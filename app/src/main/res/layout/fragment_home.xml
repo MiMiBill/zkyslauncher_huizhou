@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_bg"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="39px"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginLeft="19px">
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2019年5月24日"
+                android:textSize="14px"
+                android:textColor="@color/black_gray"/>
+
+            <TextView
+                android:id="@+id/tv_week"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="星期四"
+                android:textSize="14px"
+                android:textColor="@color/black_gray"
+                android:layout_marginLeft="10px"/>
+            <ImageView
+                android:layout_width="23px"
+                android:layout_height="21px"
+                android:src="@mipmap/ic_home_tianqi"
+                android:layout_marginLeft="10px"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginLeft="19px"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="22px">
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12:30"
+                android:textSize="14px"
+                android:textColor="@color/black_gray"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="中科云上"
+                android:textSize="14px"
+                android:textColor="@color/black_gray"
+                android:layout_marginLeft="10px"/>
+            <ImageView
+                android:layout_width="26px"
+                android:layout_height="20px"
+                android:src="@mipmap/ic_home_wifi"
+                android:layout_marginLeft="10px"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="跳转"/>
+
+</LinearLayout>

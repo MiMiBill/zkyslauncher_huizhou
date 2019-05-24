@@ -2,7 +2,9 @@ package com.muju.note.launcher.util;
 
 import android.text.TextUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class DateUtil {
 
@@ -16,6 +18,53 @@ public class DateUtil {
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int min = calendar.get(Calendar.MINUTE);
         return hour + ":" + min;
+    }
+
+    /**
+     * 获取当前时间
+     *
+     * @return
+     */
+    public static String getDate() {
+        return getDate("yyyy-MM-dd HH:mm:ss");
+    }
+
+    /**
+     * 获取当前时间
+     *
+     * @param s
+     * @return
+     */
+    public static String getDate(String s) {
+        SimpleDateFormat format = new SimpleDateFormat(s);
+        Date d = new Date(System.currentTimeMillis());
+        return format.format(d);
+    }
+
+    /**
+     * 获取当前周几
+     *
+     * @return
+     */
+    public static String getWeek() {
+        Calendar calendar = Calendar.getInstance();
+        switch (calendar.get(Calendar.DAY_OF_WEEK)) {
+            case 1:
+                return "星期天";
+            case 2:
+                return "星期一";
+            case 3:
+                return "星期二";
+            case 4:
+                return "星期三";
+            case 5:
+                return "星期四";
+            case 6:
+                return "星期五";
+            case 7:
+                return "星期六";
+        }
+        return "";
     }
 
     /**

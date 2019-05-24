@@ -13,24 +13,34 @@ public class LauncherApplication extends Application {
 
     private static Context context;
 
+
+    private static LauncherApplication instance;
+
     @Override
     public void onCreate() {
         super.onCreate();
         context=this;
+        instance=this;
 
         // 日志初始化
         LogUtil.init();
 
+        // litepal 初始化
+        LitePal.initialize(this);
+        LitePal.getDatabase();
+        LitePalDb.addDb();
+
         // okgo初始化
         OkGoUtil.initOkGo(this);
 
-        LitePal.initialize(this);
-        LitePal.getDatabase();
-
-        LitePalDb.addDb();
     }
 
     public static Context getContext(){
         return context;
     }
+
+    public static LauncherApplication getInstance(){
+        return instance;
+    }
+
 }
