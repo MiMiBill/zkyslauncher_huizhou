@@ -84,17 +84,11 @@ public class OneMinuteDisposable {
     }
 
     private void runStruct() {
-
         try {
-            //APP指定检查
-//            isTopAppCheck();
-
             playConfig();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     /**

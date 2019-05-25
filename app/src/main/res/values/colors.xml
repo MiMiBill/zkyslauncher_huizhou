@@ -7,4 +7,8 @@
     <color name="main_bg">#F4F4F4</color>
     <color name="white">#FFFFFF</color>
     <color name="black_gray">#585858</color>
+    <color name="black">#1E242C</color>
+    <color name="white_gray">#E0E0E0</color>
+    <color name="yellow_gray">#FFDE8D</color>
+    <color name="blue_gray">#38B4E9</color>
 </resources>

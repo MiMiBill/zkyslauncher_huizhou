@@ -3,6 +3,7 @@ package com.muju.note.launcher.app.hostipal.ui;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
 /**
@@ -41,6 +44,12 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
     WebView wvMien;
     @BindView(R.id.tv_type_title)
     TextView tvTypeTitle;
+    @BindView(R.id.ll_back)
+    LinearLayout llBack;
+    @BindView(R.id.ll_null)
+    LinearLayout llNull;
+    @BindView(R.id.tv_null)
+    TextView tvNull;
 
     private HospitalMienAdapter hospitalMienAdapter;
     private List<MienInfoDao> list;
@@ -69,6 +78,7 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
         hospitalMienAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                llNull.setVisibility(View.GONE);
                 llTypeTitle.setSelected(false);
                 hospitalMienAdapter.setPos(position);
                 hospitalMienAdapter.notifyDataSetChanged();
@@ -77,6 +87,8 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
         });
 
         llTypeTitle.setOnClickListener(this);
+        llBack.setOnClickListener(this);
+        tvNull.setOnClickListener(this);
 
         // 查询医院风采数据
         mPresenter.queryMien();
@@ -105,7 +117,7 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
 
     @Override
     public void getMienNull() {
-
+        llNull.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -121,10 +133,23 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
                 }
                 llTypeTitle.setSelected(!llTypeTitle.isSelected());
                 break;
+
+            case R.id.ll_back:
+                pop();
+                break;
+
+            case R.id.tv_null:
+                pop();
+                break;
         }
     }
 
     public void setWvMien(String data) {
+        if(TextUtils.isEmpty(data)){
+            getMienNull();
+            return;
+        }
         wvMien.loadDataWithBaseURL(null, data, "text/html", "UTF-8", null);
     }
+
 }

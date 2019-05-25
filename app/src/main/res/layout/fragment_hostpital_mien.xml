@@ -2,15 +2,54 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_bg"
-    android:paddingLeft="@dimen/px20"
-    android:paddingRight="@dimen/px20">
+    android:background="@color/main_bg">
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="400px"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"></View>
+    
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/px20"
+        android:layout_marginRight="@dimen/px20"
+        android:layout_marginBottom="@dimen/px20"
+        android:background="@color/white"
+        android:layout_marginTop="80px"
+        android:orientation="vertical"
+        android:padding="@dimen/px10">
 
-    <WebView
+        <WebView
         android:id="@+id/wv_Mien"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"></WebView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/px20"
+        android:layout_marginLeft="@dimen/px20"
+        android:gravity="center_vertical">
+        <ImageView
+            android:layout_width="@dimen/px34"
+            android:layout_height="@dimen/px34"
+            android:src="@mipmap/ic_back_black"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="返回"
+            android:textSize="@dimen/px20"
+            android:textColor="@color/black"
+            android:layout_marginLeft="@dimen/px10"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="@dimen/px112"
@@ -43,6 +82,35 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_null"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:visibility="gone">
+        <ImageView
+            android:layout_width="@dimen/px380"
+            android:layout_height="@dimen/px268"
+            android:src="@mipmap/ic_hospital_mein_null"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="这里一片荒土啥都没有"
+            android:textSize="@dimen/px30"
+            android:layout_marginTop="@dimen/px19"
+            android:textColor="@color/yellow_gray"/>
+        <TextView
+            android:id="@+id/tv_null"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="去看看其他"
+            android:textSize="@dimen/px20"
+            android:textColor="@color/blue_gray"
+            android:layout_marginTop="@dimen/px17"/>
     </LinearLayout>
 
 </RelativeLayout>

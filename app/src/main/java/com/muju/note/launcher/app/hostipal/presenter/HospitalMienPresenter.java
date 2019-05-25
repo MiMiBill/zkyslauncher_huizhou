@@ -25,7 +25,7 @@ public class HospitalMienPresenter extends BasePresenter<HospitalMienContract.Vi
                 if(list==null||list.size()<=0){
                     mView.getMienNull();
                     return;
-                }
+            }
                 mView.getMien(list);
             }
         });
