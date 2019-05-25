@@ -1,5 +1,7 @@
 package com.muju.note.launcher.service.db;
 
+import com.muju.note.launcher.litepal.LitePalDb;
+
 import org.litepal.LitePal;
 import org.litepal.crud.LitePalSupport;
 
@@ -111,7 +113,7 @@ public class PadConfigSubDao extends LitePalSupport {
     }
 
     public static void deleteAll(){
-        LitePal.useDefault();
+        LitePalDb.setZkysDb();
         LitePal.deleteAll(PadConfigDao.class);
         LitePal.deleteAll(PadConfigSubDao.class);
     }

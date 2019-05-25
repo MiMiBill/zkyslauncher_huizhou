@@ -27,8 +27,8 @@ public class LauncherApplication extends Application {
 
         // litepal 初始化
         LitePal.initialize(this);
-        LitePal.getDatabase();
         LitePalDb.addDb();
+        LitePal.getDatabase();
 
         // okgo初始化
         OkGoUtil.initOkGo(this);

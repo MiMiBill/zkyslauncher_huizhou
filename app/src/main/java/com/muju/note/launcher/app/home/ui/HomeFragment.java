@@ -1,22 +1,20 @@
 package com.muju.note.launcher.app.home.ui;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.home.contract.HomeContract;
 import com.muju.note.launcher.app.home.presenter.HomePresenter;
+import com.muju.note.launcher.app.hostipal.ui.HospitalMienFragment;
 import com.muju.note.launcher.base.BaseFragment;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
-public class HomeFragment extends BaseFragment<HomePresenter> implements HomeContract.View {
+public class HomeFragment extends BaseFragment<HomePresenter> implements HomeContract.View,View.OnClickListener {
+
+    private static final String TAG="HomeFragment";
 
     public static HomeFragment homeFragment = null;
     @BindView(R.id.tv_time)
@@ -25,8 +23,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     TextView tvDate;
     @BindView(R.id.tv_week)
     TextView tvWeek;
-    @BindView(R.id.btn_test)
-    Button btnTest;
+    @BindView(R.id.ll_hostipal)
+    LinearLayout llHostipal;
 
     public static HomeFragment newInstance() {
         if (homeFragment == null) {
@@ -42,12 +40,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void initData() {
-        btnTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                start(new TestFragment());
-            }
-        });
+        llHostipal.setOnClickListener(this);
     }
 
     @Override
@@ -58,21 +51,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     @Override
     public void showError(String msg) {
 
-    }
-
-    @Override
-    public void getDate(String date) {
-        tvDate.setText(date);
-    }
-
-    @Override
-    public void getTime(String time) {
-        tvTime.setText(time);
-    }
-
-    @Override
-    public void getWeek(String week) {
-        tvWeek.setText(week);
     }
 
     @Override
@@ -87,4 +65,25 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         mPresenter.onDestroy();
     }
 
+    /**
+     *  设置状态栏时间
+     * @param date
+     * @param time
+     * @param week
+     */
+    @Override
+    public void getDate(String date, String time, String week) {
+        tvDate.setText(date);
+        tvTime.setText(time);
+        tvWeek.setText(week);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.ll_hostipal:  // 医院风采
+                start(HospitalMienFragment.getInstance());
+                break;
+        }
+    }
 }

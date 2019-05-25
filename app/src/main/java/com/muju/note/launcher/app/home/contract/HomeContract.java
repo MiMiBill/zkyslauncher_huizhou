@@ -6,9 +6,7 @@ import com.muju.note.launcher.base.IView;
 public interface HomeContract  {
 
     interface View extends IView {
-        void getDate(String date);
-        void getTime(String time);
-        void getWeek(String week);
+        void getDate(String date,String time,String week);
     }
 
 

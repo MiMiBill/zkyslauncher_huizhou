@@ -7,7 +7,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="39px"
+        android:layout_height="@dimen/px39"
         android:background="@color/white">
 
         <LinearLayout
@@ -15,28 +15,26 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:layout_marginLeft="19px">
+            android:layout_marginLeft="@dimen/px19">
             <TextView
                 android:id="@+id/tv_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2019年5月24日"
-                android:textSize="14px"
+                android:textSize="@dimen/px14"
                 android:textColor="@color/black_gray"/>
 
             <TextView
                 android:id="@+id/tv_week"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="星期四"
-                android:textSize="14px"
+                android:textSize="@dimen/px14"
                 android:textColor="@color/black_gray"
-                android:layout_marginLeft="10px"/>
+                android:layout_marginLeft="@dimen/px10"/>
             <ImageView
-                android:layout_width="23px"
-                android:layout_height="21px"
+                android:layout_width="@dimen/px23"
+                android:layout_height="@dimen/px21"
                 android:src="@mipmap/ic_home_tianqi"
-                android:layout_marginLeft="10px"/>
+                android:layout_marginLeft="@dimen/px10"/>
         </LinearLayout>
 
         <LinearLayout
@@ -44,36 +42,93 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:layout_marginLeft="19px"
+            android:layout_marginLeft="@dimen/px19"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="22px">
+            android:layout_marginRight="@dimen/px22">
             <TextView
                 android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="12:30"
-                android:textSize="14px"
+                android:textSize="@dimen/px14"
                 android:textColor="@color/black_gray"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="中科云上"
-                android:textSize="14px"
+                android:textSize="@dimen/px14"
                 android:textColor="@color/black_gray"
-                android:layout_marginLeft="10px"/>
+                android:layout_marginLeft="@dimen/px10"/>
             <ImageView
-                android:layout_width="26px"
-                android:layout_height="20px"
+                android:layout_width="@dimen/px26"
+                android:layout_height="@dimen/px20"
                 android:src="@mipmap/ic_home_wifi"
-                android:layout_marginLeft="10px"/>
+                android:layout_marginLeft="@dimen/px10"/>
         </LinearLayout>
 
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/btn_test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="跳转"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/px16"
+        android:paddingRight="@dimen/px16"
+        android:paddingTop="@dimen/px16">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px358"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/px909"
+                android:layout_height="@dimen/px358"
+                android:src="@mipmap/ic_banner_defalut"/>
+            
+            <LinearLayout
+                android:layout_width="@dimen/px330"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5px"
+                android:orientation="vertical">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/px110"
+                    android:background="@mipmap/ic_home_userinfo_bg">
+
+                </RelativeLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px190"
+            android:layout_marginTop="@dimen/px15"
+            android:orientation="horizontal"
+            android:background="@color/white"
+            android:gravity="center_vertical">
+
+            <LinearLayout
+                android:id="@+id/ll_hostipal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/px61">
+                <ImageView
+                    android:layout_width="@dimen/px100"
+                    android:layout_height="@dimen/px100"
+                    android:src="@mipmap/ic_home_item_hositpal"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="医院介绍"
+                    android:textColor="@color/black_gray"
+                    android:textSize="@dimen/px25"
+                    android:layout_marginTop="@dimen/px14"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

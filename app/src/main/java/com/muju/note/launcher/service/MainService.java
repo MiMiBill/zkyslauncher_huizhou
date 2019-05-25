@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 
+import com.muju.note.launcher.app.hostipal.service.MienService;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.service.http.ServiceHttp;
 import com.muju.note.launcher.service.operation.OneMinuteDisposable;
+import com.muju.note.launcher.service.operation.SixHourDisposable;
 import com.muju.note.launcher.util.log.LogUtil;
 
 import java.util.concurrent.TimeUnit;
@@ -28,7 +30,7 @@ public class MainService extends Service {
     public void onCreate() {
         super.onCreate();
         LogUtil.i(TAG,"onCreate");
-        init(LauncherApplication.getContext());
+        init();
     }
 
     @Override
@@ -40,9 +42,8 @@ public class MainService extends Service {
     /**
      *
      *  初始化操作
-     * @param context
      */
-    private void init(Context context){
+    private void init(){
         // 10分钟内随机时间获取平板配置信息
         Observable.timer((long) (Math.random() * 10), TimeUnit.SECONDS)
                 .subscribe(new Consumer<Long>() {
@@ -53,6 +54,12 @@ public class MainService extends Service {
                 });
         // 1分钟心跳开始执行
         OneMinuteDisposable.getInstance().start();
+
+        // 6小时心跳开始执行
+        SixHourDisposable.getInstance().start();
+
+        // 检查医院宣教数据
+        MienService.getInstance().start();
     }
 
 }

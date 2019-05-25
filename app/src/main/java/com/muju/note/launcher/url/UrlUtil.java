@@ -19,4 +19,12 @@ public class UrlUtil {
         return getHost()+"/padConfig/getConfig";
     }
 
+    /**
+     *   医院风采
+     * @return
+     */
+    public static String getHospitalInfo() {
+        return getHost() + "/hospitalMien/list/%s";
+    }
+
 }

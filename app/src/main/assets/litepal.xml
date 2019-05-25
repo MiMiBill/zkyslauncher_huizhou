@@ -9,9 +9,6 @@
     <version value="2" />
     <!--表名-->
     <list>
-        <mapping class="com.muju.note.launcher.service.db.PadConfigSubDao"/>
-        <mapping class="com.muju.note.launcher.service.db.PadConfigDao"/>
-
     </list>
 
     <!--

@@ -30,9 +30,7 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
 
                     @Override
                     public void onNext(Long aLong) {
-                        mView.getTime(DateUtil.getDate("HH:mm:ss"));
-                        mView.getDate(DateUtil.getDate("yyyy年MM月dd日"));
-                        mView.getWeek(DateUtil.getWeek());
+                        mView.getDate(DateUtil.getDate("yyyy年MM月dd日"),DateUtil.getDate("HH:mm:ss"),DateUtil.getWeek());
                     }
 
                     @Override

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="px10">10px</dimen>
+    <dimen name="px14">14px</dimen>
+    <dimen name="px15">15px</dimen>
+    <dimen name="px16">16px</dimen>
+    <dimen name="px18">18px</dimen>
+    <dimen name="px19">19px</dimen>
+    <dimen name="px20">20px</dimen>
+    <dimen name="px21">21px</dimen>
+    <dimen name="px22">22px</dimen>
+    <dimen name="px23">23px</dimen>
+    <dimen name="px25">25px</dimen>
+    <dimen name="px26">26px</dimen>
+    <dimen name="px37">37px</dimen>
+    <dimen name="px39">39px</dimen>
+    <dimen name="px61">61px</dimen>
+    <dimen name="px76">76px</dimen>
+    <dimen name="px100">100px</dimen>
+    <dimen name="px110">110px</dimen>
+    <dimen name="px112">112px</dimen>
+    <dimen name="px190">190px</dimen>
+    <dimen name="px330">330px</dimen>
+    <dimen name="px358">358px</dimen>
+    <dimen name="px500">500px</dimen>
+    <dimen name="px909">909px</dimen>
+</resources>

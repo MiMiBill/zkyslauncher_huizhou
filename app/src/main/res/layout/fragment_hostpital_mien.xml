@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_bg"
+    android:paddingLeft="@dimen/px20"
+    android:paddingRight="@dimen/px20">
+
+    <WebView
+        android:id="@+id/wv_Mien"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"></WebView>
+
+    <LinearLayout
+        android:layout_width="@dimen/px112"
+        android:layout_height="@dimen/px500"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/px76">
+        <LinearLayout
+            android:id="@+id/ll_type_title"
+            android:layout_width="@dimen/px112"
+            android:layout_height="@dimen/px37"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/ll_hospital_type_bg"
+            android:visibility="gone">
+            <ImageView
+                android:layout_width="@dimen/px19"
+                android:layout_height="@dimen/px15"
+                android:src="@mipmap/ic_hospital_type_hide"/>
+            <TextView
+                android:id="@+id/tv_type_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="收起"
+                android:textColor="@color/white"
+                android:layout_marginLeft="@dimen/px20"
+                android:textSize="@dimen/px18"/>
+        </LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+
+</RelativeLayout>
