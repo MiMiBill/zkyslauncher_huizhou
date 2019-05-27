@@ -132,6 +132,10 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
         mDelegate.loadRootFragment(containerId, toFragment);
     }
 
+    public void loadRootFragment(int containerId, ISupportFragment toFragment, boolean addToBackStack, boolean allowAnim) {
+        mDelegate.loadRootFragment(containerId,toFragment,addToBackStack,allowAnim);
+    }
+
     public void start(ISupportFragment toFragment) {
         mDelegate.start(toFragment);
     }

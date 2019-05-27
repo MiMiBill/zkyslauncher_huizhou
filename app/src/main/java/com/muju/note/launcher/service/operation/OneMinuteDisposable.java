@@ -11,6 +11,7 @@ import com.muju.note.launcher.util.rx.RxUtil;
 import com.muju.note.launcher.util.system.SystemUtils;
 
 import org.litepal.LitePal;
+import org.litepal.crud.callback.FindMultiCallback;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -95,30 +96,39 @@ public class OneMinuteDisposable {
      * 执行配置文件操作
      */
     private void playConfig() throws Exception {
-        List<PadConfigDao> configDaoList=LitePal.findAll(PadConfigDao.class);
-        if(configDaoList==null||configDaoList.size()<=0){
-            LogUtil.e(TAG,"平板配置信息为空，请检查配置");
-            return;
-        }
-        Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-        LogUtil.d("当前时间："+hour+":"+minute);
-        for (PadConfigDao dao:configDaoList){
-            switch (dao.getSort()){
-                case "audio":
+        LitePal.findAllAsync(PadConfigDao.class,true).listen(new FindMultiCallback<PadConfigDao>() {
+            @Override
+            public void onFinish(List<PadConfigDao> list) {
+                try {
+                    if(list==null||list.size()<=0){
+                        LogUtil.e(TAG,"平板配置信息为空，请检查配置");
+                        return;
+                    }
+                    Calendar calendar = Calendar.getInstance();
+                    int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                    int minute = calendar.get(Calendar.MINUTE);
+                    LogUtil.d("当前时间："+hour+":"+minute);
+                    for (PadConfigDao dao:list){
+                        switch (dao.getSort()){
+                            case "audio":
 
-                    break;
+                                break;
 
-                case "openVideo":
+                            case "openVideo":
 
-                    break;
+                                break;
 
-                case "launch":
-                    lockScreen(dao.getPadConfigs());
-                    break;
+                            case "launch":
+                                lockScreen(dao.getPadConfigs());
+                                break;
+                        }
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
             }
-        }
+        });
     }
 
     /**

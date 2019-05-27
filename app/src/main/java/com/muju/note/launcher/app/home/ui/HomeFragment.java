@@ -9,7 +9,7 @@ import com.muju.note.launcher.app.home.contract.HomeContract;
 import com.muju.note.launcher.app.home.presenter.HomePresenter;
 import com.muju.note.launcher.app.hostipal.ui.EncyclopediasFragment;
 import com.muju.note.launcher.app.hostipal.ui.HospitalMienFragment;
-import com.muju.note.launcher.app.video.ui.VideoContentFragment;
+import com.muju.note.launcher.app.video.ui.VideoFragment;
 import com.muju.note.launcher.base.BaseFragment;
 
 import butterknife.BindView;
@@ -98,7 +98,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 start(EncyclopediasFragment.getInstance());
                 break;
             case R.id.ll_video:     // 视频
-                start(VideoContentFragment.getIntance());
+                start(VideoFragment.getIntance());
                 break;
         }
     }

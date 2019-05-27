@@ -70,4 +70,11 @@ dependencies {
 
     // baseAdapter
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
+
+    // gilde
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
+
+    // SmartRefreshLayout
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-22'
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-22'//没有使用特殊Header，可以不加这行
 }
