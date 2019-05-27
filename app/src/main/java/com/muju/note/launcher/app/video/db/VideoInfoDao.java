@@ -1,6 +1,7 @@
 package com.muju.note.launcher.app.video.db;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.muju.note.launcher.litepal.LitePalDb;
 
 import org.litepal.LitePal;
 import org.litepal.crud.LitePalSupport;

@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px100">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px100"
+            android:gravity="center_vertical">
+
+            <LinearLayout
+                android:id="@+id/lly_back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/px36"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/px34"
+                    android:layout_height="@dimen/px34"
+                    android:src="@mipmap/hos_back" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/px10"
+                    android:gravity="center"
+                    android:text="返回"
+                    android:textColor="@color/color_505050"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <RelativeLayout
+                android:layout_width="@dimen/px230"
+                android:layout_height="@dimen/px46"
+                android:layout_marginRight="@dimen/px40"
+                android:background="@mipmap/search_bg">
+
+                <EditText
+                    android:id="@+id/edt_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:hint="请输入"
+                    android:paddingLeft="@dimen/px10"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="@dimen/px22"
+                    android:layout_height="@dimen/px22"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/px12"
+                    android:src="@mipmap/hos_search" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="医疗百科"
+            android:textColor="@color/color_38B4E9"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px1"
+        android:background="@color/color_585858" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/lly_frmlayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFFFFF"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/px225">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/app_name"
+                        android:textColor="@color/color_38B4E9"
+                        android:textSize="30sp" />
+
+                    <TextView
+                        android:id="@+id/tv_author"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:text="作者"
+                        android:textColor="@color/color_888888"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/tv_summary_de"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/px30"
+                        android:paddingLeft="@dimen/px20"
+                        android:text="简介"
+                        android:textColor="@color/color_38B4E9"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_summary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/px30"
+                        android:paddingLeft="@dimen/px20"
+                        android:paddingRight="@dimen/px20"
+                        android:text="@string/app_name"
+                        android:textColor="@color/color_505050"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_cause_de"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/px30"
+                        android:paddingLeft="@dimen/px20"
+                        android:text="病因"
+                        android:textColor="@color/color_38B4E9"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_cause"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/px30"
+                        android:paddingLeft="@dimen/px20"
+                        android:paddingRight="@dimen/px20"
+                        android:text="@string/app_name"
+                        android:textColor="@color/color_505050"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_dassification_de"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/px30"
+                        android:paddingLeft="@dimen/px20"
+                        android:text="分类"
+                        android:textColor="@color/color_38B4E9"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_dassification"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/px30"
+                        android:paddingLeft="@dimen/px20"
+                        android:paddingRight="@dimen/px20"
+                        android:text="@string/app_name"
+                        android:textColor="@color/color_505050"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_clinicalManifestation_de"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/px30"
+                        android:paddingLeft="@dimen/px20"
+                        android:text="临床表现"
+                        android:textColor="@color/color_38B4E9"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_clinicalManifestation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/px30"
+                        android:paddingLeft="@dimen/px20"
+                        android:paddingRight="@dimen/px20"
+                        android:text="@string/app_name"
+                        android:textColor="@color/color_505050"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_check_de"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/px30"
+                        android:paddingLeft="@dimen/px20"
+                        android:text="检查"
+                        android:textColor="@color/color_38B4E9"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_check"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/px30"
+                        android:paddingLeft="@dimen/px20"
+                        android:paddingRight="@dimen/px20"
+                        android:text="@string/app_name"
+                        android:textColor="@color/color_505050"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_diacrisis_de"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/px30"
+                        android:paddingLeft="@dimen/px20"
+                        android:text="诊断"
+                        android:textColor="@color/color_38B4E9"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_diacrisis"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/px30"
+                        android:paddingLeft="@dimen/px20"
+                        android:paddingRight="@dimen/px20"
+                        android:text="@string/app_name"
+                        android:textColor="@color/color_505050"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_antidiastole_de"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/px30"
+                        android:paddingLeft="@dimen/px20"
+                        android:text="鉴别诊断"
+                        android:textColor="@color/color_38B4E9"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_antidiastole"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/px30"
+                        android:paddingLeft="@dimen/px20"
+                        android:paddingRight="@dimen/px20"
+                        android:text="@string/app_name"
+                        android:textColor="@color/color_505050"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_cure_de"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/px30"
+                        android:paddingLeft="@dimen/px20"
+                        android:text="治疗"
+                        android:textColor="@color/color_38B4E9"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_cure"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/px30"
+                        android:paddingLeft="@dimen/px20"
+                        android:paddingRight="@dimen/px20"
+                        android:text="@string/app_name"
+                        android:textColor="@color/color_505050"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_prognosis_de"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/px30"
+                        android:paddingLeft="@dimen/px20"
+                        android:text="预后"
+                        android:textColor="@color/color_38B4E9"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_prognosis"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/px30"
+                        android:paddingLeft="@dimen/px20"
+                        android:paddingRight="@dimen/px20"
+                        android:text="@string/app_name"
+                        android:textColor="@color/color_505050"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_prophylaxis_de"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/px30"
+                        android:paddingLeft="@dimen/px20"
+                        android:text="预防"
+                        android:textColor="@color/color_38B4E9"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_prophylaxis"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/px30"
+                        android:paddingLeft="@dimen/px20"
+                        android:paddingRight="@dimen/px20"
+                        android:text="@string/app_name"
+                        android:textColor="@color/color_505050"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_complicatingdisease_de"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/px30"
+                        android:paddingLeft="@dimen/px20"
+                        android:text="并发症"
+                        android:textColor="@color/color_38B4E9"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_complicatingdisease"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/px30"
+                        android:paddingLeft="@dimen/px20"
+                        android:paddingRight="@dimen/px20"
+                        android:text="@string/app_name"
+                        android:textColor="@color/color_505050"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_dietcare_de"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/px30"
+                        android:paddingLeft="@dimen/px20"
+                        android:text="饮食调护"
+                        android:textColor="@color/color_38B4E9"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_dietcare"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/px30"
+                        android:paddingLeft="@dimen/px20"
+                        android:paddingRight="@dimen/px20"
+                        android:text="@string/app_name"
+                        android:textColor="@color/color_505050"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lly_list"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ListView
+                android:id="@+id/item1"
+                android:layout_width="@dimen/px225"
+                android:layout_height="match_parent"
+                android:background="@mipmap/hos_bg"
+                android:divider="@color/white"
+                android:dividerHeight="1px"
+                android:scrollbars="none"></ListView>
+
+            <ListView
+                android:id="@+id/item2"
+                android:layout_width="@dimen/px225"
+                android:visibility="gone"
+                android:layout_height="match_parent"
+                android:divider="@null"
+                android:dividerHeight="0dp"
+                android:scrollbars="none"></ListView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lly_progress"
+            android:layout_width="@dimen/px250"
+            android:layout_height="@dimen/px250"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:id="@+id/progress"
+                style="@android:style/Widget.ProgressBar.Large.Inverse"
+                android:layout_width="@dimen/px130"
+                android:layout_height="@dimen/px130"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/px20"
+                android:gravity="center"
+                android:indeterminateTint="@color/colorPrimary"
+                android:indeterminateTintMode="src_atop"
+                android:text="正在加载中,请稍后..."
+                android:textColor="@color/color_333333"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout>

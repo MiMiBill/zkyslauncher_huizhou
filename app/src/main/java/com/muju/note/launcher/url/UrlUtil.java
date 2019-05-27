@@ -59,4 +59,9 @@ public class UrlUtil {
         return getHost()+"/video/search";
     }
 
+    //医疗百科获取数据库压缩包
+    public static String getDb() {
+        return getHost() + "/me/downloadUrl";
+    }
+
 }

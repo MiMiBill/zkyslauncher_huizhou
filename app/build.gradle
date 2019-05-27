@@ -7,10 +7,23 @@ android {
         minSdkVersion 20
         targetSdkVersion 28
         versionCode 59
-        versionName "1.4.3_alpha"
+        versionName "1.4.6_alpha"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+        release {
+            storeFile file("../zkyspad.jks")
+            storePassword 'zkyspad123'
+            keyAlias 'zkyspad123'
+            keyPassword 'zkyspad123'
+        }
+    }
+
     buildTypes {
+        debug {
+            signingConfig signingConfigs.release
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

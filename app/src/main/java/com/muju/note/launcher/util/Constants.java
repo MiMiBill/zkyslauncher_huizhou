@@ -7,4 +7,7 @@ public class Constants {
      */
     public static final String PAD_SIGN = "SIGN";
 
+    //医疗百科下载压缩包
+    public static final String ENCY_ZIP="ency_zip";
+
 }
