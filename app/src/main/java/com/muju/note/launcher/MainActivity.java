@@ -26,5 +26,6 @@ public class MainActivity extends BaseActivity {
         if (fragment == null) {
             loadRootFragment(R.id.fl_container, HomeFragment.newInstance());
         }
+        VideoService.getInstance().getVideoCloumns();
     }
 }

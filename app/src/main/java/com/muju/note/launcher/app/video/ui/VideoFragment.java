@@ -150,11 +150,5 @@ public class VideoFragment extends BaseFragment<VideoPresenter> implements View.
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-        try {
-            tabLayout.removeAllTabs();
-            tabLayout=null;
-        }catch (Exception e){
-            e.printStackTrace();
-        }
     }
 }
