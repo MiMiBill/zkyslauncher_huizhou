@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.IBinder;
 
 import com.muju.note.launcher.app.hostipal.service.MienService;
+import com.muju.note.launcher.app.video.service.VideoService;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.service.http.ServiceHttp;
 import com.muju.note.launcher.service.operation.OneMinuteDisposable;
@@ -60,6 +61,9 @@ public class MainService extends Service {
 
         // 检查医院宣教数据
         MienService.getInstance().start();
+
+        // 检查影视数据
+        VideoService.getInstance().start();
     }
 
 }

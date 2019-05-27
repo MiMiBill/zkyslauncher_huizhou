@@ -1,9 +1,6 @@
 package com.muju.note.launcher.app.home.ui;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -12,16 +9,15 @@ import com.muju.note.launcher.app.home.contract.HomeContract;
 import com.muju.note.launcher.app.home.presenter.HomePresenter;
 import com.muju.note.launcher.app.hostipal.ui.EncyclopediasFragment;
 import com.muju.note.launcher.app.hostipal.ui.HospitalMienFragment;
+import com.muju.note.launcher.app.video.ui.VideoContentFragment;
 import com.muju.note.launcher.base.BaseFragment;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class HomeFragment extends BaseFragment<HomePresenter> implements HomeContract.View, View
-        .OnClickListener {
+public class HomeFragment extends BaseFragment<HomePresenter> implements HomeContract.View,View.OnClickListener {
 
-    private static final String TAG = "HomeFragment";
+    private static final String TAG="HomeFragment";
 
     public static HomeFragment homeFragment = null;
     @BindView(R.id.tv_time)
@@ -35,6 +31,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     @BindView(R.id.ll_hostipal_ency)
     LinearLayout llHostipalEncy;
     Unbinder unbinder;
+    @BindView(R.id.ll_video)
+    LinearLayout llVideo;
 
     public static HomeFragment newInstance() {
         if (homeFragment == null) {
@@ -51,6 +49,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     @Override
     public void initData() {
         llHostipal.setOnClickListener(this);
+        llVideo.setOnClickListener(this);
         llHostipalEncy.setOnClickListener(this);
     }
 
@@ -77,8 +76,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     }
 
     /**
-     * 设置状态栏时间
-     *
+     *  设置状态栏时间
      * @param date
      * @param time
      * @param week
@@ -92,28 +90,17 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
+        switch (v.getId()){
             case R.id.ll_hostipal:  // 医院风采
                 start(HospitalMienFragment.getInstance());
                 break;
             case R.id.ll_hostipal_ency:  // 医疗百科
                 start(EncyclopediasFragment.getInstance());
                 break;
+            case R.id.ll_video:     // 视频
+                start(VideoContentFragment.getIntance());
+                break;
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
-            savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
-        return rootView;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
 }

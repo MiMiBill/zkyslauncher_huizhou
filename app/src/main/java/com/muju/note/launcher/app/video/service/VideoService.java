@@ -169,9 +169,7 @@ public class VideoService {
         params.put("parentId", "" + 0);
         params.put("hospitalId",ActiveUtils.getPadActiveInfo().getHospitalId()+"");
         params.put("deptId",ActiveUtils.getPadActiveInfo().getDeptId()+"");
-        String sign = Signature.getSign(params, MobileInfoUtil.getICCID(LauncherApplication.getContext()));
         OkGo.<BaseBean<List<VideoColumnsDao>>>get(UrlUtil.getVideoColumnsTags())
-                .headers(Constants.PAD_SIGN, sign)
                 .params(params)
                 .tag(this)
                 .execute(new JsonCallback<BaseBean<List<VideoColumnsDao>>>() {
@@ -263,9 +261,7 @@ public class VideoService {
         params.put("deptId",ActiveUtils.getPadActiveInfo().getDeptId()+"");
         params.put("pageNum","1");
         params.put("pageSize","30");
-        String sign = Signature.getSign(params, MobileInfoUtil.getICCID(LauncherApplication.getContext()));
         OkGo.<BaseBean<List<VideoInfoTopDao>>>post(UrlUtil.getSerchVideo())
-                .headers(Constants.PAD_SIGN, sign)
                 .params(params)
                 .tag(this)
                 .execute(new JsonCallback<BaseBean<List<VideoInfoTopDao>>>() {
