@@ -27,4 +27,36 @@ public class UrlUtil {
         return getHost() + "/hospitalMien/list/%s";
     }
 
+    /**
+     *  获取视频本地化信息
+     * @return
+     */
+    public static String getVideoDownLoadUrl(){
+        return getHost()+"/video/downloadUrl";
+    }
+
+    /**
+     *  获取每日影视更新列表
+     * @return
+     */
+    public static String getVideoUpdate(){
+        return getHost()+"/video/getLately";
+    }
+
+    /**
+     *  获取影视类型及所有标签
+     * @return
+     */
+    public static String getVideoColumnsTags(){
+        return getHost()+"/video/columnTags";
+    }
+
+    /**
+     *  根据条件查询视频
+     * @return
+     */
+    public static String getSerchVideo(){
+        return getHost()+"/video/search";
+    }
+
 }
