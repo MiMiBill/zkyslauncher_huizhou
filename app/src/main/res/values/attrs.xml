@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BannerMul">
+        <attr name="mode" format="integer"/>
+    </declare-styleable>
+
+    <declare-styleable name="BackTitleView">
+        <attr name="title" format="string" />
+        <attr name="titleCenter" format="boolean" />
+    </declare-styleable>
+</resources>
+

@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.muju.note.launcher"
-        minSdkVersion 20
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 59
         versionName "1.4.6_alpha"
@@ -89,4 +89,10 @@ dependencies {
     //gif
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.10'
     implementation files('libs/core-3.2.1.jar')
+    //大图
+    implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.5.0'
+
+    implementation 'com.qiniu:qiniu-android-sdk:7.3.15'
+    //视频缓存
+    implementation 'com.danikula:videocache:2.7.0'
 }

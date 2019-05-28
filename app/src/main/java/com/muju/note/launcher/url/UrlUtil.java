@@ -97,4 +97,40 @@ public class UrlUtil {
         return getHost() + "/device/getDeviceStatus";
     }
 
+    /**
+     *  根据集合获取广告列表
+     * @return
+     */
+    public static String getAdvertsByCodes(){
+        return getHost()+"/advert/getAdvertsByCodes";
+    }
+
+    //医院宣教标记已读/pushTabb/{id}/
+    public static String updateReadFlag() {
+        return getHost() + "/pushTabb/%s/updateReadFlag";
+    }
+
+    /**
+     *  广告浏览次数增加
+     * @return
+     */
+    public static String getAdvertShowCount(){
+        return getHost()+"/advert/updateShowCount";
+    }
+
+    /**
+     *  上传广告数据
+     * @return
+     */
+    public static String getUpCountDb(){
+        return getHost()+"/advert/statistics";
+    }
+
+    /**
+     *  获取七牛云token
+     * @return
+     */
+    public static String getQnToken(){
+        return getHost()+"/qn/cloud/getToken?bucketName=%s";
+    }
 }

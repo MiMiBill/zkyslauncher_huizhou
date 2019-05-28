@@ -1,17 +1,29 @@
 package com.muju.note.launcher.base;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 
+import com.muju.note.launcher.app.lockScreen.ProtectionProcessActivity;
+import com.muju.note.launcher.util.log.LogUtil;
+import com.muju.note.launcher.util.rx.RxUtil;
+
+import java.util.concurrent.TimeUnit;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import me.yokeyword.fragmentation.ExtraTransaction;
 import me.yokeyword.fragmentation.ISupportActivity;
 import me.yokeyword.fragmentation.ISupportFragment;
@@ -25,8 +37,9 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator;
  * Created by YoKey on 17/6/24.
  */
 public abstract class BaseActivity<T extends BasePresenter> extends AppCompatActivity implements ISupportActivity,IView {
+    private boolean isStartProtection = true;
     final SupportActivityDelegate mDelegate = new SupportActivityDelegate(this);
-
+    private Disposable disposableProtection;
     @Override
     public SupportActivityDelegate getSupportDelegate() {
         return mDelegate;
@@ -53,12 +66,83 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
         super.onDestroy();
     }
 
+    protected void hideActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar!=null) {
+            actionBar.hide();
+        }
+    }
+
+    public Context getContext() {
+        return this;
+    }
+
+
+    /**
+     * 屏幕保护倒计时
+     */
+    private void protectionCountDown() {
+        long period = 1;
+        disposableProtection = Observable.interval(period, TimeUnit.MINUTES)
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        LogUtil.d("protection : %s", "跳转到屏保");
+                        ProtectionProcessActivity.launch(getContext());
+                    }
+                });
+
+    }
+
+    public void setStartProtection(boolean startProtection) {
+        isStartProtection = startProtection;
+    }
+
+    /**
+     * 开始倒计时
+     */
+    public void startProtectionCountDown() {
+        RxUtil.closeDisposable(disposableProtection);
+        if (isStartProtection) {
+            protectionCountDown();
+        }
+    }
+
+    /**
+     * 结束倒计时
+     */
+    public void stopProtectionCountDown() {
+        RxUtil.closeDisposable(disposableProtection);
+    }
+
+
     /**
      * Note： return mDelegate.dispatchTouchEvent(ev) || super.dispatchTouchEvent(ev);
      */
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
+        switch (ev.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                startProtectionCountDown();
+                LogUtil.d(" %s","dispatchTouchEvent_ACTION_DOWN");
+                break;
+            case MotionEvent.ACTION_MOVE:
+                LogUtil.d("  %s","dispatchTouchEvent_ACTION_MOVE");
+                break;
+            case MotionEvent.ACTION_UP:
+                LogUtil.d(" %s","dispatchTouchEvent_ACTION_UP");
+                break;
+        }
         return mDelegate.dispatchTouchEvent(ev) || super.dispatchTouchEvent(ev);
+    }
+
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        LogUtil.d("protection : %s", "按键动作  dispatchKeyEvent");
+        //有触摸动作重置定时器
+        startProtectionCountDown();
+        return super.dispatchKeyEvent(event);
     }
 
     /**

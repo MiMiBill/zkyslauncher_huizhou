@@ -31,4 +31,11 @@ public class Constants {
     public static final String FILE_VIP_VIDEO = Environment.getExternalStorageDirectory().toString() + File.separator + "zkys" + File.separator + "pay" + File.separator + "videoVIP.dat";
     public static final String FILE_VIP_GAME = Environment.getExternalStorageDirectory().toString() + File.separator + "zkys" + File.separator + "pay" + File.separator + "gameVIP.dat";
 
+    //病人信息
+    public static final String PATIENT="Patient";
+    //七牛云数据库名
+    public static final String ZKYS_PAD_DB="zkyspaddb";
+    //    public static final String ZKYS_PAD_DB="appbucket";
+    //广告存储
+    public static final String ZKYS_ADVERTS="zkysadverts";
 }

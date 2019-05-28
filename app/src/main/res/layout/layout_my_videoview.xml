@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="#000"
+    android:layout_height="match_parent">
+
+
+    <com.muju.note.launcher.ui.widget.PlayVideoView
+        android:id="@+id/vvVideo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center" />
+
+    <ImageView
+        android:id="@+id/ivPause"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@mipmap/ic_pause"/>
+
+    <LinearLayout
+        android:id="@+id/llStatus"
+        android:padding="8dp"
+        android:visibility="gone"
+        android:background="@drawable/shape_corners8_solid_80000"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tvStatus"
+            android:textSize="24sp"
+            android:textColor="#fff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="音量 100%"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
+        <!--现在的时间-->
+        <TextView
+            android:id="@+id/tvTimeCurrent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="00:00:00"
+            android:textColor="#FFF"
+            android:textSize="20sp" />
+        <!--斜杠-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:textSize="20sp"
+            android:text="/"
+            android:textColor="#4C4C4C" />
+        <!--总共的时间-->
+        <TextView
+            android:id="@+id/tvTimeTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="00:00:00"
+            android:textColor="#4C4C4C"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivBack"
+        android:padding="18dp"
+        android:clickable="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_back"/>
+
+    <LinearLayout
+        android:id="@+id/llOperation"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/ivBack2"
+            android:layout_width="wrap_content"
+            android:src="@mipmap/ic_video_back"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/ivReplay"
+            android:layout_marginLeft="40dp"
+            android:layout_width="wrap_content"
+            android:src="@mipmap/ic_video_replay"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <include android:id="@+id/layoutLoading" layout="@layout/layout_download" />
+</FrameLayout>

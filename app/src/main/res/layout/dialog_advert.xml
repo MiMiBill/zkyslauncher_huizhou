@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/px504"
     android:layout_height="@dimen/px504"
-    android:id="@+id/rel_ad"
+    android:id="@+id/rel_dialog"
     android:visibility="gone"
     android:background="#34518B">
 
@@ -15,12 +15,6 @@
         android:src="@mipmap/home_icon_jiankangyiliao"
         android:scaleType="fitXY"/>
 
-    <VideoView
-        android:layout_centerInParent="true"
-        android:id="@+id/iv_video"
-        android:layout_width="@dimen/px500"
-        android:layout_height="@dimen/px500"
-        />
     <ImageView
         android:id="@+id/iv_dissmiss"
         android:layout_width="@dimen/px40"
