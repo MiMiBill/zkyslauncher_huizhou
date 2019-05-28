@@ -61,6 +61,7 @@ public class VideoHisFragment extends BaseFragment<VideoHisPresenter> implements
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 WotvPlayFragment wotvPlayFragment=new WotvPlayFragment();
                 wotvPlayFragment.setHisDao(hisDaos.get(position));
+                start(wotvPlayFragment);
             }
         });
 

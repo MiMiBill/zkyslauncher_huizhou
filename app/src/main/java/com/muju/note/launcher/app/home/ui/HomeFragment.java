@@ -1,6 +1,9 @@
 package com.muju.note.launcher.app.home.ui;
 
+import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -10,14 +13,16 @@ import com.muju.note.launcher.app.home.presenter.HomePresenter;
 import com.muju.note.launcher.app.hostipal.ui.EncyclopediasFragment;
 import com.muju.note.launcher.app.hostipal.ui.HospitalMienFragment;
 import com.muju.note.launcher.app.video.ui.VideoFragment;
+import com.muju.note.launcher.app.video.ui.WoTvVideoLineFragment;
 import com.muju.note.launcher.base.BaseFragment;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class HomeFragment extends BaseFragment<HomePresenter> implements HomeContract.View,View.OnClickListener {
+public class HomeFragment extends BaseFragment<HomePresenter> implements HomeContract.View, View.OnClickListener {
 
-    private static final String TAG="HomeFragment";
+    private static final String TAG = "HomeFragment";
 
     public static HomeFragment homeFragment = null;
     @BindView(R.id.tv_time)
@@ -30,9 +35,10 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     LinearLayout llHostipal;
     @BindView(R.id.ll_hostipal_ency)
     LinearLayout llHostipalEncy;
-    Unbinder unbinder;
     @BindView(R.id.ll_video)
     LinearLayout llVideo;
+    @BindView(R.id.ll_video_line)
+    LinearLayout llVideoLine;
 
     public static HomeFragment newInstance() {
         if (homeFragment == null) {
@@ -51,6 +57,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         llHostipal.setOnClickListener(this);
         llVideo.setOnClickListener(this);
         llHostipalEncy.setOnClickListener(this);
+        llVideoLine.setOnClickListener(this);
     }
 
     @Override
@@ -76,7 +83,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     }
 
     /**
-     *  设置状态栏时间
+     * 设置状态栏时间
+     *
      * @param date
      * @param time
      * @param week
@@ -90,7 +98,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.ll_hostipal:  // 医院风采
                 start(HospitalMienFragment.getInstance());
                 break;
@@ -100,7 +108,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             case R.id.ll_video:     // 视频
                 start(VideoFragment.getIntance());
                 break;
+            case R.id.ll_video_line: // 直播TV
+                start(new WoTvVideoLineFragment());
+                break;
         }
     }
-
 }

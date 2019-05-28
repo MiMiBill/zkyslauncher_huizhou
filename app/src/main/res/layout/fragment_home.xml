@@ -132,7 +132,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginLeft="@dimen/px61">
+                android:layout_marginLeft="@dimen/px102">
                 <ImageView
                     android:layout_width="@dimen/px100"
                     android:layout_height="@dimen/px100"
@@ -159,6 +159,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="视频"
+                    android:textColor="@color/black_gray"
+                    android:textSize="@dimen/px25"
+                    android:layout_marginTop="@dimen/px14"
+                    android:layout_gravity="center_horizontal"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_video_line"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/px102">
+                <ImageView
+                    android:layout_width="@dimen/px100"
+                    android:layout_height="@dimen/px100"
+                    android:src="@mipmap/ic_home_item_video_line"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="直播TV"
                     android:textColor="@color/black_gray"
                     android:textSize="@dimen/px25"
                     android:layout_marginTop="@dimen/px14"

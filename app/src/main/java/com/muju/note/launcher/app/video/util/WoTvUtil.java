@@ -241,11 +241,11 @@ public class WoTvUtil {
 
         //-----------------------------以下为举例具体根据实际需要------------------------------------
         //TODO 是否显示屏幕切换的icon 默认是展示的
-        minUIStyle.setExpandButtonVisiable(true);
+        minUIStyle.setExpandButtonVisiable(false);
         maxUIStyle.setExpandButtonVisiable(false);
 
         //TODO 是否显示返回键的icon，默认是展示的
-        minUIStyle.setBackButtonVisiable(true);
+        minUIStyle.setBackButtonVisiable(false);
         maxUIStyle.setBackButtonVisiable(false);
 
         //TODO 是否具备锁定键的icon，默认是显示的
@@ -268,7 +268,7 @@ public class WoTvUtil {
 
         //----------------------------!!!针对某些横版APP，只需要全屏的状态!!!-----------------------
 //        相当于初始化，直接调用切换大屏,以下配置虽然后执行，但优先级较高
-        minUIStyle.setEnable(false);//使得小屏幕的所有配置不生效，包括默认配置，
+        minUIStyle.setEnable(true);//使得小屏幕的所有配置不生效，包括默认配置，
         maxUIStyle.setEnable(true); //如果此时大屏幕的配置是生效的，将使用大屏幕的配置
         maxUIStyle.setBackFinish(true);
         //----------------------------!!!针对某些横版APP，只需要全屏的状态!!!-----------------------

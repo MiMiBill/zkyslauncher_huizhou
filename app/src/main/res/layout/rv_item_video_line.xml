@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px48">
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="cctv"
+            android:textColor="@color/blue_gray"
+            android:textSize="@dimen/px16"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/px20"/>
+
+        <ImageView
+            android:id="@+id/iv_playing"
+            android:layout_width="@dimen/px27"
+            android:layout_height="@dimen/px29"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/px5"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ic_video_line_playing" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/black3"></View>
+
+</LinearLayout>
