@@ -11,11 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
+import android.view.WindowManager;
 
 import com.muju.note.launcher.app.lockScreen.ProtectionProcessActivity;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
+import com.muju.note.launcher.util.toast.FancyToast;
 
 import java.util.concurrent.TimeUnit;
 
@@ -284,15 +285,17 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     }
 
 
-
     protected T mPresenter;
     private Unbinder mUnBinder;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        hideBottomUIMenu();
+        sendBroadcast(new Intent("mid.systemui.hide_statusbar"));
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        hideBottomUIMenu();
+//        hideActionBar();
         setContentView(getLayout());
         mDelegate.onCreate(savedInstanceState);
 
@@ -301,8 +304,6 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
         }
         mUnBinder = ButterKnife.bind(this);
         initData();
-
-        sendBroadcast(new Intent("mid.systemui.hide_statusbar"));
     }
 
     public abstract int getLayout() ;
@@ -331,4 +332,9 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
             decorView.setSystemUiVisibility(uiOptions);
         }
     }
+
+    protected void showToast(String msg) {
+        FancyToast.makeText(LauncherApplication.getContext(), msg, FancyToast.LENGTH_SHORT).show();
+    }
+
 }

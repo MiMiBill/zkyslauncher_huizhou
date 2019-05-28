@@ -2,7 +2,6 @@ package com.muju.note.launcher.app.video.util;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
 
@@ -267,7 +266,7 @@ public class WoTvUtil {
         videoView.setVideoUIConfig(videoUIConfig);
 
         //----------------------------!!!针对某些横版APP，只需要全屏的状态!!!-----------------------
-//        相当于初始化，直接调用切换大屏,以下配置虽然后执行，但优先级较高
+        //相当于初始化，直接调用切换大屏,以下配置虽然后执行，但优先级较高
         minUIStyle.setEnable(false);//使得小屏幕的所有配置不生效，包括默认配置，
         maxUIStyle.setEnable(true); //如果此时大屏幕的配置是生效的，将使用大屏幕的配置
         maxUIStyle.setBackFinish(true);

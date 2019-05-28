@@ -14,13 +14,6 @@
         android:scaleType="fitXY"
         android:layout_height="match_parent" />
 
-    <com.youth.banner.Banner
-        android:id="@+id/banner"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"/>
     <com.muju.note.launcher.view.banana.Banner
         android:id="@+id/banner_lc"
         android:layout_width="match_parent"

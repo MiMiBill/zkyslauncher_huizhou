@@ -5,11 +5,13 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.devbrackets.android.api.video.impl.VideoErrorInfo;
+import com.devbrackets.android.component.utils.ViewScaleUtil;
 import com.devbrackets.android.media.listener.OnVideoPreparedListener;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
@@ -105,17 +107,21 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if (msg.what == SHOW_PAY_DIALOG) {
-                diPayDialog = Observable.just(1)
-                        .subscribe(new Consumer<Integer>() {
-                            @Override
-                            public void accept(Integer integer) throws Exception {
-                                setPayPackageList();
-                            }
-                        });
-            }
-            if (msg.what == 0x01) {
-                llDes.setVisibility(View.GONE);
+            try {
+                if (msg.what == SHOW_PAY_DIALOG) {
+                    diPayDialog = Observable.just(1)
+                            .subscribe(new Consumer<Integer>() {
+                                @Override
+                                public void accept(Integer integer) throws Exception {
+                                    setPayPackageList();
+                                }
+                            });
+                }
+                if (msg.what == 0x01) {
+                    llDes.setVisibility(View.GONE);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
             }
         }
     };
@@ -128,38 +134,46 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void initData() {
 
-        startTime=System.currentTimeMillis();
+        try {
 
-        EventBus.getDefault().register(this);
+            startTime=System.currentTimeMillis();
 
-        ivBack.setOnClickListener(this);
+            EventBus.getDefault().register(this);
 
-        tvName.setText(videoHisDao.getName());
-        tvDes.setText(videoHisDao.getDescription());
+            ivBack.setOnClickListener(this);
 
-        handler.sendEmptyMessageDelayed(0x01, 1000 * 15);
+            tvName.setText(videoHisDao.getName());
+            tvDes.setText(videoHisDao.getDescription());
 
+            handler.sendEmptyMessageDelayed(0x01, 1000 * 15);
 
-        // 视频开始播放后，展示上下菜单
-        videoView.setOnPreparedListener(new OnVideoPreparedListener() {
-            @Override
-            public void onPrepared(boolean b) {
-                videoView.setBasicControlDialogsVisible(true, true);
-                llLoading.setVisibility(View.GONE);
-            }
-        });
+            // 设置播放器回调
+            setVideoView();
 
-        // 设置播放器回调
-        setVideoView();
+            // 获取当前播放的集数
+            EPISODE_POSITION = videoView.getEpisodePosition();
 
-        // 获取当前播放的集数
-        EPISODE_POSITION = videoView.getEpisodePosition();
+            // 开始播放
+            playVideoAndSetUI();
 
-        // 开始播放
-        playVideoAndSetUI();
+            // 监听支付
+            checkIsValid();
 
-        // 监听支付
-        checkIsValid();
+            // 视频开始播放后，展示上下菜单
+            videoView.setOnPreparedListener(new OnVideoPreparedListener() {
+                @Override
+                public void onPrepared(boolean b) {
+                    videoView.setBasicControlDialogsVisible(true, true);
+                    llLoading.setVisibility(View.GONE);
+                }
+            });
+
+            // 添加历史记录
+            videoHisDao.setCreateTime(System.currentTimeMillis()+"");
+            VideoService.getInstance().addVideoHisInfo(videoHisDao);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -193,7 +207,9 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                 verifyPlayingStatus();
                 //TODO 播放器的默认海报展示的时候，会通知业务层，由业务层处理业务逻辑。
                 Log.e(TAG, "海报是否显示：" + isVisiable);
-                llLoading.setVisibility(View.VISIBLE);
+                if(!videoView.isPlaying()) {
+                    llLoading.setVisibility(View.VISIBLE);
+                }
 
             }
 
@@ -213,7 +229,6 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
             @Override
             public boolean onVideoComplete() {
                 //TODO 视频播放完成（一个视频达到duration的末尾），通知业务层
-
                 LogUtil.e(TAG, "onVideoComplete:");
                 switch (videoHisDao.getPlayType()) {
                     case VIDEO_TYPE_EPISODE:
@@ -383,12 +398,19 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        if (videoView.getPlayedDuration() != 0 && videoView.getCurrentPosition() != 0) {
-                            if (videoView.getCurrentPosition() > pay_cuntDown || videoView
-                                    .getPlayedDuration() > pay_cuntDown) {
-                                handler.sendEmptyMessage(SHOW_PAY_DIALOG);
-                                RxUtil.closeDisposable(disposableIsValid);
+                        try {
+                            if(videoView==null){
+                                return;
                             }
+                            if (videoView.getPlayedDuration() != 0 && videoView.getCurrentPosition() != 0) {
+                                if (videoView.getCurrentPosition() > pay_cuntDown || videoView
+                                        .getPlayedDuration() > pay_cuntDown) {
+                                    handler.sendEmptyMessage(SHOW_PAY_DIALOG);
+                                    RxUtil.closeDisposable(disposableIsValid);
+                                }
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
                         }
                     }
                 });
@@ -609,16 +631,21 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onStop() {
+        super.onStop();
+        videoView.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
         try {
-            videoHisDao.setDuration(videoView.getDuration());
-            videoHisDao.setCreateTime(System.currentTimeMillis()+"");
-            VideoService.getInstance().addVideoHisInfo(videoHisDao);
+//            videoHisDao.setDuration(videoView.getDuration());\
             VideoService.getInstance().addVideoCount(videoHisDao.getVideoId()+"",videoHisDao.getName(),startTime,System.currentTimeMillis());
             VideoService.getInstance().addVideoInfoDb(videoHisDao.getVideoId()+"",videoHisDao.getName(),startTime,System.currentTimeMillis());
             if (videoView != null) {
+                videoView.pause();
                 videoView.onDestroy();
+                videoView=null;
             }
             RxUtil.closeDisposable(disposableSlPay);
             RxUtil.closeDisposable(diPayDialog);
@@ -632,5 +659,6 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
         }catch (Exception e){
             e.printStackTrace();
         }
+        super.onDestroy();
     }
 }

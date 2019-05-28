@@ -66,6 +66,7 @@ public class ProtectionProcessActivity extends BaseActivity {
 
     @Override
     public void initData() {
+        hideActionBar();
         lowerBrightness();
 
         setStartProtection(false);

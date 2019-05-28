@@ -394,11 +394,11 @@ public class VideoService {
      * @param dao
      */
     public void addVideoHisInfo(final VideoHisDao dao){
-        LitePal.findFirstAsync(VideoHisDao.class).listen(new FindCallback<VideoHisDao>() {
+        LitePalDb.setZkysDb();
+        LitePal.where("videoId=?",dao.getVideoId()+"").findFirstAsync(VideoHisDao.class).listen(new FindCallback<VideoHisDao>() {
             @Override
             public void onFinish(VideoHisDao videoHisDao) {
                 if(videoHisDao==null){
-                    LitePalDb.setZkysDb();
                     dao.save();
                     return;
                 }
