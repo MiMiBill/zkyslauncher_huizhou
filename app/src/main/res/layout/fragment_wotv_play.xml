@@ -7,7 +7,9 @@
     <com.muju.note.launcher.app.video.util.wotv.ExpandVideoView2
         android:id="@+id/video_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/common_black"
+        android:layout_alignParentBottom="true">
     </com.muju.note.launcher.app.video.util.wotv.ExpandVideoView2>
 
     <LinearLayout

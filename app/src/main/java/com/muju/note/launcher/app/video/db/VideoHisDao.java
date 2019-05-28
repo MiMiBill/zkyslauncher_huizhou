@@ -2,7 +2,9 @@ package com.muju.note.launcher.app.video.db;
 
 import org.litepal.crud.LitePalSupport;
 
-public class VideoHisDao extends LitePalSupport {
+import java.io.Serializable;
+
+public class VideoHisDao extends LitePalSupport implements Serializable {
 
     private int id;
     private int videoId;

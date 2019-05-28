@@ -22,6 +22,7 @@ allprojects {
         maven { url "https://jitpack.io" }
         // 外网仓库
         maven { url "http://111.230.145.98:8090/nexus/content/groups/public/" }
+        maven { url "https://maven.google.com" }
     }
 }
 

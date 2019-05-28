@@ -5,11 +5,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+
+import com.muju.note.launcher.util.toast.FancyToast;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -210,8 +213,9 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
         super.onCreate(savedInstanceState);
         sendBroadcast(new Intent("mid.systemui.hide_statusbar"));
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        hideBottomUIMenu();
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        hideBottomUIMenu();
+        hideActionBar();
         setContentView(getLayout());
         mDelegate.onCreate(savedInstanceState);
 
@@ -246,6 +250,17 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
             int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                     | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN;
             decorView.setSystemUiVisibility(uiOptions);
+        }
+    }
+
+    protected void showToast(String msg) {
+        FancyToast.makeText(LauncherApplication.getContext(), msg, FancyToast.LENGTH_SHORT).show();
+    }
+
+    protected void hideActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar!=null) {
+            actionBar.hide();
         }
     }
 }
