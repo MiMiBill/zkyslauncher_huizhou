@@ -89,4 +89,12 @@ public class UrlUtil {
         return getHost() + "/me/getLately";
     }
 
+    /**
+     *  查询影视支付数据
+     * @return
+     */
+    public static String getGetDeviceStatus() {
+        return getHost() + "/device/getDeviceStatus";
+    }
+
 }

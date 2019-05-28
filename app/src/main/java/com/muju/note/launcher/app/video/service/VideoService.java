@@ -7,6 +7,7 @@ import com.lzy.okgo.model.HttpParams;
 import com.lzy.okgo.model.Response;
 import com.muju.note.launcher.app.video.bean.VideoDownLoadBean;
 import com.muju.note.launcher.app.video.db.VideoColumnsDao;
+import com.muju.note.launcher.app.video.db.VideoHisDao;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
 import com.muju.note.launcher.app.video.db.VideoInfoTopDao;
 import com.muju.note.launcher.app.video.db.VideoPlayerCountDao;
@@ -189,7 +190,7 @@ public class VideoService {
                                 for (VideoColumnsDao columnsDao:response.body().getData()){
                                     setColumns(columnsDao);
                                     for (VideoTagsDao tagsDao:columnsDao.getVideoTags()){
-                                        setTags(tagsDao,columnsDao.getId());
+                                        setTags(tagsDao,columnsDao.getColumnsId());
                                         for (VideoTagSubDao listBean:tagsDao.getList()){
                                             setTagsSub(listBean);
                                         }
@@ -205,50 +206,57 @@ public class VideoService {
      *  更新分类
      */
     private void setColumns(VideoColumnsDao dao){
-        VideoColumnsDao videoColumnsDao= LitePal.where("columnsId = ?",dao.getId()+"").findFirst(VideoColumnsDao.class);
-        if(videoColumnsDao==null){
-            videoColumnsDao=dao;
-            videoColumnsDao.setColumnsId(dao.getId());
-            videoColumnsDao.save();
-        }else {
-            videoColumnsDao.setColumnsId(dao.getId());
-            videoColumnsDao.setName(dao.getName());
-            videoColumnsDao.update(videoColumnsDao.getId());
-        }
+//        VideoColumnsDao videoColumnsDao= LitePal.where("columnsId = ?",dao.getId()+"").findFirst(VideoColumnsDao.class);
+//        if(videoColumnsDao==null){
+//            videoColumnsDao=dao;
+//            videoColumnsDao.setColumnsId(dao.getId());
+//            videoColumnsDao.save();
+//        }else {
+//            videoColumnsDao.setColumnsId(dao.getId());
+//            videoColumnsDao.setName(dao.getName());
+//            videoColumnsDao.update(videoColumnsDao.getId());
+//        }
+        dao.setColumnsId(dao.getId());
+        dao.save();
     }
 
     /**
      *  更新标签分类
      */
     private void setTags(VideoTagsDao dao,int columnsId){
-        VideoTagsDao tagsDao=LitePal.where("tagId = ?",dao.getId()+"").findFirst(VideoTagsDao.class);
-        if(tagsDao==null){
-            tagsDao=dao;
-            tagsDao.setTagId(dao.getId());
-            tagsDao.setCoulmnsId(columnsId);
-            tagsDao.save();
-        }else {
-            tagsDao.setName(dao.getName());
-            tagsDao.setTagId(dao.getId());
-            tagsDao.update(tagsDao.getId());
-        }
+//        VideoTagsDao tagsDao=LitePal.where("tagId = ?",dao.getId()+"").findFirst(VideoTagsDao.class);
+//        if(tagsDao==null){
+//            tagsDao=dao;
+//            tagsDao.setTagId(dao.getId());
+//            tagsDao.setCoulmnsId(columnsId);
+//            tagsDao.save();
+//        }else {
+//            tagsDao.setName(dao.getName());
+//            tagsDao.setTagId(dao.getId());
+//            tagsDao.update(tagsDao.getId());
+//        }
+        dao.setTagId(dao.getId());
+        dao.setCoulmnsId(columnsId);
+        dao.save();
     }
 
     /**
      *  更新标签子分类
      */
     private void setTagsSub(VideoTagSubDao dao){
-        VideoTagSubDao subDao=LitePal.where("subId = ?",dao.getId()+"").findFirst(VideoTagSubDao.class);
-        if(subDao==null){
-            subDao=dao;
-            subDao.setSubId(dao.getId());
-            subDao.save();
-
-        }else {
-            subDao.setName(dao.getName());
-            subDao.setSubId(dao.getId());
-            subDao.update(subDao.getId());
-        }
+//        VideoTagSubDao subDao=LitePal.where("subId = ?",dao.getId()+"").findFirst(VideoTagSubDao.class);
+//        if(subDao==null){
+//            subDao=dao;
+//            subDao.setSubId(dao.getId());
+//            subDao.save();
+//
+//        }else {
+//            subDao.setName(dao.getName());
+//            subDao.setSubId(dao.getId());
+//            subDao.update(subDao.getId());
+//        }
+        dao.setSubId(dao.getId());
+        dao.save();
     }
 
     /**
@@ -379,6 +387,26 @@ public class VideoService {
         countDao.setVideoId(vid);
         countDao.setVideoName(vName);
         countDao.save();
+    }
+
+    /**
+     *  添加
+     * @param dao
+     */
+    public void addVideoHisInfo(final VideoHisDao dao){
+        LitePal.findFirstAsync(VideoHisDao.class).listen(new FindCallback<VideoHisDao>() {
+            @Override
+            public void onFinish(VideoHisDao videoHisDao) {
+                if(videoHisDao==null){
+                    LitePalDb.setZkysDb();
+                    dao.save();
+                    return;
+                }
+                videoHisDao.setCreateTime(dao.getCreateTime());
+                videoHisDao.setDuration(dao.getDuration());
+                videoHisDao.update(videoHisDao.getId());
+            }
+        });
     }
 
 }

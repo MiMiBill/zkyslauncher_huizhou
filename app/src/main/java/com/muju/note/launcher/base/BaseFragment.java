@@ -14,6 +14,8 @@ import android.view.animation.Animation;
 
 import com.muju.note.launcher.util.toast.FancyToast;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import me.yokeyword.fragmentation.ExtraTransaction;

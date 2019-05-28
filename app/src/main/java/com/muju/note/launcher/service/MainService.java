@@ -105,7 +105,7 @@ public class MainService extends Service {
      */
     private void init(){
         // 10分钟内随机时间获取平板配置信息
-        Observable.timer((long) (Math.random() * 10), TimeUnit.SECONDS)
+        Observable.timer((long) (Math.random() * 10), TimeUnit.MINUTES)
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {

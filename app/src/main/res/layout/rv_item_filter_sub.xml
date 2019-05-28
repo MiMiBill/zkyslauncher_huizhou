@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content"
+    android:layout_height="@dimen/px68"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/px10"
+    android:paddingRight="@dimen/px10"
+    android:gravity="center_vertical">
+
+    <TextView
+        android:id="@+id/tv_filter"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/px30"
+        android:text="全部"
+        android:textSize="@dimen/px18"
+        android:gravity="center"
+        android:paddingLeft="@dimen/px20"
+        android:paddingRight="@dimen/px20"
+        android:background="@drawable/tv_video_filter_bg"
+        android:textColor="@color/tv_video_filter" />
+
+</LinearLayout>
