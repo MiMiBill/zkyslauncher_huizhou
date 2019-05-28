@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
 import com.muju.note.launcher.topics.FileTopics;
 import com.muju.note.launcher.util.file.FileIOUtils;
+import com.orhanobut.logger.Logger;
 
 public class ActiveUtils {
 
@@ -39,6 +40,19 @@ public class ActiveUtils {
             e.getStackTrace();
         }
         return null;
+    }
+
+    public static String getPhoneNumber() {
+        String phone = "13800138000";
+        ActivePadInfo.DataBean entity = getPadActiveInfo();
+        if (entity != null) {
+            String simNumber = entity.getSimMobile();
+            if (!TextUtils.isEmpty(simNumber) && simNumber.length() == 11) {
+                return simNumber;
+            }
+        }
+        Logger.d("phone:%s", phone);
+        return phone;
     }
 
 }

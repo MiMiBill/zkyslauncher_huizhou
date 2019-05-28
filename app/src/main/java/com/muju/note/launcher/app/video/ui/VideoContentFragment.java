@@ -19,17 +19,20 @@ import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.video.adapter.VideoContentAdapter;
 import com.muju.note.launcher.app.video.bean.VideoMoreTagBean;
 import com.muju.note.launcher.app.video.contract.VideoContentContract;
+import com.muju.note.launcher.app.video.db.VideoHisDao;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
 import com.muju.note.launcher.app.video.db.VideoTagSubDao;
 import com.muju.note.launcher.app.video.db.VideoTagsDao;
 import com.muju.note.launcher.app.video.event.VideoFinishEvent;
 import com.muju.note.launcher.app.video.presenter.VideoContentPresenter;
+import com.muju.note.launcher.app.video.util.WoTvUtil;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.orhanobut.logger.Logger;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.unicom.common.VideoSdkConfig;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -103,6 +106,13 @@ public class VideoContentFragment extends BaseFragment<VideoContentPresenter> im
 
         mPresenter.queryVideo(columnsId,columnName,pageNum);
         mPresenter.queryFilter(columnsId);
+
+        contentAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                toPlay(videoInfoDaos.get(position));
+            }
+        });
     }
 
     @Override
@@ -195,6 +205,7 @@ public class VideoContentFragment extends BaseFragment<VideoContentPresenter> im
                                     subBean.setChoice(false);
                                 }
                             }
+                            pageNum = 1;
                             sercahVideoByTags();
                             adapter.notifyDataSetChanged();
                         }
@@ -252,7 +263,6 @@ public class VideoContentFragment extends BaseFragment<VideoContentPresenter> im
                     }
                 }
             }
-            pageNum = 1;
             String tags="";
             for (int i=0;i<tagBeanList.size();i++){
                 if(TextUtils.isEmpty(tags)) {
@@ -266,6 +276,29 @@ public class VideoContentFragment extends BaseFragment<VideoContentPresenter> im
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     *  跳转播放
+     * @param infoDao
+     */
+    private void toPlay(VideoInfoDao infoDao){
+        if (!VideoSdkConfig.getInstance().getUser().isLogined()) {
+            WoTvUtil.getInstance().login();
+            showToast("登入视频中，请稍后");
+            return;
+        }
+        VideoHisDao hisDao=new VideoHisDao();
+        hisDao.setCid(infoDao.getCid());
+        hisDao.setCustomTag(infoDao.getCustomTag());
+        hisDao.setDescription(infoDao.getDescription());
+        hisDao.setImgUrl(infoDao.getImgUrl());
+        hisDao.setName(infoDao.getName());
+        hisDao.setVideoId(infoDao.getVideoId());
+        hisDao.setVideoType(infoDao.getVideoType());
+        WotvPlayFragment wotvPlayFragment=new WotvPlayFragment();
+        wotvPlayFragment.setHisDao(hisDao);
+        ((VideoFragment) getParentFragment()).start(wotvPlayFragment);
     }
 
 }

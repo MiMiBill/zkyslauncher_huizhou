@@ -64,4 +64,12 @@ public class UrlUtil {
         return getHost() + "/me/downloadUrl";
     }
 
+    /**
+     *  查询影视支付数据
+     * @return
+     */
+    public static String getGetDeviceStatus() {
+        return getHost() + "/device/getDeviceStatus";
+    }
+
 }

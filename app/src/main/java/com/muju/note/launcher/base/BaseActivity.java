@@ -1,5 +1,6 @@
 package com.muju.note.launcher.base;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -218,6 +219,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
         mUnBinder = ButterKnife.bind(this);
         initData();
 
+        sendBroadcast(new Intent("mid.systemui.hide_statusbar"));
     }
 
     public abstract int getLayout() ;

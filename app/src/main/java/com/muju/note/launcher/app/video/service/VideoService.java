@@ -7,6 +7,7 @@ import com.lzy.okgo.model.HttpParams;
 import com.lzy.okgo.model.Response;
 import com.muju.note.launcher.app.video.bean.VideoDownLoadBean;
 import com.muju.note.launcher.app.video.db.VideoColumnsDao;
+import com.muju.note.launcher.app.video.db.VideoHisDao;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
 import com.muju.note.launcher.app.video.db.VideoInfoTopDao;
 import com.muju.note.launcher.app.video.db.VideoPlayerCountDao;
@@ -386,6 +387,26 @@ public class VideoService {
         countDao.setVideoId(vid);
         countDao.setVideoName(vName);
         countDao.save();
+    }
+
+    /**
+     *  添加
+     * @param dao
+     */
+    public void addVideoHisInfo(final VideoHisDao dao){
+        LitePal.findFirstAsync(VideoHisDao.class).listen(new FindCallback<VideoHisDao>() {
+            @Override
+            public void onFinish(VideoHisDao videoHisDao) {
+                if(videoHisDao==null){
+                    LitePalDb.setZkysDb();
+                    dao.save();
+                    return;
+                }
+                videoHisDao.setCreateTime(dao.getCreateTime());
+                videoHisDao.setDuration(dao.getDuration());
+                videoHisDao.update(videoHisDao.getId());
+            }
+        });
     }
 
 }

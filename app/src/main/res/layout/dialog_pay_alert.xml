@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="632px"
+    android:background="@drawable/shape_solid_fff_corners_8"
+    android:layout_height="664px">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/clPayAlert"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="37px"
+            android:src="@mipmap/icon_video_time_out"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:padding="20dp"
+            android:src="@mipmap/icon_close"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView18"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="52px"
+            android:layout_marginTop="43px"
+            android:layout_marginEnd="52px"
+            android:text="您当前视频免费时长已用完，请用小程序扫码完成\n支付后可获取更多时长"
+            android:textColor="#333333"
+            android:textSize="24px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+
+
+        <TextView
+            android:id="@+id/tv_login"
+            android:text="扫码登录获取更好服务"
+            android:layout_marginTop="63px"
+            android:layout_marginEnd="30px"
+            android:paddingLeft="52px"
+            android:textStyle="bold"
+            android:textColor="#2994F1"
+            android:textSize="22px"
+            app:layout_constraintTop_toBottomOf="@+id/textView18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tvHelp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="63px"
+            android:layout_marginEnd="30px"
+            android:text="使用帮助？"
+            android:textStyle="bold"
+            android:textColor="#2994F1"
+            android:textSize="22px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView18" />
+
+
+        <Button
+            android:id="@+id/btPay"
+            android:layout_width="0dp"
+            android:layout_height="68px"
+            android:layout_marginStart="35px"
+            android:layout_marginTop="30px"
+            android:layout_marginEnd="30px"
+            android:background="@drawable/zf_button_bg_ok"
+            android:text="立即支付"
+            android:textColor="#ffffff"
+            android:textSize="28px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvHelp" />
+
+
+        <TextView
+            android:id="@+id/tvHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28px"
+            android:layout_marginBottom="50px"
+            android:text="请使用微信扫一扫继续支付"
+            android:textColor="#a8a8a8"
+            android:textSize="22px"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btPay" />
+
+    </android.support.constraint.ConstraintLayout>
+
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/llPayCode"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="30px">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:background="@android:color/transparent"
+            android:layout_height="84px">
+
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#2994f1"
+                android:textSize="34px"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="支付" />
+
+
+            <ImageView
+                android:id="@+id/ivClose2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:paddingLeft="18dp"
+                android:paddingRight="18dp"
+                android:src="@mipmap/icon_close"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+
+
+            <View
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#dedede" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/ivPayCode"
+            android:layout_width="418px"
+            android:layout_height="418px"
+            android:layout_gravity="center"
+            android:layout_marginTop="40px" />
+
+
+        <TextView
+            android:layout_marginTop="15px"
+            android:id="@+id/tv_pay_time1"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:text="请用小程序扫码完成支付"
+            android:textColor="#333333"
+            android:textSize="28px" />
+
+    </LinearLayout>
+
+
+
+</FrameLayout>

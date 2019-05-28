@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
+
+    <com.muju.note.launcher.app.video.util.wotv.ExpandVideoView2
+        android:id="@+id/video_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.muju.note.launcher.app.video.util.wotv.ExpandVideoView2>
+
+    <LinearLayout
+        android:id="@+id/ll_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:background="@android:color/black"
+        android:orientation="vertical"
+        android:paddingTop="100px">
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/iv_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80px"
+            android:src="@drawable/ic_video_loading"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/cap_white"
+            android:textSize="24px"
+            android:layout_marginTop="20px"
+            android:text="影片正在加载中，请稍后... ..."/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_des"
+        android:layout_width="match_parent"
+        android:layout_height="156px"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:paddingLeft="40px"
+        android:paddingTop="19px"
+        android:background="@mipmap/ic_video_bottom_bg">
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30px"
+            android:textColor="@color/cap_white"/>
+
+        <TextView
+            android:id="@+id/tv_des"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18px"
+            android:textSize="18px"
+            android:textColor="@color/cap_white"
+            android:maxWidth="500px"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_back"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:src="@mipmap/ic_video_close"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentRight="true"/>
+
+</RelativeLayout>

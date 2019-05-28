@@ -89,4 +89,15 @@ public class DateUtil {
         int t2time = t2hour * 60 + t2min;
         return t1time >= t2time ? true : false;
     }
+
+    /**
+     * 判断时间戳是否在有效期之内
+     * @param date
+     * @return
+     */
+    public static final boolean isValid(String date) {
+        Calendar expireData = Calendar.getInstance();
+        expireData.setTimeInMillis(Long.parseLong(date) * 1000);
+        return expireData.getTimeInMillis() >= new Date().getTime();
+    }
 }
