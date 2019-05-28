@@ -1,6 +1,7 @@
 package com.muju.note.launcher.util.app;
 
 import com.muju.note.launcher.util.log.LogUtil;
+import com.muju.note.launcher.util.sp.SPUtil;
 
 import java.io.IOException;
 
@@ -15,6 +16,7 @@ public class AppUtils {
     public static void rebootPhone(){
         String cmd = "reboot";
         try {
+            SPUtil.putBoolean("rebootPhone",true);
             Runtime.getRuntime().exec(cmd);
         } catch (IOException e) {
             // TODO Auto-generated catch block

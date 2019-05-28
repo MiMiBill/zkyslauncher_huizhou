@@ -13,11 +13,6 @@ import com.muju.note.launcher.url.UrlUtil;
 public class EncyclopsediasPresenter extends BasePresenter<EncyContract.View> implements EncyContract.Presenter {
 
     @Override
-    public void queryEncy() {
-
-    }
-
-    @Override
     public void getDownLoadUrl() {
         OkGo.<BaseBean<GetDownloadBean>>get(UrlUtil.getDb()).tag(this).execute(new JsonCallback<BaseBean<GetDownloadBean>>() {
             @Override

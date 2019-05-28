@@ -6,10 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -113,6 +111,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     public FragmentAnimator onCreateFragmentAnimator() {
         return mDelegate.onCreateFragmentAnimator();
     }
+
 
     /**
      * Causes the Runnable r to be added to the action queue.

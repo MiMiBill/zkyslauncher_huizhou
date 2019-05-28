@@ -9,6 +9,7 @@ import com.muju.note.launcher.app.video.db.VideoTagsDao;
 import com.muju.note.launcher.app.video.util.WoTvUtil;
 import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.okgo.OkGoUtil;
+import com.muju.note.launcher.util.location.LocationUtil;
 import com.muju.note.launcher.util.log.LogUtil;
 
 import org.litepal.LitePal;
@@ -17,7 +18,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class LauncherApplication extends Application {
-
+    public String latitude = "";
+    public String longitude = "";
+    public String address = "";
     private static Context context;
 
 
@@ -49,6 +52,10 @@ public class LauncherApplication extends Application {
             }
         });
 
+        // okgo初始化
+        OkGoUtil.initOkGo(this);
+        //初始化定位,心跳接口必须
+        LocationUtil.initLocationOption(this);
     }
 
     public static Context getContext(){

@@ -1,12 +1,17 @@
 package com.muju.note.launcher.service.http;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
+import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
+import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.callback.FileCallback;
+import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Progress;
 import com.lzy.okgo.model.Response;
 import com.lzy.okgo.request.base.Request;
+import com.muju.note.launcher.BuildConfig;
 import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
 import com.muju.note.launcher.app.activeApp.entity.ResourceEntity;
 import com.muju.note.launcher.base.LauncherApplication;
@@ -24,6 +29,8 @@ import com.muju.note.launcher.util.sign.Signature;
 import com.muju.note.launcher.util.update.PackageUtils;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.HashMap;
@@ -138,11 +145,6 @@ public class ServiceHttp {
             case ResourceEntity.APP_UPDATE_PACKAGE:
                 installApk(resourceEntity.getFileName());
                 break;
-           /* case ResourceEntity.TIMING_AUDIO:
-                Intent intent = new Intent(LauncherApplication.getInstance(), PlayerAudioService.class);
-                intent.putExtra("resource", resourceEntity.getFileName());
-                LauncherApplication.getInstance().startService(intent);
-                break;*/
             case ResourceEntity.ENCY_ZIP:
                 EventBus.getDefault().post(resourceEntity);
                 break;
@@ -170,6 +172,66 @@ public class ServiceHttp {
                         }
                     }
                 });
+    }
+
+
+    /**
+     * 检查更新
+     */
+    public void updateVersion() {
+        ActivePadInfo.DataBean padActive = ActiveUtils.getPadActiveInfo();
+        String imei = MobileInfoUtil.getIMEI(LauncherApplication.getInstance());
+        int hospitalId = 0, deptId = 0;
+        if (padActive != null) {
+            hospitalId = padActive.getHospitalId();
+            deptId = padActive.getDeptId();
+        }
+        Map<String, String> params = new HashMap();
+        params.put("appType", "1");
+        params.put("deviceType", "1");
+        params.put("pkgName", "" + BuildConfig.APPLICATION_ID);
+        params.put("versionCode", "" + BuildConfig.VERSION_CODE);
+        params.put("hospitalId", "" + hospitalId);
+        params.put("deptId", "" + deptId);
+        params.put("code", imei);
+        String sign = Signature.getSign(params, MobileInfoUtil.getICCID(LauncherApplication.getContext()));
+        OkGo.<String>post(UrlUtil.getVersionCheckUpdate())
+                .tag(this)
+                .headers("SIGN", sign)
+                .params(params)
+                .cacheMode(CacheMode.NO_CACHE).execute(new StringCallback() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                Gson gson = new Gson();
+
+                String body = response.body();
+                Log.d("updateBody:onSuccess():", body);
+
+                try {
+                    JSONObject obj = new JSONObject(body);
+                    int code = obj.getInt("code");
+                    if (code == 200) {
+                        String url = obj.getJSONObject("data").getString("url");
+                        Log.d("updateBody:url():", url);
+//                        downloadApk(url);
+                        downloadFile(new ResourceEntity(ResourceEntity.APP_UPDATE_PACKAGE, url, "launcher.apk"));
+                        //版本更新完成检查是否激活
+                    } else if (code == -1) {
+                        //询问服务器是否激活
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                LogUtil.d("body:%s", body);
+            }
+
+            @Override
+            public void onError(Response<String> response) {
+                super.onError(response);
+                LogUtil.d("updateBody:onError:");
+            }
+        });
     }
 
 }

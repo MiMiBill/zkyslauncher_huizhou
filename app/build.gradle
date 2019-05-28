@@ -9,6 +9,8 @@ android {
         versionCode 59
         versionName "1.4.6_alpha"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled true
     }
 
     signingConfigs {
@@ -72,6 +74,8 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
     // baseAdapter
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
+    implementation files('libs/core-3.2.1.jar')
+    implementation files('libs/BaiduLBS_Android.jar')
     // gilde
     implementation 'com.github.bumptech.glide:glide:4.7.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'

@@ -13,11 +13,9 @@ import com.muju.note.launcher.util.system.SystemUtils;
 import org.litepal.LitePal;
 import org.litepal.crud.callback.FindMultiCallback;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -90,6 +88,10 @@ public class OneMinuteDisposable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void stop() {
+        RxUtil.closeDisposable(diTimer);
     }
 
     /**

@@ -12,7 +12,6 @@ public interface EncyContract {
 
 
     interface Presenter extends IPresenter<View> {
-        void queryEncy();
         void getDownLoadUrl();
     }
 }

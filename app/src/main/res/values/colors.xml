@@ -25,4 +25,5 @@
     <color name="color_38B4E9">#38B4E9</color>
     <color name="color_585858">#585858</color>
     <color name="color_333333">#333333</color>
+    <color name="toast_bg">#99858585</color>
 </resources>

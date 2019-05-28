@@ -19,7 +19,6 @@ import java.util.Map;
  * 一个账号对应一个文件
  */
 public class SPUtil {
-
     private static SharedPreferences getSharedPreferences() {
         SharedPreferences sp = LauncherApplication.getContext().getSharedPreferences("zkys_pad", Context.MODE_PRIVATE);
         return sp;
