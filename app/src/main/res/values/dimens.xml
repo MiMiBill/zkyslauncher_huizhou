@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="px1">1px</dimen>
+    <dimen name="px5">5px</dimen>
     <dimen name="px10">10px</dimen>
     <dimen name="px12">12px</dimen>
     <dimen name="px14">14px</dimen>
@@ -21,16 +22,27 @@
     <dimen name="px37">37px</dimen>
     <dimen name="px39">39px</dimen>
     <dimen name="px40">40px</dimen>
+    <dimen name="px42">43px</dimen>
     <dimen name="px46">46px</dimen>
+    <dimen name="px47">47px</dimen>
+    <dimen name="px50">50px</dimen>
+    <dimen name="px60">60px</dimen>
     <dimen name="px61">61px</dimen>
     <dimen name="px68">68px</dimen>
     <dimen name="px76">76px</dimen>
+    <dimen name="px87">87px</dimen>
     <dimen name="px100">100px</dimen>
     <dimen name="px102">102px</dimen>
+    <dimen name="px104">104px</dimen>
+    <dimen name="px108">108px</dimen>
     <dimen name="px110">110px</dimen>
     <dimen name="px112">112px</dimen>
     <dimen name="px130">130px</dimen>
+    <dimen name="px156">156px</dimen>
+    <dimen name="px164">164px</dimen>
     <dimen name="px190">190px</dimen>
+    <dimen name="px200">200px</dimen>
+    <dimen name="px208">208px</dimen>
     <dimen name="px225">225px</dimen>
     <dimen name="px230">230px</dimen>
     <dimen name="px250">250px</dimen>

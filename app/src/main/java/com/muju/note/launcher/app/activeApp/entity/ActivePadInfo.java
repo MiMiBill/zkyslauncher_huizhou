@@ -1,7 +1,7 @@
 package com.muju.note.launcher.app.activeApp.entity;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * 激活信息
@@ -17,7 +17,7 @@ public class ActivePadInfo {
     private int code;
     private String msg;
     private int total;
-    private List<DataBean> data;
+    private ArrayList<DataBean> data;
 
     public int getCode() {
         return code;
@@ -43,11 +43,11 @@ public class ActivePadInfo {
         this.total = total;
     }
 
-    public List<DataBean> getData() {
+    public ArrayList<DataBean> getData() {
         return data;
     }
 
-    public void setData(List<DataBean> data) {
+    public void setData(ArrayList<DataBean> data) {
         this.data = data;
     }
 

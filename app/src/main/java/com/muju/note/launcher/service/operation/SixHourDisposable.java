@@ -1,10 +1,12 @@
 package com.muju.note.launcher.service.operation;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 
+import com.muju.note.launcher.service.http.ServiceHttp;
+import com.muju.note.launcher.util.Constants;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
+import com.muju.note.launcher.util.sp.SPUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -35,6 +37,7 @@ public class SixHourDisposable {
 
     }
 
+
     @SuppressLint("CheckResult")
     public void start() {
         RxUtil.closeDisposable(diTimer);
@@ -59,7 +62,11 @@ public class SixHourDisposable {
     }
 
     private void runStruct() {
-
+        SPUtil.putLong(Constants.SP_SIX_HOUR_TIME,System.currentTimeMillis()/1000);
+        //检查更新
+        ServiceHttp.getInstance().updateVersion();
+        ServiceHttp.getInstance().getPadConfigs();
+//        MissionService.getInstance().downMission();
     }
 
 

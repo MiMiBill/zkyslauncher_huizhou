@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/px87"
+    >
+
+    <!-- 标题 -->
+    <ImageView
+        android:layout_width="@dimen/px156"
+        android:layout_height="@dimen/px42"
+        android:layout_marginTop="@dimen/px104"
+        android:background="@mipmap/jhym_logo" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/hide_btn"
+            android:layout_width="@dimen/px50"
+            android:layout_height="@dimen/px50"
+            android:background="#00000000"/>
+
+        <TextView
+            android:id="@+id/tv_active_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/px60"
+            android:text="@string/this_pad_has_not_actived"
+            android:textColor="#ff333333"
+            android:textSize="@dimen/px30" />
+
+        <TextView
+            android:id="@+id/tv_tip_maintain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_active_result"
+            android:layout_marginTop="@dimen/px18"
+            android:text="@string/active_pad_tip"
+            android:textColor="#ff00b7ff"
+            android:textSize="@dimen/px16" />
+
+        <TextView
+            android:id="@+id/tv_active_result_success"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/px40"
+            android:drawableLeft="@mipmap/jhym_cg"
+            android:drawablePadding="@dimen/px5"
+            android:text="@string/pad_has_actived_success"
+            android:textColor="#ff24d095"
+            android:textSize="@dimen/px30"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/tv_active_result_fail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/px40"
+            android:drawableLeft="@mipmap/jhym_sb"
+            android:drawablePadding="@dimen/px5"
+            android:text="@string/pad_has_actived_fail"
+            android:textColor="#fff64848"
+            android:textSize="@dimen/px30"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/tv_tip_maintain_zk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_active_result_success"
+            android:layout_marginTop="@dimen/px12"
+            android:text="@string/pad_has_actived_tip"
+            android:textColor="#ff666666"
+            android:textSize="@dimen/px16"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tvIccid"
+        style="@style/txt_333_16"
+        android:layout_marginTop="@dimen/px12"
+        tools:text="iccid:123456798798978564654"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tvImei"
+        style="@style/txt_333_16"
+        android:layout_marginTop="12px"
+        tools:text="imei:123456798798978564654"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <!-- 二维码 -->
+    <ImageView
+        android:id="@+id/iv_active_pad_qrcode"
+        android:layout_width="@dimen/px208"
+        android:layout_height="@dimen/px208"
+        android:layout_marginTop="@dimen/px47" />
+
+
+
+    <Button
+        android:id="@+id/bt_next"
+        android:layout_width="@dimen/px164"
+        android:layout_height="@dimen/px46"
+        android:layout_gravity="right"
+        android:layout_marginRight="@dimen/px108"
+        android:layout_marginTop="@dimen/px108"
+        android:background="@drawable/shape_button_bg_blue"
+        android:text="@string/next"
+        android:visibility="gone"
+        android:textColor="#ffffffff"
+        android:textSize="@dimen/px20" />
+</LinearLayout>

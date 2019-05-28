@@ -117,4 +117,15 @@ public class SystemUtils {
         return isScreenOn;
     }
 
+
+    /**
+     * 设置通知静音
+     *
+     * @param context
+     */
+    public static void setVolumeNotification(Context context) {
+        AudioManager manager = (AudioManager) context.getSystemService(AUDIO_SERVICE);
+//        manager.setStreamVolume(AudioManager.STREAM_SYSTEM,index,AudioManager.FLAG_SHOW_UI);
+        manager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, 0, 0);
+    }
 }

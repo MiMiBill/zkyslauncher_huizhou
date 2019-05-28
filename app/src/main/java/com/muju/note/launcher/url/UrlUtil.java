@@ -64,4 +64,29 @@ public class UrlUtil {
         return getHost() + "/me/downloadUrl";
     }
 
+    /**
+     * 平板激活状态
+     *
+     * @return
+     */
+    public static String getQueryPadActiveState() {
+        return getHost() + "/pad/newList";
+    }
+
+
+    //心跳
+    public static String putHeartbeat() {
+        return getHost() + "/padPalpitate/palpitate";
+    }
+
+    //检查更新
+    public static String getVersionCheckUpdate() {
+        return getHost() + "/appVersion/check";
+    }
+
+    //获取获取更新的科室和病资料
+    public static String getLately() {
+        return getHost() + "/me/getLately";
+    }
+
 }

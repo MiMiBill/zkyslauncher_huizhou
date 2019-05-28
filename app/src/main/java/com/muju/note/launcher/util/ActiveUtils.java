@@ -1,12 +1,16 @@
 package com.muju.note.launcher.util;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.util.Base64;
 
 import com.google.gson.Gson;
 import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
 import com.muju.note.launcher.topics.FileTopics;
+import com.muju.note.launcher.url.UrlUtil;
+import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.file.FileIOUtils;
+import com.muju.note.launcher.util.log.LogFactory;
 
 public class ActiveUtils {
 
@@ -39,6 +43,20 @@ public class ActiveUtils {
             e.getStackTrace();
         }
         return null;
+    }
+
+    public static boolean hadActived(Context context) {
+        ActivePadInfo.DataBean entity = getPadActiveInfo();
+        if (entity != null) {
+            if (!TextUtils.isEmpty(MobileInfoUtil.getICCID(context))
+                    && TextUtils.equals(entity.getIccid(), MobileInfoUtil.getICCID(context))//要保证有手机卡
+                    && TextUtils.equals(UrlUtil.getHost(), entity.getHost())) {//保证域名一致
+                LogFactory.l().i("iccid==="+entity.getIccid());
+                return true;
+            }
+
+        }
+        return false;
     }
 
 }
