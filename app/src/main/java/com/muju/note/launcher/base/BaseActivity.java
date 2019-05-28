@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -208,6 +209,8 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sendBroadcast(new Intent("mid.systemui.hide_statusbar"));
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         hideBottomUIMenu();
         setContentView(getLayout());
@@ -218,8 +221,6 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
         }
         mUnBinder = ButterKnife.bind(this);
         initData();
-
-        sendBroadcast(new Intent("mid.systemui.hide_statusbar"));
     }
 
     public abstract int getLayout() ;

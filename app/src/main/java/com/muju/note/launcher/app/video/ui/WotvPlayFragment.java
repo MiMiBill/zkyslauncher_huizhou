@@ -128,38 +128,46 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void initData() {
 
-        startTime=System.currentTimeMillis();
+        try {
+            startTime=System.currentTimeMillis();
 
-        EventBus.getDefault().register(this);
+            EventBus.getDefault().register(this);
 
-        ivBack.setOnClickListener(this);
+            ivBack.setOnClickListener(this);
 
-        tvName.setText(videoHisDao.getName());
-        tvDes.setText(videoHisDao.getDescription());
+            tvName.setText(videoHisDao.getName());
+            tvDes.setText(videoHisDao.getDescription());
 
-        handler.sendEmptyMessageDelayed(0x01, 1000 * 15);
+            handler.sendEmptyMessageDelayed(0x01, 1000 * 15);
 
 
-        // 视频开始播放后，展示上下菜单
-        videoView.setOnPreparedListener(new OnVideoPreparedListener() {
-            @Override
-            public void onPrepared(boolean b) {
-                videoView.setBasicControlDialogsVisible(true, true);
-                llLoading.setVisibility(View.GONE);
-            }
-        });
+            // 视频开始播放后，展示上下菜单
+            videoView.setOnPreparedListener(new OnVideoPreparedListener() {
+                @Override
+                public void onPrepared(boolean b) {
+                    videoView.setBasicControlDialogsVisible(true, true);
+                    llLoading.setVisibility(View.GONE);
+                }
+            });
 
-        // 设置播放器回调
-        setVideoView();
+            // 设置播放器回调
+            setVideoView();
 
-        // 获取当前播放的集数
-        EPISODE_POSITION = videoView.getEpisodePosition();
+            // 获取当前播放的集数
+            EPISODE_POSITION = videoView.getEpisodePosition();
 
-        // 开始播放
-        playVideoAndSetUI();
+            // 开始播放
+            playVideoAndSetUI();
 
-        // 监听支付
-        checkIsValid();
+            // 监听支付
+            checkIsValid();
+
+            // 添加历史记录
+            videoHisDao.setCreateTime(System.currentTimeMillis()+"");
+            VideoService.getInstance().addVideoHisInfo(videoHisDao);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -383,12 +391,16 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        if (videoView.getPlayedDuration() != 0 && videoView.getCurrentPosition() != 0) {
-                            if (videoView.getCurrentPosition() > pay_cuntDown || videoView
-                                    .getPlayedDuration() > pay_cuntDown) {
-                                handler.sendEmptyMessage(SHOW_PAY_DIALOG);
-                                RxUtil.closeDisposable(disposableIsValid);
+                        try {
+                            if (videoView.getPlayedDuration() != 0 && videoView.getCurrentPosition() != 0) {
+                                if (videoView.getCurrentPosition() > pay_cuntDown || videoView
+                                        .getPlayedDuration() > pay_cuntDown) {
+                                    handler.sendEmptyMessage(SHOW_PAY_DIALOG);
+                                    RxUtil.closeDisposable(disposableIsValid);
+                                }
                             }
+                        }catch (Exception e){
+                            e.printStackTrace();
                         }
                     }
                 });
@@ -609,16 +621,21 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onStop() {
+        super.onStop();
+        videoView.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
         try {
-            videoHisDao.setDuration(videoView.getDuration());
-            videoHisDao.setCreateTime(System.currentTimeMillis()+"");
-            VideoService.getInstance().addVideoHisInfo(videoHisDao);
+//            videoHisDao.setDuration(videoView.getDuration());\
             VideoService.getInstance().addVideoCount(videoHisDao.getVideoId()+"",videoHisDao.getName(),startTime,System.currentTimeMillis());
             VideoService.getInstance().addVideoInfoDb(videoHisDao.getVideoId()+"",videoHisDao.getName(),startTime,System.currentTimeMillis());
             if (videoView != null) {
+                videoView.pause();
                 videoView.onDestroy();
+                videoView=null;
             }
             RxUtil.closeDisposable(disposableSlPay);
             RxUtil.closeDisposable(diPayDialog);
@@ -632,5 +649,6 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
         }catch (Exception e){
             e.printStackTrace();
         }
+        super.onDestroy();
     }
 }

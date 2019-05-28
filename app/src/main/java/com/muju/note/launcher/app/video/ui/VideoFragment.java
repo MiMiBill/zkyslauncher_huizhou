@@ -1,9 +1,11 @@
 package com.muju.note.launcher.app.video.ui;
 
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -23,6 +25,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * 视频列表
@@ -42,6 +46,8 @@ public class VideoFragment extends BaseFragment<VideoPresenter> implements View.
     ViewPager viewPager;
     @BindView(R.id.tabLayout)
     TabLayout tabLayout;
+    @BindView(R.id.tv_his)
+    TextView tvHis;
 
 
     private VideoPageAdapter pageAdapter;
@@ -65,6 +71,7 @@ public class VideoFragment extends BaseFragment<VideoPresenter> implements View.
 
         llBack.setOnClickListener(this);
         tvNull.setOnClickListener(this);
+        tvHis.setOnClickListener(this);
 
         mPresenter.queryColumns();
 
@@ -87,22 +94,26 @@ public class VideoFragment extends BaseFragment<VideoPresenter> implements View.
             case R.id.tv_null:
                 pop();
                 break;
+
+            case R.id.tv_his:
+                start(new VideoHisFragment());
+                break;
         }
     }
 
     @Override
     public void getColumnsSuccess(List<VideoColumnsDao> list) {
-        for (VideoColumnsDao dao:list){
+        for (VideoColumnsDao dao : list) {
             tabLayout.addTab(tabLayout.newTab().setText(dao.getName()));
         }
-        pageAdapter=new VideoPageAdapter(getChildFragmentManager(),list);
+        pageAdapter = new VideoPageAdapter(getChildFragmentManager(), list);
         viewPager.setAdapter(pageAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
         // 设置第一个tab选中
-        TabLayout.Tab tab=tabLayout.getTabAt(tabLayout.getSelectedTabPosition());
-        View view=LayoutInflater.from(LauncherApplication.getContext()).inflate(R.layout.tablayout_video_columns,null);
-        TextView tvTitle= view.findViewById(R.id.tv_title);
+        TabLayout.Tab tab = tabLayout.getTabAt(tabLayout.getSelectedTabPosition());
+        View view = LayoutInflater.from(LauncherApplication.getContext()).inflate(R.layout.tablayout_video_columns, null);
+        TextView tvTitle = view.findViewById(R.id.tv_title);
         tvTitle.setText(tab.getText());
         tab.setCustomView(tvTitle);
 
@@ -116,14 +127,14 @@ public class VideoFragment extends BaseFragment<VideoPresenter> implements View.
     }
 
     /**
-     *  设置tablayout字体大小
+     * 设置tablayout字体大小
      */
-    private void setTabLayoutTextSize(){
+    private void setTabLayoutTextSize() {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                View view=LayoutInflater.from(LauncherApplication.getContext()).inflate(R.layout.tablayout_video_columns,null);
-                TextView tvTitle= view.findViewById(R.id.tv_title);
+                View view = LayoutInflater.from(LauncherApplication.getContext()).inflate(R.layout.tablayout_video_columns, null);
+                TextView tvTitle = view.findViewById(R.id.tv_title);
                 tvTitle.setText(tab.getText());
                 tab.setCustomView(tvTitle);
             }
@@ -142,7 +153,7 @@ public class VideoFragment extends BaseFragment<VideoPresenter> implements View.
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void finish(VideoFinishEvent event){
+    public void finish(VideoFinishEvent event) {
         pop();
     }
 
@@ -151,4 +162,5 @@ public class VideoFragment extends BaseFragment<VideoPresenter> implements View.
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+
 }
