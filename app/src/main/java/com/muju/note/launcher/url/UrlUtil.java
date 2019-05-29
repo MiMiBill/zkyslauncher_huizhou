@@ -133,4 +133,8 @@ public class UrlUtil {
     public static String getQnToken(){
         return getHost()+"/qn/cloud/getToken?bucketName=%s";
     }
+
+    public static String getGetPaitentInfo() {
+        return getHost() + "/hospitalBedTabb/list";
+    }
 }

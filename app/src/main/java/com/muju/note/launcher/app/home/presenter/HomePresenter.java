@@ -1,10 +1,24 @@
 package com.muju.note.launcher.app.home.presenter;
 
+import android.content.Context;
+
+import com.google.gson.Gson;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.Response;
+import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.app.home.contract.HomeContract;
 import com.muju.note.launcher.base.BasePresenter;
+import com.muju.note.launcher.url.UrlUtil;
+import com.muju.note.launcher.util.Constants;
 import com.muju.note.launcher.util.DateUtil;
+import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
+import com.muju.note.launcher.util.sign.Signature;
+import com.muju.note.launcher.util.sp.SPUtil;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -44,6 +58,49 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
                     }
                 });
     }
+
+    @Override
+    public void getPatientData(String padId, Context context) {
+        Map<String, String> params = new HashMap();
+        params.put("bedId",padId);
+        params.put("disabled","1");
+        String sign = Signature.getSign(params, MobileInfoUtil.getICCID(context));
+        OkGo.<String>post(UrlUtil.getGetPaitentInfo()).tag(this)
+                .headers("SIGN", sign)
+//                .params("bedId", padId)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+//                        LogFactory.l().i("response==="+response.body());
+                        Gson gson = new Gson();
+                        PatientResponse patientResponse = gson.fromJson(response.body(), PatientResponse.class);
+                        if (patientResponse.getCode() == 200 && patientResponse.getData().size() > 0) {
+                            PatientResponse.DataBean patient = patientResponse.getData().get(0);
+                            if (patient.getDisabled()) {
+                                SPUtil.saveDataList(Constants.PATIENT,patientResponse.getData());
+                                mView.patientInfo(patient);
+                            } else {
+                                mView.notPatientInfo();
+                            }
+
+                        } else {
+                            mView.notPatientInfo();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+//                        clearPatientData();
+                        if (mView != null) {
+                            mView.notPatientInfo();
+                        }
+                    }
+                });
+    }
+
+
 
     public void onDestroy(){
         RxUtil.closeDisposable(diDateTimer);

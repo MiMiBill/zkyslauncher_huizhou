@@ -19,6 +19,12 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style name="txt_333_18" parent="ww">
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_marginLeft">8px</item>
+        <item name="android:textColor">@color/color_6d6d6d</item>
+    </style>
+
     <style name="DialogFullscreen" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowNoTitle">true</item>

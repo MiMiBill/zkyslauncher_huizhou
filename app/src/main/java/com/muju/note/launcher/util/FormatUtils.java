@@ -30,6 +30,13 @@ public class FormatUtils {
 
 
 
+        //格式化时间
+        public static final String parseLong(long formatDate)  {
+            String dateFormat = new SimpleDateFormat(formatDate2).format(formatDate);
+            return dateFormat;
+        }
+
+
         /**
          * 十位时间戳转换成 @Date
          *

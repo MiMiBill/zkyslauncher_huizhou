@@ -3,10 +3,6 @@ package com.muju.note.launcher.base;
 import android.app.Application;
 import android.content.Context;
 
-import com.muju.note.launcher.app.video.db.VideoColumnsDao;
-import com.muju.note.launcher.app.video.db.VideoTagSubDao;
-import com.muju.note.launcher.app.video.db.VideoTagsDao;
-import com.muju.note.launcher.app.video.util.WoTvUtil;
 import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.okgo.OkGoUtil;
 import com.muju.note.launcher.util.location.LocationUtil;
