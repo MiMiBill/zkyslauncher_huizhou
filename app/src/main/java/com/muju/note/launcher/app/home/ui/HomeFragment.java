@@ -17,6 +17,7 @@ import com.muju.note.launcher.app.home.contract.HomeContract;
 import com.muju.note.launcher.app.home.event.PatientEvent;
 import com.muju.note.launcher.app.home.presenter.HomePresenter;
 import com.muju.note.launcher.app.hostipal.ui.EncyclopediasFragment;
+import com.muju.note.launcher.app.hostipal.ui.HosPitalMissionFragment;
 import com.muju.note.launcher.app.hostipal.ui.HospitalMienFragment;
 import com.muju.note.launcher.app.video.bean.PayEntity;
 import com.muju.note.launcher.app.video.bean.PayEvent;
@@ -89,14 +90,14 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     TextView tvHosTime;
     @BindView(R.id.tv_hos_doctor)
     TextView tvHosDoctor;
-    Unbinder unbinder;
     @BindView(R.id.lly_have_paitent)
     LinearLayout llyHavePaitent;
     @BindView(R.id.ivPersonQrCode)
     ImageView ivPersonQrCode;
     @BindView(R.id.lly_no_patient)
     LinearLayout llyNoPatient;
-    Unbinder unbinder1;
+    @BindView(R.id.ll_his_mission)
+    LinearLayout llHisMission;
     private ActivePadInfo.DataBean activeInfo;
     private List<PatientResponse.DataBean> patientList = new ArrayList<>();
 
@@ -129,6 +130,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         llVideo.setOnClickListener(this);
         llHostipalEncy.setOnClickListener(this);
         llVideoLine.setOnClickListener(this);
+        llHisMission.setOnClickListener(this);
     }
 
 
@@ -269,7 +271,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     public void onEvent(PatientEvent event) {
         switch (event.getType()) {
             case PatientEvent.BIND:
-                mPresenter.getPatientData(String.valueOf(activeInfo.getBedId()),getActivity());
+                mPresenter.getPatientData(String.valueOf(activeInfo.getBedId()), getActivity());
                 break;
             case PatientEvent.UN_BIND:
                 FileUtils.deleteFile(Constants.FILE_VIP_GAME);
@@ -306,22 +308,11 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             case R.id.ll_video_line: // 直播TV
                 start(new WoTvVideoLineFragment());
                 break;
+
+            case R.id.ll_his_mission: // 医院宣教
+                start(new HosPitalMissionFragment());
+                break;
         }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
-            savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder1 = ButterKnife.bind(this, rootView);
-        return rootView;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder1.unbind();
     }
 }
 

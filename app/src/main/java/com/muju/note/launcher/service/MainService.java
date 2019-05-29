@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.IBinder;
 
 import com.muju.note.launcher.app.hostipal.service.MienService;
+import com.muju.note.launcher.app.hostipal.service.MissionService;
 import com.muju.note.launcher.app.video.service.VideoService;
 import com.muju.note.launcher.service.config.ConfigService;
 import com.muju.note.launcher.service.encyclope.EncyclopeService;
@@ -65,6 +66,9 @@ public class MainService extends Service {
 
         //医疗百科科室
         EncyclopeService.getInstance().start();
+
+        // 检查医院宣教数据
+        MissionService.getInstance().start();
 
         // 某些操作需要10分钟内执行
         Observable.timer((long) (Math.random() * 600), TimeUnit.SECONDS)

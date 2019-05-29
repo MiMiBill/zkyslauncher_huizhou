@@ -11,11 +11,13 @@ import com.lzy.okgo.model.Response;
 import com.lzy.okgo.request.base.Request;
 import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
 import com.muju.note.launcher.base.LauncherApplication;
+import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.okgo.BaseBean;
 import com.muju.note.launcher.okgo.JsonCallback;
 import com.muju.note.launcher.service.audio.PlayerAudioService;
 import com.muju.note.launcher.service.db.PadConfigDao;
 import com.muju.note.launcher.service.db.PadConfigSubDao;
+import com.muju.note.launcher.service.download.DownLoadService;
 import com.muju.note.launcher.service.http.ServiceHttp;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.ActiveUtils;
@@ -86,6 +88,7 @@ public class ConfigService {
                         service.execute(new Runnable() {
                             @Override
                             public void run() {
+                                LitePalDb.setZkysDb();
                                 PadConfigSubDao.deleteAll();
                                 for (PadConfigDao dao : response.body().getData()) {
                                     dao.save();
@@ -218,6 +221,10 @@ public class ConfigService {
      */
     private void checkAudio(List<PadConfigSubDao> list){
         for (PadConfigSubDao dao:list){
+            File file=new File(SdcardConfig.RESOURCE_FOLDER,dao.getContent().hashCode()+".mp3");
+            if(!file.exists()){
+                DownLoadService.getInstance().downLoadHaseCode(dao.getContent(),".mp3");
+            }
             if(DateUtil.isTimeRight(dao.getActionTime(),DateUtil.getNowHourAndMin())){
                 downLoadAudio(dao);
             }
@@ -232,35 +239,14 @@ public class ConfigService {
             LogUtil.e(TAG,"音乐文件路径为空，请检查");
 
         }
-        File file=new File(dao.getContent().hashCode()+".mp3");
+        File file=new File(SdcardConfig.RESOURCE_FOLDER,dao.getContent().hashCode()+".mp3");
         if(file.exists()){
             LogUtil.d(TAG,"音乐文件存在，直接播放:"+dao.getContent().hashCode()+".mp3");
             playAudio(dao);
             return;
+        }else {
+            LogUtil.d(TAG,"音乐文件不存在");
         }
-        OkGo.<File>get(dao.getContent())
-                .tag(this)
-                .execute(new FileCallback(SdcardConfig.RESOURCE_FOLDER, dao.getContent().hashCode()+".mp3") {
-                    @Override
-                    public void onSuccess(Response<File> response) {
-                        playAudio(dao);
-                    }
-
-                    @Override
-                    public void downloadProgress(Progress progress) {
-                        super.downloadProgress(progress);
-                    }
-
-                    @Override
-                    public void onError(Response<File> response) {
-                        super.onError(response);
-                    }
-
-                    @Override
-                    public void onStart(Request<File, ? extends Request> request) {
-                        super.onStart(request);
-                    }
-                });
     }
 
     /**
@@ -282,33 +268,11 @@ public class ConfigService {
             return;
         }
         String path=daos.get(0).getContent();
-        File file=new File(path.hashCode()+".mp4");
+        File file=new File(SdcardConfig.RESOURCE_FOLDER,path.hashCode()+".mp4");
         if(file.exists()){
-            LogUtil.d(TAG,"每日视频已存在，无需下载");
             return;
         }
-        OkGo.<File>get(path)
-                .tag(this)
-                .execute(new FileCallback(SdcardConfig.RESOURCE_FOLDER, path.hashCode()+".mp4") {
-                    @Override
-                    public void onSuccess(Response<File> response) {
-                    }
-
-                    @Override
-                    public void downloadProgress(Progress progress) {
-                        super.downloadProgress(progress);
-                    }
-
-                    @Override
-                    public void onError(Response<File> response) {
-                        super.onError(response);
-                    }
-
-                    @Override
-                    public void onStart(Request<File, ? extends Request> request) {
-                        super.onStart(request);
-                    }
-                });
+        DownLoadService.getInstance().downLoadHaseCode(path,".mp4");
     }
 
 }

@@ -153,4 +153,12 @@ public class UrlUtil {
     public static String getGetPaitentInfo(){
         return getHost() + "/hospitalBedTabb/list";
     }
+
+    /**
+     *  医院宣教
+     * @return
+     */
+    public static String getHospitalMission() {
+        return getHost() + "/hospitalPublicize/list";
+    }
 }

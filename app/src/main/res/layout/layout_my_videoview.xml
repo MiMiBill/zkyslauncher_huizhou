@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
 
-    <com.muju.note.launcher.ui.widget.PlayVideoView
+    <com.muju.note.launcher.view.PlayVideoView
         android:id="@+id/vvVideo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
