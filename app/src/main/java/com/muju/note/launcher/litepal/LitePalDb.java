@@ -1,5 +1,7 @@
 package com.muju.note.launcher.litepal;
 
+import com.muju.note.launcher.app.home.db.AdvertsCountDao;
+import com.muju.note.launcher.app.home.db.AdvertsInfoDao;
 import com.muju.note.launcher.app.hostipal.db.MienInfoDao;
 import com.muju.note.launcher.app.video.db.VideoColumnsDao;
 import com.muju.note.launcher.app.video.db.VideoHisDao;
@@ -17,8 +19,8 @@ import org.litepal.LitePalDB;
 
 public class LitePalDb {
 
-    public static final LitePalDB zkysDataDb=new LitePalDB("zkys-data",8);
-    public static final LitePalDB zkysDb=new LitePalDB("zkys",12);
+    public static final LitePalDB zkysDataDb=new LitePalDB("zkys-data",9);
+    public static final LitePalDB zkysDb=new LitePalDB("zkys",14);
 
     /**
      *  初始化数据库
@@ -26,10 +28,14 @@ public class LitePalDb {
     public static void addDb(){
 
         zkysDataDb.setStorage("zkysdb");
+        zkysDataDb.addClassName(UpAdvertInfoDao.class.getName());
+        zkysDataDb.addClassName(UpVideoInfoDao.class.getName());
         LitePal.use(zkysDataDb);
 
         zkysDb.setStorage("zkysdb");
         zkysDb.addClassName(MienInfoDao.class.getName());
+        zkysDb.addClassName(AdvertsCountDao.class.getName());
+        zkysDb.addClassName(AdvertsInfoDao.class.getName());
         zkysDb.addClassName(PadConfigDao.class.getName());
         zkysDb.addClassName(PadConfigSubDao.class.getName());
         zkysDb.addClassName(VideoColumnsDao.class.getName());
@@ -39,6 +45,7 @@ public class LitePalDb {
         zkysDb.addClassName(VideoTagSubDao.class.getName());
         zkysDb.addClassName(VideoPlayerInfoDao.class.getName());
         zkysDb.addClassName(VideoPlayerCountDao.class.getName());
+        zkysDb.addClassName(VideoHisDao.class.getName());
         zkysDb.addClassName(VideoHisDao.class.getName());
         LitePal.use(zkysDb);
     }

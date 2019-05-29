@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -11,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.devbrackets.android.api.video.impl.VideoErrorInfo;
-import com.devbrackets.android.component.utils.ViewScaleUtil;
 import com.devbrackets.android.media.listener.OnVideoPreparedListener;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
@@ -28,7 +28,6 @@ import com.muju.note.launcher.app.video.util.PayUtils;
 import com.muju.note.launcher.app.video.util.WoTvUtil;
 import com.muju.note.launcher.app.video.util.wotv.ExpandVideoView2;
 import com.muju.note.launcher.base.BaseFragment;
-import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.DateUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
@@ -50,6 +49,8 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -92,6 +93,9 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
 
     // 当前播放的集数
     private static int EPISODE_POSITION;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
+    Unbinder unbinder;
 
     private VideoHisDao videoHisDao;
 
@@ -99,8 +103,8 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
 
     private long startTime;
 
-    public void setHisDao(VideoHisDao videoHisDao){
-        this.videoHisDao=videoHisDao;
+    public void setHisDao(VideoHisDao videoHisDao) {
+        this.videoHisDao = videoHisDao;
     }
 
     Handler handler = new Handler() {
@@ -120,7 +124,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                 if (msg.what == 0x01) {
                     llDes.setVisibility(View.GONE);
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -136,7 +140,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
 
         try {
 
-            startTime=System.currentTimeMillis();
+            startTime = System.currentTimeMillis();
 
             EventBus.getDefault().register(this);
 
@@ -159,6 +163,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
             // 监听支付
             checkIsValid();
 
+
             // 视频开始播放后，展示上下菜单
             videoView.setOnPreparedListener(new OnVideoPreparedListener() {
                 @Override
@@ -169,9 +174,11 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
             });
 
             // 添加历史记录
-            videoHisDao.setCreateTime(System.currentTimeMillis()+"");
+            videoHisDao.setCreateTime(System.currentTimeMillis() + "");
             VideoService.getInstance().addVideoHisInfo(videoHisDao);
-        }catch (Exception e){
+            tvTitle.setText(videoHisDao.getName());
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -189,7 +196,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.iv_back:
                 pop();
                 break;
@@ -207,7 +214,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                 verifyPlayingStatus();
                 //TODO 播放器的默认海报展示的时候，会通知业务层，由业务层处理业务逻辑。
                 Log.e(TAG, "海报是否显示：" + isVisiable);
-                if(!videoView.isPlaying()) {
+                if (!videoView.isPlaying()) {
                     llLoading.setVisibility(View.VISIBLE);
                 }
 
@@ -399,7 +406,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                     @Override
                     public void accept(Long aLong) throws Exception {
                         try {
-                            if(videoView==null){
+                            if (videoView == null) {
                                 return;
                             }
                             if (videoView.getPlayedDuration() != 0 && videoView.getCurrentPosition() != 0) {
@@ -409,7 +416,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                                     RxUtil.closeDisposable(disposableIsValid);
                                 }
                             }
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -471,6 +478,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
      */
     private VideoOrImageDialog videoOrImageDialog;
     private VideoPayDialog payDialog;
+
     private void showPayDialog(int isConvention) {
         //暂停播放
         videoView.pause();
@@ -479,10 +487,10 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
         }
         //开启轮询
         selectPayInterval();
-        payDialog=new VideoPayDialog(getActivity(), R.style.DialogFullscreen, new View.OnClickListener() {
+        payDialog = new VideoPayDialog(getActivity(), R.style.DialogFullscreen, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (v.getId()){
+                switch (v.getId()) {
                     case R.id.ivClose:
                     case R.id.ivClose2:
                         pop();
@@ -491,7 +499,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
 
                     case R.id.tvHelp:
                         payDialog.dismiss();
-                        startForResult(new VideoHelperFragment(),1001);
+                        startForResult(new VideoHelperFragment(), 1001);
                         break;
 
                     case R.id.btPay:
@@ -508,7 +516,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
         super.onFragmentResult(requestCode, resultCode, data);
-        if(requestCode==1001){
+        if (requestCode == 1001) {
             payDialog.show();
         }
     }
@@ -640,12 +648,12 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
     public void onDestroy() {
         try {
 //            videoHisDao.setDuration(videoView.getDuration());\
-            VideoService.getInstance().addVideoCount(videoHisDao.getVideoId()+"",videoHisDao.getName(),startTime,System.currentTimeMillis());
-            VideoService.getInstance().addVideoInfoDb(videoHisDao.getVideoId()+"",videoHisDao.getName(),startTime,System.currentTimeMillis());
+            VideoService.getInstance().addVideoCount(videoHisDao.getVideoId() + "", videoHisDao.getName(), startTime, System.currentTimeMillis());
+            VideoService.getInstance().addVideoInfoDb(videoHisDao.getVideoId() + "", videoHisDao.getName(), startTime, System.currentTimeMillis());
             if (videoView != null) {
                 videoView.pause();
                 videoView.onDestroy();
-                videoView=null;
+                videoView = null;
             }
             RxUtil.closeDisposable(disposableSlPay);
             RxUtil.closeDisposable(diPayDialog);
@@ -656,9 +664,23 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                 handler = null;
             }
             EventBus.getDefault().unregister(this);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         super.onDestroy();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

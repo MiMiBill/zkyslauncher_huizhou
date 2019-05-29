@@ -2,11 +2,16 @@ package com.muju.note.launcher.service.operation;
 
 import android.text.TextUtils;
 
+import com.muju.note.launcher.base.LauncherApplication;
+import com.muju.note.launcher.service.config.ConfigService;
 import com.muju.note.launcher.service.db.PadConfigDao;
 import com.muju.note.launcher.service.db.PadConfigSubDao;
+import com.muju.note.launcher.service.updatedata.UpdateDataService;
+import com.muju.note.launcher.service.uploaddata.UpLoadDataService;
 import com.muju.note.launcher.util.DateUtil;
 import com.muju.note.launcher.util.app.AppUtils;
 import com.muju.note.launcher.util.log.LogUtil;
+import com.muju.note.launcher.util.net.NetWorkUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
 import com.muju.note.launcher.util.system.SystemUtils;
 
@@ -41,9 +46,6 @@ public class OneMinuteDisposable {
 
 
     private Disposable diTimer;
-
-    private static final String CLOSE_PAD = "closePad";
-    private static final String OPEN_PAD = "openPad";
 
     public void start() {
         //时间矫正偏移
@@ -84,7 +86,17 @@ public class OneMinuteDisposable {
 
     private void runStruct() {
         try {
-            playConfig();
+            // 查看配置文件是否需要有执行的操作
+            ConfigService.getInstance().playConfig();
+
+            // 获取信号强度
+            NetWorkUtil.getSignalStrength(LauncherApplication.getContext());
+
+            // 检查是否需要更新本地数据
+            UpdateDataService.getInstance().start();
+
+            // 检查是否需要上传统计数据
+            UpLoadDataService.getInstance().start();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -94,116 +106,4 @@ public class OneMinuteDisposable {
         RxUtil.closeDisposable(diTimer);
     }
 
-    /**
-     * 执行配置文件操作
-     */
-    private void playConfig() throws Exception {
-        LitePal.findAllAsync(PadConfigDao.class,true).listen(new FindMultiCallback<PadConfigDao>() {
-            @Override
-            public void onFinish(List<PadConfigDao> list) {
-                try {
-                    if(list==null||list.size()<=0){
-                        LogUtil.e(TAG,"平板配置信息为空，请检查配置");
-                        return;
-                    }
-                    Calendar calendar = Calendar.getInstance();
-                    int hour = calendar.get(Calendar.HOUR_OF_DAY);
-                    int minute = calendar.get(Calendar.MINUTE);
-                    LogUtil.d("当前时间："+hour+":"+minute);
-                    for (PadConfigDao dao:list){
-                        switch (dao.getSort()){
-                            case "audio":
-
-                                break;
-
-                            case "openVideo":
-
-                                break;
-
-                            case "launch":
-                                lockScreen(dao.getPadConfigs());
-                                break;
-                        }
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-
-            }
-        });
-    }
-
-    /**
-     * 执行开屏或关屏
-     *
-     * @param list
-     * @throws Exception
-     */
-    private void lockScreen(List<PadConfigSubDao> list) throws Exception {
-        String type = checkScreen(list);
-        LogUtil.d(TAG,"开关屏类型："+type);
-        if (TextUtils.isEmpty(type)) {
-            return;
-        }
-        boolean isLock=SystemUtils.isLock();
-        if(type.equals(OPEN_PAD)){
-            if(isLock) {
-                LogUtil.d(TAG,"当前处于开屏状态，无需在开屏");
-            }else {
-                LogUtil.d(TAG,"当前处于关屏状态，开启屏幕");
-                Disposable di = Observable.timer(5, TimeUnit.SECONDS)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<Long>() {
-                            @Override
-                            public void accept(Long aLong) throws Exception {
-                                SystemUtils.turnOnScreen();
-                                AppUtils.rebootPhone();
-                            }
-                        });
-
-
-            }
-        }
-        if(type.equals(CLOSE_PAD)){
-            if(isLock){
-                LogUtil.d(TAG,"当前处于开屏状态，锁屏");
-                Disposable di = Observable.timer(1, TimeUnit.SECONDS)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<Long>() {
-                            @Override
-                            public void accept(Long aLong) throws Exception {
-                                SystemUtils.screenOff();
-                            }
-                        });
-            }else {
-                LogUtil.d(TAG,"当前处于锁屏状态，无需在锁屏");
-            }
-        }
-    }
-
-    private String checkScreen(List<PadConfigSubDao> list) throws Exception {
-        String nowDate = DateUtil.getNowHourAndMin();
-        for (int i = 0; i < list.size(); i++) {
-            if (i == 0) {
-                // 如果小于第一个item的时间，那么执行第一条的反操作
-                if (!DateUtil.checkTime(nowDate, list.get(i).getActionTime())) {
-                    if (TextUtils.equals(list.get(i).getType(), OPEN_PAD)) {
-                        return CLOSE_PAD;
-                    } else if (TextUtils.equals(list.get(i).getType(), CLOSE_PAD)) {
-                        return OPEN_PAD;
-                    }
-                }
-            }
-            // 如果为最后一条item，那么直接执行当前操作
-            if (i == list.size() - 1) {
-                return list.get(i).getType();
-            }
-
-            // 如果当前时间大于item时间，并且小于下一item时间，执行当前item操作
-            if (DateUtil.checkTime(nowDate, list.get(i).getActionTime()) && !DateUtil.checkTime(nowDate, list.get(i + 1).getActionTime())) {
-                return list.get(i).getType();
-            }
-        }
-        return null;
-    }
 }

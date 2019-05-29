@@ -119,7 +119,7 @@ public class UrlUtil {
     }
 
     /**
-     *  上传广告数据
+     *  上传广告统计数据
      * @return
      */
     public static String getUpCountDb(){
@@ -132,5 +132,21 @@ public class UrlUtil {
      */
     public static String getQnToken(){
         return getHost()+"/qn/cloud/getToken?bucketName=%s";
+    }
+
+    /**
+     *  开机心跳率上传
+     * @return
+     */
+    public static String padLogInsert() {
+        return getHost() + "/padLog/insert";
+    }
+
+    /**
+     *  上传影视统计数据
+     * @return
+     */
+    public static String getUpVideoCountDb(){
+        return getHost()+"/video/statistics";
     }
 }

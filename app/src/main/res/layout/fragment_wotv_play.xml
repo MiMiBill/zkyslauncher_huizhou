@@ -4,10 +4,22 @@
     android:layout_height="match_parent"
     android:background="@android:color/black">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="100px">
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="@dimen/px20"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+
     <com.muju.note.launcher.app.video.util.wotv.ExpandVideoView2
         android:id="@+id/video_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="700px"
         android:background="@color/common_black"
         android:layout_alignParentBottom="true">
     </com.muju.note.launcher.app.video.util.wotv.ExpandVideoView2>

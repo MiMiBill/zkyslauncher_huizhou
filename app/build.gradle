@@ -91,6 +91,7 @@ dependencies {
     //大图
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.5.0'
 
+    // 七牛云
     implementation 'com.qiniu:qiniu-android-sdk:7.3.15'
     //视频缓存
     implementation 'com.danikula:videocache:2.7.0'
