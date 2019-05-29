@@ -119,7 +119,7 @@ public class UrlUtil {
     }
 
     /**
-     *  上传广告数据
+     *  上传广告统计数据
      * @return
      */
     public static String getUpCountDb(){
@@ -134,8 +134,24 @@ public class UrlUtil {
         return getHost()+"/qn/cloud/getToken?bucketName=%s";
     }
 
+    /**
+     *  开机心跳率上传
+     * @return
+     */
+    public static String padLogInsert() {
+        return getHost() + "/padLog/insert";
+    }
+
+    /**
+     *  上传影视统计数据
+     * @return
+     */
+    public static String getUpVideoCountDb(){
+        return getHost() + "/video/statistics";
+    }
+
     //获取病人信息
-    public static String getGetPaitentInfo() {
+    public static String getGetPaitentInfo(){
         return getHost() + "/hospitalBedTabb/list";
     }
 
@@ -158,5 +174,13 @@ public class UrlUtil {
     //公众号平台页面验证验证码
     public static String verCode() {
         return getHost() + "/advert/verifyCode";
+    }
+
+    /**
+     *  医院宣教
+     * @return
+     */
+    public static String getHospitalMission() {
+        return getHost() + "/hospitalPublicize/list";
     }
 }

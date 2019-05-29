@@ -100,4 +100,26 @@ public class DateUtil {
         expireData.setTimeInMillis(Long.parseLong(date) * 1000);
         return expireData.getTimeInMillis() >= new Date().getTime();
     }
+
+    /**
+     *  判断时间是否相等
+     * @param t1
+     * @param t2
+     * @return
+     */
+    public static boolean isTimeRight(String t1, String t2){
+        if (TextUtils.isEmpty(t1) || t1.equals("")) {
+            return false;
+        }
+        if (TextUtils.isEmpty(t2) || t2.equals("")) {
+            return false;
+        }
+        int t1hour = Integer.parseInt(t1.split(":")[0]);
+        int t1min = Integer.parseInt(t1.split(":")[1]);
+        int t2hour = Integer.parseInt(t2.split(":")[0]);
+        int t2min = Integer.parseInt(t2.split(":")[1]);
+        int t1time = t1hour * 60 + t1min;
+        int t2time = t2hour * 60 + t2min;
+        return t1time == t2time ? true : false;
+    }
 }

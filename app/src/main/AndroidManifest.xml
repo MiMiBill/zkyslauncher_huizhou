@@ -234,15 +234,6 @@
             </intent-filter>-->
         </activity>
 
-        <!-- 百度定位 -->
-        <meta-data
-            android:name="com.baidu.lbsapi.API_KEY"
-            android:value="VdfrqzLf4xlxOkVgF89fO1qpyF3iGgCG" />
-        <!-- 百度定位 -->
-        <service
-            android:name="com.baidu.location.f"
-            android:enabled="true"
-            android:process=":remote" />
 
         <service
             android:name=".service.MainService"
@@ -385,6 +376,16 @@
             android:name=".app.lockScreen.ProtectionProcessActivity"
             android:launchMode="singleTask"
             android:screenOrientation="landscape" />
+
+        <!-- 百度定位 -->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="VdfrqzLf4xlxOkVgF89fO1qpyF3iGgCG" />
+        <!-- 百度定位 -->
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" />
         <activity
             android:name=".app.activity.AdVideoViewActivity"
             android:launchMode="singleTask"

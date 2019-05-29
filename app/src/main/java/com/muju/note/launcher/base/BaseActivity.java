@@ -107,7 +107,6 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        LogUtil.d("protection : %s", "跳转到屏保");
                         ProtectionProcessActivity.launch(getContext());
                     }
                 });
@@ -150,13 +149,10 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
         switch (ev.getAction()){
             case MotionEvent.ACTION_DOWN:
                 startProtectionCountDown();
-                LogUtil.d(" %s","dispatchTouchEvent_ACTION_DOWN");
                 break;
             case MotionEvent.ACTION_MOVE:
-                LogUtil.d("  %s","dispatchTouchEvent_ACTION_MOVE");
                 break;
             case MotionEvent.ACTION_UP:
-                LogUtil.d(" %s","dispatchTouchEvent_ACTION_UP");
                 break;
         }
         return mDelegate.dispatchTouchEvent(ev) || super.dispatchTouchEvent(ev);
@@ -165,7 +161,6 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        LogUtil.d("protection : %s", "按键动作  dispatchKeyEvent");
         //有触摸动作重置定时器
         startProtectionCountDown();
         return super.dispatchKeyEvent(event);
@@ -316,7 +311,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sendBroadcast(new Intent("mid.systemui.hide_statusbar"));
+//        sendBroadcast(new Intent("mid.systemui.hide_statusbar"));
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        hideBottomUIMenu();

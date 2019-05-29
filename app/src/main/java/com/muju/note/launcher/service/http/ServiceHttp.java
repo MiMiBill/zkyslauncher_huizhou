@@ -55,45 +55,6 @@ public class ServiceHttp {
     }
 
     /**
-     * 获取平板配置信息
-     *
-     */
-    public void getPadConfigs() {
-
-        ActivePadInfo.DataBean activeInfo = ActiveUtils.getPadActiveInfo();
-        Map<String, String> params = new HashMap();
-        params.put("hospitalId", ""+activeInfo.getHospitalId());
-        params.put("deptId", "" + activeInfo.getDeptId());
-        String sign = Signature.getSign(params, MobileInfoUtil.getICCID(LauncherApplication.getContext()));
-
-        OkGo.<BaseBean<List<PadConfigDao>>>post(UrlUtil.getPadConfigsNew())
-                .tag(this)
-                .headers(Signature.PAD_SIGN,sign)
-                .params(params)
-                .execute(new JsonCallback<BaseBean<List<PadConfigDao>>>() {
-                    @Override
-                    public void onSuccess(final Response<BaseBean<List<PadConfigDao>>> response) {
-
-                        ExecutorService service=Executors.newSingleThreadExecutor();
-                        service.execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                PadConfigSubDao.deleteAll();
-                                for (PadConfigDao dao:response.body().getData()){
-                                    dao.save();
-                                    for (PadConfigSubDao subDao:dao.getPadConfigs()){
-                                        subDao.save();
-                                    }
-                                }
-                            }
-                        });
-
-                    }
-                });
-    }
-
-
-    /**
      * 下载文件
      *
      * @param resourceEntity

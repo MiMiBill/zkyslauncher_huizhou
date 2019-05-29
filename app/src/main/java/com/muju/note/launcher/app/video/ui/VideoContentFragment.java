@@ -302,4 +302,9 @@ public class VideoContentFragment extends BaseFragment<VideoContentPresenter> im
         ((VideoFragment) getParentFragment()).start(wotvPlayFragment);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().sendBroadcast(new Intent("mid.systemui.hide_statusbar"));
+    }
 }

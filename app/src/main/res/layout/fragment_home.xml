@@ -386,6 +386,27 @@
                     android:textSize="@dimen/px25"
                     android:layout_marginTop="@dimen/px14"/>
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_his_mission"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/px102">
+                <ImageView
+                    android:layout_width="@dimen/px100"
+                    android:layout_height="@dimen/px100"
+                    android:src="@mipmap/ic_home_item_his_mission"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="医疗宣教"
+                    android:textColor="@color/black_gray"
+                    android:textSize="@dimen/px25"
+                    android:layout_marginTop="@dimen/px14"
+                    android:layout_gravity="center_horizontal"/>
+            </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/ll_video"
                 android:layout_width="wrap_content"
@@ -445,6 +466,8 @@
                     android:layout_marginTop="@dimen/px14"
                     android:layout_gravity="center_horizontal"/>
             </LinearLayout>
+
+
         </LinearLayout>
 
     </LinearLayout>

@@ -2,6 +2,7 @@ package com.muju.note.launcher.base;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 
 import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.okgo.OkGoUtil;
@@ -28,6 +29,10 @@ public class LauncherApplication extends Application {
         context=this;
         instance=this;
 
+        sendBroadcast(new Intent("mid.systemui.hide_statusbar"));
+        sendBroadcast(new Intent("mid.settings.hide_dev"));
+        sendFullScreenBroadcast();
+
         ExecutorService service=Executors.newSingleThreadExecutor();
         service.execute(new Runnable() {
             @Override
@@ -47,11 +52,15 @@ public class LauncherApplication extends Application {
 //                WoTvUtil.getInstance().initSDK(instance);
             }
         });
+    }
 
-        // okgo初始化
-        OkGoUtil.initOkGo(this);
-        //初始化定位,心跳接口必须
-        LocationUtil.initLocationOption(this);
+    private void sendFullScreenBroadcast() {
+        //todo 小鲸鱼专用全屏广播
+        Intent hideNavigIntent = new Intent();
+        hideNavigIntent.setAction("android.intent.action.sendkey");
+        hideNavigIntent.putExtra("keycode", 1239);
+        hideNavigIntent.putExtra("state", 1);
+        sendBroadcast(hideNavigIntent);
     }
 
     public static Context getContext(){
