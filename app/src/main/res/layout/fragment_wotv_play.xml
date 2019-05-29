@@ -12,6 +12,29 @@
         android:layout_alignParentBottom="true">
     </com.muju.note.launcher.app.video.util.wotv.ExpandVideoView2>
 
+    <RelativeLayout
+        android:id="@+id/rel_cornor"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="30px"
+        android:layout_marginRight="30px"
+        android:background="#34518B"
+        android:layout_width="362px"
+        android:layout_height="122px">
+        <ImageView
+            android:layout_centerInParent="true"
+            android:id="@+id/iv_corner"
+            android:layout_width="360px"
+            android:layout_height="120px" />
+        <ImageView
+            android:id="@+id/iv_colse"
+            android:clickable="true"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/ic_video_close"
+            android:layout_width="25px"
+            android:layout_height="25px" />
+    </RelativeLayout>
     <LinearLayout
         android:id="@+id/ll_loading"
         android:layout_width="match_parent"

@@ -134,7 +134,29 @@ public class UrlUtil {
         return getHost()+"/qn/cloud/getToken?bucketName=%s";
     }
 
+    //获取病人信息
     public static String getGetPaitentInfo() {
         return getHost() + "/hospitalBedTabb/list";
+    }
+
+    /**
+     *  微信登录二维码链接
+     * @return
+     */
+    public static String getWxLogin(){
+        return getHost()+"/login/wxLogin/";
+    }
+
+    /**
+     *  获取用户信息
+     * @return
+     */
+    public static String getUserInfo(){
+        return getHost()+"/login/getUserInfo/";
+    }
+
+    //公众号平台页面验证验证码
+    public static String verCode() {
+        return getHost() + "/advert/verifyCode";
     }
 }

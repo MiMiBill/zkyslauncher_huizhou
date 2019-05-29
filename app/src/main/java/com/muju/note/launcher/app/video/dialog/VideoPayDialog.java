@@ -61,6 +61,7 @@ public class VideoPayDialog extends Dialog {
         ivClose2.setOnClickListener(listener);
         tvHelp.setOnClickListener(listener);
         btPay.setOnClickListener(listener);
+        tvLogin.setOnClickListener(listener);
     }
 
     public void setPay(){

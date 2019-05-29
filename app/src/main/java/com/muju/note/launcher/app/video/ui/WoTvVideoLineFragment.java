@@ -1,12 +1,9 @@
 package com.muju.note.launcher.app.video.ui;
 
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,6 +14,7 @@ import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.video.adapter.VideoLineAdapter;
 import com.muju.note.launcher.app.video.contract.VideoLineContract;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
+import com.muju.note.launcher.app.video.event.VideoNoLockEvent;
 import com.muju.note.launcher.app.video.presenter.VideoLinePresenter;
 import com.muju.note.launcher.app.video.util.WoTvUtil;
 import com.muju.note.launcher.app.video.util.wotv.ExpandVideoView2;
@@ -28,13 +26,13 @@ import com.unicom.common.VideoSdkConfig;
 import com.unicom.common.base.video.IVideoEvent;
 import com.unicom.common.base.video.expand.ExpandVideoListener;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -102,7 +100,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
 
         // 设置播放器回调
         setVideoView();
-
+        EventBus.getDefault().post(new VideoNoLockEvent(false));
         lineAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -334,6 +332,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
                 videoView.onDestroy();
                 videoView = null;
             }
+            EventBus.getDefault().post(new VideoNoLockEvent(true));
         } catch (Exception e) {
             e.printStackTrace();
         }

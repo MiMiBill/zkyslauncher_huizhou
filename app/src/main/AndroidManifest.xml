@@ -35,8 +35,6 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     <uses-permission android:name="android.permission.INSTALL_LOCATION_PROVIDER" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIMAX_STATE" />
@@ -45,7 +43,6 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH_STACK" />
     <uses-permission android:name="android.permission.NFC" />
-    <uses-permission android:name="android.permission.CONNECTIVITY_INTERNAL" />
     <uses-permission android:name="android.permission.RECEIVE_DATA_ACTIVITY_CHANGE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
@@ -71,8 +68,6 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.USE_SIP" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_MEDIA_STORAGE" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" />
@@ -93,9 +88,7 @@
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.READ_SYNC_STATS" />
-    <uses-permission android:name="android.permission.SET_SCREEN_COMPATIBILITY" />
     <uses-permission android:name="android.permission.ACCESS_ALL_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_GSERVICES" />
     <uses-permission android:name="android.permission.SET_SCREEN_COMPATIBILITY" />
@@ -108,7 +101,6 @@
     <uses-permission android:name="android.permission.SET_PREFERRED_APPLICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.MOUNT_FORMAT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.ASEC_ACCESS" />
     <uses-permission android:name="android.permission.ASEC_CREATE" />
@@ -166,7 +158,6 @@
     <uses-permission android:name="android.permission.CONFIGURE_WIFI_DISPLAY" />
     <uses-permission android:name="android.permission.CONTROL_WIFI_DISPLAY" />
     <uses-permission android:name="android.permission.BRICK" />
-    <uses-permission android:name="android.permission.REBOOT" />
     <uses-permission android:name="android.permission.DEVICE_POWER" />
     <uses-permission android:name="android.permission.NET_TUNNELING" />
     <uses-permission android:name="android.permission.FACTORY_TEST" />
@@ -192,7 +183,6 @@
     <uses-permission android:name="android.permission.SET_WALLPAPER_COMPONENT" />
     <uses-permission android:name="android.permission.READ_DREAM_STATE" />
     <uses-permission android:name="android.permission.WRITE_DREAM_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_CACHE_FILESYSTEM" />
     <uses-permission android:name="android.permission.COPY_PROTECTED_DATA" />
     <uses-permission android:name="android.permission.CRYPT_KEEPER" />
     <uses-permission android:name="android.permission.READ_NETWORK_USAGE_HISTORY" />
@@ -214,9 +204,13 @@
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
     <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.RECOVERY" />
 
+    <!-- Jpush权限 -->
+    <permission
+        android:name="${JPUSH_PKGNAME}.permission.JPUSH_MESSAGE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="${JPUSH_PKGNAME}.permission.JPUSH_MESSAGE" />
     <!-- ******************************************  全部权限结束  ****************************************************** -->
     <application
         android:name=".base.LauncherApplication"
@@ -226,6 +220,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        tools:replace="label,allowBackup"
         >
 
         <activity
@@ -262,7 +257,7 @@
         <!-- Jpush相关配置 -->
         <!-- Required SDK 核心功能 -->
         <!-- 可配置android:process参数将PushService放在其他进程中 -->
-        <!--<service
+        <service
             android:name="cn.jpush.android.service.PushService"
             android:enabled="true"
             android:exported="false">
@@ -274,15 +269,17 @@
             </intent-filter>
         </service>
 
-        &lt;!&ndash; since 3.0.9 Required SDK 核心功能 &ndash;&gt;
+        <!-- since 3.0.9 Required SDK 核心功能 -->
         <provider
             android:name="cn.jpush.android.service.DataProvider"
             android:authorities="${JPUSH_PKGNAME}.DataProvider"
             android:exported="true"
+            tools:node="replace"
+            tools:replace="android:exported"
              />
 
-        &lt;!&ndash; since 1.8.0 option 可选项。用于同一设备中不同应用的JPush服务相互拉起的功能。 &ndash;&gt;
-        &lt;!&ndash; 若不启用该功能可删除该组件，将不拉起其他应用也不能被其他应用拉起 &ndash;&gt;
+        <!-- since 1.8.0 option 可选项。用于同一设备中不同应用的JPush服务相互拉起的功能。 -->
+        <!-- 若不启用该功能可删除该组件，将不拉起其他应用也不能被其他应用拉起 -->
         <service
             android:name="cn.jpush.android.service.DaemonService"
             android:enabled="true"
@@ -294,13 +291,13 @@
             </intent-filter>
         </service>
 
-        &lt;!&ndash; since 3.1.0 Required SDK 核心功能 &ndash;&gt;
+        <!-- since 3.1.0 Required SDK 核心功能 -->
         <provider
             android:name="cn.jpush.android.service.DownloadProvider"
             android:authorities="${JPUSH_PKGNAME}.DownloadProvider"
             android:exported="true" />
 
-        &lt;!&ndash; Required SDK核心功能 &ndash;&gt;
+        <!-- Required SDK核心功能 -->
         <receiver
             android:name="cn.jpush.android.service.PushReceiver"
             android:enabled="true">
@@ -313,14 +310,14 @@
                 <action android:name="android.intent.action.USER_PRESENT" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
-            &lt;!&ndash; Optional &ndash;&gt;
+            <!-- Optional -->
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />
 
                 <data android:scheme="package" />
             </intent-filter>
-        </receiver>-->
+        </receiver>
 
         <!-- 设备管理 -->
         <receiver
@@ -362,7 +359,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.muju.note.launcher.fileProvider"
+            android:authorities="${JPUSH_PKGNAME}.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -398,6 +395,10 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".app.activity.LargePicActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".app.publicAdress.ui.PublicActivity"
             android:launchMode="singleTask"
             android:screenOrientation="landscape" />
     </application>

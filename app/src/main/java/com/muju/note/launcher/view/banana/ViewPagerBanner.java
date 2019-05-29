@@ -10,7 +10,6 @@ import android.view.MotionEvent;
 public class ViewPagerBanner extends ViewPager {
     //是否可以进行滑动
     private boolean isSlide = false;//false:不可以滑动；true:可以滑动
-
     public ViewPagerBanner(@NonNull Context context) {
         super(context);
     }
@@ -49,6 +48,8 @@ public class ViewPagerBanner extends ViewPager {
         //return super.onInterceptTouchEvent(ev);//不行,会有细微移动
         //return !isSlide;
     }
+
+
 
     /**
      * 是否消费事件

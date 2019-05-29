@@ -1,6 +1,8 @@
 package com.muju.note.launcher.app.home.ui;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,8 +33,11 @@ import com.muju.note.launcher.util.Constants;
 import com.muju.note.launcher.util.FormatUtils;
 import com.muju.note.launcher.util.UIUtils;
 import com.muju.note.launcher.util.adverts.NewAdvertsUtil;
+import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.file.CacheUtil;
 import com.muju.note.launcher.util.file.FileUtils;
+import com.muju.note.launcher.util.log.LogUtil;
+import com.muju.note.launcher.util.qr.QrCodeUtils;
 import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.view.banana.Banner;
 
@@ -42,10 +47,15 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import cn.jpush.android.api.JPushInterface;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 
 public class HomeFragment extends BaseFragment<HomePresenter> implements HomeContract.View, View
         .OnClickListener {
@@ -107,6 +117,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         return homeFragment;
     }
 
+
     @Override
     public int getLayout() {
         return R.layout.fragment_home;
@@ -116,7 +127,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     public void initData() {
         activeInfo = ActiveUtils.getPadActiveInfo();
         initBanner();
-
+        saveRegisterId();
         patientList = SPUtil.getPatientList(Constants.PATIENT);
         if (patientList.size() > 0) {
             patientInfo(patientList.get(0));
@@ -258,10 +269,30 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void notPatientInfo() {
-//        ivPersonQrCode.setImageBitmap(QrCodeUtils.generateBitmap(MobileInfoUtil.getICCID
-//                (getContext()) + "," + JPushInterface.getRegistrationID(getContext()), 200, 200));
+        ivPersonQrCode.setImageBitmap(QrCodeUtils.generateBitmap(MobileInfoUtil.getICCID
+                (getContext()) + "," + JPushInterface.getRegistrationID(getContext()), 200, 200));
         llyNoPatient.setVisibility(View.VISIBLE);
         llyHavePaitent.setVisibility(View.GONE);
+    }
+
+    /**
+     * 保存RegisterId到后台
+     */
+    @SuppressLint("CheckResult")
+    private void saveRegisterId() {
+        String regId = JPushInterface.getRegistrationID(getContext());
+        LogUtil.d("jgId:%s", regId);
+        if (TextUtils.isEmpty(regId)) {
+            Observable.timer(1, TimeUnit.MINUTES)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<Long>() {
+                        @Override
+                        public void accept(Long aLong) throws Exception {
+                            saveRegisterId();
+                        }
+                    });
+            return;
+        }
     }
 
 

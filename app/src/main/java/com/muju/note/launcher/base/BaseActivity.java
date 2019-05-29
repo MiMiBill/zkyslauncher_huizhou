@@ -14,9 +14,15 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.muju.note.launcher.app.lockScreen.ProtectionProcessActivity;
+import com.muju.note.launcher.app.video.event.VideoNoLockEvent;
+import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
 import com.muju.note.launcher.util.toast.FancyToast;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.concurrent.TimeUnit;
 
@@ -58,12 +64,14 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         mDelegate.onPostCreate(savedInstanceState);
     }
 
     @Override
     protected void onDestroy() {
         mDelegate.onDestroy();
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 
@@ -78,6 +86,17 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
         return this;
     }
 
+
+    //监听失败返回
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(VideoNoLockEvent event) {
+        LogFactory.l().i("event.VideoNoLockEvent==" + event.isLock);
+        if (!event.isLock) {
+            setStartProtection(false);
+        }else {
+            setStartProtection(true);
+        }
+    }
 
     /**
      * 屏幕保护倒计时
@@ -107,6 +126,12 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
         if (isStartProtection) {
             protectionCountDown();
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        stopProtectionCountDown();
     }
 
     /**
