@@ -297,6 +297,7 @@ public class VideoContentFragment extends BaseFragment<VideoContentPresenter> im
         hisDao.setName(infoDao.getName());
         hisDao.setVideoId(infoDao.getVideoId());
         hisDao.setVideoType(infoDao.getVideoType());
+        hisDao.setScreenUrl(infoDao.getScreenUrl());
         WotvPlayFragment wotvPlayFragment=new WotvPlayFragment();
         wotvPlayFragment.setHisDao(hisDao);
         ((VideoFragment) getParentFragment()).start(wotvPlayFragment);

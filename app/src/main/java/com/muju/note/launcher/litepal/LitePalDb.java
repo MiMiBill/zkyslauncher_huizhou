@@ -24,7 +24,7 @@ import org.litepal.LitePalDB;
 public class LitePalDb {
 
     public static final LitePalDB zkysDataDb=new LitePalDB("zkys-data",9);
-    public static final LitePalDB zkysDb=new LitePalDB("zkys",15);
+    public static final LitePalDB zkysDb=new LitePalDB("zkys",16);
 
     /**
      *  初始化数据库

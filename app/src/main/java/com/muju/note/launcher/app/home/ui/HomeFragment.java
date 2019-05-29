@@ -2,6 +2,9 @@ package com.muju.note.launcher.app.home.ui;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +16,8 @@ import android.widget.TextView;
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
 import com.muju.note.launcher.app.dialog.AdvertsDialog;
+import com.muju.note.launcher.app.home.adapter.HomeHisVideoAdapter;
+import com.muju.note.launcher.app.home.adapter.HomeTopVideoAdapter;
 import com.muju.note.launcher.app.home.bean.AdvertsBean;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.app.home.contract.HomeContract;
@@ -24,9 +29,12 @@ import com.muju.note.launcher.app.hostipal.ui.HospitalMienFragment;
 import com.muju.note.launcher.app.video.bean.PayEntity;
 import com.muju.note.launcher.app.video.bean.PayEvent;
 import com.muju.note.launcher.app.video.bean.VideoEvent;
+import com.muju.note.launcher.app.video.db.VideoHisDao;
+import com.muju.note.launcher.app.video.db.VideoInfoDao;
 import com.muju.note.launcher.app.video.ui.VideoFragment;
 import com.muju.note.launcher.app.video.ui.WoTvVideoLineFragment;
 import com.muju.note.launcher.base.BaseFragment;
+import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.topics.AdvertsTopics;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.ClickTimeUtils;
@@ -37,6 +45,7 @@ import com.muju.note.launcher.util.adverts.NewAdvertsUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.file.CacheUtil;
 import com.muju.note.launcher.util.file.FileUtils;
+import com.muju.note.launcher.util.gilde.GlideUtil;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.qr.QrCodeUtils;
 import com.muju.note.launcher.util.sp.SPUtil;
@@ -108,8 +117,24 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     LinearLayout llyNoPatient;
     @BindView(R.id.ll_his_mission)
     LinearLayout llHisMission;
+    @BindView(R.id.rv_his_video)
+    RecyclerView rvHisVideo;
+    @BindView(R.id.ll_his_video_null)
+    LinearLayout llHisVideoNull;
+    @BindView(R.id.rv_video_top)
+    RecyclerView rvVideoTop;
+    @BindView(R.id.ll_top_video_null)
+    LinearLayout llTopVideoNull;
     private ActivePadInfo.DataBean activeInfo;
     private List<PatientResponse.DataBean> patientList = new ArrayList<>();
+
+    private List<VideoHisDao> videoHisDaos;
+    private HomeHisVideoAdapter homeHisVideoAdapter;
+
+    private List<VideoInfoDao> videoInfoDaos;
+    private HomeTopVideoAdapter homeTopVideoAdapter;
+
+    private ImageView ivVideoTop;
 
     public static HomeFragment newInstance() {
         if (homeFragment == null) {
@@ -142,6 +167,24 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         llHostipalEncy.setOnClickListener(this);
         llVideoLine.setOnClickListener(this);
         llHisMission.setOnClickListener(this);
+
+        // 加载首页历史记录
+        videoHisDaos = new ArrayList<>();
+        homeHisVideoAdapter = new HomeHisVideoAdapter(R.layout.rv_item_home_his_video, videoHisDaos);
+        rvHisVideo.setLayoutManager(new LinearLayoutManager(LauncherApplication.getContext(), LinearLayoutManager.HORIZONTAL, false));
+        rvHisVideo.setAdapter(homeHisVideoAdapter);
+        mPresenter.getVideoHis();
+
+        // 加载首页推荐影视
+        videoInfoDaos = new ArrayList<>();
+        homeTopVideoAdapter = new HomeTopVideoAdapter(R.layout.rv_home_video_top, videoInfoDaos);
+        rvVideoTop.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(), 2, LinearLayoutManager.HORIZONTAL, false));
+        // 添加头部
+        View view=LayoutInflater.from(LauncherApplication.getContext()).inflate(R.layout.header_home_video_top,null);
+        ivVideoTop=view.findViewById(R.id.iv_img);
+        homeTopVideoAdapter.addHeaderView(view);
+        rvVideoTop.setAdapter(homeTopVideoAdapter);
+        mPresenter.getTopVideo();
     }
 
 
@@ -275,6 +318,34 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 (getContext()) + "," + JPushInterface.getRegistrationID(getContext()), 200, 200));
         llyNoPatient.setVisibility(View.VISIBLE);
         llyHavePaitent.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void getVideoHisSuccess(List<VideoHisDao> list) {
+        videoHisDaos.addAll(list);
+        homeHisVideoAdapter.notifyDataSetChanged();
+    }
+
+
+    @Override
+    public void getVideoHisNull() {
+        llHisVideoNull.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void getVideoTopSuccess(List<VideoInfoDao> list) {
+        videoInfoDaos.addAll(list);
+        homeTopVideoAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void getVideoTopNull() {
+        llTopVideoNull.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void getVideoTopImg(VideoInfoDao dao) {
+        GlideUtil.loadImg(dao.getScreenUrl(),ivVideoTop,R.mipmap.ic_video_load_default);
     }
 
     /**

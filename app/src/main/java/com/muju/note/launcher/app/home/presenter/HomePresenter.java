@@ -8,6 +8,9 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.app.home.contract.HomeContract;
+import com.muju.note.launcher.app.video.db.VideoHisDao;
+import com.muju.note.launcher.app.video.db.VideoInfoDao;
+import com.muju.note.launcher.app.video.db.VideoInfoTopDao;
 import com.muju.note.launcher.base.BasePresenter;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.Constants;
@@ -17,7 +20,12 @@ import com.muju.note.launcher.util.rx.RxUtil;
 import com.muju.note.launcher.util.sign.Signature;
 import com.muju.note.launcher.util.sp.SPUtil;
 
+import org.litepal.LitePal;
+import org.litepal.crud.callback.FindMultiCallback;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -100,6 +108,55 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
                 });
     }
 
+    /**
+     *  获取播放记录
+     */
+    @Override
+    public void getVideoHis() {
+        LitePal.findAllAsync(VideoHisDao.class).listen(new FindMultiCallback<VideoHisDao>() {
+            @Override
+            public void onFinish(List<VideoHisDao> list) {
+                if(list==null||list.size()<=0){
+                    mView.getVideoHisNull();
+                    return;
+                }
+                mView.getVideoHisSuccess(list);
+            }
+        });
+    }
+
+    /**
+     *  获取首页推荐影视
+     */
+    @Override
+    public void getTopVideo() {
+        LitePal.findAllAsync(VideoInfoTopDao.class).listen(new FindMultiCallback<VideoInfoTopDao>() {
+            @Override
+            public void onFinish(List<VideoInfoTopDao> list) {
+                if(list==null||list.size()<=0){
+                    mView.getVideoTopNull();
+                    return;
+                }
+                List<VideoInfoDao> topDaos=new ArrayList<>();
+                for (VideoInfoTopDao dao:list){
+                    VideoInfoDao infoDao=new VideoInfoDao();
+                    infoDao.setImgUrl(dao.getImgUrl());
+                    infoDao.setColumnId(dao.getColumnId());
+                    infoDao.setVideoType(dao.getVideoType());
+                    infoDao.setScreenUrl(dao.getScreenUrl());
+                    infoDao.setName(dao.getName());
+                    infoDao.setDescription(dao.getDescription());
+                    infoDao.setEditTime(dao.getEditTime());
+                    infoDao.setCid(dao.getCid());
+                    infoDao.setWatchCount(dao.getWatchCount());
+                    topDaos.add(infoDao);
+                }
+                mView.getVideoTopImg(topDaos.get(0));
+                topDaos.remove(0);
+                mView.getVideoTopSuccess(topDaos);
+            }
+        });
+    }
 
 
     public void onDestroy(){

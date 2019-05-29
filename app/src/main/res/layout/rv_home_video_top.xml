@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingRight="@dimen/px10"
+    android:paddingLeft="@dimen/px10"
+    android:paddingTop="@dimen/px20"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/iv_img"
+        android:layout_width="@dimen/px290"
+        android:layout_height="@dimen/px151"
+        android:src="@mipmap/ic_video_load_default"
+        android:scaleType="fitXY"/>
+
+</LinearLayout>
