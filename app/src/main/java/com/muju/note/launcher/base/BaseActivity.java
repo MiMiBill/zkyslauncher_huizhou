@@ -295,7 +295,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        hideBottomUIMenu();
-//        hideActionBar();
+        hideActionBar();
         setContentView(getLayout());
         mDelegate.onCreate(savedInstanceState);
 

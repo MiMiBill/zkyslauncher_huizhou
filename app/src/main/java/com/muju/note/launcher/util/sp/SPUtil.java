@@ -7,9 +7,11 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.base.LauncherApplication;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -108,5 +110,22 @@ public class SPUtil {
 //        Log.e("zkpad","saveDataList-strJson=="+strJson);
         editor.putString(tag, strJson);
         editor.commit();
+    }
+
+    /**
+     * 获取患者信息List
+     * @param tag
+     * @return
+     */
+    public static  List<PatientResponse.DataBean> getPatientList(String tag) {
+        List<PatientResponse.DataBean> datalist=new ArrayList<PatientResponse.DataBean>();
+        String strJson = getSharedPreferences().getString(tag, null);
+//        LogFactory.l().i("getPatientList-strJson=="+strJson);
+        if (null == strJson) {
+            return datalist;
+        }
+        Gson gson = new Gson();
+        datalist = gson.fromJson(strJson, new TypeToken<List<PatientResponse.DataBean>>() {}.getType());
+        return datalist;
     }
 }

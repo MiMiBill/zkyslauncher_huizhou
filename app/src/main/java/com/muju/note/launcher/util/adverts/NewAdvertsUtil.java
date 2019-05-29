@@ -458,7 +458,6 @@ public class NewAdvertsUtil {
         public void success();
     }
 
-
     /**
      * 增加广告点击
      *

@@ -146,7 +146,11 @@ public class UrlUtil {
      *  上传影视统计数据
      * @return
      */
-    public static String getUpVideoCountDb(){
-        return getHost()+"/video/statistics";
+    public static String getUpVideoCountDb() {
+        return getHost() + "/video/statistics";
+    }
+
+    public static String getGetPaitentInfo(){
+        return getHost() + "/hospitalBedTabb/list";
     }
 }

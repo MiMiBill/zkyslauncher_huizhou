@@ -3,12 +3,16 @@ package com.muju.note.launcher.app.startUp.ui;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -23,10 +27,10 @@ import com.muju.note.launcher.base.BaseActivity;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.Constants;
-import com.muju.note.launcher.util.QrCodeUtils;
 import com.muju.note.launcher.util.UIUtils;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.log.LogFactory;
+import com.muju.note.launcher.util.qr.QrCodeUtils;
 import com.muju.note.launcher.util.rx.RxUtil;
 import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.util.system.SystemUtils;
@@ -40,12 +44,14 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
 //激活页面
-public class ActivationActivity extends BaseActivity<ActivationPresenter> implements ActivationPresenter.ActivationListener {
+public class ActivationActivity extends BaseActivity<ActivationPresenter> implements
+        ActivationPresenter.ActivationListener {
     @BindView(R.id.hide_btn)
     Button hideBtn;
     @BindView(R.id.tv_active_result)
@@ -69,16 +75,35 @@ public class ActivationActivity extends BaseActivity<ActivationPresenter> implem
     AlertDialog dialog;
     EditText et;
     Disposable disposableCheckActive;
+    @BindView(R.id.lly_progress)
+    LinearLayout llyProgress;
+    @BindView(R.id.lly_active)
+    LinearLayout llyActive;
 
     @Override
     public int getLayout() {
         return R.layout.activity_activation;
     }
 
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    Intent intent = new Intent(ActivationActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                    break;
+                default:
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    };
 
     @Override
     public void initData() {
-        mPresenter=new ActivationPresenter();
+        mPresenter = new ActivationPresenter();
         mPresenter.setOnActivationListener(this);
         //版本不一样之后重置默认域名
         long versionCode = SPUtil.getLong(Constants.HOST_VERSION);
@@ -224,25 +249,27 @@ public class ActivationActivity extends BaseActivity<ActivationPresenter> implem
      * 跳转到首页
      */
     private void loginHome() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
+        llyActive.setVisibility(View.GONE);
+        llyProgress.setVisibility(View.VISIBLE);
+        handler.sendEmptyMessageDelayed(1, 3000);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         RxUtil.closeDisposable(disposableCheckActive);
+        handler.removeMessages(1);
     }
 
 
     @Override
     public void bindSuccess(String response) {
-        JSONObject jsonObject=null;
+        JSONObject jsonObject = null;
         try {
             jsonObject = new JSONObject(response);
             if (jsonObject.optInt("code") == 200) {
-                if((jsonObject.optString("data")!=null)&& (!jsonObject.optString("data").equals("[]"))){
+                if ((jsonObject.optString("data") != null) && (!jsonObject.optString("data")
+                        .equals("[]"))) {
                     Gson gson = new Gson();
                     ActivePadInfo activePadInfo = gson.fromJson(response, ActivePadInfo.class);
                     ArrayList<ActivePadInfo.DataBean> data = activePadInfo.getData();
@@ -267,8 +294,8 @@ public class ActivationActivity extends BaseActivity<ActivationPresenter> implem
                         //未激活
                         bindFail();
                     }
-                }else {
-                   bindFail();
+                } else {
+                    bindFail();
                 }
             }
         } catch (JSONException e) {
@@ -279,5 +306,12 @@ public class ActivationActivity extends BaseActivity<ActivationPresenter> implem
     @Override
     public void bindFail() {
         activeFail();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 }

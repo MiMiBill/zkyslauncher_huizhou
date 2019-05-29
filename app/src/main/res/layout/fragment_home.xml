@@ -87,18 +87,257 @@
                 >
             </com.muju.note.launcher.view.banana.Banner>
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="@dimen/px330"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5px"
-                android:orientation="vertical">
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/px110"
-                    android:background="@mipmap/ic_home_userinfo_bg">
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:id="@+id/lly_have_paitent"
+                    android:visibility="gone"
+                    android:layout_width="@dimen/px330"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:layout_marginLeft="5px"
+                    android:orientation="vertical">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/px110"
+                        android:paddingLeft="@dimen/px20"
+                        android:paddingTop="@dimen/px24"
+                        android:background="@mipmap/ic_home_userinfo_bg">
+                        <TextView
+                            android:id="@+id/tv_bed"
+                            android:textSize="20sp"
+                            android:text="20床"
+                            android:textColor="@color/white"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/tv_room"
+                            android:textSize="14sp"
+                            android:text="1210房"
+                            android:layout_marginTop="@dimen/px10"
+                            android:gravity="center"
+                            android:background="@mipmap/hos_room_bg"
+                            android:layout_below="@id/tv_bed"
+                            android:textColor="@color/white"
+                            android:layout_width="@dimen/px86"
+                            android:layout_height="@dimen/px30" />
+                        <TextView
+                            android:id="@+id/tv_name"
+                            android:textSize="15sp"
+                            android:text="张洋"
+                            android:layout_marginLeft="@dimen/px48"
+                            android:layout_toRightOf="@id/tv_bed"
+                            android:textColor="@color/white"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/tv_age"
+                            android:textSize="15sp"
+                            android:text="40岁"
+                            android:layout_below="@id/tv_name"
+                            android:layout_marginTop="@dimen/px16"
+                            android:layout_marginLeft="@dimen/px48"
+                            android:layout_toRightOf="@id/tv_bed"
+                            android:textColor="@color/white"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/tv_ency"
+                            android:textSize="15sp"
+                            android:text="外科"
+                            android:layout_below="@id/tv_name"
+                            android:layout_marginTop="@dimen/px16"
+                            android:layout_marginLeft="@dimen/px48"
+                            android:layout_toRightOf="@id/tv_age"
+                            android:textColor="@color/white"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/tv_sex"
+                            android:textSize="12sp"
+                            android:text="男"
+                            android:layout_marginTop="@dimen/px10"
+                            android:layout_marginLeft="@dimen/px12"
+                            android:layout_toRightOf="@id/tv_name"
+                            android:textColor="@color/white"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </RelativeLayout>
 
-                </RelativeLayout>
-            </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:layout_height="0dp">
+                        <ImageView
+                            android:layout_marginLeft="@dimen/px22"
+                            android:src="@mipmap/hos_card"
+                            android:layout_width="@dimen/px18"
+                            android:layout_height="@dimen/px16" />
+                        <TextView
+                            android:text="住院卡号"
+                            style="@style/txt_333_18" />
+                        <TextView
+                            android:layout_marginLeft="@dimen/px70"
+                            android:id="@+id/tv_hos_card"
+                            android:gravity="center_vertical"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:textColor="@color/color_585858"
+                            android:layout_height="match_parent" />
+                    </LinearLayout>
+                    <View
+                        android:background="@color/white_gray"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/px1"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:layout_height="0dp">
+                        <ImageView
+                            android:layout_marginLeft="@dimen/px22"
+                            android:src="@mipmap/hos_time"
+                            android:layout_width="@dimen/px18"
+                            android:layout_height="@dimen/px16" />
+                        <TextView
+                            android:text="入院时间"
+                            style="@style/txt_333_18" />
+                        <TextView
+                            android:id="@+id/tv_hos_time"
+                            android:gravity="center_vertical"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="@dimen/px70"
+                            android:textColor="@color/color_585858"
+                            android:layout_height="match_parent" />
+                    </LinearLayout>
+                    <View
+                        android:background="@color/white_gray"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/px1"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:layout_height="0dp">
+                        <ImageView
+                            android:layout_marginLeft="@dimen/px22"
+                            android:src="@mipmap/hos_doctor"
+                            android:layout_width="@dimen/px18"
+                            android:layout_height="@dimen/px16" />
+                        <TextView
+                            android:text="主治医师"
+                            style="@style/txt_333_18" />
+                        <TextView
+                            android:layout_marginLeft="@dimen/px70"
+                            android:id="@+id/tv_hos_doctor"
+                            android:gravity="center_vertical"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:textColor="@color/color_585858"
+                            android:layout_height="match_parent" />
+                    </LinearLayout>
+                    <View
+                        android:background="@color/white_gray"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/px1"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:layout_height="0dp">
+                        <ImageView
+                            android:layout_marginLeft="@dimen/px22"
+                            android:src="@mipmap/hos_info"
+                            android:layout_width="@dimen/px18"
+                            android:layout_height="@dimen/px16" />
+                        <TextView
+                            style="@style/txt_333_18"
+                            android:text="缴费信息"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            />
+                        <ImageView
+                            android:layout_width="@dimen/px10"
+                            android:layout_height="@dimen/px18"
+                            android:layout_marginRight="@dimen/px26"
+                            android:src="@mipmap/hos_right_arrow" />
+                    </LinearLayout>
+                    <View
+                        android:background="@color/white_gray"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/px1"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="@dimen/px18"
+                            android:layout_height="@dimen/px16"
+                            android:layout_marginLeft="@dimen/px22"
+                            android:src="@mipmap/hos_card" />
+
+                        <TextView
+                            style="@style/txt_333_18"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:text="病历查询" />
+
+                        <ImageView
+                            android:layout_width="@dimen/px10"
+                            android:layout_height="@dimen/px18"
+                            android:layout_marginRight="@dimen/px26"
+                            android:src="@mipmap/hos_right_arrow" />
+                    </LinearLayout>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/lly_no_patient"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/px110"
+                        android:paddingLeft="@dimen/px20"
+                        android:orientation="vertical"
+                        android:gravity="center_vertical"
+                        android:background="@mipmap/ic_home_userinfo_bg">
+                        <TextView
+                            android:text="亲爱的患者:"
+                            android:textSize="12sp"
+                            android:textColor="@color/white"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:text="当前您未办理入院信息"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:layout_marginTop="@dimen/px10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/px30"
+                        android:id="@+id/ivPersonQrCode"
+                        android:layout_width="@dimen/px180"
+                        android:layout_height="@dimen/px180" />
+                    <TextView
+                        android:gravity="center"
+                        android:textColor="@color/color_585858"
+                        android:textSize="12sp"
+                        android:layout_marginTop="@dimen/px10"
+                        android:text="请联系护士办理入院信息登记"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </FrameLayout>
+
 
         </LinearLayout>
 
