@@ -588,6 +588,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/lly_sign"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/px102"
@@ -609,6 +610,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/lly_luck"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/px102"

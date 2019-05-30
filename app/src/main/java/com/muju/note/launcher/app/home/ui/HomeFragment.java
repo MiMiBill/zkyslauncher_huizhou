@@ -28,13 +28,16 @@ import com.muju.note.launcher.app.home.presenter.HomePresenter;
 import com.muju.note.launcher.app.hostipal.ui.EncyclopediasFragment;
 import com.muju.note.launcher.app.hostipal.ui.HosPitalMissionFragment;
 import com.muju.note.launcher.app.hostipal.ui.HospitalMienFragment;
+import com.muju.note.launcher.app.luckdraw.ui.LuckDrawFragment;
 import com.muju.note.launcher.app.setting.ui.GuideFragment;
 import com.muju.note.launcher.app.setting.ui.SettingFragment;
+import com.muju.note.launcher.app.sign.ui.SignFragment;
 import com.muju.note.launcher.app.video.bean.PayEntity;
 import com.muju.note.launcher.app.video.bean.PayEvent;
 import com.muju.note.launcher.app.video.bean.VideoEvent;
 import com.muju.note.launcher.app.video.db.VideoHisDao;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
+import com.muju.note.launcher.app.video.dialog.LoginDialog;
 import com.muju.note.launcher.app.video.ui.VideoFragment;
 import com.muju.note.launcher.app.video.ui.WoTvVideoLineFragment;
 import com.muju.note.launcher.app.video.ui.WotvPlayFragment;
@@ -141,6 +144,11 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     VideoView videoview;
     @BindView(R.id.lly_guide)
     LinearLayout llyGuide;
+    @BindView(R.id.lly_sign)
+    LinearLayout llySign;
+    @BindView(R.id.lly_luck)
+    LinearLayout llyLuck;
+    Unbinder unbinder1;
     private ActivePadInfo.DataBean activeInfo;
     private List<PatientResponse.DataBean> patientList = new ArrayList<>();
 
@@ -151,6 +159,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     private HomeTopVideoAdapter homeTopVideoAdapter;
 
     private VideoInfoDao imgVideoInfo;
+    private LoginDialog loginDialog;
 
 
     public static HomeFragment newInstance() {
@@ -186,6 +195,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         llHisMission.setOnClickListener(this);
         llSetting.setOnClickListener(this);
         llyGuide.setOnClickListener(this);
+        llySign.setOnClickListener(this);
+        llyLuck.setOnClickListener(this);
 
         // 加载首页历史记录
         videoHisDaos = new ArrayList<>();
@@ -488,7 +499,34 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             case R.id.lly_guide: // 新手引导
                 start(new GuideFragment());
                 break;
+            case R.id.lly_sign: // 签到中心
+                showLoginDialog(0);
+                break;
+            case R.id.lly_luck: // 抽奖中心
+                showLoginDialog(1);
+                break;
         }
+    }
+
+
+    private void showLoginDialog(final int type){
+        loginDialog = new LoginDialog(getActivity(), R.style.DialogFullscreen, new LoginDialog.OnLoginListener() {
+            @Override
+            public void onSuccess() {
+                loginDialog.dismiss();
+                if(type==0){
+                    start(new SignFragment());
+                }else {
+                    start(new LuckDrawFragment());
+                }
+            }
+
+            @Override
+            public void onFail() {
+
+            }
+        });
+        loginDialog.show();
     }
 
     @Override
@@ -496,14 +534,14 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             savedInstanceState) {
         // TODO: inflate a fragment view
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
+        unbinder1 = ButterKnife.bind(this, rootView);
         return rootView;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        unbinder1.unbind();
     }
 }
 
