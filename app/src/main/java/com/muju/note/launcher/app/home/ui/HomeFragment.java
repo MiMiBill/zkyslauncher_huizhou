@@ -1,14 +1,11 @@
 package com.muju.note.launcher.app.home.ui;
 
 import android.annotation.SuppressLint;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,8 +25,8 @@ import com.muju.note.launcher.app.home.presenter.HomePresenter;
 import com.muju.note.launcher.app.hostipal.ui.EncyclopediasFragment;
 import com.muju.note.launcher.app.hostipal.ui.HosPitalMissionFragment;
 import com.muju.note.launcher.app.hostipal.ui.HospitalMienFragment;
-import com.muju.note.launcher.app.msg.ui.MsgFragment;
 import com.muju.note.launcher.app.luckdraw.ui.LuckDrawFragment;
+import com.muju.note.launcher.app.msg.ui.MsgFragment;
 import com.muju.note.launcher.app.setting.ui.GuideFragment;
 import com.muju.note.launcher.app.setting.ui.SettingFragment;
 import com.muju.note.launcher.app.sign.ui.SignFragment;
@@ -71,8 +68,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -150,7 +145,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     LinearLayout llySign;
     @BindView(R.id.lly_luck)
     LinearLayout llyLuck;
-    Unbinder unbinder1;
+
     private ActivePadInfo.DataBean activeInfo;
     private List<PatientResponse.DataBean> patientList = new ArrayList<>();
 
@@ -307,7 +302,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                         NewAdvertsUtil.getInstance().showDefaultBanner(banner, 1);
                     } else {
                         NewAdvertsUtil.getInstance().showByBanner(CacheUtil.getDataList
-                                (AdvertsTopics.CODE_HOME), banner, videoview);
+                                (AdvertsTopics.CODE_HOME), banner);
                     }
                 }
             });
