@@ -151,12 +151,12 @@ public class ActivationActivity extends BaseActivity<ActivationPresenter> implem
             return;
         }
         LogFactory.l().i("是否激活===" + ActiveUtils.hadActived(this));
-        if (ActiveUtils.hadActived(this)) {
-            //已经激活成功，进入主页面
-            loginHome();
-        } else {
+//        if (ActiveUtils.hadActived(this)) {
+//            //已经激活成功，进入主页面
+//            loginHome();
+//        } else {
             mPresenter.bindingDevice(MobileInfoUtil.getIMEI(this));
-        }
+//        }
     }
 
     //隐藏页面
@@ -221,6 +221,7 @@ public class ActivationActivity extends BaseActivity<ActivationPresenter> implem
      * 激活失败
      */
     private void activeFail() {
+        llyProgress.setVisibility(View.GONE);
         tvActiveResult.setVisibility(View.INVISIBLE);
         tvTipMaintain.setVisibility(View.INVISIBLE);
         tvActiveResultSuccess.setVisibility(View.INVISIBLE);
@@ -249,7 +250,6 @@ public class ActivationActivity extends BaseActivity<ActivationPresenter> implem
      * 跳转到首页
      */
     private void loginHome() {
-        llyActive.setVisibility(View.GONE);
         llyProgress.setVisibility(View.VISIBLE);
         handler.sendEmptyMessageDelayed(1, 3000);
     }

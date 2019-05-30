@@ -11,15 +11,22 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.devbrackets.android.api.video.impl.VideoErrorInfo;
 import com.devbrackets.android.media.listener.OnVideoPreparedListener;
 import com.muju.note.launcher.R;
+import com.muju.note.launcher.app.home.bean.AdvertsBean;
 import com.muju.note.launcher.app.video.adapter.VideoLineAdapter;
 import com.muju.note.launcher.app.video.contract.VideoLineContract;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
+import com.muju.note.launcher.app.video.dialog.VideoOrImageDialog;
 import com.muju.note.launcher.app.video.event.VideoNoLockEvent;
+import com.muju.note.launcher.app.video.event.VideoPauseEvent;
 import com.muju.note.launcher.app.video.presenter.VideoLinePresenter;
 import com.muju.note.launcher.app.video.util.WoTvUtil;
 import com.muju.note.launcher.app.video.util.wotv.ExpandVideoView2;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
+import com.muju.note.launcher.topics.AdvertsTopics;
+import com.muju.note.launcher.util.adverts.NewAdvertsUtil;
+import com.muju.note.launcher.util.file.CacheUtil;
+import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
 import com.unicom.common.VideoSdkConfig;
@@ -27,6 +34,8 @@ import com.unicom.common.base.video.IVideoEvent;
 import com.unicom.common.base.video.expand.ExpandVideoListener;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +77,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
 
     private List<VideoInfoDao> videoInfoDaos;
     private VideoLineAdapter lineAdapter;
-
+    private VideoOrImageDialog videoOrImageDialog;
     private VideoInfoDao infoDao;
 
     @Override
@@ -80,7 +89,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
     public void initData() {
         llBack.setOnClickListener(this);
         tvNull.setOnClickListener(this);
-
+        EventBus.getDefault().register(this);
         videoInfoDaos = new ArrayList<>();
         lineAdapter = new VideoLineAdapter(R.layout.rv_item_video_line, videoInfoDaos);
         rvVideoView.setLayoutManager(new LinearLayoutManager(LauncherApplication.getContext(), LinearLayoutManager.VERTICAL, false));
@@ -150,6 +159,28 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
         llNull.setVisibility(View.VISIBLE);
     }
 
+    //监听视频播放暂停
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(VideoPauseEvent event) {
+        LogFactory.l().i("VideoPauseEvent==" + event.isPause);
+        if (event.isPause) {
+            List<AdvertsBean> adverts = CacheUtil.getDataList(AdvertsTopics.CODE_VIDEO_DIALOG);
+            try {
+                if (videoOrImageDialog == null) {
+                    videoOrImageDialog = new VideoOrImageDialog(getActivity(), R.style.dialog);
+                    if (adverts != null && adverts.size() > 0)
+                        NewAdvertsUtil.getInstance().showVideoDialog(adverts, videoOrImageDialog);
+                } else {
+                    if(adverts.get(0).getCloseType()==2){
+                        videoOrImageDialog.closeBySelf(adverts.get(0).getSecond());
+                    }
+                    videoOrImageDialog.show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
     /**
      * 播放器回调监听
      */
@@ -332,7 +363,11 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
                 videoView.onDestroy();
                 videoView = null;
             }
+            if (videoOrImageDialog != null && videoOrImageDialog.isShowing()) {
+                videoOrImageDialog.dismiss();
+            }
             EventBus.getDefault().post(new VideoNoLockEvent(true));
+            EventBus.getDefault().unregister(this);
         } catch (Exception e) {
             e.printStackTrace();
         }

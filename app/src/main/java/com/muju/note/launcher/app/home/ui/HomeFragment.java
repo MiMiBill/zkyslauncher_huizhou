@@ -27,6 +27,7 @@ import com.muju.note.launcher.app.home.presenter.HomePresenter;
 import com.muju.note.launcher.app.hostipal.ui.EncyclopediasFragment;
 import com.muju.note.launcher.app.hostipal.ui.HosPitalMissionFragment;
 import com.muju.note.launcher.app.hostipal.ui.HospitalMienFragment;
+import com.muju.note.launcher.app.setting.ui.SettingFragment;
 import com.muju.note.launcher.app.video.bean.PayEntity;
 import com.muju.note.launcher.app.video.bean.PayEvent;
 import com.muju.note.launcher.app.video.bean.VideoEvent;
@@ -121,6 +122,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     LinearLayout llyNoPatient;
     @BindView(R.id.ll_his_mission)
     LinearLayout llHisMission;
+    @BindView(R.id.ll_setting)
+    LinearLayout llSetting;
+    Unbinder unbinder;
     @BindView(R.id.rv_his_video)
     RecyclerView rvHisVideo;
     @BindView(R.id.ll_his_video_null)
@@ -174,6 +178,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         llHostipalEncy.setOnClickListener(this);
         llVideoLine.setOnClickListener(this);
         llHisMission.setOnClickListener(this);
+        llSetting.setOnClickListener(this);
 
         // 加载首页历史记录
         videoHisDaos = new ArrayList<>();
@@ -235,6 +240,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         WotvPlayFragment wotvPlayFragment=new WotvPlayFragment();
         wotvPlayFragment.setHisDao(hisDao);
         start(wotvPlayFragment);
+        llSetting.setOnClickListener(this);
     }
 
 
@@ -465,7 +471,25 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             case R.id.ll_his_mission: // 医院宣教
                 start(new HosPitalMissionFragment());
                 break;
+            case R.id.ll_setting: // 设置
+                start(new SettingFragment());
+                break;
         }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }
 

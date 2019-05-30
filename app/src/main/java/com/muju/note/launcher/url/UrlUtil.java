@@ -183,4 +183,23 @@ public class UrlUtil {
     public static String getHospitalMission() {
         return getHost() + "/hospitalPublicize/list";
     }
+
+    //抽奖
+    public static String startLuck() {
+        return getHost() + "/lottery/start/%s";
+    }
+
+    //抽奖
+    public static String checkSignStatus() {
+        return getHost() + "/userSing/isSign/%s";
+    }
+
+    public static String checkSign() {
+        return getHost() + "/userSing/sign";
+    }
+
+    //意见反馈
+    public static String getFeedbackContent() {
+        return getHost() + "/padFeedBack/insert";
+    }
 }
