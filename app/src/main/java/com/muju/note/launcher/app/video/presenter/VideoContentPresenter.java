@@ -2,26 +2,19 @@ package com.muju.note.launcher.app.video.presenter;
 
 import android.text.TextUtils;
 
-import com.google.gson.Gson;
 import com.muju.note.launcher.app.video.contract.VideoContentContract;
-import com.muju.note.launcher.app.video.contract.VideoContract;
-import com.muju.note.launcher.app.video.db.VideoColumnsDao;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
 import com.muju.note.launcher.app.video.db.VideoInfoTopDao;
 import com.muju.note.launcher.app.video.db.VideoTagSubDao;
 import com.muju.note.launcher.app.video.db.VideoTagsDao;
-import com.muju.note.launcher.app.video.ui.VideoContentFragment;
 import com.muju.note.launcher.base.BasePresenter;
 import com.muju.note.launcher.litepal.LitePalDb;
-import com.muju.note.launcher.util.log.LogUtil;
-import com.orhanobut.logger.Logger;
 
 import org.litepal.LitePal;
 import org.litepal.crud.callback.FindMultiCallback;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class VideoContentPresenter extends BasePresenter<VideoContentContract.View> implements VideoContentContract.Presenter {
 
@@ -104,8 +97,6 @@ public class VideoContentPresenter extends BasePresenter<VideoContentContract.Vi
         LitePal.where("coulmnsId = ?", columnId + "").findAsync(VideoTagsDao.class, true).listen(new FindMultiCallback<VideoTagsDao>() {
             @Override
             public void onFinish(List<VideoTagsDao> list) {
-                LogUtil.i(VideoContentFragment.TAG,"coulmnsId: "+columnId);
-                Logger.json(new Gson().toJson(list));
                 for (VideoTagsDao tagsDao : list) {
                     if (tagsDao.getList() != null) {
                         tagsDao.getList().add(0, new VideoTagSubDao("全部", true));

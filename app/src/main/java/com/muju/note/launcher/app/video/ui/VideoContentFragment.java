@@ -164,7 +164,6 @@ public class VideoContentFragment extends BaseFragment<VideoContentPresenter> im
 
     @Override
     public void getFilter(List<VideoTagsDao> list) {
-        Logger.json(new Gson().toJson(list));
         filterList.clear();
         filterList.addAll(list);
         adapterFilter.setNewData(filterList);

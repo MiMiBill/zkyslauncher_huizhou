@@ -113,7 +113,7 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
      */
     @Override
     public void getVideoHis() {
-        LitePal.findAllAsync(VideoHisDao.class).listen(new FindMultiCallback<VideoHisDao>() {
+        LitePal.limit(20).order("createTime desc").findAsync(VideoHisDao.class).listen(new FindMultiCallback<VideoHisDao>() {
             @Override
             public void onFinish(List<VideoHisDao> list) {
                 if(list==null||list.size()<=0){

@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
 import com.muju.note.launcher.app.dialog.AdvertsDialog;
@@ -33,6 +34,8 @@ import com.muju.note.launcher.app.video.db.VideoHisDao;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
 import com.muju.note.launcher.app.video.ui.VideoFragment;
 import com.muju.note.launcher.app.video.ui.WoTvVideoLineFragment;
+import com.muju.note.launcher.app.video.ui.WotvPlayFragment;
+import com.muju.note.launcher.app.video.util.WoTvUtil;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.topics.AdvertsTopics;
@@ -50,6 +53,7 @@ import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.qr.QrCodeUtils;
 import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.view.banana.Banner;
+import com.unicom.common.VideoSdkConfig;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -125,6 +129,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     RecyclerView rvVideoTop;
     @BindView(R.id.ll_top_video_null)
     LinearLayout llTopVideoNull;
+    @BindView(R.id.iv_img)
+    ImageView ivImg;
     private ActivePadInfo.DataBean activeInfo;
     private List<PatientResponse.DataBean> patientList = new ArrayList<>();
 
@@ -134,7 +140,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     private List<VideoInfoDao> videoInfoDaos;
     private HomeTopVideoAdapter homeTopVideoAdapter;
 
-    private ImageView ivVideoTop;
+    private VideoInfoDao imgVideoInfo;
+
 
     public static HomeFragment newInstance() {
         if (homeFragment == null) {
@@ -179,12 +186,55 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         videoInfoDaos = new ArrayList<>();
         homeTopVideoAdapter = new HomeTopVideoAdapter(R.layout.rv_home_video_top, videoInfoDaos);
         rvVideoTop.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(), 2, LinearLayoutManager.HORIZONTAL, false));
-        // 添加头部
-        View view=LayoutInflater.from(LauncherApplication.getContext()).inflate(R.layout.header_home_video_top,null);
-        ivVideoTop=view.findViewById(R.id.iv_img);
-        homeTopVideoAdapter.addHeaderView(view);
         rvVideoTop.setAdapter(homeTopVideoAdapter);
         mPresenter.getTopVideo();
+
+        homeHisVideoAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                WotvPlayFragment wotvPlayFragment=new WotvPlayFragment();
+                wotvPlayFragment.setHisDao(videoHisDaos.get(position));
+                start(wotvPlayFragment);
+            }
+        });
+
+        homeTopVideoAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                toPlay(videoInfoDaos.get(position));
+            }
+        });
+
+        ivImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toPlay(imgVideoInfo);
+            }
+        });
+    }
+
+    /**
+     *  跳转播放
+     * @param infoDao
+     */
+    private void toPlay(VideoInfoDao infoDao){
+        if (!VideoSdkConfig.getInstance().getUser().isLogined()) {
+            WoTvUtil.getInstance().login();
+            showToast("登入视频中，请稍后");
+            return;
+        }
+        VideoHisDao hisDao=new VideoHisDao();
+        hisDao.setCid(infoDao.getCid());
+        hisDao.setCustomTag(infoDao.getCustomTag());
+        hisDao.setDescription(infoDao.getDescription());
+        hisDao.setImgUrl(infoDao.getImgUrl());
+        hisDao.setName(infoDao.getName());
+        hisDao.setVideoId(infoDao.getVideoId());
+        hisDao.setVideoType(infoDao.getVideoType());
+        hisDao.setScreenUrl(infoDao.getScreenUrl());
+        WotvPlayFragment wotvPlayFragment=new WotvPlayFragment();
+        wotvPlayFragment.setHisDao(hisDao);
+        start(wotvPlayFragment);
     }
 
 
@@ -345,7 +395,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void getVideoTopImg(VideoInfoDao dao) {
-        GlideUtil.loadImg(dao.getScreenUrl(),ivVideoTop,R.mipmap.ic_video_load_default);
+        imgVideoInfo=dao;
+        GlideUtil.loadImg(dao.getScreenUrl(), ivImg, R.mipmap.ic_video_load_default);
     }
 
     /**

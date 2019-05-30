@@ -7,6 +7,11 @@ public class VideoPlayerCountDao extends LitePalSupport {
     private int id;
 
     /**
+     *  影视播放ID
+     */
+    private String cid;
+
+    /**
      *  imei
      */
     private String imei;
@@ -46,6 +51,13 @@ public class VideoPlayerCountDao extends LitePalSupport {
      */
     private long playTime;
 
+    public String getCid() {
+        return cid;
+    }
+
+    public void setCid(String cid) {
+        this.cid = cid;
+    }
 
     public String getImei() {
         return imei;

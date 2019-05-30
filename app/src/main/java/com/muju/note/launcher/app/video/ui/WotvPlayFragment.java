@@ -188,7 +188,9 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
             videoView.setOnPreparedListener(new OnVideoPreparedListener() {
                 @Override
                 public void onPrepared(boolean b) {
-                    videoView.setBasicControlDialogsVisible(true, true);
+                    if(videoView!=null) {
+                        videoView.setBasicControlDialogsVisible(true, true);
+                    }
                     llLoading.setVisibility(View.GONE);
                 }
             });
@@ -198,7 +200,6 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
             VideoService.getInstance().addVideoHisInfo(videoHisDao);
         } catch (Exception e) {
             tvTitle.setText(videoHisDao.getName());
-
         }
 
     }
@@ -230,13 +231,16 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
         videoView.setVideoEvent(new IVideoEvent() {
             @Override
             public void setPosterVisiable(boolean isVisiable) {
-                verifyPlayingStatus();
-                //TODO 播放器的默认海报展示的时候，会通知业务层，由业务层处理业务逻辑。
-                Log.e(TAG, "海报是否显示：" + isVisiable);
-                if (!videoView.isPlaying()) {
-                    llLoading.setVisibility(View.VISIBLE);
+                try {
+                    verifyPlayingStatus();
+                    //TODO 播放器的默认海报展示的时候，会通知业务层，由业务层处理业务逻辑。
+                    Log.e(TAG, "海报是否显示：" + isVisiable);
+                    if (!videoView.isPlaying()) {
+                        llLoading.setVisibility(View.VISIBLE);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
-
             }
 
             @Override
@@ -792,15 +796,9 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onDestroy() {
         try {
-//            videoHisDao.setDuration(videoView.getDuration());\
-            VideoService.getInstance().addVideoCount(videoHisDao.getVideoId() + "", videoHisDao.getName(), startTime, System.currentTimeMillis());
-            VideoService.getInstance().addVideoInfoDb(videoHisDao.getVideoId() + "", videoHisDao.getName(), startTime, System.currentTimeMillis());
-            VideoService.getInstance().addVideoCount(videoHisDao.getVideoId() + "", videoHisDao
-                    .getName(), startTime, System.currentTimeMillis());
-            VideoService.getInstance().addVideoInfoDb(videoHisDao.getVideoId() + "", videoHisDao
-                    .getName(), startTime, System.currentTimeMillis());
+            VideoService.getInstance().addVideoCount(videoHisDao.getVideoId() + "",videoHisDao.getCid(), videoHisDao.getName(), startTime, System.currentTimeMillis());
+            VideoService.getInstance().addVideoInfoDb(videoHisDao.getVideoId() + "",videoHisDao.getCid(), videoHisDao.getName(), startTime, System.currentTimeMillis());
             if (videoView != null) {
-                videoView.pause();
                 videoView.onDestroy();
                 videoView = null;
             }
