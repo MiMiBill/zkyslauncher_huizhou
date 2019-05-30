@@ -17,6 +17,15 @@ public class VideoHisDao extends LitePalSupport implements Serializable {
     private String createTime;
     private String customTag;
     private String playType;
+    private String screenUrl;
+
+    public String getScreenUrl() {
+        return screenUrl;
+    }
+
+    public void setScreenUrl(String screenUrl) {
+        this.screenUrl = screenUrl;
+    }
 
     public String getPlayType() {
         return playType;

@@ -16,7 +16,7 @@ public class VideoHisPresenter extends BasePresenter<VideoHisContract.View> impl
      */
     @Override
     public void queryHis() {
-        LitePal.findAllAsync(VideoHisDao.class).listen(new FindMultiCallback<VideoHisDao>() {
+        LitePal.order("createTime desc").findAsync(VideoHisDao.class).listen(new FindMultiCallback<VideoHisDao>() {
             @Override
             public void onFinish(List<VideoHisDao> list) {
                 if(list==null||list.size()<=0){

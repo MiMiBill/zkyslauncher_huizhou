@@ -144,7 +144,7 @@ public class VideoService {
                             public void run() {
                                 LitePalDb.setZkysDb();
                                for (VideoInfoDao dao:response.body().getData()){
-                                   VideoInfoDao videoInfoDao=LitePal.where("videoid = ?",dao.getId()+"").findFirst(VideoInfoDao.class);
+                                   VideoInfoDao videoInfoDao=LitePal.where("cid = ?",dao.getCid()+"").findFirst(VideoInfoDao.class);
                                    if(videoInfoDao==null){
                                        dao.setVideoId(dao.getId());
                                        dao.save();
@@ -336,12 +336,12 @@ public class VideoService {
      * @param startTime
      * @param endTime
      */
-    public void addVideoCount(final String vid, final String vName, final long startTime, final long endTime){
+    public void addVideoCount(final String vid, final String cid, final String vName, final long startTime, final long endTime){
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date d = new Date(System.currentTimeMillis());
         final String date = format.format(d);
         LitePalDb.setZkysDb();
-        LitePal.where("videoid = ? and date = ?",vid+"",date).findFirstAsync(VideoPlayerCountDao.class).listen(new FindCallback<VideoPlayerCountDao>() {
+        LitePal.where("cid = ? and date = ?",cid+"",date).findFirstAsync(VideoPlayerCountDao.class).listen(new FindCallback<VideoPlayerCountDao>() {
             @Override
             public void onFinish(VideoPlayerCountDao videoPlayerCountDao) {
                 if(videoPlayerCountDao==null){
@@ -354,6 +354,7 @@ public class VideoService {
                     countDao.setPlayTime((endTime-startTime));
                     countDao.setVideoId(vid);
                     countDao.setVideoName(vName);
+                    countDao.setCid(cid);
                     countDao.save();
                 }else {
                     long time=videoPlayerCountDao.getPlayTime()+(endTime-startTime);
@@ -372,7 +373,7 @@ public class VideoService {
      * @param startTime
      * @param endTime
      */
-    public void addVideoInfoDb(final String vid, final String vName, final long startTime, final long endTime){
+    public void addVideoInfoDb(final String vid,String cid, final String vName, final long startTime, final long endTime){
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:dd");
         Date d = new Date(System.currentTimeMillis());
         final String date = format.format(d);
@@ -386,6 +387,7 @@ public class VideoService {
         countDao.setEndTime(endTime);
         countDao.setVideoId(vid);
         countDao.setVideoName(vName);
+        countDao.setCid(cid);
         countDao.save();
     }
 
@@ -395,7 +397,7 @@ public class VideoService {
      */
     public void addVideoHisInfo(final VideoHisDao dao){
         LitePalDb.setZkysDb();
-        LitePal.where("videoId=?",dao.getVideoId()+"").findFirstAsync(VideoHisDao.class).listen(new FindCallback<VideoHisDao>() {
+        LitePal.where("cid=?",dao.getCid()+"").findFirstAsync(VideoHisDao.class).listen(new FindCallback<VideoHisDao>() {
             @Override
             public void onFinish(VideoHisDao videoHisDao) {
                 if(videoHisDao==null){

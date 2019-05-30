@@ -5,6 +5,11 @@ import org.litepal.crud.LitePalSupport;
 public class VideoPlayerInfoDao extends LitePalSupport {
 
     /**
+     *  影视播放ID
+     */
+    private String cid;
+
+    /**
      *  imei
      */
     private String imei;
@@ -43,6 +48,14 @@ public class VideoPlayerInfoDao extends LitePalSupport {
      *  结束时间
      */
     private long endTime;
+
+    public String getCid() {
+        return cid;
+    }
+
+    public void setCid(String cid) {
+        this.cid = cid;
+    }
 
     public String getImei() {
         return imei;

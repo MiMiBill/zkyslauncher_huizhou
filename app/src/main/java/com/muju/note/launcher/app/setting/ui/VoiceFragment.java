@@ -52,7 +52,7 @@ public class VoiceFragment extends BaseFragment {
             public void onProgressChanged(int currentValue, int percent) {
                 LogFactory.l().i( "==onProgressChanged: " + currentValue);
                 LogFactory.l().i(  "==percent: " + percent);
-                int rateValue = (int) (currentValue / 1.0 / SystemUtils.getMaxVolume(getContext()) * 100);
+                int rateValue = (int) (currentValue / 1.0 / SystemUtils.getMaxVolume(getContext())*100);
                 if (currentValue != SystemUtils.getCurrentVolume(getContext())) {
                     SystemUtils.setVolume(getContext(), rateValue);
                 }

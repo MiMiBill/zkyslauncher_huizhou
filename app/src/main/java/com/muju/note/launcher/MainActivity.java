@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v4.widget.DrawerLayout;
 
 import com.muju.note.launcher.app.home.ui.HomeFragment;
+import com.muju.note.launcher.app.video.service.VideoService;
 import com.muju.note.launcher.app.video.util.WoTvUtil;
 import com.muju.note.launcher.base.BaseActivity;
 import com.muju.note.launcher.base.BaseFragment;
@@ -36,6 +37,7 @@ public class MainActivity extends BaseActivity {
         WoTvUtil.getInstance().initSDK(LauncherApplication.getInstance());
 
         drawlayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
     }
 
 }
