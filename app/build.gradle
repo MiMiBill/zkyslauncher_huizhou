@@ -125,4 +125,6 @@ dependencies {
 //
 //    // 此处以JAnalytics 2.0.0 版本为例。
     implementation 'cn.jiguang.sdk:jcore:1.2.5'
+
+    implementation 'com.github.open-android:ViewPager:0.1.0'
 }

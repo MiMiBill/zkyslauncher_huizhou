@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/ic_user_signin_bg">
+
+    <ImageView
+        android:layout_width="636px"
+        android:layout_height="536px"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50px"
+        android:src="@mipmap/ic_user_signin_title_bg" />
+
+    <TextView
+        android:id="@+id/tv_sign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="130px"
+        android:gravity="center"
+        android:text="签到"
+        android:textColor="@color/white"
+        android:textSize="50sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:layout_width="1280px"
+        android:layout_height="700px"
+        android:layout_alignParentBottom="true"
+        android:scaleType="fitXY"
+        android:src="@mipmap/ic_user_signin_bg_bottom" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_sign"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="130px"
+        android:gravity="center"
+        android:text="获取抽奖机会"
+        android:textColor="@color/white"
+        android:textSize="26sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_gift"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="360dp"
+        android:text="每日大礼包"
+        android:textColor="#333333"
+        android:textSize="16sp" />
+    <TextView
+        android:text="您有100积分"
+        android:layout_toRightOf="@id/tv_gift"
+        android:id="@+id/tv_integral"
+        android:textSize="16sp"
+        android:textColor="#333333"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="360dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_below="@id/tv_gift"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_marginRight="20dp"
+            android:layout_width="265px"
+            android:layout_height="160px"
+            android:src="@mipmap/gift" />
+
+        <ImageView
+            android:layout_width="265px"
+            android:layout_height="160px"
+            android:layout_marginRight="20dp"
+            android:src="@mipmap/gift"  />
+
+        <ImageView
+            android:layout_width="265px"
+            android:layout_height="160px"
+            android:layout_marginRight="20dp"
+            android:src="@mipmap/gift3"  />
+
+        <ImageView
+            android:layout_width="265px"
+            android:layout_height="160px"
+            android:src="@mipmap/gift4"  />
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40px"
+        android:layout_marginTop="20px"
+        android:layout_marginLeft="20px">
+        <LinearLayout
+            android:id="@+id/ll_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="40px"
+                android:layout_height="40px"
+                android:src="@mipmap/ic_luckdraw_back"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="返回"
+                android:textColor="#732716"
+                android:textSize="20px"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10px"/>
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

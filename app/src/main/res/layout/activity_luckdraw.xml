@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/ic_luck_draw_ui_bg">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40px"
+        android:layout_marginTop="20px"
+        android:layout_marginLeft="20px">
+        <LinearLayout
+            android:id="@+id/ll_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="40px"
+                android:layout_height="40px"
+                android:src="@mipmap/ic_luckdraw_back"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="返回"
+                android:textColor="#732716"
+                android:textSize="20px"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10px"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="710px"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginLeft="50px"
+            android:layout_marginTop="35px">
+            <ImageView
+                android:layout_width="458px"
+                android:layout_height="129px"
+                android:src="@mipmap/ic_luck_draw_titlebg"
+                android:layout_gravity="center_horizontal"/>
+
+            <com.muju.note.launcher.view.LuckDrawView
+                android:id="@+id/luckdrawView"
+                android:layout_width="710px"
+                android:layout_height="570px"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="7px">
+            </com.muju.note.launcher.view.LuckDrawView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginLeft="92px">
+
+            <LinearLayout
+                android:layout_width="400px"
+                android:layout_height="180px"
+                android:orientation="vertical"
+                android:background="@mipmap/ic_luck_draw_zjlist"
+                android:layout_marginTop="100px">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="11px"
+                    android:layout_marginTop="11px">
+                    <ImageView
+                        android:layout_width="21px"
+                        android:layout_height="19px"
+                        android:src="@mipmap/ic_luck_draw_laa"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#F3D393"
+                        android:text="中奖名单"
+                        android:textSize="18px"
+                        android:layout_marginLeft="10px"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="抽奖规则"
+                android:textColor="#732716"
+                android:textSize="18px"
+                android:layout_marginTop="40px"/>
+
+            <ImageView
+                android:layout_width="402px"
+                android:layout_height="188px"
+                android:src="@mipmap/ic_luck_draw_remark"
+                android:layout_marginTop="21px"/>
+
+            <Button
+                android:layout_width="200px"
+                android:layout_height="45px"
+                android:background="@mipmap/ic_luck_draw_btn_bg"
+                android:layout_marginTop="20px"
+                android:text="我的奖品"
+                android:textColor="@color/white"
+                android:textSize="18px"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="你的任务做完了吗？"
+                android:textSize="18px"
+                android:textColor="#732716"
+                android:layout_marginTop="25px"/>
+
+            <LinearLayout
+                android:layout_width="221px"
+                android:layout_height="58px"
+                android:layout_marginTop="10px"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/ll_luck_draw_bg">
+
+                <ImageView
+                    android:layout_width="33px"
+                    android:layout_height="33px"
+                    android:src="@mipmap/ic_luck_draw_signin"
+                    android:layout_marginLeft="38px"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20px"
+                    android:textColor="@color/white"
+                    android:text="签到有礼"
+                    android:layout_marginLeft="10px"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+
+
+</RelativeLayout>

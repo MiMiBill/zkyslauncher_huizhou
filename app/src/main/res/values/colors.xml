@@ -32,4 +32,6 @@
     <color name="color_transparent">#00000000</color>
     <color name="titleView_bg">#4478c1</color>
     <color name="color_6d6d6d">#FF6D6D6D</color>
+    <color name="color_FF6339">#FFFF6339</color>
+    <color name="white_drak">#DEDEDE</color>
 </resources>

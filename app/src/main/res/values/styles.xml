@@ -51,4 +51,18 @@
         <item name="android:windowEnterAnimation">@anim/push_bottom_in</item>
         <item name="android:windowExitAnimation">@anim/push_bottom_out</item>
     </style>
+
+    <declare-styleable name="RectProgress">
+        <attr name="progressValue" format="integer" />
+        <attr name="progressMax" format="integer" />
+        <attr name="bgColor" format="color" />
+        <attr name="rectRadius" format="dimension" />
+        <attr name="iconPadding" format="dimension" />
+        <attr name="progressColor" format="color" />
+        <attr name="iconSrc" format="reference" />
+        <attr name="progressOrientation">
+            <enum name="vertical" value="1" />
+            <enum name="horizontal" value="2" />
+        </attr>
+    </declare-styleable>
 </resources>

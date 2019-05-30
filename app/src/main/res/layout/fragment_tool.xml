@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/lly_qu"
+        android:orientation="vertical"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/px130"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_wechat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="请用运维工具扫码"
+            android:textColor="@color/color_FF6339"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/iv_ma"
+            android:layout_width="@dimen/px234"
+            android:layout_height="@dimen/px234"
+            android:layout_below="@id/tv_wechat"
+            android:src="@mipmap/setting_ma" />
+    </LinearLayout>
+
+
+    <ImageView
+        android:layout_width="@dimen/px470"
+        android:layout_height="@dimen/px438"
+        android:layout_marginLeft="@dimen/px4"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/lly_qu"
+        android:src="@mipmap/setting_tool" />
+</RelativeLayout>

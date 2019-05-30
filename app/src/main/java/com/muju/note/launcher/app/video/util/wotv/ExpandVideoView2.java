@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 
 import com.muju.note.launcher.app.video.event.VideoPauseEvent;
 import com.muju.note.launcher.app.video.event.VideoStartEvent;
+import com.muju.note.launcher.util.log.LogFactory;
 import com.unicom.common.base.video.expand.ExpandVideoView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -43,6 +44,7 @@ public class ExpandVideoView2 extends ExpandVideoView {
     @Override
     public void pause() {
         super.pause();
+        LogFactory.l().i("pause");
         EventBus.getDefault().post(new VideoPauseEvent(true));
     }
 

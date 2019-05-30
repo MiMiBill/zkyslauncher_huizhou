@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    >
+    <RelativeLayout
+        android:paddingLeft="@dimen/px48"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:id="@+id/activity_feedback_title_ll"
+            android:layout_width="match_parent"
+            android:layout_height="33px"
+            android:layout_marginTop="42px">
+
+            <View
+                android:id="@+id/activity_feedback_flag"
+                android:layout_width="4px"
+                android:layout_height="28px"
+                android:visibility="invisible"
+                android:layout_alignParentBottom="true"
+                android:background="#333333" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/activity_feedback_flag"
+
+                android:layout_alignParentBottom="true"
+                android:text="请写下您宝贵的反馈意见"
+                android:textColor="#333333"
+                android:textSize="28px" />
+
+        </RelativeLayout>
+        <EditText
+            android:id="@+id/activity_feedback_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="350px"
+            android:layout_marginTop="33px"
+            android:textSize="22px"
+            android:gravity="start"
+            android:paddingTop="20px"
+            android:textColor="#A8A8A8"
+            android:hint="请输入..."
+            android:background="#F2F2F2"
+            android:layout_below="@+id/activity_feedback_title_ll"/>
+        <Button
+            android:id="@+id/activity_feedback_sumbit"
+            android:layout_width="170px"
+            android:layout_height="68px"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="4px"
+            android:layout_marginRight="28px"
+            android:layout_marginBottom="32px"
+            android:text="确认提交"
+            android:textColor="@color/white"
+            android:textSize="28px"
+            android:background="#2994F1"/>
+    </RelativeLayout>
+</RelativeLayout>

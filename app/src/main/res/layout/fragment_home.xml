@@ -466,7 +466,34 @@
                     android:layout_marginTop="@dimen/px14"
                     android:layout_gravity="center_horizontal"/>
             </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px190"
+            android:layout_marginTop="@dimen/px15"
+            android:orientation="horizontal"
+            android:background="@color/white"
+            android:gravity="center_vertical">
 
+            <LinearLayout
+                android:id="@+id/ll_setting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/px61">
+                <ImageView
+                    android:layout_width="@dimen/px100"
+                    android:layout_height="@dimen/px100"
+                    android:src="@mipmap/hos_setting"/>
+                <TextView
+                    android:layout_width="@dimen/px100"
+                    android:layout_height="wrap_content"
+                    android:text="设置"
+                    android:gravity="center"
+                    android:textColor="@color/black_gray"
+                    android:textSize="@dimen/px25"
+                    android:layout_marginTop="@dimen/px14"/>
+            </LinearLayout>
 
         </LinearLayout>
 
