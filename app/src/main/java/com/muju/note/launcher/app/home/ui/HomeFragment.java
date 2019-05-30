@@ -177,6 +177,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void initData() {
+        EventBus.getDefault().register(this);
         activeInfo = ActiveUtils.getPadActiveInfo();
         initBanner();
         saveRegisterId();
@@ -347,6 +348,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     @Override
     public void onDestroy() {
         super.onDestroy();
+        banner.destroy();
         EventBus.getDefault().unregister(this);
     }
 
