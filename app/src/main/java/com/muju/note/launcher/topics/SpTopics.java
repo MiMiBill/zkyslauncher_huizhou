@@ -22,6 +22,18 @@ public class SpTopics {
      */
     public static final String SP_UPLOAD_DATA_DAY="sp_upload_data_day";
 
+    /**
+     *  推送
+     */
+    public static final String SP_ZKY_PAD_LAUNCHER = "sp_zky_pad_launcher";
+    public static final String SP_PAD_HAS_ACTIVE_ID = "sp_pad_has_active_id";
+    public static final String SP_PAD_JPUSH_ID = "sp_pad_jpush_id";
+
+
+    /**
+     *  音量推送
+     */
+    public static final String PAD_CONFIG_VOLUME_RATE = "PadConfigEntityVolume";
 
 
 }
