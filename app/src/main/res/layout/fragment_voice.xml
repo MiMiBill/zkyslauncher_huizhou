@@ -16,7 +16,7 @@
         app:progressColor="@color/color_38B4E9"
         app:progressMax="100"
         app:progressOrientation="vertical"
-        app:progressValue="30" />
+         />
     <TextView
         android:layout_marginTop="@dimen/px24"
         android:text="屏幕亮度"
@@ -50,7 +50,7 @@
         app:progressColor="@color/color_38B4E9"
         app:progressMax="100"
         app:progressOrientation="vertical"
-        app:progressValue="30" />
+         />
     <TextView
         android:layout_marginTop="@dimen/px24"
         android:text="声音大小"

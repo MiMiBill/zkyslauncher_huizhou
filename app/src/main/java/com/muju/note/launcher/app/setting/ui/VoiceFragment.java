@@ -35,6 +35,8 @@ public class VoiceFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        rectProgressLight.setMax(255);
+        rectProgressVoice.setMax(SystemUtils.getMaxVolume(getContext()));
         rectProgressLight.setProgress(SystemUtils.getScreenBrightness());
         rectProgressVoice.setProgress(SystemUtils.getCurrentVolume(getContext()));
 
@@ -74,23 +76,7 @@ public class VoiceFragment extends BaseFragment {
 
     @Override
     public void initData() {
-       /* rectProgressLight.setChangedListener(new RectProgress.OnProgressChangedListener() {
-            @Override
-            public void onProgressChanged(int currentValue, int percent) {
-                Log.e("zkpad","onProgressChanged==="+currentValue);
-                Log.e("zkpad","percent==="+percent);
-                LogFactory.l().i( "==onProgressChanged: " + currentValue);
-                LogFactory.l().i(  "==percent: " + percent);
-            }
-        });
 
-        rectProgressVoice.setChangedListener(new RectProgress.OnProgressChangedListener() {
-            @Override
-            public void onProgressChanged(int currentValue, int percent) {
-                LogFactory.l().i( "==onProgressChanged: " + currentValue);
-                LogFactory.l().i(  "==percent: " + percent);
-            }
-        });*/
     }
 
     @Override

@@ -126,7 +126,6 @@
         android:layout_height="@dimen/px250"
         android:layout_gravity="center"
         android:orientation="vertical"
-        android:visibility="gone"
         android:layout_centerInParent="true"
         >
         <ProgressBar

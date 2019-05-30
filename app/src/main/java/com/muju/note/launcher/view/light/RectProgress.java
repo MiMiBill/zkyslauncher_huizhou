@@ -243,8 +243,8 @@ public class RectProgress extends View {
             progress = max;
         } else if (progress < 0)
             progress = 0;
-
-        startProgressAnim(oldProgress);
+        //动画
+//        startProgressAnim(oldProgress);
     }
 
     private ValueAnimator valueAnimator;
