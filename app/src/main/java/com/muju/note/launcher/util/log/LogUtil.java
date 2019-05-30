@@ -49,6 +49,18 @@ public class LogUtil {
         }
     }
 
+    public static void w(String msg,Object... obj) {
+        if (isDebug) {
+            Logger.w(msg, obj);
+        }
+    }
+
+    public static void w(String tag,String msg,Object... obj) {
+        if (isDebug) {
+            Logger.t(tag).w(msg,obj);
+        }
+    }
+
     public static void e(String tag,String msg,Object... obj) {
         if (isDebug) {
             Logger.t(tag).e(msg,obj);

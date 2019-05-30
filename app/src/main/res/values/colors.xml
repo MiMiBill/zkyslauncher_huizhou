@@ -32,4 +32,7 @@
     <color name="color_transparent">#00000000</color>
     <color name="titleView_bg">#4478c1</color>
     <color name="color_6d6d6d">#FF6D6D6D</color>
+
+    <color name="message_dialog_color">#00b7ff</color>
+    <color name="message_dialog_color_pressed">#075d80</color>
 </resources>

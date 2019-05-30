@@ -41,4 +41,5 @@ public class Constants {
     //    public static final String ZKYS_PAD_DB="appbucket";
     //广告存储
     public static final String ZKYS_ADVERTS="zkysadverts";
+    public static final String PAD_SURVEY_ID = "pad_survey_id";
 }
