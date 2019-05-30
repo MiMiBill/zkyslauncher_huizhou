@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.muju.note.launcher.R;
@@ -28,12 +29,16 @@ import com.muju.note.launcher.app.hostipal.ui.EncyclopediasFragment;
 import com.muju.note.launcher.app.hostipal.ui.HosPitalMissionFragment;
 import com.muju.note.launcher.app.hostipal.ui.HospitalMienFragment;
 import com.muju.note.launcher.app.msg.ui.MsgFragment;
+import com.muju.note.launcher.app.luckdraw.ui.LuckDrawFragment;
+import com.muju.note.launcher.app.setting.ui.GuideFragment;
 import com.muju.note.launcher.app.setting.ui.SettingFragment;
+import com.muju.note.launcher.app.sign.ui.SignFragment;
 import com.muju.note.launcher.app.video.bean.PayEntity;
 import com.muju.note.launcher.app.video.bean.PayEvent;
 import com.muju.note.launcher.app.video.bean.VideoEvent;
 import com.muju.note.launcher.app.video.db.VideoHisDao;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
+import com.muju.note.launcher.app.video.dialog.LoginDialog;
 import com.muju.note.launcher.app.video.ui.VideoFragment;
 import com.muju.note.launcher.app.video.ui.WoTvVideoLineFragment;
 import com.muju.note.launcher.app.video.ui.WotvPlayFragment;
@@ -137,6 +142,15 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     ImageView ivImg;
     @BindView(R.id.ll_msg)
     LinearLayout llMsg;
+    @BindView(R.id.videoview)
+    VideoView videoview;
+    @BindView(R.id.lly_guide)
+    LinearLayout llyGuide;
+    @BindView(R.id.lly_sign)
+    LinearLayout llySign;
+    @BindView(R.id.lly_luck)
+    LinearLayout llyLuck;
+    Unbinder unbinder1;
     private ActivePadInfo.DataBean activeInfo;
     private List<PatientResponse.DataBean> patientList = new ArrayList<>();
 
@@ -147,6 +161,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     private HomeTopVideoAdapter homeTopVideoAdapter;
 
     private VideoInfoDao imgVideoInfo;
+    private LoginDialog loginDialog;
 
 
     public static HomeFragment newInstance() {
@@ -182,18 +197,24 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         llHisMission.setOnClickListener(this);
         llSetting.setOnClickListener(this);
         llMsg.setOnClickListener(this);
+        llyGuide.setOnClickListener(this);
+        llySign.setOnClickListener(this);
+        llyLuck.setOnClickListener(this);
 
         // 加载首页历史记录
         videoHisDaos = new ArrayList<>();
-        homeHisVideoAdapter = new HomeHisVideoAdapter(R.layout.rv_item_home_his_video, videoHisDaos);
-        rvHisVideo.setLayoutManager(new LinearLayoutManager(LauncherApplication.getContext(), LinearLayoutManager.HORIZONTAL, false));
+        homeHisVideoAdapter = new HomeHisVideoAdapter(R.layout.rv_item_home_his_video,
+                videoHisDaos);
+        rvHisVideo.setLayoutManager(new LinearLayoutManager(LauncherApplication.getContext(),
+                LinearLayoutManager.HORIZONTAL, false));
         rvHisVideo.setAdapter(homeHisVideoAdapter);
         mPresenter.getVideoHis();
 
         // 加载首页推荐影视
         videoInfoDaos = new ArrayList<>();
         homeTopVideoAdapter = new HomeTopVideoAdapter(R.layout.rv_home_video_top, videoInfoDaos);
-        rvVideoTop.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(), 2, LinearLayoutManager.HORIZONTAL, false));
+        rvVideoTop.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(), 2,
+                LinearLayoutManager.HORIZONTAL, false));
         rvVideoTop.setAdapter(homeTopVideoAdapter);
         mPresenter.getTopVideo();
 
@@ -285,7 +306,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                         NewAdvertsUtil.getInstance().showDefaultBanner(banner, 1);
                     } else {
                         NewAdvertsUtil.getInstance().showByBanner(CacheUtil.getDataList
-                                (AdvertsTopics.CODE_HOME), banner);
+                                (AdvertsTopics.CODE_HOME), banner, videoview);
                     }
                 }
             });
@@ -481,7 +502,37 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             case R.id.ll_msg: // 通知
                 start(new MsgFragment());
                 break;
+            case R.id.lly_guide: // 新手引导
+                start(new GuideFragment());
+                break;
+            case R.id.lly_sign: // 签到中心
+                showLoginDialog(0);
+                break;
+            case R.id.lly_luck: // 抽奖中心
+                showLoginDialog(1);
+                break;
         }
+    }
+
+
+    private void showLoginDialog(final int type){
+        loginDialog = new LoginDialog(getActivity(), R.style.DialogFullscreen, new LoginDialog.OnLoginListener() {
+            @Override
+            public void onSuccess() {
+                loginDialog.dismiss();
+                if(type==0){
+                    start(new SignFragment());
+                }else {
+                    start(new LuckDrawFragment());
+                }
+            }
+
+            @Override
+            public void onFail() {
+
+            }
+        });
+        loginDialog.show();
     }
 }
 

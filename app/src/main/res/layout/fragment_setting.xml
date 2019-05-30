@@ -102,34 +102,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="1px"/>
             <LinearLayout
-                android:id="@+id/lly_guide"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:background="@color/blue_gray"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/iv_guide"
-                    android:layout_width="@dimen/px48"
-                    android:layout_height="@dimen/px48"
-                    android:src="@mipmap/setting_guide" />
-
-                <TextView
-                    android:id="@+id/tv_guide"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="新手引导"
-                    android:layout_marginTop="@dimen/px12"
-                    android:textColor="@color/white"
-                    android:textSize="15sp"  />
-            </LinearLayout>
-            <View
-                android:background="@color/color_585858"
-                android:layout_width="match_parent"
-                android:layout_height="1px"/>
-            <LinearLayout
                 android:id="@+id/lly_message"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"

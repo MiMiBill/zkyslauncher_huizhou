@@ -74,7 +74,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
     LinearLayout llContent;
     @BindView(R.id.ll_error)
     LinearLayout llError;
-
+    private boolean isShowDialog=true;
     private List<VideoInfoDao> videoInfoDaos;
     private VideoLineAdapter lineAdapter;
     private VideoOrImageDialog videoOrImageDialog;
@@ -139,6 +139,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
         switch (v.getId()) {
             case R.id.ll_back:
             case R.id.tv_null:
+                isShowDialog=false;
                 pop();
                 break;
         }
@@ -163,7 +164,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(VideoPauseEvent event) {
         LogFactory.l().i("VideoPauseEvent==" + event.isPause);
-        if (event.isPause) {
+        if (event.isPause && isShowDialog) {
             List<AdvertsBean> adverts = CacheUtil.getDataList(AdvertsTopics.CODE_VIDEO_DIALOG);
             try {
                 if (videoOrImageDialog == null) {

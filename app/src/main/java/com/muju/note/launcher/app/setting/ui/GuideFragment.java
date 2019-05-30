@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.base.BaseFragment;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.youngkaaa.yviewpager.YFragmentPagerAdapter;
 import cn.youngkaaa.yviewpager.YViewPager;
@@ -25,22 +27,13 @@ public class GuideFragment extends BaseFragment {
     @BindView(R.id.yvp_guide)
     YViewPager yvpGuide;
     Unbinder unbinder;
+    @BindView(R.id.img_close)
+    ImageView imgClose;
     private List<FragmentInner> mFragments = new ArrayList<>();
 
     @Override
     public int getLayout() {
         return R.layout.fragment_guide;
-    }
-
-    public static GuideFragment newInstance() {
-        GuideFragment fragment = new GuideFragment();
-        return fragment;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-//        setData();
     }
 
     @Override
@@ -100,6 +93,11 @@ public class GuideFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @OnClick(R.id.img_close)
+    public void onViewClicked() {
+        pop();
     }
 
 

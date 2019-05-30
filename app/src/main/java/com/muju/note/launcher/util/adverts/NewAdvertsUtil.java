@@ -3,6 +3,8 @@ package com.muju.note.launcher.util.adverts;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -42,6 +45,7 @@ import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.view.banana.Banner;
+import com.muju.note.launcher.view.banana.BannerModel;
 import com.muju.note.launcher.view.banana.BannerPage;
 import com.muju.note.launcher.view.banana.OnBannerListener;
 import com.qiniu.android.http.ResponseInfo;
@@ -163,11 +167,15 @@ public class NewAdvertsUtil {
         }
     }
 
+
     public void showByBanner(final List<AdvertsBean> list, final Banner banner) {
         banner.setVisibility(View.VISIBLE);
         List<BannerPage> pageList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
-            BannerPage page = new BannerPage(list.get(i).getResourceUrl(), 10000);
+            if(list.get(i).getAdditionUrl()==null){
+                list.get(i).setAdditionUrl("");
+            }
+            BannerPage page = new BannerPage(list.get(i).getResourceUrl(), 15000);
 //            BannerPage page = new BannerPage(list.get(i).getResourceUrl(), list.get(i).getInterval()*1000); //轮播时长
             pageList.add(page);
         }
@@ -178,7 +186,6 @@ public class NewAdvertsUtil {
             public void OnBannerClick(int position) {
                 Log.e("zkpad", "click---position===" + position);
                 AdvertsBean bean = list.get(position);
-                Log.e("zkpad", "click---position===" + bean.getResourceUrl());
                 try {
                     if (bean.getResourceUrl().endsWith("png") || bean.getResourceUrl().endsWith
                             ("jpg")) {
@@ -232,7 +239,102 @@ public class NewAdvertsUtil {
 
             @Override
             public void onPageScrollStateChanged(int status) {
-                LogFactory.l().i("status==="+status);
+//                LogFactory.l().i("status==="+status);
+            }
+        });
+    }
+
+    //带画中画效果的banana
+    public void showByBanner(final List<AdvertsBean> list, final Banner banner, final VideoView videoView) {
+        banner.setVisibility(View.VISIBLE);
+        List<BannerPage> pageList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            if(list.get(i).getAdditionUrl()==null){
+                list.get(i).setAdditionUrl("");
+            }
+            BannerPage page = new BannerPage(list.get(i).getResourceUrl(), 10000);
+//            BannerPage page = new BannerPage(list.get(i).getResourceUrl(), list.get(i).getInterval()*1000); //轮播时长
+            pageList.add(page);
+        }
+        banner.setSlide(true);
+        banner.setDataPlay(pageList, 0);
+        banner.setOnBannerListener(new OnBannerListener() {
+            @Override
+            public void OnBannerClick(int position) {
+                Log.e("zkpad", "click---position===" + position);
+                AdvertsBean bean = list.get(position);
+                try {
+                    if (bean.getResourceUrl().endsWith("png") || bean.getResourceUrl().endsWith
+                            ("jpg")) {
+                        jump(bean);
+                    }
+                } catch (Exception e) {
+                    LogFactory.l().i("e=="+e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        final int[] id = {0};
+        final long[] startTime={System.currentTimeMillis()};
+        banner.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+//                LogFactory.l().i("position:"+position);
+                try {
+                    if(id[0]!=0){
+                        if(position==0){
+                            return;
+                        }
+                        if(position==list.size()+1){
+                            position=1;
+                        }
+                        if(id[0]==list.get(position-1).getId()){
+                            return;
+                        }
+                        if(position==1){
+                            addData(list.get(list.size()-1).getId(),TAG_SHOWTIME,System.currentTimeMillis()-startTime[0]);
+                        }else{
+                            addData(list.get(position-2).getId(),TAG_SHOWTIME,System.currentTimeMillis()-startTime[0]);
+                        }
+                        startTime[0]=System.currentTimeMillis();
+                    }
+                    if(id[0]!=list.get(position-1).getId()){
+                        addData(list.get(position-1).getId(),TAG_SHOWCOUNT);
+//                        LogFactory.l().i("TAG_SHOWCOUNT");
+                    }
+                    id[0] =list.get(position-1).getId();
+                    AdvertsBean advertsBean = list.get(position - 1);
+                    if(advertsBean.getAdditionUrl().endsWith("mp4")){
+                        videoView.setVisibility(View.VISIBLE);
+                        videoView.setVideoURI(Uri.parse(BannerModel.getProxyUrl(advertsBean.getAdditionUrl())));
+                        //videoView.start();
+                        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                            @Override
+                            public void onPrepared(MediaPlayer mp) {
+                                mp.setVolume(0f, 0f);
+                                mp.start();
+                            }
+                        });
+                    }else {
+                        if(videoView.isPlaying()){
+                            videoView.pause();
+                        }
+                        videoView.setVisibility(View.GONE);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int status) {
+//                LogFactory.l().i("status==="+status);
             }
         });
     }
