@@ -18,6 +18,8 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
@@ -30,12 +32,12 @@ import com.muju.note.launcher.util.adverts.NewAdvertsUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.sign.Signature;
-import com.muju.note.launcher.view.BackTitleView;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -52,7 +54,10 @@ public class WebActivity extends BaseActivity {
     WebView webView;
     View loadingView;
     View emptyView;
-    BackTitleView titleView;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
+    @BindView(R.id.ll_back)
+    LinearLayout llBack;
 
     private String url = "https://www.baidu.com/";
     private int advertId = 0;
@@ -79,7 +84,7 @@ public class WebActivity extends BaseActivity {
             webView.loadUrl(url);
         }
         if (getIntent().getStringExtra(WEB_TITLE) != null) {
-            titleView.setTitle(getIntent().getStringExtra(WEB_TITLE));
+            tvTitle.setText(getIntent().getStringExtra(WEB_TITLE));
         }
         advertId = getIntent().getIntExtra(ADVERTID, 0);
         isFinish = getIntent().getBooleanExtra(IS_FINISH, false);
@@ -87,6 +92,13 @@ public class WebActivity extends BaseActivity {
             startTime = System.currentTimeMillis();
             setStartProtection(false);
         }
+
+        llBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Override
@@ -103,7 +115,6 @@ public class WebActivity extends BaseActivity {
         webView = findViewById(R.id.web);
         loadingView = findViewById(R.id.loadingView);
         emptyView = findViewById(R.id.emptyView);
-        titleView = findViewById(R.id.title);
 
         emptyView.setVisibility(View.GONE);
     }
@@ -151,7 +162,7 @@ public class WebActivity extends BaseActivity {
                 String title = view.getTitle();
                 if (!TextUtils.isEmpty(title) && TextUtils.isEmpty(getIntent().getStringExtra
                         (WEB_TITLE))) {
-                    titleView.setTitle(title);
+                    tvTitle.setText(title);
                 }
             }
 
@@ -189,7 +200,7 @@ public class WebActivity extends BaseActivity {
                 //如果不传title过来就是用网页解析的title
                 if (!TextUtils.isEmpty(title) && TextUtils.isEmpty(getIntent().getStringExtra
                         (WEB_TITLE))) {
-                    titleView.setTitle(title);
+                    tvTitle.setText(title);
                 }
                 super.onReceivedTitle(view, title);
             }

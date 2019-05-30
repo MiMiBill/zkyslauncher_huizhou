@@ -57,8 +57,8 @@ public class JPUSHReceiver extends BroadcastReceiver {
             } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
                 LogUtil.d("[JPUSHReceiver] 接收到推送下来的自定义消息: " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
                 LogUtil.d("[JPUSHReceiver] 接收到推送下来的附加字段: " + bundle.getString(JPushInterface.EXTRA_EXTRA));
-                if (!ActiveUtils.hadActived(LauncherApplication.getInstance()))
-                    return;//如果没激活就不要弹出推送
+//                if (!ActiveUtils.hadActived(LauncherApplication.getInstance()))
+//                    return;//如果没激活就不要弹出推送
                 JSONObject jsonObject = new JSONObject(bundle.getString(JPushInterface.EXTRA_EXTRA));
                 switch (jsonObject.optInt("alertType")) {
                     case 11:
