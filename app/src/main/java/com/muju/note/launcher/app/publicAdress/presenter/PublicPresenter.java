@@ -8,6 +8,7 @@ import com.muju.note.launcher.app.publicAdress.contract.PublicContract;
 import com.muju.note.launcher.base.BasePresenter;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.ActiveUtils;
+import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.user.UserUtil;
 
 public class PublicPresenter extends BasePresenter<PublicContract.View> implements PublicContract.Presenter {
@@ -33,6 +34,7 @@ public class PublicPresenter extends BasePresenter<PublicContract.View> implemen
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
+                        LogFactory.l().i("onError");
                         if(listener!=null)
                             listener.verfyFail();
                     }

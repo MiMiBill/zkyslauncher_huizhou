@@ -167,6 +167,9 @@ public class NewAdvertsUtil {
         banner.setVisibility(View.VISIBLE);
         List<BannerPage> pageList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
+            if(list.get(i).getAdditionUrl()==null){
+                list.get(i).setAdditionUrl("");
+            }
             BannerPage page = new BannerPage(list.get(i).getResourceUrl(), 10000);
 //            BannerPage page = new BannerPage(list.get(i).getResourceUrl(), list.get(i).getInterval()*1000); //轮播时长
             pageList.add(page);
@@ -178,7 +181,6 @@ public class NewAdvertsUtil {
             public void OnBannerClick(int position) {
                 Log.e("zkpad", "click---position===" + position);
                 AdvertsBean bean = list.get(position);
-                Log.e("zkpad", "click---position===" + bean.getResourceUrl());
                 try {
                     if (bean.getResourceUrl().endsWith("png") || bean.getResourceUrl().endsWith
                             ("jpg")) {
@@ -232,7 +234,7 @@ public class NewAdvertsUtil {
 
             @Override
             public void onPageScrollStateChanged(int status) {
-                LogFactory.l().i("status==="+status);
+//                LogFactory.l().i("status==="+status);
             }
         });
     }

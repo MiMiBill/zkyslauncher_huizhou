@@ -46,11 +46,20 @@ public class AdvertsBean implements Serializable {
     private String accessModule;
     private String startDate;
     private String createDate;
+    private String additionUrl; //画中画url
     private int order;
     private int status;
     private int interval;
     private int incomeType;
     private String code;
+
+    public String getAdditionUrl() {
+        return additionUrl;
+    }
+
+    public void setAdditionUrl(String additionUrl) {
+        this.additionUrl = additionUrl;
+    }
 
     public String getAdvertType() {
         return advertType;

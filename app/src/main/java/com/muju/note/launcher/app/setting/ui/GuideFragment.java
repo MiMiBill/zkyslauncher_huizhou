@@ -32,17 +32,6 @@ public class GuideFragment extends BaseFragment {
         return R.layout.fragment_guide;
     }
 
-    public static GuideFragment newInstance() {
-        GuideFragment fragment = new GuideFragment();
-        return fragment;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-//        setData();
-    }
-
     @Override
     public void initData() {
         setData();
