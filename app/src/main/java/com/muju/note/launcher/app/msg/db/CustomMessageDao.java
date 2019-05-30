@@ -3,19 +3,28 @@ package com.muju.note.launcher.app.msg.db;
 import org.litepal.crud.LitePalSupport;
 
 public class CustomMessageDao extends LitePalSupport {
-    private Long id;
+    private int id;
     private int xjId;
     private String title;
     private String type;
     private String author;
     private String url;
     private String time;
+    private long createTime;
 
-    public Long getId() {
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

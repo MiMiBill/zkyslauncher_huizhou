@@ -11,9 +11,11 @@ import com.muju.note.launcher.app.activity.WebActivity;
 import com.muju.note.launcher.app.home.event.PatientEvent;
 import com.muju.note.launcher.app.msg.db.CustomMessageDao;
 import com.muju.note.launcher.app.msg.dialog.CustomMsgDialog;
+import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.util.log.LogUtil;
 
 import org.greenrobot.eventbus.EventBus;
+import org.litepal.LitePal;
 
 import java.text.SimpleDateFormat;
 
@@ -26,7 +28,6 @@ public class CustomMessageService extends Service {
     private final String TAG="CustomMessageService";
     public static final String MESSAGE_TYPE = "message_type";
     public static final String PUSH_CUSTOM_CONTENT = "push_content";
-    CustomMessageDao entity;
 
     @Nullable
     @Override
@@ -49,6 +50,7 @@ public class CustomMessageService extends Service {
             //宣教
             case 1:
                 Gson gson = new Gson();
+                CustomMessageDao entity=new CustomMessageDao();
                 try {
                     entity = gson.fromJson(intent.getStringExtra(PUSH_CUSTOM_CONTENT), CustomMessageDao.class);
                 } catch (Exception e) {
@@ -58,6 +60,8 @@ public class CustomMessageService extends Service {
 
                 if (entity != null) {
                     entity.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(System.currentTimeMillis()));
+                    entity.setCreateTime(System.currentTimeMillis());
+                    LitePalDb.setZkysDb();
                     entity.save();
                     EventBus.getDefault().post(new PatientEvent(PatientEvent.MISSION_ADD));
                     WebActivity.launchXJ(CustomMessageService.this, entity.getUrl(), entity.getTitle(), entity.getXjId());

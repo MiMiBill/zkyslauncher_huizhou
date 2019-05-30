@@ -7,6 +7,7 @@ import com.muju.note.launcher.app.hostipal.db.InfoDao;
 import com.muju.note.launcher.app.hostipal.db.InfomationDao;
 import com.muju.note.launcher.app.hostipal.db.MienInfoDao;
 import com.muju.note.launcher.app.hostipal.db.MissionInfoDao;
+import com.muju.note.launcher.app.msg.db.CustomMessageDao;
 import com.muju.note.launcher.app.video.db.VideoColumnsDao;
 import com.muju.note.launcher.app.video.db.VideoHisDao;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
@@ -24,7 +25,7 @@ import org.litepal.LitePalDB;
 public class LitePalDb {
 
     public static final LitePalDB zkysDataDb=new LitePalDB("zkys-data",9);
-    public static final LitePalDB zkysDb=new LitePalDB("zkys",17);
+    public static final LitePalDB zkysDb=new LitePalDB("zkys",19);
 
     /**
      *  初始化数据库
@@ -55,6 +56,7 @@ public class LitePalDb {
         zkysDb.addClassName(VideoPlayerCountDao.class.getName());
         zkysDb.addClassName(VideoHisDao.class.getName());
         zkysDb.addClassName(VideoHisDao.class.getName());
+        zkysDb.addClassName(CustomMessageDao.class.getName());
         LitePal.use(zkysDb);
     }
 

@@ -247,6 +247,8 @@
             </intent-filter>
         </service>
 
+        <service android:name=".service.CustomMessageService"></service>
+
 
         <!-- 设备管理 -->
         <receiver

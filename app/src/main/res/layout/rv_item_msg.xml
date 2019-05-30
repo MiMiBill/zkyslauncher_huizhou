@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px52"
+        android:layout_marginTop="@dimen/px25"
+        android:layout_marginLeft="@dimen/px70"
+        android:layout_marginRight="@dimen/px70"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="@dimen/px7"
+            android:layout_height="@dimen/px7"
+            android:src="@mipmap/ic_msg_yuan"
+            android:layout_marginLeft="@dimen/px44"
+            android:layout_gravity="center_vertical"/>
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="match_parent"
+            android:text="标题内容"
+            android:textColor="@color/black_gray"
+            android:layout_marginLeft="@dimen/px10"
+            android:gravity="center_vertical"/>
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="时间"
+            android:textColor="@color/black_gray"
+            android:layout_marginLeft="@dimen/px44"
+            android:gravity="center_vertical"/>
+    </LinearLayout>
+
+</LinearLayout>

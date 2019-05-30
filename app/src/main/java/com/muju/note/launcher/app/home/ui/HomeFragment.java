@@ -28,6 +28,7 @@ import com.muju.note.launcher.app.home.presenter.HomePresenter;
 import com.muju.note.launcher.app.hostipal.ui.EncyclopediasFragment;
 import com.muju.note.launcher.app.hostipal.ui.HosPitalMissionFragment;
 import com.muju.note.launcher.app.hostipal.ui.HospitalMienFragment;
+import com.muju.note.launcher.app.msg.ui.MsgFragment;
 import com.muju.note.launcher.app.luckdraw.ui.LuckDrawFragment;
 import com.muju.note.launcher.app.setting.ui.GuideFragment;
 import com.muju.note.launcher.app.setting.ui.SettingFragment;
@@ -129,7 +130,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     LinearLayout llHisMission;
     @BindView(R.id.ll_setting)
     LinearLayout llSetting;
-    Unbinder unbinder;
     @BindView(R.id.rv_his_video)
     RecyclerView rvHisVideo;
     @BindView(R.id.ll_his_video_null)
@@ -140,6 +140,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     LinearLayout llTopVideoNull;
     @BindView(R.id.iv_img)
     ImageView ivImg;
+    @BindView(R.id.ll_msg)
+    LinearLayout llMsg;
     @BindView(R.id.videoview)
     VideoView videoview;
     @BindView(R.id.lly_guide)
@@ -195,6 +197,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         llVideoLine.setOnClickListener(this);
         llHisMission.setOnClickListener(this);
         llSetting.setOnClickListener(this);
+        llMsg.setOnClickListener(this);
         llyGuide.setOnClickListener(this);
         llySign.setOnClickListener(this);
         llyLuck.setOnClickListener(this);
@@ -498,6 +501,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             case R.id.ll_setting: // 设置
                 start(new SettingFragment());
                 break;
+            case R.id.ll_msg: // 通知
+                start(new MsgFragment());
+                break;
             case R.id.lly_guide: // 新手引导
                 start(new GuideFragment());
                 break;
@@ -529,21 +535,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             }
         });
         loginDialog.show();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
-            savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder1 = ButterKnife.bind(this, rootView);
-        return rootView;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder1.unbind();
     }
 }
 
