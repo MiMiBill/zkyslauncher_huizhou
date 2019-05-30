@@ -10,4 +10,13 @@
         android:layout_height="match_parent"
         app:orientation="vertical">
     </cn.youngkaaa.yviewpager.YViewPager>
+    <ImageView
+        android:id="@+id/img_close"
+        android:layout_width="58px"
+        android:layout_height="58px"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="43px"
+        android:layout_marginRight="@dimen/x40"
+        android:src="@mipmap/icon_yd_close"/>
 </RelativeLayout>

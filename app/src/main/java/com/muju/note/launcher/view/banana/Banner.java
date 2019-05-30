@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
@@ -364,27 +363,6 @@ public class Banner extends LinearLayout {
 
                 listBanner.add(bannerPage);
 
-               /* if (bannerPage.videourl.endsWith("mp4")) {    //画中画
-                    RelativeLayout relativeLayout = new RelativeLayout(getContext());
-                    relativeLayout.setLayoutParams(lp);
-                    ImageView imageView = new ImageView(getContext());
-                    imageView.setLayoutParams(lp);
-                    Glide.with(getContext()).load(bannerPage.url).apply(options).into(imageView);
-                    MVideoView videoView = new MVideoView(getContext());
-                    videoView.setLayoutParams(new LayoutParams(356, 270));
-                    relativeLayout.addView(imageView);
-                    relativeLayout.addView(videoView);
-                    videoView.setVideoURI(Uri.parse(BannerModel.getProxyUrl(bannerPage.videourl)));
-                    //videoView.start();
-                    videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                        @Override
-                        public void onPrepared(MediaPlayer mp) {
-                            mp.setVolume(0f, 0f);
-                            mp.start();
-                        }
-                    });
-                    views.add(relativeLayout);
-                } else {*/
                     if (bannerPage.url.endsWith("mp4")) {
                         MVideoView videoView = new MVideoView(getContext());
                         videoView.setLayoutParams(lp);
@@ -471,7 +449,7 @@ public class Banner extends LinearLayout {
             BannerPage bannerPage = dataList.get(0);
             listBanner.add(bannerPage);
 
-            if (bannerPage.videourl.endsWith("mp4")) {    //画中画
+          /*  if (bannerPage.videourl.endsWith("mp4")) {    //画中画
                 RelativeLayout relativeLayout = new RelativeLayout(getContext());
                 relativeLayout.setLayoutParams(lp);
                 ImageView imageView = new ImageView(getContext());
@@ -491,7 +469,7 @@ public class Banner extends LinearLayout {
                     }
                 });
                 views.add(relativeLayout);
-            } else {
+            } else {*/
                 if (MimeTypeMap.getFileExtensionFromUrl(bannerPage.url).equals("mp4")) {
                     MVideoView videoView = new MVideoView(getContext());
                     videoView.setLayoutParams(lp);
@@ -532,7 +510,7 @@ public class Banner extends LinearLayout {
                     });
                     views.add(imageView);
                 }
-            }
+//            }
 
         } else {
             views.add(new LinearLayout(getContext()));

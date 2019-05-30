@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.muju.note.launcher.R;
@@ -27,6 +28,7 @@ import com.muju.note.launcher.app.home.presenter.HomePresenter;
 import com.muju.note.launcher.app.hostipal.ui.EncyclopediasFragment;
 import com.muju.note.launcher.app.hostipal.ui.HosPitalMissionFragment;
 import com.muju.note.launcher.app.hostipal.ui.HospitalMienFragment;
+import com.muju.note.launcher.app.setting.ui.GuideFragment;
 import com.muju.note.launcher.app.setting.ui.SettingFragment;
 import com.muju.note.launcher.app.video.bean.PayEntity;
 import com.muju.note.launcher.app.video.bean.PayEvent;
@@ -135,6 +137,10 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     LinearLayout llTopVideoNull;
     @BindView(R.id.iv_img)
     ImageView ivImg;
+    @BindView(R.id.videoview)
+    VideoView videoview;
+    @BindView(R.id.lly_guide)
+    LinearLayout llyGuide;
     private ActivePadInfo.DataBean activeInfo;
     private List<PatientResponse.DataBean> patientList = new ArrayList<>();
 
@@ -179,25 +185,29 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         llVideoLine.setOnClickListener(this);
         llHisMission.setOnClickListener(this);
         llSetting.setOnClickListener(this);
+        llyGuide.setOnClickListener(this);
 
         // 加载首页历史记录
         videoHisDaos = new ArrayList<>();
-        homeHisVideoAdapter = new HomeHisVideoAdapter(R.layout.rv_item_home_his_video, videoHisDaos);
-        rvHisVideo.setLayoutManager(new LinearLayoutManager(LauncherApplication.getContext(), LinearLayoutManager.HORIZONTAL, false));
+        homeHisVideoAdapter = new HomeHisVideoAdapter(R.layout.rv_item_home_his_video,
+                videoHisDaos);
+        rvHisVideo.setLayoutManager(new LinearLayoutManager(LauncherApplication.getContext(),
+                LinearLayoutManager.HORIZONTAL, false));
         rvHisVideo.setAdapter(homeHisVideoAdapter);
         mPresenter.getVideoHis();
 
         // 加载首页推荐影视
         videoInfoDaos = new ArrayList<>();
         homeTopVideoAdapter = new HomeTopVideoAdapter(R.layout.rv_home_video_top, videoInfoDaos);
-        rvVideoTop.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(), 2, LinearLayoutManager.HORIZONTAL, false));
+        rvVideoTop.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(), 2,
+                LinearLayoutManager.HORIZONTAL, false));
         rvVideoTop.setAdapter(homeTopVideoAdapter);
         mPresenter.getTopVideo();
 
         homeHisVideoAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                WotvPlayFragment wotvPlayFragment=new WotvPlayFragment();
+                WotvPlayFragment wotvPlayFragment = new WotvPlayFragment();
                 wotvPlayFragment.setHisDao(videoHisDaos.get(position));
                 start(wotvPlayFragment);
             }
@@ -219,16 +229,17 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     }
 
     /**
-     *  跳转播放
+     * 跳转播放
+     *
      * @param infoDao
      */
-    private void toPlay(VideoInfoDao infoDao){
+    private void toPlay(VideoInfoDao infoDao) {
         if (!VideoSdkConfig.getInstance().getUser().isLogined()) {
             WoTvUtil.getInstance().login();
             showToast("登入视频中，请稍后");
             return;
         }
-        VideoHisDao hisDao=new VideoHisDao();
+        VideoHisDao hisDao = new VideoHisDao();
         hisDao.setCid(infoDao.getCid());
         hisDao.setCustomTag(infoDao.getCustomTag());
         hisDao.setDescription(infoDao.getDescription());
@@ -237,7 +248,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         hisDao.setVideoId(infoDao.getVideoId());
         hisDao.setVideoType(infoDao.getVideoType());
         hisDao.setScreenUrl(infoDao.getScreenUrl());
-        WotvPlayFragment wotvPlayFragment=new WotvPlayFragment();
+        WotvPlayFragment wotvPlayFragment = new WotvPlayFragment();
         wotvPlayFragment.setHisDao(hisDao);
         start(wotvPlayFragment);
         llSetting.setOnClickListener(this);
@@ -281,7 +292,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                         NewAdvertsUtil.getInstance().showDefaultBanner(banner, 1);
                     } else {
                         NewAdvertsUtil.getInstance().showByBanner(CacheUtil.getDataList
-                                (AdvertsTopics.CODE_HOME), banner);
+                                (AdvertsTopics.CODE_HOME), banner, videoview);
                     }
                 }
             });
@@ -401,7 +412,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void getVideoTopImg(VideoInfoDao dao) {
-        imgVideoInfo=dao;
+        imgVideoInfo = dao;
         GlideUtil.loadImg(dao.getScreenUrl(), ivImg, R.mipmap.ic_video_load_default);
     }
 
@@ -473,6 +484,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 break;
             case R.id.ll_setting: // 设置
                 start(new SettingFragment());
+                break;
+            case R.id.lly_guide: // 新手引导
+                start(new GuideFragment());
                 break;
         }
     }
