@@ -1,7 +1,6 @@
 package com.muju.note.launcher.base;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,7 +15,6 @@ import android.view.WindowManager;
 import com.muju.note.launcher.app.lockScreen.ProtectionProcessActivity;
 import com.muju.note.launcher.app.video.event.VideoNoLockEvent;
 import com.muju.note.launcher.util.log.LogFactory;
-import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
 import com.muju.note.launcher.util.toast.FancyToast;
 
@@ -64,8 +62,8 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
         mDelegate.onPostCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -92,9 +90,9 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     public void onEvent(VideoNoLockEvent event) {
         LogFactory.l().i("event.VideoNoLockEvent==" + event.isLock);
         if (!event.isLock) {
-            setStartProtection(false);
+            stopProtectionCountDown();
         }else {
-            setStartProtection(true);
+            startProtectionCountDown();
         }
     }
 

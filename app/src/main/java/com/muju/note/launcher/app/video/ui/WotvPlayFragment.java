@@ -94,7 +94,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
     Unbinder unbinder;
     private boolean isCodeFail = false;
     private static final String TAG = "WotvPlayFragment";
-
+    private boolean isShowDialog=true;
     /**
      * 视频类型
      * 1：电视台直播
@@ -218,6 +218,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_back:
+                isShowDialog=false;
                 pop();
                 break;
         }
@@ -493,7 +494,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(VideoPauseEvent event) {
 //        LogFactory.l().i("VideoPauseEvent==" + event.isPause);
-        if (event.isPause) {
+        if (event.isPause && isShowDialog) {
             List<AdvertsBean> adverts = CacheUtil.getDataList(AdvertsTopics.CODE_VIDEO_DIALOG);
             try {
                 if (videoOrImageDialog == null) {

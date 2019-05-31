@@ -25,6 +25,7 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 import com.muju.note.launcher.R;
+import com.muju.note.launcher.app.video.event.VideoNoLockEvent;
 import com.muju.note.launcher.base.BaseActivity;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.url.UrlUtil;
@@ -32,6 +33,8 @@ import com.muju.note.launcher.util.adverts.NewAdvertsUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.sign.Signature;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.HashMap;
@@ -90,7 +93,8 @@ public class WebActivity extends BaseActivity {
         isFinish = getIntent().getBooleanExtra(IS_FINISH, false);
         if (advertId != 0) {
             startTime = System.currentTimeMillis();
-            setStartProtection(false);
+//            setStartProtection(false);
+            EventBus.getDefault().post(new VideoNoLockEvent(false));
         }
 
         llBack.setOnClickListener(new View.OnClickListener() {
