@@ -189,10 +189,12 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
             videoView.setOnPreparedListener(new OnVideoPreparedListener() {
                 @Override
                 public void onPrepared(boolean b) {
-                    if(videoView!=null) {
+                    try {
                         videoView.setBasicControlDialogsVisible(true, true);
+                        llLoading.setVisibility(View.GONE);
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
-                    llLoading.setVisibility(View.GONE);
                 }
             });
 
@@ -237,6 +239,9 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                     verifyPlayingStatus();
                     //TODO 播放器的默认海报展示的时候，会通知业务层，由业务层处理业务逻辑。
                     Log.e(TAG, "海报是否显示：" + isVisiable);
+                    if(videoView==null){
+                        return;
+                    }
                     if (videoView!=null && !videoView.isPlaying()) {
                         llLoading.setVisibility(View.VISIBLE);
                     }
@@ -260,27 +265,32 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
 
             @Override
             public boolean onVideoComplete() {
-                //TODO 视频播放完成（一个视频达到duration的末尾），通知业务层
-                LogUtil.e(TAG, "onVideoComplete:");
-                switch (videoHisDao.getPlayType()) {
-                    case VIDEO_TYPE_EPISODE:
-                    case VIDEO_TYPE_VARIETY:
-                        EPISODE_POSITION = videoView.getEpisodePosition();
-                        //自动播放下一集
-                        if (EPISODE_POSITION < videoView.getVideoEpisodes().size() - 1) {
-                            EPISODE_POSITION++;
-                            videoView.changeEpisode(EPISODE_POSITION);
-                        } else {
-                            //todo 如果最后一集就应该播放另一部视频
+                try {
+                    //TODO 视频播放完成（一个视频达到duration的末尾），通知业务层
+                    LogUtil.e(TAG, "onVideoComplete:");
+                    switch (videoHisDao.getPlayType()) {
+                        case VIDEO_TYPE_EPISODE:
+                        case VIDEO_TYPE_VARIETY:
+                            EPISODE_POSITION = videoView.getEpisodePosition();
+                            //自动播放下一集
+                            if (EPISODE_POSITION < videoView.getVideoEpisodes().size() - 1) {
+                                EPISODE_POSITION++;
+                                videoView.changeEpisode(EPISODE_POSITION);
+                            } else {
+                                //todo 如果最后一集就应该播放另一部视频
+                                showToast("视频已播放完成");
+                                pop();
+                            }
+
+                            break;
+                        default:
                             showToast("视频已播放完成");
                             pop();
-                        }
-
-                        break;
-                    default:
-                        showToast("视频已播放完成");
-                        pop();
-                        break;
+                            break;
+                    }
+                    return true;
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
                 return true;
             }
@@ -292,33 +302,37 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
 
             @Override
             public void onError(VideoErrorInfo.VideoException e) {
-                LogUtil.e(TAG, "onError:" + e.toString());
-                //TODO VideoErrorInfo配套查阅错误代码
-                LogUtil.e(TAG, "错误代码：" + e.getCode());
-                LogUtil.e(TAG, "错误信息：" + e.getMessage());
-                switch (e.getCode()) {
-                    case VideoErrorInfo.CODE_ACCOUNT_CHECK_ERROR:
-                    case VideoErrorInfo.CODE_VIDEO_CONTENTE_PERMISSION:
-                        if (VideoSdkConfig.getInstance().getUser().isLogined()) {
-                            //这里发生错误就先重新登录
-                            showToast("没有权限播放此视频");
+                try {
+                    LogUtil.e(TAG, "onError:" + e.toString());
+                    //TODO VideoErrorInfo配套查阅错误代码
+                    LogUtil.e(TAG, "错误代码：" + e.getCode());
+                    LogUtil.e(TAG, "错误信息：" + e.getMessage());
+                    switch (e.getCode()) {
+                        case VideoErrorInfo.CODE_ACCOUNT_CHECK_ERROR:
+                        case VideoErrorInfo.CODE_VIDEO_CONTENTE_PERMISSION:
+                            if (VideoSdkConfig.getInstance().getUser().isLogined()) {
+                                //这里发生错误就先重新登录
+                                showToast("没有权限播放此视频");
+                                pop();
+                            } else {
+                                WoTvUtil.getInstance().login();
+                                showToast("网络环境异常，请检查！");
+                            }
+                            break;
+                        case VideoErrorInfo.CODE_VIDEO_INNER_ERROR:
+                        case VideoErrorInfo.CODE_VIDEO_GET_ERROR:
+                            showToast(e.getMessage() + "");
                             pop();
-                        } else {
+                            break;
+                        case VideoErrorInfo.CODE_ORDER_CHECK_ERROR:
+                        case VideoErrorInfo.CODE_VIDEO_URL_ERROR:
                             WoTvUtil.getInstance().login();
-                            showToast("网络环境异常，请检查！");
-                        }
-                        break;
-                    case VideoErrorInfo.CODE_VIDEO_INNER_ERROR:
-                    case VideoErrorInfo.CODE_VIDEO_GET_ERROR:
-                        showToast(e.getMessage() + "");
-                        pop();
-                        break;
-                    case VideoErrorInfo.CODE_ORDER_CHECK_ERROR:
-                    case VideoErrorInfo.CODE_VIDEO_URL_ERROR:
-                        WoTvUtil.getInstance().login();
-                        showToast(e.getMessage() + "");
-                        pop();
-                        break;
+                            showToast(e.getMessage() + "");
+                            pop();
+                            break;
+                    }
+                }catch (Exception es){
+                    es.printStackTrace();
                 }
             }
         });
@@ -808,7 +822,6 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
             VideoService.getInstance().addVideoInfoDb(videoHisDao.getVideoId() + "",videoHisDao.getCid(), videoHisDao.getName(), startTime, System.currentTimeMillis());
             if (videoView != null) {
                 videoView.onDestroy();
-                videoView = null;
             }
             RxUtil.closeDisposable(disposableSlPay);
             RxUtil.closeDisposable(diPayDialog);
