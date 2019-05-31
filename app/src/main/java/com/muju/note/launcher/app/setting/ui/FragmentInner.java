@@ -9,8 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.muju.note.launcher.R;
-import com.muju.note.launcher.util.log.LogFactory;
+import com.muju.note.launcher.base.LauncherApplication;
 
 
 public class FragmentInner extends Fragment {
@@ -29,7 +30,7 @@ public class FragmentInner extends Fragment {
     public static FragmentInner newInstance(String title, @DrawableRes int res){
         Bundle bundle=new Bundle();
         bundle.putString(KEY_TITLE,title);
-        LogFactory.l().i("title==="+title);
+//        LogFactory.l().i("title==="+title);
         bundle.putInt(KEY_IMG,res);
         FragmentInner fragment=new FragmentInner();
         fragment.setArguments(bundle);
@@ -41,6 +42,8 @@ public class FragmentInner extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Bundle arguments = getArguments();
-        mImageView.setImageResource(arguments.getInt(KEY_IMG));
+//        mImageView.setImageResource(arguments.getInt(KEY_IMG));
+        Glide.with(LauncherApplication.getContext()).load(arguments.getInt(KEY_IMG)).into(mImageView);
+
     }
 }

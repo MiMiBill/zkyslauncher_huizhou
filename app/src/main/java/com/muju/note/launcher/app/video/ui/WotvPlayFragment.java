@@ -237,7 +237,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                     verifyPlayingStatus();
                     //TODO 播放器的默认海报展示的时候，会通知业务层，由业务层处理业务逻辑。
                     Log.e(TAG, "海报是否显示：" + isVisiable);
-                    if (!videoView.isPlaying()) {
+                    if (videoView!=null && !videoView.isPlaying()) {
                         llLoading.setVisibility(View.VISIBLE);
                     }
                 }catch (Exception e){
