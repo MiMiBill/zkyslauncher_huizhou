@@ -60,6 +60,7 @@ import com.muju.note.launcher.util.gilde.GlideUtil;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.qr.QrCodeUtils;
 import com.muju.note.launcher.util.sp.SPUtil;
+import com.muju.note.launcher.util.user.UserUtil;
 import com.muju.note.launcher.view.banana.Banner;
 import com.unicom.common.VideoSdkConfig;
 
@@ -280,7 +281,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     private void initBanner() {
         final AdvertsDialog dialog = new AdvertsDialog(getActivity(), R.style.dialog);
         try {
-            NewAdvertsUtil.getInstance().queryAdverts(UIUtils.fun(AdvertsTopics.CODE_HOME,
+            NewAdvertsUtil.getInstance().queryAdverts(UIUtils.fun(AdvertsTopics.CODE_HOME_LB,
                     AdvertsTopics.CODE_HOME_DIALOG, AdvertsTopics.CODE_LOCK,
                     AdvertsTopics.CODE_PUBLIC, AdvertsTopics.CODE_VERTICAL,
                     AdvertsTopics.CODE_VIDEO_CORNER, AdvertsTopics.CODE_VIDEO_DIALOG,
@@ -308,17 +309,17 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                     .OnBannerSuccessLisinter() {
                 @Override
                 public void success() {
-                    List<AdvertsBean> dataList = CacheUtil.getDataList(AdvertsTopics.CODE_HOME);
+                    List<AdvertsBean> dataList = CacheUtil.getDataList(AdvertsTopics.CODE_HOME_LB);
                     if (dataList.size() == 0) {
                         NewAdvertsUtil.getInstance().showDefaultBanner(banner, 1);
                     } else {
                         NewAdvertsUtil.getInstance().showByBanner(CacheUtil.getDataList
-                                (AdvertsTopics.CODE_HOME), banner);
+                                (AdvertsTopics.CODE_HOME_LB), banner);
                     }
                 }
             });
 
-            List<AdvertsBean> dataList = CacheUtil.getDataList(AdvertsTopics.CODE_HOME);
+            List<AdvertsBean> dataList = CacheUtil.getDataList(AdvertsTopics.CODE_HOME_LB);
             if (dataList.size() == 0) {
                 NewAdvertsUtil.getInstance().showDefaultBanner(banner, 1);
             }
@@ -515,10 +516,18 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 start(new GuideFragment());
                 break;
             case R.id.lly_sign: // 签到中心
-                showLoginDialog(0);
+                if(UserUtil.getUserBean()!=null){
+                    start(new SignFragment());
+                }else {
+                    showLoginDialog(0);
+                }
                 break;
             case R.id.lly_luck: // 抽奖中心
-                showLoginDialog(1);
+                if(UserUtil.getUserBean()!=null){
+                    start(new LuckDrawFragment());
+                }else {
+                    showLoginDialog(1);
+                }
                 break;
             case R.id.lly_cabinet: // 屏安柜
                 showToast("更多精彩,敬请期待");

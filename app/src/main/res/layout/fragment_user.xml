@@ -1,30 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
     >
 
-    <TextView
-        android:id="@+id/tv_wechat"
-        android:text="请用微信扫码登录"
-        android:textColor="@color/color_FF6339"
-        android:textSize="20sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <ImageView
-        android:id="@+id/iv_ma"
-        android:layout_below="@id/tv_wechat"
-        android:src="@mipmap/setting_ma"
-        android:layout_width="@dimen/px234"
-        android:layout_height="@dimen/px234" />
-    <ImageView
-        android:src="@mipmap/setting_default"
-        android:layout_toRightOf="@id/tv_wechat"
-        android:layout_width="@dimen/px256"
-        android:layout_marginLeft="@dimen/px4"
-        android:layout_height="@dimen/px256" />
+    <RelativeLayout
+        android:id="@+id/rel_login"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="110px"
+                android:layout_marginTop="50px">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="昵称"
+                    android:textColor="#505050"
+                    android:textSize="18px"/>
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="#505050"
+                    android:textSize="18px"
+                    android:layout_marginLeft="30px"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="519px"
+                android:layout_height="1px"
+                android:background="#B5B5B5"
+                android:layout_marginTop="30px"
+                android:layout_marginLeft="96px"></View>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="110px"
+                android:layout_marginTop="30px">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="性别"
+                    android:textColor="#505050"
+                    android:textSize="18px"/>
+
+                <TextView
+                    android:id="@+id/tv_sex"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="#505050"
+                    android:textSize="18px"
+                    android:layout_marginLeft="30px"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="519px"
+                android:layout_height="1px"
+                android:background="#B5B5B5"
+                android:layout_marginTop="30px"
+                android:layout_marginLeft="96px"></View>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="110px"
+                android:layout_marginTop="30px">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="联系方式"
+                    android:textColor="#505050"
+                    android:textSize="18px"/>
+
+                <TextView
+                    android:id="@+id/tv_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="#505050"
+                    android:textSize="18px"
+                    android:layout_marginLeft="30px"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="519px"
+                android:layout_height="1px"
+                android:background="#B5B5B5"
+                android:layout_marginTop="30px"
+                android:layout_marginLeft="96px"></View>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="110px"
+                android:layout_marginTop="30px">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="地址"
+                    android:textColor="#505050"
+                    android:textSize="18px"/>
+
+                <TextView
+                    android:id="@+id/tv_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="#505050"
+                    android:textSize="18px"
+                    android:layout_marginLeft="30px"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="519px"
+                android:layout_height="1px"
+                android:background="#B5B5B5"
+                android:layout_marginTop="30px"
+                android:layout_marginLeft="96px"></View>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_head"
+            android:layout_width="130px"
+            android:layout_height="130px"
+            android:layout_marginTop="20px"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="96px"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rel_not_login"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/tv_wechat"
+            android:text="请用微信扫码登录"
+            android:textColor="@color/color_FF6339"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/iv_ma"
+            android:layout_below="@id/tv_wechat"
+            android:src="@mipmap/setting_ma"
+            android:layout_width="@dimen/px234"
+            android:layout_height="@dimen/px234" />
+        <ImageView
+            android:src="@mipmap/setting_default"
+            android:layout_toRightOf="@id/tv_wechat"
+            android:layout_width="@dimen/px256"
+            android:layout_marginLeft="@dimen/px4"
+            android:layout_height="@dimen/px256" />
+    </RelativeLayout>
 </RelativeLayout>

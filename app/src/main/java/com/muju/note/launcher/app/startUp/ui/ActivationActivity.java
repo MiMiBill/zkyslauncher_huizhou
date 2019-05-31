@@ -24,6 +24,7 @@ import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
 import com.muju.note.launcher.app.startUp.presenter.ActivationPresenter;
 import com.muju.note.launcher.base.BaseActivity;
+import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.Constants;
@@ -112,7 +113,7 @@ public class ActivationActivity extends BaseActivity<ActivationPresenter> implem
             SPUtil.putLong(Constants.HOST_VERSION, BuildConfig.VERSION_CODE);
         }
 
-        boolean isReboot = SPUtil.getBoolean("rebootPhone");
+        boolean isReboot = SPUtil.getBoolean(SpTopics.SP_REBOOT);
         LogFactory.l().i("isReboot===" + isReboot);
         if (isReboot) {
             loginHome();
