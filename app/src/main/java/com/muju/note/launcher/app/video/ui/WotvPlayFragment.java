@@ -396,6 +396,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void playVideoAndSetUI() {
+        EventBus.getDefault().post(new VideoNoLockEvent(false));
         switchContentWithCid(videoHisDao.getCid(), videoHisDao.getPlayType());
     }
 

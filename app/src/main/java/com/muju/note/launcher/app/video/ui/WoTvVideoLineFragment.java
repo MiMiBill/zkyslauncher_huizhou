@@ -109,7 +109,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
 
         // 设置播放器回调
         setVideoView();
-        EventBus.getDefault().post(new VideoNoLockEvent(false));
+
         lineAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -328,6 +328,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
     }
 
     private void playVideoAndSetUI() {
+        EventBus.getDefault().post(new VideoNoLockEvent(false));
         switchContentWithCid(infoDao.getCid(), infoDao.getVideoType() + "");
     }
 
