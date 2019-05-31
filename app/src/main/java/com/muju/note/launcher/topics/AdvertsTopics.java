@@ -51,4 +51,10 @@ public class AdvertsTopics {
      *  签到全屏广告
      */
     public static final String CODE_SIGN="QD1001";
+
+
+    /**
+     *  1.6.0版本首页轮播
+     */
+    public static final String CODE_HOME_LB="LB1601";
 }

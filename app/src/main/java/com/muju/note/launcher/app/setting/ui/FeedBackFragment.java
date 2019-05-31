@@ -16,6 +16,7 @@ import com.muju.note.launcher.app.userinfo.contract.FeedBackContract;
 import com.muju.note.launcher.app.userinfo.presenter.FeedBackPresenter;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
+import com.muju.note.launcher.util.log.LogFactory;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,7 +63,9 @@ public class FeedBackFragment extends BaseFragment<FeedBackPresenter> implements
 
     @Override
     public void onDestroyView() {
+        LogFactory.l().i("onDestroyView");
         super.onDestroyView();
+        hideSoftInput();
         unbinder.unbind();
     }
 
@@ -82,7 +85,14 @@ public class FeedBackFragment extends BaseFragment<FeedBackPresenter> implements
         } else {
             return true;
         }
+    }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if(hidden){
+            hideSoftInput();
+        }
     }
 
     @Override

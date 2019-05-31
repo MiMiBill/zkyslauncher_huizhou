@@ -45,6 +45,7 @@ import com.muju.note.launcher.util.file.CacheUtil;
 import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
+import com.muju.note.launcher.util.user.UserUtil;
 import com.unicom.common.VideoSdkConfig;
 import com.unicom.common.base.video.IVideoEvent;
 import com.unicom.common.base.video.expand.ExpandVideoListener;
@@ -241,7 +242,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                     if(videoView==null){
                         return;
                     }
-                    if (!videoView.isPlaying()) {
+                    if (videoView!=null && !videoView.isPlaying()) {
                         llLoading.setVisibility(View.VISIBLE);
                     }
                 }catch (Exception e){
@@ -629,6 +630,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                     case R.id.ivClose:
                     case R.id.ivClose2:
                         pop();
+                        isShowDialog=false;
                         payDialog.dismiss();
                         break;
 
@@ -642,7 +644,11 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                         payDialog.setQrde();
                         break;
                     case R.id.tv_login:
-                        showLoginDialog();
+                        if(UserUtil.getUserBean()!=null){
+                            goToPublicActivity();
+                        }else {
+                            showLoginDialog();
+                        }
                         break;
                 }
             }

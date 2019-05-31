@@ -89,6 +89,7 @@ public class UserInfoFragment extends BaseFragment {
         // TODO: inflate a fragment view
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         unbinder = ButterKnife.bind(this, rootView);
+        initData();
         return rootView;
     }
 

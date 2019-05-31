@@ -204,7 +204,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
                     if (!videoView.isPlaying()) {
                         llLoading.setVisibility(View.VISIBLE);
                     }
-                }catch (Exception e){
+                }catch (Exception e) {
                     e.printStackTrace();
                 }
             }
