@@ -37,18 +37,22 @@ public class DBManager {
 
 
     //查询第二张表
-    public List<InfomationDao> query(SQLiteDatabase sqliteDB, int VALUE_ID) {
+    public List<InfomationDao> query(final SQLiteDatabase sqliteDB, final int VALUE_ID) {
         try {
-            String table = "medical_encyclopedia";
-            Cursor cursor = sqliteDB.rawQuery("select * from " + table + " where columnId=" +
-                    VALUE_ID, null);
-            InfomationDao bean = null;
-            while (cursor.moveToNext()) {
-                bean = setInfomationBean(cursor);
-                mBeanLists.add(bean);
-            }
-            cursor.close();
-            LogUtil.i(""+System.currentTimeMillis());
+            final String table = "medical_encyclopedia";
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Cursor cursor = sqliteDB.rawQuery("select * from " + table + " where columnId=" +
+                            VALUE_ID, null);
+                    while (cursor.moveToNext()) {
+                        InfomationDao bean = setInfomationBean(cursor);
+                        mBeanLists.add(bean);
+                    }
+                    cursor.close();
+                }
+            }).run();
+
             return mBeanLists;
         } catch (Exception e) {
             e.printStackTrace();
@@ -263,9 +267,5 @@ public class DBManager {
         values.put("id", bean.getId());
         sqliteDB.update(table, values, "name = ? where id = ?", new String[]{bean.getName(), bean
                 .getId() + ""});
-    }
-
-    public void setOnQuerySuccessListener(OnQuerySuccessListener listener){
-        this.listener=listener;
     }
 }

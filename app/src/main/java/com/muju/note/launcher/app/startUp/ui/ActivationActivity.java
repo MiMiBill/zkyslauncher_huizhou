@@ -3,7 +3,6 @@ package com.muju.note.launcher.app.startUp.ui;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -45,7 +44,6 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -151,7 +149,7 @@ public class ActivationActivity extends BaseActivity<ActivationPresenter> implem
             ToastUtil.showToast(this, "非法设备！");
             return;
         }
-        LogFactory.l().i("是否激活===" + ActiveUtils.hadActived(this));
+//        LogFactory.l().i("是否激活===" + ActiveUtils.hadActived(this));
 //        if (ActiveUtils.hadActived(this)) {
 //            //已经激活成功，进入主页面
 //            loginHome();
@@ -307,12 +305,5 @@ public class ActivationActivity extends BaseActivity<ActivationPresenter> implem
     @Override
     public void bindFail() {
         activeFail();
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
     }
 }

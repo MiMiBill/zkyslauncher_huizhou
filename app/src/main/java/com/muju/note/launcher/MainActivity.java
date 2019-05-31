@@ -1,7 +1,6 @@
 package com.muju.note.launcher;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,7 +27,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity {
 
@@ -75,20 +73,6 @@ public class MainActivity extends BaseActivity {
         if (adverts != null && adverts.size() > 0) {
             NewAdvertsUtil.getInstance().showByImageView(adverts, ivAd);
         }
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-//        EventBus.getDefault().register(this);
-        ButterKnife.bind(this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-//        EventBus.getDefault().unregister(this);
     }
 
 

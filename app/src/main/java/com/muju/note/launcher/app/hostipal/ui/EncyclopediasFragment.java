@@ -8,7 +8,9 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -46,7 +48,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 
 //医疗百科
 public class EncyclopediasFragment extends BaseFragment<EncyclopsediasPresenter> implements
@@ -121,6 +125,10 @@ public class EncyclopediasFragment extends BaseFragment<EncyclopsediasPresenter>
     ProgressBar progress;
     @BindView(R.id.lly_progress)
     LinearLayout llyProgress;
+
+    Unbinder unbinder;
+    @BindView(R.id.lly_patient)
+    LinearLayout llyPatient;
     private DepartmentAdapter departmentAdapter;
     private PathologyAdapter pathologyAdapter;
     private List<InfoDao> infoBeans = new ArrayList<>();
@@ -150,10 +158,10 @@ public class EncyclopediasFragment extends BaseFragment<EncyclopsediasPresenter>
 
     private void setData(List<InfoDao> infoBeans) {
 //        if(departmentAdapter ==null){
-            departmentAdapter = new DepartmentAdapter(infoBeans, getActivity());
+        departmentAdapter = new DepartmentAdapter(infoBeans, getActivity());
 //        }
 //        if(pathologyAdapter ==null){
-            pathologyAdapter = new PathologyAdapter(infomationBeans, getActivity());
+        pathologyAdapter = new PathologyAdapter(infomationBeans, getActivity());
 //        }
         item1.setAdapter(departmentAdapter);
         mItem2.setAdapter(pathologyAdapter);
@@ -221,6 +229,21 @@ public class EncyclopediasFragment extends BaseFragment<EncyclopsediasPresenter>
         }
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
     private class LoadDataTask implements Runnable {
         @Override
         public void run() {
@@ -247,9 +270,9 @@ public class EncyclopediasFragment extends BaseFragment<EncyclopsediasPresenter>
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 for (int i = 0; i < infoBeans.size(); i++) {
                     InfoDao infoBean = infoBeans.get(i);
-                    if(position==i){
+                    if (position == i) {
                         infoBean.setCheck(true);
-                    }else {
+                    } else {
                         infoBean.setCheck(false);
                     }
                 }
@@ -293,6 +316,12 @@ public class EncyclopediasFragment extends BaseFragment<EncyclopsediasPresenter>
             @Override
             public void afterTextChanged(Editable s) {
 
+            }
+        });
+        llyPatient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mItem2.setVisibility(View.GONE);
             }
         });
     }

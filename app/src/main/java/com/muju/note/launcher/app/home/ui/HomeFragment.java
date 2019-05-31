@@ -1,14 +1,11 @@
 package com.muju.note.launcher.app.home.ui;
 
 import android.annotation.SuppressLint;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -73,7 +70,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observable;
@@ -358,7 +354,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     @Override
     public void onDestroy() {
         super.onDestroy();
-        banner.destroy();
+        if (banner!=null){
+            banner.destroy();
+        }
         EventBus.getDefault().unregister(this);
     }
 
@@ -488,10 +486,10 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         }
         switch (v.getId()) {
             case R.id.ll_hostipal:  // 医院风采
-                start(HospitalMienFragment.getInstance());
+                start(new HospitalMienFragment());
                 break;
             case R.id.ll_hostipal_ency:  // 医疗百科
-                start(EncyclopediasFragment.getInstance());
+                start(new EncyclopediasFragment());
                 break;
             case R.id.ll_video:     // 视频
                 start(VideoFragment.getIntance());
@@ -555,21 +553,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             }
         });
         loginDialog.show();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
-            savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
-        return rootView;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
     }
 }
 

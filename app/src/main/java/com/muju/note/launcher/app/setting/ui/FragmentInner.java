@@ -44,6 +44,5 @@ public class FragmentInner extends Fragment {
         Bundle arguments = getArguments();
 //        mImageView.setImageResource(arguments.getInt(KEY_IMG));
         Glide.with(LauncherApplication.getContext()).load(arguments.getInt(KEY_IMG)).into(mImageView);
-
     }
 }
