@@ -102,8 +102,12 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
         videoView.setOnPreparedListener(new OnVideoPreparedListener() {
             @Override
             public void onPrepared(boolean b) {
-                videoView.setBasicControlDialogsVisible(true, true);
-                llLoading.setVisibility(View.GONE);
+                try {
+                    videoView.setBasicControlDialogsVisible(true, true);
+                    llLoading.setVisibility(View.GONE);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -190,11 +194,18 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
         videoView.setVideoEvent(new IVideoEvent() {
             @Override
             public void setPosterVisiable(boolean isVisiable) {
-                verifyPlayingStatus();
-                //TODO 播放器的默认海报展示的时候，会通知业务层，由业务层处理业务逻辑。
-                Log.e(TAG, "海报是否显示：" + isVisiable);
-                if (!videoView.isPlaying()) {
-                    llLoading.setVisibility(View.VISIBLE);
+                try {
+                    verifyPlayingStatus();
+                    //TODO 播放器的默认海报展示的时候，会通知业务层，由业务层处理业务逻辑。
+                    Log.e(TAG, "海报是否显示：" + isVisiable);
+                    if(videoView==null){
+                        return;
+                    }
+                    if (!videoView.isPlaying()) {
+                        llLoading.setVisibility(View.VISIBLE);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
             }
 
@@ -226,33 +237,38 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
 
             @Override
             public void onError(VideoErrorInfo.VideoException e) {
-                LogUtil.e(TAG, "onError:" + e.toString());
-                //TODO VideoErrorInfo配套查阅错误代码
-                LogUtil.e(TAG, "错误代码：" + e.getCode());
-                LogUtil.e(TAG, "错误信息：" + e.getMessage());
-                llError.setVisibility(View.VISIBLE);
-                llLoading.setVisibility(View.GONE);
-                switch (e.getCode()) {
-                    case VideoErrorInfo.CODE_ACCOUNT_CHECK_ERROR:
-                    case VideoErrorInfo.CODE_VIDEO_CONTENTE_PERMISSION:
-                        if (VideoSdkConfig.getInstance().getUser().isLogined()) {
-                            //这里发生错误就先重新登录
-                            showToast("没有权限播放此视频");
-                        } else {
+                try {
+                    LogUtil.e(TAG, "onError:" + e.toString());
+                    //TODO VideoErrorInfo配套查阅错误代码
+                    LogUtil.e(TAG, "错误代码：" + e.getCode());
+                    LogUtil.e(TAG, "错误信息：" + e.getMessage());
+                    llError.setVisibility(View.VISIBLE);
+                    llLoading.setVisibility(View.GONE);
+                    switch (e.getCode()) {
+                        case VideoErrorInfo.CODE_ACCOUNT_CHECK_ERROR:
+                        case VideoErrorInfo.CODE_VIDEO_CONTENTE_PERMISSION:
+                            if (VideoSdkConfig.getInstance().getUser().isLogined()) {
+                                //这里发生错误就先重新登录
+                                showToast("没有权限播放此视频");
+                            } else {
+                                WoTvUtil.getInstance().login();
+                                showToast("网络环境异常，请检查！");
+                            }
+                            break;
+                        case VideoErrorInfo.CODE_VIDEO_INNER_ERROR:
+                        case VideoErrorInfo.CODE_VIDEO_GET_ERROR:
+                            showToast(e.getMessage() + "");
+                            break;
+                        case VideoErrorInfo.CODE_ORDER_CHECK_ERROR:
+                        case VideoErrorInfo.CODE_VIDEO_URL_ERROR:
                             WoTvUtil.getInstance().login();
-                            showToast("网络环境异常，请检查！");
-                        }
-                        break;
-                    case VideoErrorInfo.CODE_VIDEO_INNER_ERROR:
-                    case VideoErrorInfo.CODE_VIDEO_GET_ERROR:
-                        showToast(e.getMessage() + "");
-                        break;
-                    case VideoErrorInfo.CODE_ORDER_CHECK_ERROR:
-                    case VideoErrorInfo.CODE_VIDEO_URL_ERROR:
-                        WoTvUtil.getInstance().login();
-                        showToast(e.getMessage() + "");
-                        break;
+                            showToast(e.getMessage() + "");
+                            break;
+                    }
+                }catch (Exception es){
+                    es.printStackTrace();
                 }
+
             }
         });
     }
@@ -362,7 +378,6 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
         try {
             if (videoView != null) {
                 videoView.onDestroy();
-                videoView = null;
             }
             if (videoOrImageDialog != null && videoOrImageDialog.isShowing()) {
                 videoOrImageDialog.dismiss();

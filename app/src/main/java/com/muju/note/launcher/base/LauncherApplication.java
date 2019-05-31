@@ -6,6 +6,7 @@ import android.content.Intent;
 
 import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.okgo.OkGoUtil;
+import com.muju.note.launcher.util.carsh.CrashHandler;
 import com.muju.note.launcher.util.location.LocationUtil;
 import com.muju.note.launcher.util.log.LogUtil;
 
@@ -26,32 +27,28 @@ public class LauncherApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        context=this;
-        instance=this;
+        context = this;
+        instance = this;
 
         sendBroadcast(new Intent("mid.systemui.hide_statusbar"));
         sendBroadcast(new Intent("mid.settings.hide_dev"));
         sendFullScreenBroadcast();
 
-        ExecutorService service=Executors.newSingleThreadExecutor();
-        service.execute(new Runnable() {
-            @Override
-            public void run() {
-                // 日志初始化
-                LogUtil.init();
+        // 日志初始化
+        LogUtil.init();
 
-                // litepal 初始化
-                LitePal.initialize(instance);
-                LitePalDb.addDb();
-                LitePal.getDatabase();
+        // litepal 初始化
+        LitePal.initialize(instance);
+        LitePalDb.addDb();
+        LitePal.getDatabase();
 
-                // okgo初始化
-                OkGoUtil.initOkGo(instance);
+        // okgo初始化
+        OkGoUtil.initOkGo(instance);
 
-                // wotv初始化
+        // 异常信息捕获
+        CrashHandler.getInstance().init(this);
+        // wotv初始化
 //                WoTvUtil.getInstance().initSDK(instance);
-            }
-        });
     }
 
     private void sendFullScreenBroadcast() {
@@ -63,11 +60,11 @@ public class LauncherApplication extends Application {
         sendBroadcast(hideNavigIntent);
     }
 
-    public static Context getContext(){
+    public static Context getContext() {
         return context;
     }
 
-    public static LauncherApplication getInstance(){
+    public static LauncherApplication getInstance() {
         return instance;
     }
 
