@@ -14,8 +14,6 @@ import android.view.animation.Animation;
 
 import com.muju.note.launcher.util.toast.FancyToast;
 
-import org.greenrobot.eventbus.EventBus;
-
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import me.yokeyword.fragmentation.ExtraTransaction;
@@ -375,11 +373,6 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment imp
     }
 
 
-
-
-
-
-
     protected T mPresenter;
 
     @Nullable
@@ -405,7 +398,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment imp
     public abstract void initData();
 
     protected void showToast(String msg) {
-        FancyToast.makeText(getContext(), msg, FancyToast.LENGTH_SHORT).show();
+        FancyToast.makeText(LauncherApplication.getContext(), msg, FancyToast.LENGTH_SHORT).show();
     }
 
     public abstract void initPresenter();

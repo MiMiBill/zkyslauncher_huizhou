@@ -1,11 +1,14 @@
 package com.muju.note.launcher.app.home.ui;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,6 +24,7 @@ import com.muju.note.launcher.app.home.bean.AdvertsBean;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.app.home.contract.HomeContract;
 import com.muju.note.launcher.app.home.event.PatientEvent;
+import com.muju.note.launcher.app.home.event.PatientInfoEvent;
 import com.muju.note.launcher.app.home.presenter.HomePresenter;
 import com.muju.note.launcher.app.hostipal.ui.EncyclopediasFragment;
 import com.muju.note.launcher.app.hostipal.ui.HosPitalMissionFragment;
@@ -68,6 +72,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -145,6 +151,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     LinearLayout llySign;
     @BindView(R.id.lly_luck)
     LinearLayout llyLuck;
+    @BindView(R.id.lly_cabinet)
+    LinearLayout llyCabinet;
+    Unbinder unbinder;
 
     private ActivePadInfo.DataBean activeInfo;
     private List<PatientResponse.DataBean> patientList = new ArrayList<>();
@@ -196,6 +205,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         llyGuide.setOnClickListener(this);
         llySign.setOnClickListener(this);
         llyLuck.setOnClickListener(this);
+        llyCabinet.setOnClickListener(this);
+        llHosService.setOnClickListener(this);
 
         // 加载首页历史记录
         videoHisDaos = new ArrayList<>();
@@ -378,6 +389,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void patientInfo(PatientResponse.DataBean entity) {
+        EventBus.getDefault().post(new PatientInfoEvent(entity));
         llyNoPatient.setVisibility(View.GONE);
         llyHavePaitent.setVisibility(View.VISIBLE);
         tvName.setText(entity.getUserName());
@@ -484,7 +496,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 start(VideoFragment.getIntance());
                 break;
             case R.id.ll_hos_service:     //医疗服务
-
+                showToast("更多精彩,敬请期待");
                 break;
             case R.id.ll_video_line: // 直播TV
                 start(new WoTvVideoLineFragment());
@@ -508,18 +520,22 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             case R.id.lly_luck: // 抽奖中心
                 showLoginDialog(1);
                 break;
+            case R.id.lly_cabinet: // 屏安柜
+                showToast("更多精彩,敬请期待");
+                break;
         }
     }
 
 
-    private void showLoginDialog(final int type){
-        loginDialog = new LoginDialog(getActivity(), R.style.DialogFullscreen, new LoginDialog.OnLoginListener() {
+    private void showLoginDialog(final int type) {
+        loginDialog = new LoginDialog(getActivity(), R.style.DialogFullscreen, new LoginDialog
+                .OnLoginListener() {
             @Override
             public void onSuccess() {
                 loginDialog.dismiss();
-                if(type==0){
+                if (type == 0) {
                     start(new SignFragment());
-                }else {
+                } else {
                     start(new LuckDrawFragment());
                 }
             }
@@ -530,6 +546,21 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             }
         });
         loginDialog.show();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }
 
