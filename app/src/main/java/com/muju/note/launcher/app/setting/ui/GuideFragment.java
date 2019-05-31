@@ -10,7 +10,6 @@ import android.widget.ImageView;
 
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.base.BaseFragment;
-import com.muju.note.launcher.util.log.LogFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +41,6 @@ public class GuideFragment extends BaseFragment {
     }
 
     private void setData() {
-        LogFactory.l().i("initData===");
         mFragments = new ArrayList<>();
         FragmentInner fragmentInner1 = FragmentInner.newInstance("fragment1", R.mipmap
                 .img_novice_01);
