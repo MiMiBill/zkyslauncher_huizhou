@@ -21,11 +21,17 @@ import com.muju.note.launcher.service.db.PadConfigSubDao;
 
 import org.litepal.LitePal;
 import org.litepal.LitePalDB;
+import org.litepal.crud.callback.CountCallback;
+import org.litepal.tablemanager.callback.DatabaseListener;
+
+import java.io.File;
 
 public class LitePalDb {
 
-    public static final LitePalDB zkysDataDb=new LitePalDB("zkys-data",9);
+    public static final LitePalDB zkysDataDb=new LitePalDB("zkys-data",10);
     public static final LitePalDB zkysDb=new LitePalDB("zkys",19);
+
+    public static final String DBNAME_ZKYS_DATA="/sdcard/zkysdb/zkys-data.db";
 
     /**
      *  初始化数据库
@@ -36,6 +42,12 @@ public class LitePalDb {
         zkysDataDb.addClassName(UpAdvertInfoDao.class.getName());
         zkysDataDb.addClassName(UpVideoInfoDao.class.getName());
         LitePal.use(zkysDataDb);
+
+        File file=new File("/sdcard/zkysdb/zkys-data.db");
+        if(!file.exists()){
+            UpAdvertInfoDao dao=new UpAdvertInfoDao();
+            dao.save();
+        }
 
         zkysDb.setStorage("zkysdb");
         zkysDb.addClassName(AdvertsCountDao.class.getName());

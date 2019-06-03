@@ -4,6 +4,8 @@ import org.litepal.crud.LitePalSupport;
 
 public class UpVideoInfoDao extends LitePalSupport {
 
+    private String cid;
+
     /**
      *  imei
      */
@@ -33,6 +35,14 @@ public class UpVideoInfoDao extends LitePalSupport {
      *   日期
      */
     private String date;
+
+    public String getCid() {
+        return cid;
+    }
+
+    public void setCid(String cid) {
+        this.cid = cid;
+    }
 
     /**
      *  开始时间

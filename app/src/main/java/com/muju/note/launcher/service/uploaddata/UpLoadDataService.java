@@ -10,6 +10,7 @@ import com.muju.note.launcher.app.home.db.AdvertsCountDao;
 import com.muju.note.launcher.app.home.db.AdvertsInfoDao;
 import com.muju.note.launcher.app.video.db.VideoPlayerCountDao;
 import com.muju.note.launcher.app.video.db.VideoPlayerInfoDao;
+import com.muju.note.launcher.app.video.util.DbHelper;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.litepal.UpAdvertInfoDao;
@@ -104,7 +105,7 @@ public class UpLoadDataService {
                 upVideoCountDb();
 
                 // 复制数据到data数据库
-                moveDbToData();
+//                moveDbToData();
 
                 // 获取token，上传数据库到七牛云
                 getToken(Constants.ZKYS_PAD_DB);
@@ -251,10 +252,16 @@ public class UpLoadDataService {
                     public void complete(String key, ResponseInfo info, JSONObject res) {
                         //res包含hash、key等信息，具体字段取决于上传策略的设置
                         if (info.isOK()) {
-                            LogUtil.d(TAG,"上传七牛云成功");
-                            LitePalDb.setZkysDataDb();
-                            LitePal.deleteAll(UpVideoInfoDao.class);
-                            LitePal.deleteAll(UpAdvertInfoDao.class);
+                            try {
+                                LogUtil.d(TAG,"上传七牛云成功");
+//                            LitePalDb.setZkysDataDb();
+//                            LitePal.deleteAll(UpVideoInfoDao.class);
+//                            LitePal.deleteAll(UpAdvertInfoDao.class);
+                                DbHelper.clearTable(LitePalDb.DBNAME_ZKYS_DATA,UpAdvertInfoDao.class.getSimpleName());
+                                DbHelper.clearTable(LitePalDb.DBNAME_ZKYS_DATA,UpVideoInfoDao.class.getSimpleName());
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
                         } else {
                             LogUtil.e(TAG,"上传七牛云失败");
                             //如果失败，这里可以把info信息上报自己的服务器，便于后面分析上传错误原因
