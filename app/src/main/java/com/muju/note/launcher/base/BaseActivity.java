@@ -214,7 +214,6 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
         return mDelegate.onCreateFragmentAnimator();
     }
 
-
     /**
      * Causes the Runnable r to be added to the action queue.
      * <p>
@@ -313,6 +312,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        hideBottomUIMenu();
+        startProtectionCountDown();
         hideActionBar();
         setContentView(getLayout());
         mDelegate.onCreate(savedInstanceState);

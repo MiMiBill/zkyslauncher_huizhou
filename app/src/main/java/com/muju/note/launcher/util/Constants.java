@@ -42,4 +42,14 @@ public class Constants {
     //广告存储
     public static final String ZKYS_ADVERTS="zkysadverts";
     public static final String PAD_SURVEY_ID = "pad_survey_id";
+
+    public static final String PAD_CONFIG_OPEN_NETWORK_SPEEK = "PAD_CONFIG_OPEN_NETWORK_SPEEK";
+    public static final String SHOW_LOG = "show_log";
+
+    //各种广播
+    public static final String ACTION_SHOW_STATUSBAR = "mid.systemui.show_statusbar";
+    public static final String ACTION_HIDE_STATUSBAR = "mid.systemui.hide_statusbar";
+    public static final String ACTION_SHOW_DEV = "mid.settings.show_dev";
+    public static final String ACTION_HIDE_DEV = "mid.settings.hide_dev";
+    public static final String ACTION_UMENG_WATCH_VIDEO = "umeng.watch.video";
 }

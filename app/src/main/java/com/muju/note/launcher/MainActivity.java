@@ -59,6 +59,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public void initData() {
         startService(new Intent(this, MainService.class));
+
         activeInfo = ActiveUtils.getPadActiveInfo();
         BaseFragment fragment = (BaseFragment) findFragment(HomeFragment.class);
         if (fragment == null) {
@@ -69,7 +70,6 @@ public class MainActivity extends BaseActivity {
         WoTvUtil.getInstance().initSDK(LauncherApplication.getInstance());
 
         List<AdvertsBean> adverts = CacheUtil.getDataList(AdvertsTopics.CODE_VERTICAL);
-
         if (adverts != null && adverts.size() > 0) {
             NewAdvertsUtil.getInstance().showByImageView(adverts, ivAd);
         }

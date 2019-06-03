@@ -3,7 +3,9 @@ package com.muju.note.launcher.util.system;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.media.AudioManager;
+import android.media.RingtoneManager;
 import android.os.PowerManager;
 import android.provider.Settings;
 

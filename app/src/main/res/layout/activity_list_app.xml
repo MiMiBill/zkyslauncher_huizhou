@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.muju.note.launcher.view.BackTitleView
+        android:layout_width="wrap_content"
+        android:layout_height="80px">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingLeft="100px">
+
+            <Button
+                android:id="@+id/one"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="one" />
+
+            <Button
+                android:id="@+id/two"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="two" />
+
+            <Button
+                android:id="@+id/three"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="three" />
+
+            <Button
+                android:id="@+id/four"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="four" />
+
+            <Button
+                android:id="@+id/btnConfig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="修改配置" />
+
+            <CheckBox
+                android:id="@+id/btnOpenNetwork"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="网速悬浮窗开关" />
+        </LinearLayout>
+    </com.muju.note.launcher.view.BackTitleView>
+
+    <GridView
+        android:id="@+id/lv_app_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="80px"
+        android:numColumns="3" />
+</android.support.constraint.ConstraintLayout>

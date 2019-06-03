@@ -256,7 +256,7 @@ public class WebActivity extends BaseActivity {
             NewAdvertsUtil.getInstance().addData(advertId, NewAdvertsUtil.TAG_BROWSETIME, System
                     .currentTimeMillis() - startTime);
         }
-
+        EventBus.getDefault().post(new VideoNoLockEvent(true));
         super.onDestroy();
     }
 
@@ -291,6 +291,7 @@ public class WebActivity extends BaseActivity {
         intent.putExtra(WebActivity.ADVERTID, advertId);
         context.startActivity(intent);
     }
+
 
     /**
      * 清除WebView缓存

@@ -30,6 +30,7 @@ import com.muju.note.launcher.util.Constants;
 import com.muju.note.launcher.util.UIUtils;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.log.LogFactory;
+import com.muju.note.launcher.util.net.NetWorkUtil;
 import com.muju.note.launcher.util.qr.QrCodeUtils;
 import com.muju.note.launcher.util.rx.RxUtil;
 import com.muju.note.launcher.util.sp.SPUtil;
@@ -44,6 +45,7 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -74,10 +76,15 @@ public class ActivationActivity extends BaseActivity<ActivationPresenter> implem
     AlertDialog dialog;
     EditText et;
     Disposable disposableCheckActive;
+    Disposable disposableCheckNetWork;
     @BindView(R.id.lly_progress)
     LinearLayout llyProgress;
     @BindView(R.id.lly_active)
     LinearLayout llyActive;
+    @BindView(R.id.tv_retry)
+    TextView tvRetry;
+    @BindView(R.id.lly_no_internet)
+    LinearLayout llyNoInternet;
 
     @Override
     public int getLayout() {
@@ -111,17 +118,32 @@ public class ActivationActivity extends BaseActivity<ActivationPresenter> implem
             SPUtil.putLong(Constants.HOST_VERSION, BuildConfig.VERSION_CODE);
         }
 
+        checkNetWork();
+    }
+
+
+    private void checkNetWork() {
         boolean isReboot = SPUtil.getBoolean(SpTopics.SP_REBOOT);
+        boolean isConnect = NetWorkUtil.isConnected(this);
         LogFactory.l().i("isReboot===" + isReboot);
-        if (isReboot) {
-            loginHome();
+        LogFactory.l().i("isConnect===" + isConnect);
+        if (!isConnect) {
+            llyNoInternet.setVisibility(View.VISIBLE);
+            llyActive.setVisibility(View.GONE);
+            llyProgress.setVisibility(View.GONE);
         } else {
-            initHide();
-            SystemUtils.setVolumeNotification(this);
-            checkHadActiveDi();
-            setActiveLayout();
+            if (isReboot) {
+                loginHome();
+            } else {
+                initHide();
+                SystemUtils.setVolumeNotification(this);
+                checkHadActiveDi();
+                setActiveLayout();
+            }
         }
     }
+
+
 
     /**
      * 轮询查询是否激活
@@ -149,13 +171,8 @@ public class ActivationActivity extends BaseActivity<ActivationPresenter> implem
             ToastUtil.showToast(this, "非法设备！");
             return;
         }
-//        LogFactory.l().i("是否激活===" + ActiveUtils.hadActived(this));
-//        if (ActiveUtils.hadActived(this)) {
-//            //已经激活成功，进入主页面
-//            loginHome();
-//        } else {
-            mPresenter.bindingDevice(MobileInfoUtil.getIMEI(this));
-//        }
+
+        mPresenter.bindingDevice(MobileInfoUtil.getIMEI(this));
     }
 
     //隐藏页面
@@ -168,7 +185,7 @@ public class ActivationActivity extends BaseActivity<ActivationPresenter> implem
                     public void onClick(DialogInterface dialog, int which) {
                         if (UIUtils.checkHidePwd(ActivationActivity.this, et.getText().toString
                                 ())) {
-//                            HideActivity.launch(ActivationActivity.this);
+                            HideActivity.launch(ActivationActivity.this);
                         } else {
                             FancyToast.makeText(ActivationActivity.this, "验证码错误", 0);
                         }
@@ -257,6 +274,7 @@ public class ActivationActivity extends BaseActivity<ActivationPresenter> implem
     protected void onDestroy() {
         super.onDestroy();
         RxUtil.closeDisposable(disposableCheckActive);
+        RxUtil.closeDisposable(disposableCheckNetWork);
         handler.removeMessages(1);
     }
 
@@ -305,5 +323,11 @@ public class ActivationActivity extends BaseActivity<ActivationPresenter> implem
     @Override
     public void bindFail() {
         activeFail();
+    }
+
+
+    @OnClick(R.id.tv_retry)
+    public void onViewClicked() {
+        checkNetWork();
     }
 }

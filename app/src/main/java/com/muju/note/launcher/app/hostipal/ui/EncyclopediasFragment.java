@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -125,10 +126,15 @@ public class EncyclopediasFragment extends BaseFragment<EncyclopsediasPresenter>
     ProgressBar progress;
     @BindView(R.id.lly_progress)
     LinearLayout llyProgress;
-
     Unbinder unbinder;
     @BindView(R.id.lly_patient)
     LinearLayout llyPatient;
+    @BindView(R.id.btn_up)
+    Button btnUp;
+    @BindView(R.id.btn_next)
+    Button btnNext;
+    @BindView(R.id.lly_item)
+    LinearLayout llyItem;
     private DepartmentAdapter departmentAdapter;
     private PathologyAdapter pathologyAdapter;
     private List<InfoDao> infoBeans = new ArrayList<>();
@@ -139,6 +145,8 @@ public class EncyclopediasFragment extends BaseFragment<EncyclopsediasPresenter>
     private String outPathString;
     private String outPathName;
     private String dbName;
+    private int pageNum=0;
+    private int itenId=0;
     private ArrayList<InfomationDao> searchList = new ArrayList<>();
     private Handler handler = new Handler() {
         @Override
@@ -244,6 +252,42 @@ public class EncyclopediasFragment extends BaseFragment<EncyclopsediasPresenter>
         unbinder.unbind();
     }
 
+
+
+    @OnClick({R.id.lly_patient, R.id.btn_up, R.id.btn_next,R.id.lly_back})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.lly_patient:
+                llyItem.setVisibility(View.GONE);
+                break;
+            case R.id.btn_up:
+                if(pageNum==0){
+                    showToast("已经是第一页了");
+                    return;
+                }
+                pageNum--;
+                infomationBeans.clear();
+                infomationBeans = manager.query(sqLiteDatabase,itenId,pageNum);
+                pathologyAdapter.setNewData(infomationBeans);
+                pathologyAdapter.notifyDataSetChanged();
+                break;
+            case R.id.btn_next:
+                pageNum++;
+                infomationBeans.clear();
+                infomationBeans = manager.query(sqLiteDatabase,itenId,pageNum);
+                if(infomationBeans.size()<11){
+                    showToast("已经是最后一页了");
+                    return;
+                }
+                pathologyAdapter.setNewData(infomationBeans);
+                pathologyAdapter.notifyDataSetChanged();
+                break;
+            case R.id.lly_back:
+                pop();
+                break;
+        }
+    }
+
     private class LoadDataTask implements Runnable {
         @Override
         public void run() {
@@ -276,12 +320,14 @@ public class EncyclopediasFragment extends BaseFragment<EncyclopsediasPresenter>
                         infoBean.setCheck(false);
                     }
                 }
+                pageNum=0;
+                itenId=infoBeans.get(position).getId();
                 departmentAdapter.setNewData(infoBeans);
                 infomationBeans.clear();
-                infomationBeans = manager.query(sqLiteDatabase, infoBeans.get(position).getId());
+                infomationBeans = manager.query(sqLiteDatabase,itenId);
                 pathologyAdapter.setNewData(infomationBeans);
                 pathologyAdapter.notifyDataSetChanged();
-                mItem2.setVisibility(View.VISIBLE);
+                llyItem.setVisibility(View.VISIBLE);
             }
         });
 
@@ -291,7 +337,7 @@ public class EncyclopediasFragment extends BaseFragment<EncyclopsediasPresenter>
                 InfomationDao bean = infomationBeans.get(position);
                 pathologyAdapter.notifyDataSetChanged();
                 //通过监听器
-                mItem2.setVisibility(View.GONE);
+                llyItem.setVisibility(View.GONE);
                 setUi(bean);
             }
         });
@@ -316,12 +362,6 @@ public class EncyclopediasFragment extends BaseFragment<EncyclopsediasPresenter>
             @Override
             public void afterTextChanged(Editable s) {
 
-            }
-        });
-        llyPatient.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mItem2.setVisibility(View.GONE);
             }
         });
     }
@@ -351,15 +391,6 @@ public class EncyclopediasFragment extends BaseFragment<EncyclopsediasPresenter>
 
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-    }
-
-    @OnClick(R.id.lly_back)
-    public void onViewClicked() {
-        pop();
-    }
 
     @Override
     public void getDownLoadUrl(GetDownloadBean getDownloadBean) {
