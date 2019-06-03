@@ -1,14 +1,18 @@
 package com.muju.note.launcher.app.video.ui;
 
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.devbrackets.android.api.video.impl.VideoErrorInfo;
+import com.devbrackets.android.component.utils.ViewScaleUtil;
 import com.devbrackets.android.media.listener.OnVideoPreparedListener;
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.home.bean.AdvertsBean;
@@ -42,6 +46,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -54,27 +60,28 @@ import pl.droidsonroids.gif.GifImageView;
 public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> implements View.OnClickListener, VideoLineContract.View {
 
     private static final String TAG = "WoTvVideoLineFragment";
-
-
     @BindView(R.id.ll_back)
     LinearLayout llBack;
     @BindView(R.id.rv_video_view)
     RecyclerView rvVideoView;
-    @BindView(R.id.tv_null)
-    TextView tvNull;
-    @BindView(R.id.ll_null)
-    LinearLayout llNull;
-    @BindView(R.id.video_view)
-    ExpandVideoView2 videoView;
     @BindView(R.id.iv_loading)
     GifImageView ivLoading;
     @BindView(R.id.ll_loading)
     LinearLayout llLoading;
-    @BindView(R.id.ll_content)
-    LinearLayout llContent;
     @BindView(R.id.ll_error)
     LinearLayout llError;
-    private boolean isShowDialog=true;
+    @BindView(R.id.ll_content)
+    LinearLayout llContent;
+    @BindView(R.id.video_view)
+    ExpandVideoView2 videoView;
+    @BindView(R.id.tv_null)
+    TextView tvNull;
+    @BindView(R.id.ll_null)
+    LinearLayout llNull;
+    Unbinder unbinder;
+
+
+    private boolean isShowDialog = true;
     private List<VideoInfoDao> videoInfoDaos;
     private VideoLineAdapter lineAdapter;
     private VideoOrImageDialog videoOrImageDialog;
@@ -105,7 +112,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
                 try {
                     videoView.setBasicControlDialogsVisible(true, true);
                     llLoading.setVisibility(View.GONE);
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -143,7 +150,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
         switch (v.getId()) {
             case R.id.ll_back:
             case R.id.tv_null:
-                isShowDialog=false;
+                isShowDialog = false;
                 pop();
                 break;
         }
@@ -162,6 +169,8 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
     public void getVideoNull() {
         llContent.setVisibility(View.GONE);
         llNull.setVisibility(View.VISIBLE);
+        llError.setVisibility(View.GONE);
+        llLoading.setVisibility(View.GONE);
     }
 
     //监听视频播放暂停
@@ -176,7 +185,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
                     if (adverts != null && adverts.size() > 0)
                         NewAdvertsUtil.getInstance().showVideoDialog(adverts, videoOrImageDialog);
                 } else {
-                    if(adverts.get(0).getCloseType()==2){
+                    if (adverts.get(0).getCloseType() == 2) {
                         videoOrImageDialog.closeBySelf(adverts.get(0).getSecond());
                     }
                     videoOrImageDialog.show();
@@ -186,6 +195,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
             }
         }
     }
+
     /**
      * 播放器回调监听
      */
@@ -198,13 +208,13 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
                     verifyPlayingStatus();
                     //TODO 播放器的默认海报展示的时候，会通知业务层，由业务层处理业务逻辑。
                     Log.e(TAG, "海报是否显示：" + isVisiable);
-                    if(videoView==null){
+                    if (videoView == null) {
                         return;
                     }
                     if (!videoView.isPlaying()) {
                         llLoading.setVisibility(View.VISIBLE);
                     }
-                }catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -213,7 +223,13 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
             public void changeScreenOrientation(boolean isFullScreen) {
                 //TODO 切换横竖屏、大小屏的核心实现，完成此方法，即可，不同合作方根据自己的业务实现，当前demo仅为测试样例
                 //todo 加点切换的动画
-                LogUtil.e(TAG, "changeScreenOrientation:" + isFullScreen);
+                LogUtil.i(TAG, "changeScreenOrientation:" + isFullScreen);
+                if (isFullScreen) {
+                    ViewScaleUtil.widthFixed(videoView, ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT);
+                } else {
+                    ViewScaleUtil.widthFixed(videoView, 1080, 737);
+                }
             }
 
             @Override
@@ -265,7 +281,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
                             showToast(e.getMessage() + "");
                             break;
                     }
-                }catch (Exception es){
+                } catch (Exception es) {
                     es.printStackTrace();
                 }
 
@@ -363,7 +379,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
                         if (videoView == null) return;
                         LogUtil.e("switchContentWithCid", "cid:" + cid);
                         WoTvUtil.getInstance().switchContent(videoView, cid, videoType, null,
-                                infoDao.getName(), mControlListener);
+                                infoDao.getName(), mControlListener, 2);
                     }
                 });
     }
@@ -389,5 +405,19 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
             e.printStackTrace();
         }
         super.onDestroy();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

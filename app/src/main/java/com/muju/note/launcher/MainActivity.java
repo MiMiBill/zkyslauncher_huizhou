@@ -9,10 +9,12 @@ import com.muju.note.launcher.app.home.bean.AdvertsBean;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.app.home.event.PatientInfoEvent;
 import com.muju.note.launcher.app.home.ui.HomeFragment;
+import com.muju.note.launcher.app.video.db.VideoInfoTopDao;
 import com.muju.note.launcher.app.video.util.WoTvUtil;
 import com.muju.note.launcher.base.BaseActivity;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
+import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.service.MainService;
 import com.muju.note.launcher.topics.AdvertsTopics;
 import com.muju.note.launcher.util.ActiveUtils;
@@ -23,8 +25,11 @@ import com.muju.note.launcher.view.EBDrawerLayout;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.litepal.LitePal;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 
@@ -65,8 +70,15 @@ public class MainActivity extends BaseActivity {
             loadRootFragment(R.id.fl_container, HomeFragment.newInstance());
         }
 
-        // 登录沃tv
-        WoTvUtil.getInstance().initSDK(LauncherApplication.getInstance());
+
+        ExecutorService service= Executors.newSingleThreadExecutor();
+        service.execute(new Runnable() {
+            @Override
+            public void run() {
+                // 登录沃tv
+                WoTvUtil.getInstance().initSDK(LauncherApplication.getInstance());
+            }
+        });
 
         List<AdvertsBean> adverts = CacheUtil.getDataList(AdvertsTopics.CODE_VERTICAL);
 

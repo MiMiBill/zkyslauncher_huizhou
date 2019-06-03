@@ -31,12 +31,13 @@ import org.json.JSONObject;
 
 public class WoTvUtil {
 
-    private static final String TAG="WoTvUtil";
+    private static final String TAG = "WoTvUtil";
 
-    public static WoTvUtil woTvUtil=null;
-    public static WoTvUtil getInstance(){
-        if(woTvUtil==null){
-            woTvUtil=new WoTvUtil();
+    public static WoTvUtil woTvUtil = null;
+
+    public static WoTvUtil getInstance() {
+        if (woTvUtil == null) {
+            woTvUtil = new WoTvUtil();
         }
         return woTvUtil;
     }
@@ -58,22 +59,22 @@ public class WoTvUtil {
                         new OnNetworkConfigCallback() {
                             @Override
                             public void onSuccess() {
-                                LogUtil.d(TAG,"初始化sdk完成, 可正常调用其他API");
+                                LogUtil.d(TAG, "初始化sdk完成, 可正常调用其他API");
                                 if (LauncherApplication.getContext().getPackageName().equals(ModuleSDKConfig.getConfig().getPackageName())) {
-                                    LogUtil.d(TAG,"配置文件的包名与此app相同，可放心使用");
+                                    LogUtil.d(TAG, "配置文件的包名与此app相同，可放心使用");
                                     login();
                                 } else {
-                                    LogUtil.e(TAG,"配置文件的包名不一致，请注意检查是否哪里配置错误");
+                                    LogUtil.e(TAG, "配置文件的包名不一致，请注意检查是否哪里配置错误");
                                 }
                             }
 
                             @Override
                             public void onFail(String message) {
-                                LogUtil.e(TAG,"初始化sdk失败,原因：" + message);
+                                LogUtil.e(TAG, "初始化sdk失败,原因：" + message);
                             }
                         });
 
-        if(ProcessUtil.isMainProcess(application)){
+        if (ProcessUtil.isMainProcess(application)) {
             //用于配置不同Module的Lifecycle配置
             String thisModuleName = this.getClass().getPackage().getName();
             LifecycleObserverManager
@@ -97,9 +98,9 @@ public class WoTvUtil {
     }
 
     /**
-     *  登出
+     * 登出
      */
-    public  void loginOut() {
+    public void loginOut() {
         VideoSdkConfig.getInstance().getUser().logout();
         VideoSDKOpenAPI.getInstance().logoutSDK();
     }
@@ -129,12 +130,12 @@ public class WoTvUtil {
             VideoSDKOpenAPI.getInstance().loginSDK(LoginType.LOGIN_TYPE_UID, woPhoneNum, new InitConfig.OnLoginListener() {
                 @Override
                 public void onSuccess() {
-                    LogUtil.i(TAG,"沃tv登录成功");
+                    LogUtil.i(TAG, "沃tv登录成功");
                 }
 
                 @Override
                 public void onFail(String s) {
-                    LogUtil.e(TAG,"沃tv登录失败："+s);
+                    LogUtil.e(TAG, "沃tv登录失败：" + s);
                 }
             });
         }
@@ -159,12 +160,12 @@ public class WoTvUtil {
      * @param title           内容标题
      * @param controlListener 播放器回调函数
      */
-    public void switchContent(ExpandVideoView videoView, String cid, String videoType, String url, String title, ExpandVideoListener controlListener) {
+    public void switchContent(ExpandVideoView videoView, String cid, String videoType, String url, String title, ExpandVideoListener controlListener, int status) {
         LogUtil.e("播放", "cid=" + cid + ",type=" + videoType);
         if (!VideoSdkConfig.getInstance().getUser().isLogined()) {//如果到这里还没有登录，就再次登录一下
             login();
         } else {
-            switchContent(videoView, true, cid, videoType, url, title, controlListener);
+            switchContent(videoView, true, cid, videoType, url, title, controlListener, status);
         }
         JSONObject jsonObject = new JSONObject();
         try {
@@ -187,9 +188,9 @@ public class WoTvUtil {
      * @param title           内容标题
      * @param controlListener 播放器回调函数
      */
-    public void switchContent(ExpandVideoView videoView, boolean isShowUI, String cid, String videoType, String url, String title, ExpandVideoListener controlListener) {
+    public void switchContent(ExpandVideoView videoView, boolean isShowUI, String cid, String videoType, String url, String title, ExpandVideoListener controlListener, int status) {
 //        videoView.setSilence(true);
-        setPlayerUi(videoView);
+        setPlayerUi(videoView, status);
         videoView.setExpandVideoListener(controlListener);
         LogUtil.e("updateVideo播放", "cid=" + cid + ",type=" + videoType);
         if (TextUtils.isEmpty(cid)) {
@@ -200,7 +201,7 @@ public class WoTvUtil {
         }
     }
 
-    private void setPlayerUi(ExpandVideoView videoView) {
+    private void setPlayerUi(ExpandVideoView videoView, int status) {
         // Exo的升级版，使用硬解，兼容性好， 较稳定
         videoView.setPlayerType(BasicVideoView.PlayerType.EXO2);
         //是否设置为WIFI下自动播放视频
@@ -239,13 +240,26 @@ public class WoTvUtil {
 
 
         //-----------------------------以下为举例具体根据实际需要------------------------------------
-        //TODO 是否显示屏幕切换的icon 默认是展示的
-        minUIStyle.setExpandButtonVisiable(false);
-        maxUIStyle.setExpandButtonVisiable(false);
+        if (status == 1) {
+            //TODO 是否显示屏幕切换的icon 默认是展示的
+            minUIStyle.setExpandButtonVisiable(false);
+            maxUIStyle.setExpandButtonVisiable(false);
+        } else {
+            //TODO 是否显示屏幕切换的icon 默认是展示的
+            minUIStyle.setExpandButtonVisiable(true);
+            maxUIStyle.setExpandButtonVisiable(true);
+        }
 
-        //TODO 是否显示返回键的icon，默认是展示的
-        minUIStyle.setBackButtonVisiable(false);
-        maxUIStyle.setBackButtonVisiable(false);
+        if (status == 1) {
+            //TODO 是否显示返回键的icon，默认是展示的
+            minUIStyle.setBackButtonVisiable(false);
+            maxUIStyle.setBackButtonVisiable(false);
+        } else {
+            //TODO 是否显示返回键的icon，默认是展示的
+            minUIStyle.setBackButtonVisiable(false);
+            maxUIStyle.setBackButtonVisiable(true);
+        }
+
 
         //TODO 是否具备锁定键的icon，默认是显示的
         minUIStyle.setLockButtonVisiable(true);
@@ -267,9 +281,9 @@ public class WoTvUtil {
 
         //----------------------------!!!针对某些横版APP，只需要全屏的状态!!!-----------------------
         //相当于初始化，直接调用切换大屏,以下配置虽然后执行，但优先级较高
-        minUIStyle.setEnable(true);//使得小屏幕的所有配置不生效，包括默认配置，
-        maxUIStyle.setEnable(true); //如果此时大屏幕的配置是生效的，将使用大屏幕的配置
-        maxUIStyle.setBackFinish(true);
+//        minUIStyle.setEnable(true);//使得小屏幕的所有配置不生效，包括默认配置，
+//        maxUIStyle.setEnable(true); //如果此时大屏幕的配置是生效的，将使用大屏幕的配置
+//        maxUIStyle.setBackFinish(true);
         //----------------------------!!!针对某些横版APP，只需要全屏的状态!!!-----------------------
 
 
