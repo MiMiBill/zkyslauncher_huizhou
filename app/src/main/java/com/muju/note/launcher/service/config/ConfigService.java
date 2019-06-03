@@ -107,6 +107,7 @@ public class ConfigService {
      * 执行配置文件操作
      */
     public void playConfig() throws Exception {
+        LitePalDb.setZkysDb();
         LitePal.findAllAsync(PadConfigDao.class, true).listen(new FindMultiCallback<PadConfigDao>() {
             @Override
             public void onFinish(List<PadConfigDao> list) {

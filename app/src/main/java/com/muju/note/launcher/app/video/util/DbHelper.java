@@ -1,25 +1,33 @@
 package com.muju.note.launcher.app.video.util;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 
+import com.muju.note.launcher.app.home.db.AdvertsInfoDao;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
+import com.muju.note.launcher.litepal.LitePalDb;
+import com.muju.note.launcher.litepal.UpAdvertInfoDao;
+import com.muju.note.launcher.litepal.UpVideoInfoDao;
 import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.sp.SPUtil;
 
+import org.litepal.LitePal;
+import org.litepal.crud.callback.FindMultiCallback;
+
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
 public class DbHelper {
 
-    private static SQLiteDatabase sqLiteDatabase;
     public static final String TAG="DbHelper";
 
     public static SQLiteDatabase getDataBase(String dbPath) throws Exception {
-        sqLiteDatabase=SQLiteDatabase.openDatabase(dbPath,null,0);
+        SQLiteDatabase sqLiteDatabase=SQLiteDatabase.openDatabase(dbPath,null,0);
         return sqLiteDatabase;
     }
 
@@ -29,6 +37,12 @@ public class DbHelper {
         return cursor;
     }
 
+    /**
+     *  插入影视数据
+     * @param dbPath
+     * @param tableName
+     * @throws Exception
+     */
     public static void insertToVideo(final String dbPath, final String tableName) throws Exception {
         LogUtil.i(TAG,"数据插入开始时间："+System.currentTimeMillis());
         ExecutorService service=Executors.newSingleThreadExecutor();
@@ -75,7 +89,7 @@ public class DbHelper {
                         dao.saveDb(dao);
                     }
                     cursor.close();
-                    sqLiteDatabase.close();
+                    database.close();
                     SPUtil.putLong(SpTopics.SP_VIDEO_UPDATE_TIME,(System.currentTimeMillis()/1000));
                     LogUtil.i(TAG,"数据插入结束时间："+System.currentTimeMillis());
                 }catch (Exception e){
@@ -85,4 +99,55 @@ public class DbHelper {
         });
     }
 
+    /**
+     *  插入广告详情数据
+     * @param dbPath
+     * @param dao
+     * @throws Exception
+     */
+    public static void insertToAdvertData(String dbPath, UpAdvertInfoDao dao) throws Exception{
+        SQLiteDatabase database=getDataBase(dbPath);
+        ContentValues values=new ContentValues();
+        values.put("imei",dao.getImei());
+        values.put("advertId",dao.getAdvertId());
+        values.put("hosId",dao.getHosId());
+        values.put("depId",dao.getDepId());
+        values.put("date",dao.getDate());
+        values.put("type",dao.getType());
+        values.put("startTime",dao.getStartTime());
+        values.put("endTime",dao.getEndTime());
+        values.put("time",dao.getTime());
+        database.insert("UpAdvertInfoDao",null,values);
+    }
+
+    /**
+     *  插入影视统计数据
+     * @param dbPath
+     * @param dao
+     * @throws Exception
+     */
+    public static void insertToVideoData(String dbPath, UpVideoInfoDao dao) throws Exception{
+        SQLiteDatabase database=getDataBase(dbPath);
+        ContentValues values=new ContentValues();
+        values.put("imei",dao.getImei());
+        values.put("videoId",dao.getVideoId());
+        values.put("hosId",dao.getHosId());
+        values.put("depId",dao.getDepId());
+        values.put("date",dao.getDate());
+        values.put("videoName",dao.getVideoName());
+        values.put("startTime",dao.getStartTime());
+        values.put("endTime",dao.getEndTime());
+        values.put("cid",dao.getCid());
+        database.insert("UpVideoInfoDao",null,values);
+    }
+
+    /**
+     *  清除表数据
+     * @param dbPath
+     * @param table
+     */
+    public static void clearTable(String dbPath,String table) throws Exception{
+        SQLiteDatabase database=getDataBase(dbPath);
+        database.delete(table,null,null);
+    }
 }

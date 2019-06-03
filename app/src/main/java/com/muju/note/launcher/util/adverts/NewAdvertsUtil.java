@@ -34,8 +34,10 @@ import com.muju.note.launcher.app.home.db.AdvertsCountDao;
 import com.muju.note.launcher.app.home.db.AdvertsInfoDao;
 import com.muju.note.launcher.app.video.dialog.OnAdDialogDismissListener;
 import com.muju.note.launcher.app.video.dialog.VideoOrImageDialog;
+import com.muju.note.launcher.app.video.util.DbHelper;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.litepal.LitePalDb;
+import com.muju.note.launcher.litepal.UpAdvertInfoDao;
 import com.muju.note.launcher.okgo.BaseBean;
 import com.muju.note.launcher.okgo.JsonCallback;
 import com.muju.note.launcher.url.UrlUtil;
@@ -733,30 +735,35 @@ public class NewAdvertsUtil {
      *
      */
     public void addDataInfo(int advertId,int tag,long startTime, long endTime){
-        String date = getStringDate();
-        AdvertsInfoDao dao=new AdvertsInfoDao();
-        dao.setAdvertId(advertId);
-        dao.setDate(date);
-        dao.setDepId(ActiveUtils.getPadActiveInfo().getDeptId());
-        dao.setHosId(ActiveUtils.getPadActiveInfo().getHospitalId());
-        dao.setType(tag);
-        dao.setImei(MobileInfoUtil.getIMEI(LauncherApplication.getContext()));
-        switch (tag){
-            case TAG_SHOWCOUNT:
-            case TAG_CLICKCOUNT:
-                dao.setStartTime(System.currentTimeMillis());
-                dao.setEndTime(System.currentTimeMillis());
-                dao.setTime(0);
-                break;
+        try {
+            String date = getStringDate();
+            UpAdvertInfoDao dao=new UpAdvertInfoDao();
+            dao.setAdvertId(advertId);
+            dao.setDate(date);
+            dao.setDepId(ActiveUtils.getPadActiveInfo().getDeptId());
+            dao.setHosId(ActiveUtils.getPadActiveInfo().getHospitalId());
+            dao.setType(tag);
+            dao.setImei(MobileInfoUtil.getIMEI(LauncherApplication.getContext()));
+            switch (tag){
+                case TAG_SHOWCOUNT:
+                case TAG_CLICKCOUNT:
+                    dao.setStartTime(System.currentTimeMillis());
+                    dao.setEndTime(System.currentTimeMillis());
+                    dao.setTime(0);
+                    break;
 
-            case TAG_BROWSETIME:
-            case TAG_SHOWTIME:
-                dao.setStartTime(startTime);
-                dao.setEndTime(endTime);
-                dao.setTime((endTime-startTime));
-                break;
+                case TAG_BROWSETIME:
+                case TAG_SHOWTIME:
+                    dao.setStartTime(startTime);
+                    dao.setEndTime(endTime);
+                    dao.setTime((endTime-startTime));
+                    break;
+            }
+//        saveAdvertsInfoByDb(dao);
+            DbHelper.insertToAdvertData(LitePalDb.DBNAME_ZKYS_DATA,dao);
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        saveAdvertsInfoByDb(dao);
     }
 
     private String getStringDate() {

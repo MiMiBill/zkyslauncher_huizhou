@@ -17,6 +17,7 @@ import com.muju.note.launcher.app.video.db.VideoTagsDao;
 import com.muju.note.launcher.app.video.util.DbHelper;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.litepal.LitePalDb;
+import com.muju.note.launcher.litepal.UpVideoInfoDao;
 import com.muju.note.launcher.okgo.BaseBean;
 import com.muju.note.launcher.okgo.JsonCallback;
 import com.muju.note.launcher.topics.SpTopics;
@@ -374,21 +375,26 @@ public class VideoService {
      * @param endTime
      */
     public void addVideoInfoDb(final String vid,String cid, final String vName, final long startTime, final long endTime){
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:dd");
-        Date d = new Date(System.currentTimeMillis());
-        final String date = format.format(d);
-        LitePalDb.setZkysDb();
-        VideoPlayerInfoDao countDao=new VideoPlayerInfoDao();
-        countDao.setDate(date);
-        countDao.setDepId(ActiveUtils.getPadActiveInfo().getDeptId());
-        countDao.setHosId(ActiveUtils.getPadActiveInfo().getHospitalId());
-        countDao.setImei(MobileInfoUtil.getIMEI(LauncherApplication.getContext()));
-        countDao.setStartTime(startTime);
-        countDao.setEndTime(endTime);
-        countDao.setVideoId(vid);
-        countDao.setVideoName(vName);
-        countDao.setCid(cid);
-        countDao.save();
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:dd");
+            Date d = new Date(System.currentTimeMillis());
+            final String date = format.format(d);
+            LitePalDb.setZkysDb();
+            UpVideoInfoDao countDao=new UpVideoInfoDao();
+            countDao.setDate(date);
+            countDao.setDepId(ActiveUtils.getPadActiveInfo().getDeptId());
+            countDao.setHosId(ActiveUtils.getPadActiveInfo().getHospitalId());
+            countDao.setImei(MobileInfoUtil.getIMEI(LauncherApplication.getContext()));
+            countDao.setStartTime(startTime);
+            countDao.setEndTime(endTime);
+            countDao.setVideoId(vid);
+            countDao.setVideoName(vName);
+            countDao.setCid(cid);
+//        countDao.save();
+            DbHelper.insertToVideoData(LitePalDb.DBNAME_ZKYS_DATA,countDao);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     /**
