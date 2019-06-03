@@ -69,7 +69,7 @@ public class ProtectionProcessActivity extends BaseActivity {
         hideActionBar();
         lowerBrightness();
 
-        setStartProtection(false);
+//        setStartProtection(false);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(new String[]{Manifest.permission.WRITE_SETTINGS}, 0x01);
@@ -145,7 +145,7 @@ public class ProtectionProcessActivity extends BaseActivity {
         super.onDestroy();
         RxUtil.closeDisposable(disposableTimeAdd);
         RxUtil.closeDisposable(disposableAdjust);
-
+//        setStartProtection(true);
         bannerLc.destroy();
     }
 

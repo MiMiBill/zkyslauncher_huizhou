@@ -131,4 +131,6 @@ dependencies {
     implementation 'cn.jiguang.sdk:janalytics:2.0.0'  // 此处以JCore 2.0.1 版本为例。
 
     implementation 'com.github.open-android:ViewPager:0.1.0'
+
+    implementation 'com.dyhdyh.loadingbar:loadingbar:1.4.4'
 }

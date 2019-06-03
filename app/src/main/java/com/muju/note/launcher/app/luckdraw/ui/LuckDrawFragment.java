@@ -1,11 +1,7 @@
 package com.muju.note.launcher.app.luckdraw.ui;
 
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.muju.note.launcher.R;
@@ -17,16 +13,13 @@ import com.muju.note.launcher.util.user.UserUtil;
 import com.muju.note.launcher.view.LuckDrawView;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 public class LuckDrawFragment extends BaseFragment<LuckPresenter> implements LuckContract.View {
     @BindView(R.id.ll_back)
     LinearLayout llBack;
     @BindView(R.id.luckdrawView)
     LuckDrawView luckdrawView;
-    Unbinder unbinder;
 
     private int[] luckIndex={1,4,6,9,11};
     private Handler handler=new Handler(){
@@ -80,20 +73,6 @@ public class LuckDrawFragment extends BaseFragment<LuckPresenter> implements Luc
 
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
-            savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
-        return rootView;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
 
     @OnClick(R.id.ll_back)
     public void onViewClicked() {

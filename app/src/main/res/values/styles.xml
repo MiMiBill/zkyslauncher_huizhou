@@ -89,4 +89,21 @@
             <enum name="horizontal" value="2" />
         </attr>
     </declare-styleable>
+
+    <style name="et_333_a8_32">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textColor">#333</item>
+        <item name="android:textColorHint">#a8a8a8</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">32px</item>
+    </style>
+
+    <style name="btn">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:background">@drawable/btn_solid_2994f1_corners_4dp</item>
+        <item name="android:textColor">#fff</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_height">68px</item>
+        <item name="android:textSize">28px</item>
+    </style>
 </resources>

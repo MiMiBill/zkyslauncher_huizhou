@@ -78,14 +78,17 @@ public class RectProgress extends View {
         if (attrs != null) {
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RectProgress);
             bgColor = typedArray.getColor(R.styleable.RectProgress_bgColor, defaultBgColor);
-            progressColor = typedArray.getColor(R.styleable.RectProgress_progressColor, defaultProgressColor);
+            progressColor = typedArray.getColor(R.styleable.RectProgress_progressColor,
+                    defaultProgressColor);
             progress = typedArray.getInteger(R.styleable.RectProgress_progressValue, progress);
             max = typedArray.getInteger(R.styleable.RectProgress_progressMax, max);
             if (max <= 0)
                 throw new RuntimeException("Max 必须大于 0");
-            orientation = typedArray.getInteger(R.styleable.RectProgress_progressOrientation, VERTICAL);
+            orientation = typedArray.getInteger(R.styleable.RectProgress_progressOrientation,
+                    VERTICAL);
             int imgSrc = typedArray.getResourceId(R.styleable.RectProgress_iconSrc, 0);
-            iconPadding = typedArray.getDimensionPixelSize(R.styleable.RectProgress_iconPadding, 40);
+            iconPadding = typedArray.getDimensionPixelSize(R.styleable.RectProgress_iconPadding,
+                    40);
             rectRadius = typedArray.getDimensionPixelSize(R.styleable.RectProgress_rectRadius, 20);
             if (max < progress) {
                 progress = max;
@@ -176,6 +179,10 @@ public class RectProgress extends View {
                 handleTouch(event);
                 invalidate();
                 break;
+            case MotionEvent.ACTION_UP:
+                handleTouch(event);
+                invalidate();
+                break;
         }
         invalidate();
         return super.onTouchEvent(event);
@@ -198,6 +205,9 @@ public class RectProgress extends View {
                 progress = percent * max / 100;
                 if (changedListener != null)
                     changedListener.onProgressChanged(progress, percent);
+                if(event.getAction()==MotionEvent.ACTION_UP){
+
+                }
             }
         } else {
             if (event.getX() > bgRect.right) {
@@ -226,7 +236,7 @@ public class RectProgress extends View {
         this.changedListener = changedListener;
     }
 
-    public interface  OnProgressChangedListener {
+    public interface OnProgressChangedListener {
         void onProgressChanged(int currentValue, int percent);
     }
 

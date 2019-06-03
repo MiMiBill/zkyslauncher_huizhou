@@ -37,4 +37,9 @@
     <color name="message_dialog_color_pressed">#075d80</color>
     <color name="color_FF6339">#FFFF6339</color>
     <color name="white_drak">#DEDEDE</color>
+    <color name="color_125c7c">#125C7C</color>
+    <color name="color_176F95">#176F95</color>
+    <color name="color_ED6C6A">#ED6C6A</color>
+    <color name="theme_color">#2994F1</color>
+    <color name="line_de">#dedede</color>
 </resources>

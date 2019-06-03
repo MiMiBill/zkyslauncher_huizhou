@@ -284,14 +284,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                     AdvertsTopics.CODE_ROAD), banner, dialog);
 
 
-            NewAdvertsUtil.getInstance().setOnDialogSuccessLisinter(new NewAdvertsUtil
-                    .OnDialogSuccessLisinter() {
-                @Override
-                public void success() {
-                    NewAdvertsUtil.getInstance().showByDialog(CacheUtil.getDataList(AdvertsTopics
-                            .CODE_HOME_DIALOG), dialog);
-                }
-            });
 
             NewAdvertsUtil.getInstance().setOnBannerFailLisinter(new NewAdvertsUtil
                     .OnBannerFailLisinter() {
@@ -319,6 +311,15 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             if (dataList.size() == 0) {
                 NewAdvertsUtil.getInstance().showDefaultBanner(banner, 1);
             }
+
+            /*NewAdvertsUtil.getInstance().setOnDialogSuccessLisinter(new NewAdvertsUtil
+                    .OnDialogSuccessLisinter() {
+                @Override
+                public void success() {
+                    NewAdvertsUtil.getInstance().showByDialog(CacheUtil.getDataList(AdvertsTopics
+                            .CODE_HOME_DIALOG), dialog);
+                }
+            });*/
         } catch (Exception e) {
             e.printStackTrace();
         }

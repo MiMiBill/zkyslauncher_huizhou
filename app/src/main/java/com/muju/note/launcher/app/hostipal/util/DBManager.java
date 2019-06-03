@@ -9,6 +9,7 @@ import android.os.Environment;
 import com.muju.note.launcher.app.hostipal.db.InfoDao;
 import com.muju.note.launcher.app.hostipal.db.InfomationDao;
 import com.muju.note.launcher.listener.OnQuerySuccessListener;
+import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.log.LogUtil;
 
 import java.io.File;
@@ -44,7 +45,33 @@ public class DBManager {
                 @Override
                 public void run() {
                     Cursor cursor = sqliteDB.rawQuery("select * from " + table + " where columnId=" +
-                            VALUE_ID, null);
+                            VALUE_ID +" limit "+12, null);
+                    while (cursor.moveToNext()) {
+                        InfomationDao bean = setInfomationBean(cursor);
+                        mBeanLists.add(bean);
+                    }
+                    cursor.close();
+                }
+            }).run();
+
+            return mBeanLists;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    //分页查询第二张表
+    public List<InfomationDao> query(final SQLiteDatabase sqliteDB, final int VALUE_ID, final int pageNum) {
+        LogFactory.l().i("pageNum=="+pageNum);
+        try {
+            final String table = "medical_encyclopedia";
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Cursor cursor = sqliteDB.rawQuery("select * from " + table + " where columnId=" +
+                            VALUE_ID +" limit "+11+" offset "+pageNum, null);
                     while (cursor.moveToNext()) {
                         InfomationDao bean = setInfomationBean(cursor);
                         mBeanLists.add(bean);

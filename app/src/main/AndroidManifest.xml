@@ -307,7 +307,7 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.HOME" />
+                <!--<category android:name="android.intent.category.HOME" />-->
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -474,10 +474,6 @@
             </intent-filter>
         </receiver>
         <activity
-            android:name=".app.setting.ui.SettingActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="landscape"></activity>
-        <activity
             android:name=".app.userinfo.UserInfoActivity"
             android:launchMode="singleTask"
             android:screenOrientation="landscape" />
@@ -487,6 +483,10 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".app.userinfo.LuckDrawActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".app.startUp.ui.HideActivity"
             android:launchMode="singleTask"
             android:screenOrientation="landscape" />
     </application>

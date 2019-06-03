@@ -521,6 +521,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                     }
                     videoOrImageDialog.show();
                 }
+                EventBus.getDefault().post(new VideoNoLockEvent(false));
             } catch (Exception e) {
                 e.printStackTrace();
             }

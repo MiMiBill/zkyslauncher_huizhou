@@ -15,14 +15,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.model.Response;
 import com.muju.note.launcher.R;
+import com.muju.note.launcher.app.setting.presenter.UserPresenter;
 import com.muju.note.launcher.app.video.bean.UserBean;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
-import com.muju.note.launcher.okgo.BaseBean;
-import com.muju.note.launcher.okgo.JsonCallback;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.log.LogFactory;
@@ -33,7 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class UserFragment extends BaseFragment {
+public class UserFragment extends BaseFragment<UserPresenter> implements UserPresenter.UserListener {
     @BindView(R.id.tv_wechat)
     TextView tvWechat;
     @BindView(R.id.iv_ma)
@@ -59,7 +56,7 @@ public class UserFragment extends BaseFragment {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 0x01:
-                    startQueryUser();
+                    mPresenter.startQueryUser();
                     break;
                 case 0x03:
                     ivMa.setImageBitmap((Bitmap) msg.obj);
@@ -106,35 +103,11 @@ public class UserFragment extends BaseFragment {
 
     }
 
-    private void startQueryUser() {
-        OkGo.<BaseBean<UserBean>>get(UrlUtil.getUserInfo() + MobileInfoUtil.getIMEI
-                (LauncherApplication.getContext()))
-                .tag(UrlUtil.getUserInfo() + MobileInfoUtil.getIMEI(LauncherApplication
-                        .getContext()))
-                .execute(new JsonCallback<BaseBean<UserBean>>() {
-                    @Override
-                    public void onSuccess(Response<BaseBean<UserBean>> response) {
-                        LogFactory.l().i("response==="+response.body().getData());
-                        if (response.body().getData() == null) {
-                            handler.sendEmptyMessageDelayed(0x01, 1000 * 3);
-                            return;
-                        }else {
-                            UserUtil.setUserBean(response.body().getData());
-                            setUser();
-                        }
-                    }
 
-                    @Override
-                    public void onError(Response<BaseBean<UserBean>> response) {
-                        super.onError(response);
-                        handler.sendEmptyMessageDelayed(0x01, 1000 * 3);
-                    }
-                });
-    }
 
     @Override
     public void initPresenter() {
-
+//        mPresenter=new UserPresenter();
     }
 
     @Override
@@ -153,6 +126,8 @@ public class UserFragment extends BaseFragment {
     }
 
     private void showView() {
+        mPresenter=new UserPresenter();
+        mPresenter.setOnUserListener(this);
         if (UserUtil.getUserBean() != null) {
             //登录成功
             LogFactory.l().i("登录成功");
@@ -173,7 +148,7 @@ public class UserFragment extends BaseFragment {
             }).start();
             relLogin.setVisibility(View.GONE);
             relNotLogin.setVisibility(View.VISIBLE);
-            startQueryUser();
+            mPresenter.startQueryUser();
         }
     }
 
@@ -183,6 +158,21 @@ public class UserFragment extends BaseFragment {
         handler.removeMessages(0x01);
         handler.removeMessages(0x03);
         unbinder.unbind();
+    }
+
+    @Override
+    public void startQueryUser(UserBean bean) {
+        setUser();
+    }
+
+    @Override
+    public void qeryNotLogin() {
+        handler.sendEmptyMessageDelayed(0x01,1000*3);
+    }
+
+    @Override
+    public void QueryCode(String data) {
+
     }
 
 }
