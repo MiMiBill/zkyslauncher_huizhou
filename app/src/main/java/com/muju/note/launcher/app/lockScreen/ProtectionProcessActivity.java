@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.home.bean.AdvertsBean;
+import com.muju.note.launcher.app.video.event.VideoNoLockEvent;
 import com.muju.note.launcher.base.BaseActivity;
 import com.muju.note.launcher.topics.AdvertsTopics;
 import com.muju.note.launcher.util.FormatUtils;
@@ -20,6 +21,8 @@ import com.muju.note.launcher.util.file.CacheUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
 import com.muju.note.launcher.util.system.SystemUtils;
 import com.muju.note.launcher.view.banana.Banner;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -146,6 +149,7 @@ public class ProtectionProcessActivity extends BaseActivity {
         RxUtil.closeDisposable(disposableTimeAdd);
         RxUtil.closeDisposable(disposableAdjust);
 //        setStartProtection(true);
+        EventBus.getDefault().post(new VideoNoLockEvent(true));
         bannerLc.destroy();
     }
 

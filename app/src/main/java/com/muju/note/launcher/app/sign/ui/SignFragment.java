@@ -52,8 +52,9 @@ public class SignFragment extends BaseFragment<SignPresenter> implements SignCon
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_sign:
-                if (!isSign)
+                if (!isSign){
                     mPresenter.checkSign(UserUtil.getUserBean().getId());
+                }
                 break;
             case R.id.ll_back:
                 pop();
@@ -77,5 +78,6 @@ public class SignFragment extends BaseFragment<SignPresenter> implements SignCon
     public void checkSign(SignBean bean) {
         tvIntegral.setText("您总共有" + bean.getIntegral() + "积分");
         UserUtil.getUserBean().setIntegral(bean.getIntegral());
+        tvSign.setText("已签到");
     }
 }

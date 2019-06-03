@@ -312,14 +312,14 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 NewAdvertsUtil.getInstance().showDefaultBanner(banner, 1);
             }
 
-            /*NewAdvertsUtil.getInstance().setOnDialogSuccessLisinter(new NewAdvertsUtil
+            NewAdvertsUtil.getInstance().setOnDialogSuccessLisinter(new NewAdvertsUtil
                     .OnDialogSuccessLisinter() {
                 @Override
                 public void success() {
                     NewAdvertsUtil.getInstance().showByDialog(CacheUtil.getDataList(AdvertsTopics
                             .CODE_HOME_DIALOG), dialog);
                 }
-            });*/
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }

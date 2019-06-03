@@ -138,7 +138,7 @@ public class UserFragment extends BaseFragment<UserPresenter> implements UserPre
                 public void run() {
                     String code = UrlUtil.getWxLogin() + MobileInfoUtil.getIMEI
                             (LauncherApplication.getContext());
-                    LogFactory.l().i("code=="+code);
+//                    LogFactory.l().i("code=="+code);
                     Bitmap bitmap = QrCodeUtils.generateOriginalBitmap(code, 468, 468);
                     Message msg = new Message();
                     msg.what = 0x03;

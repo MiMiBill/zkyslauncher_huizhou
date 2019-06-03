@@ -180,8 +180,9 @@ public class RectProgress extends View {
                 invalidate();
                 break;
             case MotionEvent.ACTION_UP:
-                handleTouch(event);
-                invalidate();
+                if (listener != null) {
+                    listener.onActionUp();
+                }
                 break;
         }
         invalidate();
@@ -203,10 +204,8 @@ public class RectProgress extends View {
             if (percent != tmp) {
                 percent = tmp;
                 progress = percent * max / 100;
-                if (changedListener != null)
+                if (changedListener != null) {
                     changedListener.onProgressChanged(progress, percent);
-                if(event.getAction()==MotionEvent.ACTION_UP){
-
                 }
             }
         } else {
@@ -229,6 +228,15 @@ public class RectProgress extends View {
         }
     }
 
+    private OnActionUpListener listener;
+
+    public interface OnActionUpListener {
+        void onActionUp();
+    }
+
+    public void setOnActionUpListener(OnActionUpListener listener) {
+        this.listener = listener;
+    }
 
     private OnProgressChangedListener changedListener;
 

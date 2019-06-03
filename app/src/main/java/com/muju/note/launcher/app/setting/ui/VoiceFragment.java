@@ -1,6 +1,7 @@
 package com.muju.note.launcher.app.setting.ui;
 
 import android.content.ContentResolver;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -8,6 +9,7 @@ import android.support.annotation.Nullable;
 
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.base.BaseFragment;
+import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.util.system.SystemUtils;
 import com.muju.note.launcher.view.light.RectProgress;
 
@@ -20,7 +22,8 @@ public class VoiceFragment extends BaseFragment {
     @BindView(R.id.rectProgress_voice)
     RectProgress rectProgressVoice;
     Unbinder unbinder;
-
+    private boolean isRelease = true; //判断MediaPlayer是否释放的标志
+    private MediaPlayer mediaPlayer = null;
     @Override
     public int getLayout() {
         return R.layout.fragment_voice;
@@ -29,7 +32,6 @@ public class VoiceFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         rectProgressLight.setMax(255);
         rectProgressVoice.setMax(SystemUtils.getMaxVolume(getContext()));
         rectProgressLight.setProgress(SystemUtils.getScreenBrightness());
@@ -51,6 +53,29 @@ public class VoiceFragment extends BaseFragment {
                 }
             }
         });
+
+        rectProgressVoice.setOnActionUpListener(new RectProgress.OnActionUpListener() {
+            @Override
+            public void onActionUp() {
+                if (isRelease){
+                    //在raw下的资源
+                    mediaPlayer = MediaPlayer.create(LauncherApplication.getContext(),R.raw.messagetips);
+                    isRelease = false;
+                }
+                mediaPlayer.start(); //开始播放
+
+                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        mediaPlayer.reset();
+                        mediaPlayer.release();
+                        isRelease=true;
+                    }
+                });
+            }
+        });
+
+
     }
 
 
