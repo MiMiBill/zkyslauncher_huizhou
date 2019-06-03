@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/main_bg"
     android:orientation="vertical">
-    <include layout="@layout/title_bar"/>
+
+    <include layout="@layout/title_bar" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/px63">
 
         <LinearLayout
             android:id="@+id/ll_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -28,18 +29,20 @@
                     android:layout_height="@dimen/x70"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="@dimen/px26"
                         android:layout_height="@dimen/px25"
-                        android:src="@mipmap/ic_video_line_menu"
-                        android:layout_marginLeft="@dimen/px40"/>
+                        android:layout_marginLeft="@dimen/px40"
+                        android:src="@mipmap/ic_video_line_menu" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="直播频道"
-                        android:textSize="@dimen/px20"
                         android:layout_marginLeft="@dimen/px10"
-                        android:textColor="@color/white_gray3"/>
+                        android:text="直播频道"
+                        android:textColor="@color/white_gray3"
+                        android:textSize="@dimen/px20" />
                 </LinearLayout>
 
                 <View
@@ -53,106 +56,104 @@
                     android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
             </LinearLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <com.muju.note.launcher.app.video.util.wotv.ExpandVideoView2
-                    android:id="@+id/video_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                </com.muju.note.launcher.app.video.util.wotv.ExpandVideoView2>
-
-                <LinearLayout
-                    android:id="@+id/ll_loading"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_centerHorizontal="true"
-                    android:gravity="center_horizontal"
-                    android:background="@android:color/black"
-                    android:orientation="vertical"
-                    android:paddingTop="100px">
-
-                    <pl.droidsonroids.gif.GifImageView
-                        android:id="@+id/iv_loading"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="80px"
-                        android:src="@drawable/ic_video_loading"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/cap_white"
-                        android:textSize="24px"
-                        android:layout_marginTop="20px"
-                        android:text="直播正在加载中，请稍后... ..."/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ll_error"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_centerHorizontal="true"
-                    android:gravity="center_horizontal"
-                    android:background="@android:color/black"
-                    android:orientation="vertical"
-                    android:visibility="gone"
-                    >
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/px250"
-                        android:src="@mipmap/ic_video_line_error"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/cap_white"
-                        android:textSize="24px"
-                        android:layout_marginTop="@dimen/px50"
-                        android:text="直播加载失败，请稍后重试... ..."/>
-
-                </LinearLayout>
-
-            </RelativeLayout>
-
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_null"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <ImageView
-                android:layout_width="@dimen/px380"
-                android:layout_height="@dimen/px268"
-                android:src="@mipmap/ic_hospital_mein_null" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/px19"
-                android:text="这里一片荒土啥都没有"
-                android:textColor="@color/yellow_gray"
-                android:textSize="@dimen/px30" />
-
-            <TextView
-                android:id="@+id/tv_null"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/px17"
-                android:text="去看看其他"
-                android:textColor="@color/blue_gray"
-                android:textSize="@dimen/px20" />
-        </LinearLayout>
-
     </RelativeLayout>
 
-</LinearLayout>
+    <com.muju.note.launcher.app.video.util.wotv.ExpandVideoView2
+        android:id="@+id/video_view"
+        android:layout_width="1080px"
+        android:layout_height="737px"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true">
+    </com.muju.note.launcher.app.video.util.wotv.ExpandVideoView2>
+
+    <LinearLayout
+        android:id="@+id/ll_loading"
+        android:layout_width="1080px"
+        android:layout_height="737px"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/black"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:paddingTop="100px">
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/iv_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80px"
+            android:src="@drawable/ic_video_loading" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:text="直播正在加载中，请稍后... ..."
+            android:textColor="@color/cap_white"
+            android:textSize="24px" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_error"
+        android:layout_width="1080px"
+        android:layout_height="737px"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/black"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/px250"
+            android:src="@mipmap/ic_video_line_error" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/px50"
+            android:text="直播加载失败，请稍后重试... ..."
+            android:textColor="@color/cap_white"
+            android:textSize="24px" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_null"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="@dimen/px380"
+            android:layout_height="@dimen/px268"
+            android:src="@mipmap/ic_hospital_mein_null" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/px19"
+            android:text="这里一片荒土啥都没有"
+            android:textColor="@color/yellow_gray"
+            android:textSize="@dimen/px30" />
+
+        <TextView
+            android:id="@+id/tv_null"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/px17"
+            android:text="去看看其他"
+            android:textColor="@color/blue_gray"
+            android:textSize="@dimen/px20" />
+    </LinearLayout>
+
+</RelativeLayout>

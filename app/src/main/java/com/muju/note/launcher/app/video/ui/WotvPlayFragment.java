@@ -92,7 +92,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
     ImageView ivColse;
     @BindView(R.id.rel_cornor)
     RelativeLayout relCornor;
-    Unbinder unbinder;
+
     private boolean isCodeFail = false;
     private static final String TAG = "WotvPlayFragment";
     private boolean isShowDialog=true;
@@ -112,8 +112,6 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
     private VideoOrImageDialog videoOrImageDialog;
     // 当前播放的集数
     private static int EPISODE_POSITION;
-    @BindView(R.id.tv_title)
-    TextView tvTitle;
 
 
     private VideoHisDao videoHisDao;
@@ -202,7 +200,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
             videoHisDao.setCreateTime(System.currentTimeMillis() + "");
             VideoService.getInstance().addVideoHisInfo(videoHisDao);
         } catch (Exception e) {
-            tvTitle.setText(videoHisDao.getName());
+            e.printStackTrace();
         }
 
     }
@@ -429,7 +427,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                         if (videoView == null) return;
                         LogUtil.e("switchContentWithCid", "cid:" + cid);
                         WoTvUtil.getInstance().switchContent(videoView, cid, videoType, null,
-                                videoHisDao.getName(), mControlListener);
+                                videoHisDao.getName(), mControlListener,1);
                     }
                 });
     }
