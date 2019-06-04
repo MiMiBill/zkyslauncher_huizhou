@@ -474,18 +474,7 @@
                 <category android:name="${JPUSH_PKGNAME}" />
             </intent-filter>
         </receiver>
-        <activity
-            android:name=".app.userinfo.UserInfoActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name=".app.userinfo.SigninActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name=".app.userinfo.LuckDrawActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="landscape" />
+
         <activity
             android:name=".app.startUp.ui.HideActivity"
             android:launchMode="singleTask"
