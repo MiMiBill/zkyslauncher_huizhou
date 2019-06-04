@@ -5,29 +5,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
-import com.muju.note.launcher.app.home.bean.AdvertsBean;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.app.home.event.PatientInfoEvent;
 import com.muju.note.launcher.app.home.ui.HomeFragment;
-import com.muju.note.launcher.app.video.db.VideoInfoTopDao;
 import com.muju.note.launcher.app.video.util.WoTvUtil;
 import com.muju.note.launcher.base.BaseActivity;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
-import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.service.MainService;
-import com.muju.note.launcher.topics.AdvertsTopics;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.FormatUtils;
-import com.muju.note.launcher.util.adverts.NewAdvertsUtil;
-import com.muju.note.launcher.util.file.CacheUtil;
 import com.muju.note.launcher.view.EBDrawerLayout;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.litepal.LitePal;
 
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -81,10 +73,10 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        List<AdvertsBean> adverts = CacheUtil.getDataList(AdvertsTopics.CODE_VERTICAL);
+       /* List<AdvertsBean> adverts = CacheUtil.getDataList(AdvertsTopics.CODE_VERTICAL);
         if (adverts != null && adverts.size() > 0) {
             NewAdvertsUtil.getInstance().showByImageView(adverts, ivAd);
-        }
+        }*/
     }
 
 

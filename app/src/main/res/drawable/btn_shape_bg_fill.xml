@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="15dp" />
+            <gradient android:centerColor="@color/btn_call_pressed" android:endColor="@color/btn_call_pressed" android:startColor="@color/btn_call_pressed" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="15dp" />
+            <gradient android:centerColor="@color/btn_call_default" android:endColor="@color/btn_call_default" android:startColor="@color/btn_call_default" />
+        </shape>
+    </item>
+</selector>

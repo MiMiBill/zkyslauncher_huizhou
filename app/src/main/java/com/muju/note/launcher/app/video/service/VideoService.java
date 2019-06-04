@@ -2,7 +2,6 @@ package com.muju.note.launcher.app.video.service;
 
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.FileCallback;
-import com.lzy.okgo.db.CacheManager;
 import com.lzy.okgo.model.HttpParams;
 import com.lzy.okgo.model.Response;
 import com.muju.note.launcher.app.video.bean.VideoDownLoadBean;
@@ -11,7 +10,6 @@ import com.muju.note.launcher.app.video.db.VideoHisDao;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
 import com.muju.note.launcher.app.video.db.VideoInfoTopDao;
 import com.muju.note.launcher.app.video.db.VideoPlayerCountDao;
-import com.muju.note.launcher.app.video.db.VideoPlayerInfoDao;
 import com.muju.note.launcher.app.video.db.VideoTagSubDao;
 import com.muju.note.launcher.app.video.db.VideoTagsDao;
 import com.muju.note.launcher.app.video.util.DbHelper;
@@ -23,9 +21,7 @@ import com.muju.note.launcher.okgo.JsonCallback;
 import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.ActiveUtils;
-import com.muju.note.launcher.util.Constants;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
-import com.muju.note.launcher.util.sign.Signature;
 import com.muju.note.launcher.util.sp.SPUtil;
 
 import org.litepal.LitePal;
@@ -95,7 +91,12 @@ public class VideoService {
                 .execute(new JsonCallback<BaseBean<VideoDownLoadBean>>() {
                     @Override
                     public void onSuccess(Response<BaseBean<VideoDownLoadBean>> response) {
-                        downVideoDb(response.body().getData().getPath(),response.body().getData().getTableName());
+                        try{
+                            downVideoDb(response.body().getData().getPath(),response.body().getData().getTableName());
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+
                     }
                 });
     }

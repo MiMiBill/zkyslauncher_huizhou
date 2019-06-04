@@ -407,6 +407,7 @@
             </intent-filter>
         </receiver>
 
+        <!-- User defined. 用户自定义的广播接收器 -->
         <!-- Required SDK核心功能 -->
         <activity
             android:name="cn.jpush.android.ui.PushActivity"
@@ -487,6 +488,10 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".app.startUp.ui.HideActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".app.satisfaction.SatisfactionSurveyActivity"
             android:launchMode="singleTask"
             android:screenOrientation="landscape" />
     </application>

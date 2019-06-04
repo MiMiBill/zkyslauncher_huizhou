@@ -70,7 +70,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.Unbinder;
 import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -150,7 +149,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     LinearLayout llyLuck;
     @BindView(R.id.lly_cabinet)
     LinearLayout llyCabinet;
-    Unbinder unbinder;
 
     private ActivePadInfo.DataBean activeInfo;
     private List<PatientResponse.DataBean> patientList = new ArrayList<>();
@@ -185,13 +183,13 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         initBanner();
         saveRegisterId();
         patientList = SPUtil.getPatientList(Constants.PATIENT);
-        if (patientList.size() > 0) {
-            patientInfo(patientList.get(0));
-        } else {
+//        if (patientList.size() > 0) {
+//            patientInfo(patientList.get(0));
+//        } else {
             if (activeInfo != null) {
                 mPresenter.getPatientData(String.valueOf(activeInfo.getBedId()), getActivity());
             }
-        }
+//        }
         llHostipal.setOnClickListener(this);
         llVideo.setOnClickListener(this);
         llHostipalEncy.setOnClickListener(this);
@@ -293,6 +291,18 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 }
             });
 
+             NewAdvertsUtil.getInstance().setOnDialogSuccessLisinter(new NewAdvertsUtil
+                    .OnDialogSuccessLisinter() {
+                @Override
+                public void success() {
+                    List<AdvertsBean> dataList = CacheUtil.getDataList(AdvertsTopics.CODE_HOME_DIALOG);
+                    if(dataList.size()>0){
+                        NewAdvertsUtil.getInstance().showByDialog(CacheUtil.getDataList(AdvertsTopics
+                                .CODE_HOME_DIALOG), dialog);
+                    }
+                }
+            });
+
             NewAdvertsUtil.getInstance().setOnBannerSuccessLisinter(new NewAdvertsUtil
                     .OnBannerSuccessLisinter() {
                 @Override
@@ -307,19 +317,11 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 }
             });
 
-            List<AdvertsBean> dataList = CacheUtil.getDataList(AdvertsTopics.CODE_HOME_LB);
+            /*List<AdvertsBean> dataList = CacheUtil.getDataList(AdvertsTopics.CODE_HOME_LB);
             if (dataList.size() == 0) {
                 NewAdvertsUtil.getInstance().showDefaultBanner(banner, 1);
-            }
+            }*/
 
-            NewAdvertsUtil.getInstance().setOnDialogSuccessLisinter(new NewAdvertsUtil
-                    .OnDialogSuccessLisinter() {
-                @Override
-                public void success() {
-                    NewAdvertsUtil.getInstance().showByDialog(CacheUtil.getDataList(AdvertsTopics
-                            .CODE_HOME_DIALOG), dialog);
-                }
-            });
         } catch (Exception e) {
             e.printStackTrace();
         }

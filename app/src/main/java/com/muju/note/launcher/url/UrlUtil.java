@@ -1,9 +1,8 @@
 package com.muju.note.launcher.url;
 
 public class UrlUtil {
-
-    //    public static final String HOST_DEFAULT = "http://pad.zgzkys.com";
-    public static final String HOST_DEFAULT = "http://test.pad.zgzkys.com";
+        public static final String HOST_DEFAULT = "http://pad.zgzkys.com";
+//    public static final String HOST_DEFAULT = "http://test.pad.zgzkys.com";
 //    public static final String HOST_DEFAULT = "http://192.168.1.114:8086";
 //    public static final String HOST_DEFAULT = "http://192.168.1.200:8086";
 
@@ -201,5 +200,18 @@ public class UrlUtil {
     //意见反馈
     public static String getFeedbackContent() {
         return getHost() + "/padFeedBack/insert";
+    }
+
+    public static String getGetCommitSurveyData() {
+        return getHost() + "/survey/saveAnswer";
+    }
+
+    /**
+     * 医院宣教
+     *
+     * @return
+     */
+    public static String getGetSurveyData() {
+        return getHost() + "/survey/%s/data";
     }
 }

@@ -21,6 +21,7 @@ public class Constants {
     public static final String HOST_VERSION = "host_version";
     public static final String PAD_CONFIG_SIGNAL_LEVEL = "PAD_CONFIG_SIGNAL_LEVEL";
     public static final String PAD_CONFIG_SIGNAL_TYPE = "PAD_CONFIG_SIGNAL_TYPE";
+    public static final String PAD_CONFIG_VOLUME_RATE = "PadConfigEntityVolume";
 
     /**
      *  沃TV

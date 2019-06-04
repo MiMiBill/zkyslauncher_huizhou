@@ -8,6 +8,7 @@ import android.text.TextUtils;
 
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.home.event.PatientEvent;
+import com.muju.note.launcher.app.satisfaction.SatisfactionSurveyActivity;
 import com.muju.note.launcher.app.video.bean.PayEntity;
 import com.muju.note.launcher.app.video.bean.PayEvent;
 import com.muju.note.launcher.app.video.bean.VideoEvent;
@@ -16,7 +17,6 @@ import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.service.CustomMessageService;
 import com.muju.note.launcher.topics.FileTopics;
 import com.muju.note.launcher.topics.SpTopics;
-import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.Constants;
 import com.muju.note.launcher.util.DateUtil;
 import com.muju.note.launcher.util.file.FileUtils;
@@ -42,7 +42,6 @@ import cn.jpush.android.api.JPushInterface;
  */
 public class JPUSHReceiver extends BroadcastReceiver {
     private static final String TAG = "JIGUANG-JPUSHReceiver";
-
     @Override
     public void onReceive(Context context, Intent intent) {
         try {
@@ -120,11 +119,11 @@ public class JPUSHReceiver extends BroadcastReceiver {
                         break;
                     case 10:
 ////                        if (LauncherApplication.getInstance().getPatient().getDisabled()) {//患者已入院
-//                            FileUtils.playReplay(LauncherApplication.getInstance().getApplicationContext(), R.raw.messagetips);
-//                            Intent msgIntent = new Intent(context, SatisfactionSurveyActivity.class);
-//                            msgIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                            msgIntent.putExtra(Constants.PAD_SURVEY_ID, bundle.getString(JPushInterface.EXTRA_MESSAGE));
-//                            context.startActivity(msgIntent);
+                            FileUtils.playReplay(LauncherApplication.getInstance().getApplicationContext(), R.raw.messagetips);
+                            Intent msgIntent = new Intent(context, SatisfactionSurveyActivity.class);
+                            msgIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            msgIntent.putExtra(Constants.PAD_SURVEY_ID, bundle.getString(JPushInterface.EXTRA_MESSAGE));
+                            context.startActivity(msgIntent);
 ////                        }
                         break;
                 }

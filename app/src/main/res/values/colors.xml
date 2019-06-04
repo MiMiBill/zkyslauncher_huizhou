@@ -42,4 +42,6 @@
     <color name="color_ED6C6A">#ED6C6A</color>
     <color name="theme_color">#2994F1</color>
     <color name="line_de">#dedede</color>
+    <color name="btn_call_default">#427bea</color>
+    <color name="btn_call_pressed">#2455b4</color>
 </resources>

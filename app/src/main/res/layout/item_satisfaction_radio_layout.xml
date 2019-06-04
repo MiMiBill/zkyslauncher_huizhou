@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioButton xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/radiobutton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingLeft="8px"
+    android:paddingRight="12px"
+    android:layout_marginRight="12px"
+    android:textColor="@color/color_333333"
+    android:textSize="23px"
+    tools:text="我了个擦" />
+
+

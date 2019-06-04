@@ -53,6 +53,7 @@
             android:layout_marginEnd="30px"
             android:paddingLeft="42px"
             android:textStyle="bold"
+            android:visibility="gone"
             android:textColor="@color/color_ED6C6A"
             android:textSize="22px"
             app:layout_constraintTop_toBottomOf="@+id/textView18"

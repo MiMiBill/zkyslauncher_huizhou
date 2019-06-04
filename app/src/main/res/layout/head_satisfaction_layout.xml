@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="35px">
+
+    <TextView
+        android:id="@+id/head_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#111111"
+        android:textSize="35px"
+        tools:text="东莞人民医院满意度调查" />
+
+    <TextView
+        android:id="@+id/head_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20px"
+        android:lineSpacingExtra="8px"
+        android:textColor="#999999"
+        android:textSize="23px"
+        tools:text="    诚邀您为此次诊疗打评，更希望您能提出宝贵的建议。调查结果将用于医院服务改进依据，我们将致力给您提供更好的医疗服务，感谢您的参与。" />
+
+</LinearLayout>

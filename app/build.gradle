@@ -133,4 +133,8 @@ dependencies {
     implementation 'com.github.open-android:ViewPager:0.1.0'
 
     implementation 'com.dyhdyh.loadingbar:loadingbar:1.4.4'
+
+    implementation('com.zhy:autolayout:1.4.5') {
+//        exclude group: 'com.android.support', module: 'appcompat'
+    }
 }

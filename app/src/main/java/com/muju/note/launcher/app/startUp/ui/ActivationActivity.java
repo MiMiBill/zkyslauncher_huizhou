@@ -132,6 +132,8 @@ public class ActivationActivity extends BaseActivity<ActivationPresenter> implem
             llyActive.setVisibility(View.GONE);
             llyProgress.setVisibility(View.GONE);
         } else {
+            llyNoInternet.setVisibility(View.GONE);
+            llyActive.setVisibility(View.VISIBLE);
             if (isReboot) {
                 loginHome();
             } else {
