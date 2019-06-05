@@ -46,6 +46,7 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -308,6 +309,9 @@ public class ActivationActivity extends BaseActivity<ActivationPresenter> implem
                             headers.put("PAD", activePadInfo.getData().get(0).getPad());
                             OkGo.getInstance().addCommonHeaders(headers);
                             loginHome();
+
+                            JPushInterface.setAlias(this, 2, dataBean.getBedId() + "pad"
+                                    + dataBean.getActive());
                         }
                     } else {
                         //未激活

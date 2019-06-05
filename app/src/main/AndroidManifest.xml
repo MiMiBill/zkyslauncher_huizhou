@@ -247,8 +247,6 @@
             </intent-filter>
         </service>
 
-        <service android:name=".service.CustomMessageService"></service>
-
 
         <!-- 设备管理 -->
         <receiver
@@ -443,10 +441,10 @@
         <!-- 该广播需要继承JPush提供的JPushMessageReceiver类, 并如下新增一个 Intent-Filter -->
         <receiver
             android:name=".push.MyJPushMessageReceiver"
-            android:enabled="true">
+            android:enabled="true"
+            android:exported="false">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
-
                 <category android:name="${JPUSH_PKGNAME}" />
             </intent-filter>
         </receiver>
@@ -469,7 +467,7 @@
                 <action android:name="cn.jpush.android.intent.CONNECTION" />
 
                 <category android:name="${JPUSH_PKGNAME}" />
-            </intent-filter>
+            </intent-filter>M
         </receiver>
 
         <activity

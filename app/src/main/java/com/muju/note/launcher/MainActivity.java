@@ -10,12 +10,17 @@ import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.app.home.event.PatientInfoEvent;
 import com.muju.note.launcher.app.home.ui.HomeFragment;
+import com.muju.note.launcher.app.msg.dialog.CustomMsgDialog;
 import com.muju.note.launcher.app.publicui.ProtectionProcessFragment;
+import com.muju.note.launcher.app.publicui.WebViewFragment;
 import com.muju.note.launcher.app.video.event.VideoNoLockEvent;
 import com.muju.note.launcher.app.video.util.WoTvUtil;
 import com.muju.note.launcher.base.BaseActivity;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
+import com.muju.note.launcher.entity.AdvertWebEntity;
+import com.muju.note.launcher.entity.PushAutoMsgEntity;
+import com.muju.note.launcher.entity.PushCustomMessageEntity;
 import com.muju.note.launcher.service.MainService;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.FormatUtils;
@@ -196,4 +201,35 @@ public class MainActivity extends BaseActivity {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+
+    /**
+     *  宣教推送
+     * @param entity
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void pushCustomMsg(PushCustomMessageEntity entity){
+        start(WebViewFragment.newInstance(entity.getTitle(),entity.getUrl(),entity.getCustomId(),true,0));
+    }
+
+    /**
+     *  宣教推送
+     * @param entity
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void pushAutoMsg(PushAutoMsgEntity entity){
+        CustomMsgDialog dialog = new CustomMsgDialog(this, entity.getMsg())
+                .setCustView(R.layout.dialog_custom_msg_layout);
+        dialog.show();
+    }
+
+    /**
+     *  广告跳转
+     * @param entity
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void toAdverWebView(AdvertWebEntity entity){
+        start(WebViewFragment.newInstance(entity.getTitle(),entity.getUrl(),entity.getAdvertId()));
+    }
+
+
 }

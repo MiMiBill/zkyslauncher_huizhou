@@ -104,7 +104,10 @@ public class UrlUtil {
         return getHost()+"/advert/getAdvertsByCodes";
     }
 
-    //医院宣教标记已读/pushTabb/{id}/
+    /**
+     *  医院宣教标记已读
+     * @return
+     */
     public static String updateReadFlag() {
         return getHost() + "/pushTabb/%s/updateReadFlag";
     }

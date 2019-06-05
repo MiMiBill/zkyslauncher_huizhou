@@ -12,7 +12,9 @@ import android.widget.TextView;
 
 import com.muju.note.launcher.BuildConfig;
 import com.muju.note.launcher.R;
+import com.muju.note.launcher.app.startUp.ui.HideActivity;
 import com.muju.note.launcher.base.BaseFragment;
+import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.url.UrlUtil;
 
 import butterknife.BindView;
@@ -61,6 +63,14 @@ public class SettingFragment extends BaseFragment {
     public void initData() {
         replaceFragment(0);
         tvVersion.setText(String.format("宝屏V%s", TextUtils.equals(UrlUtil.getHost(), "http://test.pad.zgzkys.com") ? BuildConfig.VERSION_NAME + "beta" : BuildConfig.VERSION_NAME));
+
+        tvVersion.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                HideActivity.launch(LauncherApplication.getContext());
+                return true;
+            }
+        });
     }
 
     @Override

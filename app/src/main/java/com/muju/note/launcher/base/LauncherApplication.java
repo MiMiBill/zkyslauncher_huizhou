@@ -15,6 +15,8 @@ import org.litepal.LitePal;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import cn.jpush.android.api.JPushInterface;
+
 public class LauncherApplication extends Application {
     public String latitude = "";
     public String longitude = "";
@@ -47,6 +49,11 @@ public class LauncherApplication extends Application {
 
         // 异常信息捕获
         CrashHandler.getInstance().init(this);
+
+        // 初始化极光推送
+        JPushInterface.init(this);
+        JPushInterface.setDebugMode(true);
+
         // wotv初始化
 //                WoTvUtil.getInstance().initSDK(instance);
     }
