@@ -1,6 +1,8 @@
 package com.muju.note.launcher;
 
 import android.content.Intent;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -8,6 +10,8 @@ import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.app.home.event.PatientInfoEvent;
 import com.muju.note.launcher.app.home.ui.HomeFragment;
+import com.muju.note.launcher.app.publicui.ProtectionProcessFragment;
+import com.muju.note.launcher.app.video.event.VideoNoLockEvent;
 import com.muju.note.launcher.app.video.util.WoTvUtil;
 import com.muju.note.launcher.base.BaseActivity;
 import com.muju.note.launcher.base.BaseFragment;
@@ -15,15 +19,24 @@ import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.service.MainService;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.FormatUtils;
+import com.muju.note.launcher.util.log.LogFactory;
+import com.muju.note.launcher.util.rx.RxUtil;
 import com.muju.note.launcher.view.EBDrawerLayout;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import me.yokeyword.fragmentation.ISupportFragment;
+import me.yokeyword.fragmentation.SupportFragment;
 
 public class MainActivity extends BaseActivity {
 
@@ -48,6 +61,10 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.tv_hos_doctor)
     TextView tvHosDoctor;
     private ActivePadInfo.DataBean activeInfo;
+
+    private Disposable disposableProtection;
+    private boolean isStartProtection = true;
+
     @Override
     public int getLayout() {
         return R.layout.activity_main;
@@ -55,6 +72,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void initData() {
+        EventBus.getDefault().register(this);
         startService(new Intent(this, MainService.class));
 
         activeInfo = ActiveUtils.getPadActiveInfo();
@@ -72,6 +90,8 @@ public class MainActivity extends BaseActivity {
                 WoTvUtil.getInstance().initSDK(LauncherApplication.getInstance());
             }
         });
+
+        startProtectionCountDown();
 
        /* List<AdvertsBean> adverts = CacheUtil.getDataList(AdvertsTopics.CODE_VERTICAL);
         if (adverts != null && adverts.size() > 0) {
@@ -95,5 +115,85 @@ public class MainActivity extends BaseActivity {
                 .getCreateTime())));
         tvBed.setText(activeInfo.getBedNumber() + "床");
         tvPaitent.setText(activeInfo.getDeptName());
+    }
+
+    /**
+     * 开始倒计时
+     */
+    public void startProtectionCountDown() {
+        RxUtil.closeDisposable(disposableProtection);
+        if (isStartProtection) {
+            protectionCountDown();
+        }
+    }
+
+    /**
+     * 屏幕保护倒计时
+     */
+    private void protectionCountDown() {
+        long period = 3;
+        disposableProtection = Observable.interval(period, TimeUnit.MINUTES)
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        start(new ProtectionProcessFragment(), SupportFragment.SINGLETASK);
+                    }
+                });
+
+    }
+
+    /**
+     * 结束倒计时
+     */
+    public void stopProtectionCountDown() {
+        RxUtil.closeDisposable(disposableProtection);
+    }
+
+    /**
+     *  屏幕是否计时状态
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(VideoNoLockEvent event) {
+        LogFactory.l().i("event.VideoNoLockEvent==" + event.isLock);
+        if (!event.isLock) {
+            stopProtectionCountDown();
+        }else {
+            startProtectionCountDown();
+        }
+    }
+
+    /**
+     * Note： return mDelegate.dispatchTouchEvent(ev) || super.dispatchTouchEvent(ev);
+     */
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        switch (ev.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                startProtectionCountDown();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                break;
+            case MotionEvent.ACTION_UP:
+                break;
+        }
+        return mDelegate.dispatchTouchEvent(ev) || super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        //有触摸动作重置定时器
+        startProtectionCountDown();
+        return super.dispatchKeyEvent(event);
+    }
+
+    public void setStartProtection(boolean startProtection) {
+        isStartProtection = startProtection;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

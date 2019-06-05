@@ -1,10 +1,9 @@
-package com.muju.note.launcher.app.lockScreen;
+package com.muju.note.launcher.app.publicui;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
+import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -13,7 +12,7 @@ import android.widget.TextView;
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.home.bean.AdvertsBean;
 import com.muju.note.launcher.app.video.event.VideoNoLockEvent;
-import com.muju.note.launcher.base.BaseActivity;
+import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.topics.AdvertsTopics;
 import com.muju.note.launcher.util.FormatUtils;
 import com.muju.note.launcher.util.adverts.NewAdvertsUtil;
@@ -29,63 +28,63 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
-
 /**
- * 屏幕保护程序
+ * 锁屏轮播界面
  */
-public class ProtectionProcessActivity extends BaseActivity {
+public class ProtectionProcessFragment extends BaseFragment {
+    @BindView(R.id.iv_launcher)
+    ImageView ivLauncher;
+    @BindView(R.id.banner_lc)
+    Banner bannerLc;
     @BindView(R.id.tvTime)
     TextView tvTime;
     @BindView(R.id.tvDate)
     TextView tvDate;
     @BindView(R.id.ivBtn)
     ImageView ivBtn;
-    @BindView(R.id.iv_launcher)
-    ImageView ivLauncher;
-    @BindView(R.id.banner_lc)
-    Banner bannerLc;
+
+
     //调整亮度
     Disposable disposableAdjust;
     //时间自动增加
     private Disposable disposableTimeAdd;
     private List<AdvertsBean> adverts=new ArrayList<>();
 
-
-    public static void launch(Context context) {
-        Intent intent = new Intent(context, ProtectionProcessActivity.class);
-        context.startActivity(intent);
-    }
-
-
     @Override
     public int getLayout() {
-        return R.layout.activity_protection_process;
+        return R.layout.fragment_protection_process;
     }
 
     @Override
     public void initData() {
-        hideActionBar();
         lowerBrightness();
-
-//        setStartProtection(false);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(new String[]{Manifest.permission.WRITE_SETTINGS}, 0x01);
-        }
         ivBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addBrightness();
-                finish();
+                pop();
             }
         });
         setTime();
         queryNewAdverts();
+    }
+
+    @Override
+    public void initPresenter() {
+
+    }
+
+
+    @Override
+    public void showError(String msg) {
+
     }
 
     /**
@@ -108,24 +107,15 @@ public class ProtectionProcessActivity extends BaseActivity {
      * @param v
      */
     private void setBrightness(double v) {
-        Window window = this.getWindow();
+        Window window = getActivity().getWindow();
         WindowManager.LayoutParams lp = window.getAttributes();
         lp.screenBrightness = (float) v;
         window.setAttributes(lp);
     }
 
-//    @Override
-//    public boolean dispatchTouchEvent(MotionEvent ev) {
-//        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-//            LogUtil.d("ev.getAction():%s", ev.getAction());
-//            addBrightness();
-//            adjustDownCount();
-//        }
-//        return super.dispatchTouchEvent(ev);
-//    }
-
-
-
+    /**
+     *  设置时间
+     */
     public void setTime() {
         tvTime.setText(FormatUtils.FormatDateUtil.formatDateHHmm());
         tvDate.setText(FormatUtils.FormatDateUtil.formatDateWeek());
@@ -142,15 +132,38 @@ public class ProtectionProcessActivity extends BaseActivity {
                 });
     }
 
-
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         RxUtil.closeDisposable(disposableTimeAdd);
         RxUtil.closeDisposable(disposableAdjust);
-//        setStartProtection(true);
+        if(bannerLc!=null){
+            bannerLc.destroy();
+        }
+    }
+
+    /**
+     *  界面可见时
+     */
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        if(bannerLc!=null){
+            bannerLc.startAutoPlay();
+        }
+        EventBus.getDefault().post(new VideoNoLockEvent(false));
+    }
+
+    /**
+     *  界面不可见时
+     */
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
+        if(bannerLc!=null){
+            bannerLc.stopAutoPlay();
+        }
         EventBus.getDefault().post(new VideoNoLockEvent(true));
-        bannerLc.destroy();
     }
 
     /**
@@ -183,4 +196,5 @@ public class ProtectionProcessActivity extends BaseActivity {
             NewAdvertsUtil.getInstance().showDefaultBanner(bannerLc,0);
         }
     }
+
 }
