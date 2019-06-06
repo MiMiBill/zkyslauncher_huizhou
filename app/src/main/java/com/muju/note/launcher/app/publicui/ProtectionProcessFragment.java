@@ -164,6 +164,7 @@ public class ProtectionProcessFragment extends BaseFragment {
             bannerLc.stopAutoPlay();
         }
         EventBus.getDefault().post(new VideoNoLockEvent(true));
+        addBrightness();
     }
 
     /**

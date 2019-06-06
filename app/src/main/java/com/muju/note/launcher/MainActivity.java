@@ -137,7 +137,7 @@ public class MainActivity extends BaseActivity {
      */
     private void protectionCountDown() {
         long period = 3;
-        disposableProtection = Observable.interval(period, TimeUnit.MINUTES)
+        disposableProtection = Observable.interval(10, TimeUnit.SECONDS)
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
@@ -161,6 +161,7 @@ public class MainActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(VideoNoLockEvent event) {
         LogFactory.l().i("event.VideoNoLockEvent==" + event.isLock);
+        isStartProtection=event.isLock;
         if (!event.isLock) {
             stopProtectionCountDown();
         }else {

@@ -239,7 +239,12 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
-        EventBus.getDefault().post(new VideoNoLockEvent(true));
+        if(payDialog!=null&&payDialog.isShowing()){
+            LogUtil.i(TAG,"支付窗口弹出，不发送锁屏消息");
+            return;
+        }else {
+            EventBus.getDefault().post(new VideoNoLockEvent(true));
+        }
     }
 
     /**
