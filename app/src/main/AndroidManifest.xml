@@ -221,6 +221,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:largeHeap="true"
         android:theme="@style/AppTheme"
         tools:replace="label,allowBackup">
         <activity
@@ -246,12 +247,10 @@
             </intent-filter>
         </service>
 
-        <service android:name=".service.CustomMessageService"></service>
-
 
         <!-- 设备管理 -->
         <receiver
-            android:name=".broadcast.AdminReceiver"
+            android:name=".broadcast.ScreenOffAdminReceiver"
             android:permission="android.permission.BIND_DEVICE_ADMIN">
             <meta-data
                 android:name="android.app.device_admin"
@@ -311,10 +310,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".app.lockScreen.ProtectionProcessActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="landscape" />
 
         <!-- 百度定位 -->
         <meta-data
@@ -446,10 +441,10 @@
         <!-- 该广播需要继承JPush提供的JPushMessageReceiver类, 并如下新增一个 Intent-Filter -->
         <receiver
             android:name=".push.MyJPushMessageReceiver"
-            android:enabled="true">
+            android:enabled="true"
+            android:exported="false">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
-
                 <category android:name="${JPUSH_PKGNAME}" />
             </intent-filter>
         </receiver>
@@ -472,7 +467,7 @@
                 <action android:name="cn.jpush.android.intent.CONNECTION" />
 
                 <category android:name="${JPUSH_PKGNAME}" />
-            </intent-filter>
+            </intent-filter>M
         </receiver>
 
         <activity

@@ -6,15 +6,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.home.event.PatientEvent;
+import com.muju.note.launcher.app.msg.db.CustomMessageDao;
 import com.muju.note.launcher.app.satisfaction.SatisfactionSurveyActivity;
 import com.muju.note.launcher.app.video.bean.PayEntity;
 import com.muju.note.launcher.app.video.bean.PayEvent;
 import com.muju.note.launcher.app.video.bean.VideoEvent;
 import com.muju.note.launcher.app.video.util.PayUtils;
 import com.muju.note.launcher.base.LauncherApplication;
-import com.muju.note.launcher.service.CustomMessageService;
+import com.muju.note.launcher.entity.PushAutoMsgEntity;
+import com.muju.note.launcher.entity.PushCustomMessageEntity;
+import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.topics.FileTopics;
 import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.util.Constants;
@@ -28,6 +32,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.Iterator;
 
 import cn.jpush.android.api.JPushInterface;
@@ -88,26 +93,12 @@ public class JPUSHReceiver extends BroadcastReceiver {
                         }
 
                         break;
-                    case 1:
-//                        if (!LauncherApplication.getInstance().getPatient().getDisabled()) {
-//                            return;
-//                        }
-                        FileUtils.playReplay(LauncherApplication.getInstance().getApplicationContext(), R.raw.messagetips);
-                        Intent serviceIntent = new Intent(context, CustomMessageService.class);
-                        serviceIntent.putExtra(CustomMessageService.PUSH_CUSTOM_CONTENT, bundle.getString(JPushInterface.EXTRA_MESSAGE));
-                        serviceIntent.putExtra(CustomMessageService.MESSAGE_TYPE, 1);
-                        context.startService(serviceIntent);
+                    case 1: // 宣教推送
+                        pushCustomMessage(bundle.getString(JPushInterface.EXTRA_MESSAGE));
                         break;
                     //自定义消息
                     case 7:
-//                        if (!LauncherApplication.getInstance().getPatient().getDisabled()) {
-//                            return;
-//                        }
-                        FileUtils.playReplay(LauncherApplication.getInstance().getApplicationContext(), R.raw.messagetips);
-                        Intent serviceIntent2 = new Intent(context, CustomMessageService.class);
-                        serviceIntent2.putExtra(CustomMessageService.PUSH_CUSTOM_CONTENT, bundle.getString(JPushInterface.EXTRA_MESSAGE));
-                        serviceIntent2.putExtra(CustomMessageService.MESSAGE_TYPE, 7);
-                        context.startService(serviceIntent2);
+                        pushAutoMsg(bundle.getString(JPushInterface.EXTRA_MESSAGE));
                         break;
                     case 8://入院
                         FileUtils.playReplay(LauncherApplication.getInstance().getApplicationContext(), R.raw.messagetips);
@@ -200,25 +191,32 @@ public class JPUSHReceiver extends BroadcastReceiver {
         return sb.toString();
     }
 
-    //send msg to MainActivity
-/*	private void processCustomMessage(Context context, Bundle bundle) {
-		if (MainActivity.isForeground) {
-			String message = bundle.getString(JPushInterface.EXTRA_MESSAGE);
-			String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
-			Intent msgIntent = new Intent(MainActivity.MESSAGE_RECEIVED_ACTION);
-			msgIntent.putExtra(MainActivity.KEY_MESSAGE, message);
-			if (!ExampleUtil.isEmpty(extras)) {
-				try {
-					JSONObject extraJson = new JSONObject(extras);
-					if (extraJson.length() > 0) {
-						msgIntent.putExtra(MainActivity.KEY_EXTRAS, extras);
-					}
-				} catch (JSONException e) {
+    /**
+     *  处理医院宣教推送
+     * @param data
+     */
+    private void pushCustomMessage(String data){
+        try {
+            FileUtils.playReplay(LauncherApplication.getInstance().getApplicationContext(), R.raw.messagetips);
+            CustomMessageDao dao=new Gson().fromJson(data,CustomMessageDao.class);
+            dao.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(System.currentTimeMillis()));
+            dao.setCreateTime(System.currentTimeMillis());
+            LitePalDb.setZkysDb();
+            dao.save();
+            EventBus.getDefault().post(new PushCustomMessageEntity(dao.getTitle(),dao.getUrl(),dao.getId()));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
-				}
-
-			}
-			LocalBroadcastManager.getInstance(context).sendBroadcast(msgIntent);
-		}
-	}*/
+    /**
+     *  处理自定义推送消息
+     */
+    private void pushAutoMsg(String data){
+        try {
+            EventBus.getDefault().post(new PushAutoMsgEntity(data));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }

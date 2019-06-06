@@ -155,7 +155,6 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     public void initData() {
-        EventBus.getDefault().post(new VideoNoLockEvent(false));
         try {
 
             startTime = System.currentTimeMillis();
@@ -223,6 +222,24 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                 pop();
                 break;
         }
+    }
+
+    /**
+     *  界面可见时
+     */
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        EventBus.getDefault().post(new VideoNoLockEvent(false));
+    }
+
+    /**
+     *  界面不可见时
+     */
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
+        EventBus.getDefault().post(new VideoNoLockEvent(true));
     }
 
     /**
@@ -408,7 +425,6 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void playVideoAndSetUI() {
-        EventBus.getDefault().post(new VideoNoLockEvent(false));
         switchContentWithCid(videoHisDao.getCid(), videoHisDao.getPlayType());
     }
 
@@ -521,7 +537,6 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                     }
                     videoOrImageDialog.show();
                 }
-                EventBus.getDefault().post(new VideoNoLockEvent(false));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -834,7 +849,6 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
             if (videoOrImageDialog != null && videoOrImageDialog.isShowing()) {
                 videoOrImageDialog.dismiss();
             }
-            EventBus.getDefault().post(new VideoNoLockEvent(true));
         } catch (Exception e) {
             e.printStackTrace();
         }

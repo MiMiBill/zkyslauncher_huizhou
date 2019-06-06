@@ -152,7 +152,7 @@ public class UpdateVersionService {
                     public void accept(Long aLong) throws Exception {
                         File apkFile = new File(SdcardConfig.RESOURCE_FOLDER, fileName);
                         String apkPath = apkFile.getAbsolutePath();
-                        int resultCode = PackageUtils.installSilent(LauncherApplication.getInstance(), apkPath);
+                        int resultCode = PackageUtils.installSilent(LauncherApplication.getContext(), apkPath);
                         if (resultCode != PackageUtils.INSTALL_SUCCEEDED) {
                             LogUtil.e(TAG,"升级失败" + apkFile.exists());
                         }

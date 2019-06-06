@@ -7,28 +7,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.muju.note.launcher.app.lockScreen.ProtectionProcessActivity;
-import com.muju.note.launcher.app.video.event.VideoNoLockEvent;
-import com.muju.note.launcher.util.log.LogFactory;
-import com.muju.note.launcher.util.rx.RxUtil;
 import com.muju.note.launcher.util.toast.FancyToast;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import me.yokeyword.fragmentation.ExtraTransaction;
 import me.yokeyword.fragmentation.ISupportActivity;
 import me.yokeyword.fragmentation.ISupportFragment;
@@ -43,7 +29,7 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator;
  */
 public abstract class BaseActivity<T extends BasePresenter> extends AppCompatActivity implements ISupportActivity,IView {
     private boolean isStartProtection = true;
-    final SupportActivityDelegate mDelegate = new SupportActivityDelegate(this);
+    public final SupportActivityDelegate mDelegate = new SupportActivityDelegate(this);
     private Disposable disposableProtection;
     @Override
     public SupportActivityDelegate getSupportDelegate() {
@@ -63,13 +49,11 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         mDelegate.onPostCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onDestroy() {
         mDelegate.onDestroy();
-        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 
@@ -85,84 +69,12 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     }
 
 
-    //监听失败返回
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(VideoNoLockEvent event) {
-        LogFactory.l().i("event.VideoNoLockEvent==" + event.isLock);
-        if (!event.isLock) {
-            stopProtectionCountDown();
-        }else {
-            startProtectionCountDown();
-        }
-    }
-
-    /**
-     * 屏幕保护倒计时
-     */
-    private void protectionCountDown() {
-        long period = 1;
-        disposableProtection = Observable.interval(period, TimeUnit.MINUTES)
-                .subscribe(new Consumer<Long>() {
-                    @Override
-                    public void accept(Long aLong) throws Exception {
-                        ProtectionProcessActivity.launch(getContext());
-                    }
-                });
-
-    }
-
-    public void setStartProtection(boolean startProtection) {
-        isStartProtection = startProtection;
-    }
-
-    /**
-     * 开始倒计时
-     */
-    public void startProtectionCountDown() {
-        RxUtil.closeDisposable(disposableProtection);
-        if (isStartProtection) {
-            protectionCountDown();
-        }
-    }
 
     @Override
     protected void onStop() {
         super.onStop();
-        stopProtectionCountDown();
     }
 
-    /**
-     * 结束倒计时
-     */
-    public void stopProtectionCountDown() {
-        RxUtil.closeDisposable(disposableProtection);
-    }
-
-
-    /**
-     * Note： return mDelegate.dispatchTouchEvent(ev) || super.dispatchTouchEvent(ev);
-     */
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        switch (ev.getAction()){
-            case MotionEvent.ACTION_DOWN:
-                startProtectionCountDown();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                break;
-            case MotionEvent.ACTION_UP:
-                break;
-        }
-        return mDelegate.dispatchTouchEvent(ev) || super.dispatchTouchEvent(ev);
-    }
-
-
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        //有触摸动作重置定时器
-        startProtectionCountDown();
-        return super.dispatchKeyEvent(event);
-    }
 
     /**
      * 不建议复写该方法,请使用 {@link #onBackPressedSupport} 代替
@@ -312,7 +224,6 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        hideBottomUIMenu();
-        startProtectionCountDown();
         hideActionBar();
         setContentView(getLayout());
         mDelegate.onCreate(savedInstanceState);

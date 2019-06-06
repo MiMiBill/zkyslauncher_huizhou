@@ -197,6 +197,24 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
     }
 
     /**
+     *  界面可见时
+     */
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        EventBus.getDefault().post(new VideoNoLockEvent(false));
+    }
+
+    /**
+     *  界面不可见时
+     */
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
+        EventBus.getDefault().post(new VideoNoLockEvent(true));
+    }
+
+    /**
      * 播放器回调监听
      */
     private void setVideoView() {
@@ -360,7 +378,6 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
     }
 
     private void playVideoAndSetUI() {
-        EventBus.getDefault().post(new VideoNoLockEvent(false));
         switchContentWithCid(infoDao.getCid(), infoDao.getVideoType() + "");
     }
 
@@ -399,7 +416,6 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
             if (videoOrImageDialog != null && videoOrImageDialog.isShowing()) {
                 videoOrImageDialog.dismiss();
             }
-            EventBus.getDefault().post(new VideoNoLockEvent(true));
             EventBus.getDefault().unregister(this);
         } catch (Exception e) {
             e.printStackTrace();

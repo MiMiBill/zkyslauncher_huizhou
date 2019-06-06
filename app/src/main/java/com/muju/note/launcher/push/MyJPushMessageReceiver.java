@@ -4,6 +4,8 @@ package com.muju.note.launcher.push;
 import android.content.Context;
 
 
+import com.muju.note.launcher.util.log.LogUtil;
+
 import cn.jpush.android.api.JPushMessage;
 import cn.jpush.android.service.JPushMessageReceiver;
 
@@ -13,8 +15,11 @@ import cn.jpush.android.service.JPushMessageReceiver;
  */
 public class MyJPushMessageReceiver extends JPushMessageReceiver {
 
+    private static final String TAG="MyJPushMessageReceiver";
+
     @Override
     public void onTagOperatorResult(Context context, JPushMessage jPushMessage) {
+        LogUtil.i(TAG,"onTagOperatorResult");
         TagAliasOperatorHelper.getInstance().onTagOperatorResult(context, jPushMessage);
         super.onTagOperatorResult(context, jPushMessage);
        /* if (jPushMessage.getTags().contains(Constant.JPUSH_TAG)) {
@@ -26,18 +31,21 @@ public class MyJPushMessageReceiver extends JPushMessageReceiver {
 
     @Override
     public void onCheckTagOperatorResult(Context context, JPushMessage jPushMessage) {
+        LogUtil.i(TAG,"onTagOperatorResult");
         TagAliasOperatorHelper.getInstance().onCheckTagOperatorResult(context, jPushMessage);
         super.onCheckTagOperatorResult(context, jPushMessage);
     }
 
     @Override
     public void onAliasOperatorResult(Context context, JPushMessage jPushMessage) {
+        LogUtil.i(TAG,"onTagOperatorResult");
         TagAliasOperatorHelper.getInstance().onAliasOperatorResult(context, jPushMessage);
         super.onAliasOperatorResult(context, jPushMessage);
     }
 
     @Override
     public void onMobileNumberOperatorResult(Context context, JPushMessage jPushMessage) {
+        LogUtil.i(TAG,"onTagOperatorResult");
         TagAliasOperatorHelper.getInstance().onMobileNumberOperatorResult(context, jPushMessage);
         super.onMobileNumberOperatorResult(context, jPushMessage);
     }

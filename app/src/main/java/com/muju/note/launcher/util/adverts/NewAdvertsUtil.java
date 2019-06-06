@@ -36,6 +36,7 @@ import com.muju.note.launcher.app.video.dialog.OnAdDialogDismissListener;
 import com.muju.note.launcher.app.video.dialog.VideoOrImageDialog;
 import com.muju.note.launcher.app.video.util.DbHelper;
 import com.muju.note.launcher.base.LauncherApplication;
+import com.muju.note.launcher.entity.AdvertWebEntity;
 import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.litepal.UpAdvertInfoDao;
 import com.muju.note.launcher.okgo.BaseBean;
@@ -55,6 +56,7 @@ import com.qiniu.android.storage.Configuration;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 import org.litepal.LitePal;
 
@@ -370,8 +372,9 @@ public class NewAdvertsUtil {
         LogFactory.l().i(bean.getLinkType());
         LogFactory.l().i("跳转类型==="+bean.getLinkType());
         if(bean.getLinkType()==1){
-            WebActivity.launch(LauncherApplication.getContext(), true, bean
-                    .getLinkContent(), bean.getName(), bean.getId());
+//            WebActivity.launch(LauncherApplication.getContext(), true, bean
+//                    .getLinkContent(), bean.getName(), bean.getId());
+            EventBus.getDefault().post(new AdvertWebEntity(bean.getId(),bean.getName(),bean.getLinkContent()));
         }else if (bean.getLinkType()==5){
             String url=bean.getLinkContent();
             LargePicActivity.launch(LauncherApplication.getContext(),url,bean.getId());
