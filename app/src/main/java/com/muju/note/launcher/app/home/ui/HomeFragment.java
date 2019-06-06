@@ -1,11 +1,14 @@
 package com.muju.note.launcher.app.home.ui;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -70,6 +73,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -99,10 +104,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     Banner banner;
     @BindView(R.id.ll_hos_service)
     LinearLayout llHosService;
-    @BindView(R.id.tv_bed)
-    TextView tvBed;
-    @BindView(R.id.tv_room)
-    TextView tvRoom;
     @BindView(R.id.tv_name)
     TextView tvName;
     @BindView(R.id.tv_age)
@@ -149,6 +150,11 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     LinearLayout llyLuck;
     @BindView(R.id.lly_cabinet)
     LinearLayout llyCabinet;
+    @BindView(R.id.tv_hos_info)
+    TextView tvHosInfo;
+    Unbinder unbinder;
+    @BindView(R.id.tv_no_hos_info)
+    TextView tvNoHosInfo;
 
     private ActivePadInfo.DataBean activeInfo;
     private List<PatientResponse.DataBean> patientList = new ArrayList<>();
@@ -186,9 +192,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 //        if (patientList.size() > 0) {
 //            patientInfo(patientList.get(0));
 //        } else {
-            if (activeInfo != null) {
-                mPresenter.getPatientData(String.valueOf(activeInfo.getBedId()), getActivity());
-            }
+        if (activeInfo != null) {
+            mPresenter.getPatientData(String.valueOf(activeInfo.getBedId()), getActivity());
+        }
 //        }
         llHostipal.setOnClickListener(this);
         llVideo.setOnClickListener(this);
@@ -269,8 +275,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         start(wotvPlayFragment);
         llSetting.setOnClickListener(this);
     }
-
-
+    
     //加载广告
     private void initBanner() {
         final AdvertsDialog dialog = new AdvertsDialog(getActivity(), R.style.dialog);
@@ -282,7 +287,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                     AdvertsTopics.CODE_ROAD), banner, dialog);
 
 
-
             NewAdvertsUtil.getInstance().setOnBannerFailLisinter(new NewAdvertsUtil
                     .OnBannerFailLisinter() {
                 @Override
@@ -291,14 +295,16 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 }
             });
 
-             NewAdvertsUtil.getInstance().setOnDialogSuccessLisinter(new NewAdvertsUtil
+            NewAdvertsUtil.getInstance().setOnDialogSuccessLisinter(new NewAdvertsUtil
                     .OnDialogSuccessLisinter() {
                 @Override
                 public void success() {
-                    List<AdvertsBean> dataList = CacheUtil.getDataList(AdvertsTopics.CODE_HOME_DIALOG);
-                    if(dataList.size()>0){
-                        NewAdvertsUtil.getInstance().showByDialog(CacheUtil.getDataList(AdvertsTopics
-                                .CODE_HOME_DIALOG), dialog);
+                    List<AdvertsBean> dataList = CacheUtil.getDataList(AdvertsTopics
+                            .CODE_HOME_DIALOG);
+                    if (dataList.size() > 0) {
+                        NewAdvertsUtil.getInstance().showByDialog(CacheUtil.getDataList
+                                (AdvertsTopics
+                                        .CODE_HOME_DIALOG), dialog);
                     }
                 }
             });
@@ -357,7 +363,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (banner!=null){
+        if (banner != null) {
             banner.destroy();
         }
         EventBus.getDefault().unregister(this);
@@ -400,12 +406,15 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         tvHosDoctor.setText(entity.getChargeDoctor());
         tvHosTime.setText(FormatUtils.FormatDateUtil.parseLong(Long.parseLong(entity
                 .getCreateTime())));
-        tvBed.setText(activeInfo.getBedNumber() + "床");
         tvEncy.setText(activeInfo.getDeptName());
+        tvHosInfo.setText(activeInfo.getHospitalName() + "-" + activeInfo.getDeptName() + "-" +
+                activeInfo.getBedNumber() + "床");
     }
 
     @Override
     public void notPatientInfo() {
+        tvNoHosInfo.setText(activeInfo.getHospitalName() + "-" + activeInfo.getDeptName() + "-" +
+                activeInfo.getBedNumber() + "床");
         ivPersonQrCode.setImageBitmap(QrCodeUtils.generateBitmap(MobileInfoUtil.getICCID
                 (getContext()) + "," + JPushInterface.getRegistrationID(getContext()), 200, 200));
         llyNoPatient.setVisibility(View.VISIBLE);
@@ -517,16 +526,16 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 start(new GuideFragment());
                 break;
             case R.id.lly_sign: // 签到中心
-                if(UserUtil.getUserBean()!=null){
+                if (UserUtil.getUserBean() != null) {
                     start(new SignFragment());
-                }else {
+                } else {
                     showLoginDialog(0);
                 }
                 break;
             case R.id.lly_luck: // 抽奖中心
-                if(UserUtil.getUserBean()!=null){
+                if (UserUtil.getUserBean() != null) {
                     start(new LuckDrawFragment());
-                }else {
+                } else {
                     showLoginDialog(1);
                 }
                 break;
@@ -556,6 +565,21 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             }
         });
         loginDialog.show();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }
 

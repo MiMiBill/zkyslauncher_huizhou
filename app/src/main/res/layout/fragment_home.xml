@@ -111,10 +111,10 @@
                     </RelativeLayout>
                     
 
-                    <FrameLayout
+                    <LinearLayout
+                        android:orientation="vertical"
                         android:layout_width="@dimen/px330"
                         android:layout_height="match_parent">
-
                         <LinearLayout
                             android:id="@+id/lly_have_paitent"
                             android:layout_width="@dimen/px330"
@@ -122,41 +122,25 @@
                             android:layout_marginLeft="5px"
                             android:background="@color/white"
                             android:orientation="vertical"
-                            android:visibility="gone">
-
+                            >
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/px110"
                                 android:background="@mipmap/ic_home_userinfo_bg"
-                                android:paddingLeft="@dimen/px20"
-                                android:paddingTop="@dimen/px24">
-
+                                >
                                 <TextView
-                                    android:id="@+id/tv_bed"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="20床"
-                                    android:textColor="@color/white"
-                                    android:textSize="20sp" />
-
-                                <TextView
-                                    android:id="@+id/tv_room"
-                                    android:layout_width="@dimen/px86"
-                                    android:layout_height="@dimen/px30"
-                                    android:layout_below="@id/tv_bed"
-                                    android:layout_marginTop="@dimen/px10"
-                                    android:background="@mipmap/hos_room_bg"
+                                    android:id="@+id/tv_hos_info"
+                                    android:layout_width="match_parent"
+                                    android:textSize="14sp"
                                     android:gravity="center"
-                                    android:text="1210房"
                                     android:textColor="@color/white"
-                                    android:textSize="14sp" />
-
+                                    android:layout_height="30px" />
                                 <TextView
                                     android:id="@+id/tv_name"
+                                    android:layout_below="@id/tv_hos_info"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="@dimen/px48"
-                                    android:layout_toRightOf="@id/tv_bed"
+                                    android:layout_marginLeft="@dimen/px20"
                                     android:text="张洋"
                                     android:textColor="@color/white"
                                     android:textSize="15sp" />
@@ -166,7 +150,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_below="@id/tv_name"
-                                    android:layout_marginLeft="@dimen/px48"
+                                    android:layout_marginLeft="@dimen/px20"
                                     android:layout_marginTop="@dimen/px16"
                                     android:layout_toRightOf="@id/tv_bed"
                                     android:text="40岁"
@@ -187,14 +171,14 @@
 
                                 <TextView
                                     android:id="@+id/tv_sex"
+                                    android:layout_below="@id/tv_hos_info"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="@dimen/px12"
-                                    android:layout_marginTop="@dimen/px10"
+                                    android:layout_marginLeft="@dimen/px32"
                                     android:layout_toRightOf="@id/tv_name"
                                     android:text="男"
                                     android:textColor="@color/white"
-                                    android:textSize="12sp" />
+                                    android:textSize="15sp" />
                             </RelativeLayout>
 
                             <LinearLayout
@@ -348,6 +332,7 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:visibility="gone"
                             android:id="@+id/lly_no_patient"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -358,13 +343,20 @@
                                 android:layout_height="@dimen/px110"
                                 android:background="@mipmap/ic_home_userinfo_bg"
                                 android:gravity="center_vertical"
-                                android:orientation="vertical"
-                                android:paddingLeft="@dimen/px20">
+                                android:orientation="vertical">
 
+                                <TextView
+                                    android:id="@+id/tv_no_hos_info"
+                                    android:layout_width="match_parent"
+                                    android:textSize="14sp"
+                                    android:gravity="center"
+                                    android:textColor="@color/white"
+                                    android:layout_height="30px" />
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="亲爱的患者:"
+                                    android:paddingLeft="@dimen/px20"
                                     android:textColor="@color/white"
                                     android:textSize="12sp" />
 
@@ -372,6 +364,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/px10"
+                                    android:paddingLeft="@dimen/px20"
                                     android:text="当前您未办理入院信息"
                                     android:textColor="@color/white"
                                     android:textSize="12sp" />
@@ -393,7 +386,7 @@
                                 android:textColor="@color/color_585858"
                                 android:textSize="12sp" />
                         </LinearLayout>
-                    </FrameLayout>
+                    </LinearLayout>
 
 
                 </LinearLayout>

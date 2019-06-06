@@ -86,6 +86,8 @@ public class ActivationActivity extends BaseActivity<ActivationPresenter> implem
     TextView tvRetry;
     @BindView(R.id.lly_no_internet)
     LinearLayout llyNoInternet;
+    @BindView(R.id.tv_reason)
+    TextView tvReason;
 
     @Override
     public int getLayout() {
@@ -125,27 +127,38 @@ public class ActivationActivity extends BaseActivity<ActivationPresenter> implem
 
     private void checkNetWork() {
         boolean isReboot = SPUtil.getBoolean(SpTopics.SP_REBOOT);
-        boolean isConnect = NetWorkUtil.isConnected(this);
-        LogFactory.l().i("isReboot===" + isReboot);
-        LogFactory.l().i("isConnect===" + isConnect);
-        if (!isConnect) {
+        String iccid = MobileInfoUtil.getICCID(this);
+
+        if (MobileInfoUtil.haveSIMCard(this) && !TextUtils.isEmpty(iccid)) {
+            LogFactory.l().i("有手机卡");
+            boolean isConnect = NetWorkUtil.isConnected(this);
+            if (!isConnect) {
+                llyNoInternet.setVisibility(View.VISIBLE);
+                tvReason.setText("没有检测到网络,请重试");
+                tvRetry.setText("重新加载网络");
+                llyActive.setVisibility(View.GONE);
+                llyProgress.setVisibility(View.GONE);
+            } else {
+                llyNoInternet.setVisibility(View.GONE);
+                llyActive.setVisibility(View.VISIBLE);
+                if (isReboot) {
+                    loginHome();
+                } else {
+                    initHide();
+                    SystemUtils.setVolumeNotification(this);
+                    checkHadActiveDi();
+                    setActiveLayout();
+                }
+            }
+        } else {
+            LogFactory.l().i("没有手机卡");
             llyNoInternet.setVisibility(View.VISIBLE);
+            tvReason.setText("没有检测到手机卡,请重试");
+            tvRetry.setText("重新加载");
             llyActive.setVisibility(View.GONE);
             llyProgress.setVisibility(View.GONE);
-        } else {
-            llyNoInternet.setVisibility(View.GONE);
-            llyActive.setVisibility(View.VISIBLE);
-            if (isReboot) {
-                loginHome();
-            } else {
-                initHide();
-                SystemUtils.setVolumeNotification(this);
-                checkHadActiveDi();
-                setActiveLayout();
-            }
         }
     }
-
 
 
     /**

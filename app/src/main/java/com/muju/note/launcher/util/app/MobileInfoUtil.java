@@ -28,6 +28,21 @@ public class MobileInfoUtil {
         return builder.toString();
     }
 
+
+    public static boolean haveSIMCard(Context context) {
+        TelephonyManager manager = (TelephonyManager) context
+                .getSystemService(Context.TELEPHONY_SERVICE);// 取得相关系统服务
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+        }
+        String imsi = manager.getSubscriberId(); // 取出IMSI
+        if (imsi == null || imsi.length() <= 0) {
+           return false;
+        } else {
+            return true;
+        }
+    }
+
     /**
      * 获取手机IMSI
      */

@@ -40,7 +40,6 @@ import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
-import me.yokeyword.fragmentation.ISupportFragment;
 import me.yokeyword.fragmentation.SupportFragment;
 
 public class MainActivity extends BaseActivity {
@@ -116,10 +115,9 @@ public class MainActivity extends BaseActivity {
         tvName.setText(entity.getUserName());
         tvAge.setText(entity.getAge() + "岁");
         tvHosDoctor.setText(entity.getChargeDoctor());
-        tvHosTime.setText(FormatUtils.FormatDateUtil.parseLong(Long.parseLong(entity
-                .getCreateTime())));
-        tvBed.setText(activeInfo.getBedNumber() + "床");
-        tvPaitent.setText(activeInfo.getDeptName());
+        tvHosTime.setText(FormatUtils.FormatDateUtil.parseLong(Long.parseLong(entity.getCreateTime())));
+        tvBed.setText(activeInfo.getHospitalName()+"-"+activeInfo.getDeptName()+"-"+activeInfo.getBedNumber()+"床");
+        tvPaitent.setText(entity.getSex() == 1 ? "男" : "女");
     }
 
     /**
