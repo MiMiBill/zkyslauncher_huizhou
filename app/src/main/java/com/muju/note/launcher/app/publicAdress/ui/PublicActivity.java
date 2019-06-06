@@ -105,7 +105,6 @@ public class PublicActivity extends BaseActivity<PublicPresenter> implements Pub
         popEnterPassword.setOnPassFinish(new OnPasswordFinish() {
             @Override
             public void passwordFinish(String password) {
-//                verfycode(password);
                 mPresenter.verfycode(password, adverId, advertCode);
             }
         });
