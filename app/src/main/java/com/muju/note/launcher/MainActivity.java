@@ -135,7 +135,7 @@ public class MainActivity extends BaseActivity {
      */
     private void protectionCountDown() {
         long period = 3;
-        disposableProtection = Observable.interval(10, TimeUnit.SECONDS)
+        disposableProtection = Observable.interval(period, TimeUnit.MINUTES)
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {

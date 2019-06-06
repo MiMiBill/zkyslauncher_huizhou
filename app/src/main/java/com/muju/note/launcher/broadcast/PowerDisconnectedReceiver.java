@@ -16,7 +16,7 @@ public class PowerDisconnectedReceiver extends BroadcastReceiver {
         LogFactory.l().i("系统断电");
         if (intent.getAction().equals(Intent.ACTION_POWER_DISCONNECTED)) {
             LogFactory.l().i("系统断电");
-            SPUtil.putBoolean("rebootPhone",true);
+//            SPUtil.putBoolean("rebootPhone",true);
         }
     }
 }
