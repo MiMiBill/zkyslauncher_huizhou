@@ -157,6 +157,7 @@
             android:layout_width="@dimen/px300"
             android:layout_height="@dimen/px234" />
         <TextView
+            android:id="@+id/tv_reason"
             android:textSize="36sp"
             android:textColor="@color/color_888888"
             android:text="平板没有网络哦,请重新加载"
