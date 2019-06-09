@@ -275,7 +275,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         start(wotvPlayFragment);
         llSetting.setOnClickListener(this);
     }
-    
+
     //加载广告
     private void initBanner() {
         final AdvertsDialog dialog = new AdvertsDialog(getActivity(), R.style.dialog);
