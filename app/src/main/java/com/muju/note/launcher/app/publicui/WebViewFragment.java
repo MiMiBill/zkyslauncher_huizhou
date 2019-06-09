@@ -19,7 +19,6 @@ import com.muju.note.launcher.R;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.util.adverts.NewAdvertsUtil;
 
-
 import butterknife.BindView;
 
 public class WebViewFragment extends BaseFragment implements View.OnClickListener {
@@ -205,13 +204,14 @@ public class WebViewFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onDestroy() {
         super.onDestroy();
+        long currentTime=System.currentTimeMillis();
+        if (advertId != 0) {
+            NewAdvertsUtil.getInstance().addData(advertId, NewAdvertsUtil.TAG_BROWSETIME, currentTime - startTime);
+            NewAdvertsUtil.getInstance().addDataInfo(advertId, NewAdvertsUtil.TAG_BROWSETIME, startTime,currentTime);
+        }
         if(web!=null){
             web.removeAllViews();
             web.destroy();
-        }
-        if (advertId != 0) {
-            NewAdvertsUtil.getInstance().addData(advertId, NewAdvertsUtil.TAG_BROWSETIME, System
-                    .currentTimeMillis() - startTime);
         }
     }
 }

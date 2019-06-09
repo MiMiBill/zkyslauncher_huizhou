@@ -5,16 +5,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.muju.note.launcher.R;
+import com.muju.note.launcher.app.adtask.TaskListBean;
 import com.muju.note.launcher.app.sign.contract.SignContract;
 import com.muju.note.launcher.app.sign.presenter.SignPresenter;
 import com.muju.note.launcher.app.userinfo.bean.SignBean;
 import com.muju.note.launcher.app.userinfo.bean.SignStatusBean;
 import com.muju.note.launcher.base.BaseFragment;
+import com.muju.note.launcher.util.Constants;
+import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.util.user.UserUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
+//签到
 public class SignFragment extends BaseFragment<SignPresenter> implements SignContract.View {
     @BindView(R.id.tv_sign)
     TextView tvSign;
@@ -25,6 +31,7 @@ public class SignFragment extends BaseFragment<SignPresenter> implements SignCon
     @BindView(R.id.ll_back)
     LinearLayout llBack;
     private boolean isSign = false;
+    private List<TaskListBean> adList=new ArrayList<>();
 
     @Override
     public int getLayout() {
@@ -35,6 +42,8 @@ public class SignFragment extends BaseFragment<SignPresenter> implements SignCon
     public void initData() {
         mPresenter.checkSignStatus(UserUtil.getUserBean().getId());
         tvIntegral.setText("您总共有" + UserUtil.getUserBean().getIntegral() + "积分");
+
+        adList = SPUtil.getTaskList(Constants.AD_TASK_LIST);
     }
 
     @Override

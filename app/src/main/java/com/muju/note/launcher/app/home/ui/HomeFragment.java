@@ -1,14 +1,11 @@
 package com.muju.note.launcher.app.home.ui;
 
 import android.annotation.SuppressLint;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -73,7 +70,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observable;
@@ -322,12 +318,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                     }
                 }
             });
-
-            /*List<AdvertsBean> dataList = CacheUtil.getDataList(AdvertsTopics.CODE_HOME_LB);
-            if (dataList.size() == 0) {
-                NewAdvertsUtil.getInstance().showDefaultBanner(banner, 1);
-            }*/
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -450,6 +440,11 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         GlideUtil.loadImg(dao.getScreenUrl(), ivImg, R.mipmap.ic_video_load_default);
     }
 
+    @Override
+    public void getTaskListSuccess() {
+
+    }
+
     /**
      * 保存RegisterId到后台
      */
@@ -565,21 +560,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             }
         });
         loginDialog.show();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
-            savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
-        return rootView;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
     }
 }
 

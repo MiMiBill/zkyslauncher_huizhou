@@ -16,6 +16,7 @@ import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.Constants;
 import com.muju.note.launcher.util.DateUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
+import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
 import com.muju.note.launcher.util.sign.Signature;
 import com.muju.note.launcher.util.sp.SPUtil;
@@ -34,25 +35,27 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
-public class HomePresenter extends BasePresenter<HomeContract.View> implements HomeContract.Presenter {
-
+public class HomePresenter extends BasePresenter<HomeContract.View> implements HomeContract
+        .Presenter {
+    private static final String TAG="HomePresenter";
     private Disposable diDateTimer;
 
     /**
-     *  更新标题栏时间
+     * 更新标题栏时间
      */
-    public void updateDate(){
-        Observable.interval(1,TimeUnit.SECONDS)
+    public void updateDate() {
+        Observable.interval(1, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Long>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        diDateTimer=d;
+                        diDateTimer = d;
                     }
 
                     @Override
                     public void onNext(Long aLong) {
-                        mView.getDate(DateUtil.getDate("yyyy年MM月dd日"),DateUtil.getDate("HH:mm:ss"),DateUtil.getWeek());
+                        mView.getDate(DateUtil.getDate("yyyy年MM月dd日"), DateUtil.getDate
+                                ("HH:mm:ss"), DateUtil.getWeek());
                     }
 
                     @Override
@@ -70,8 +73,8 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
     @Override
     public void getPatientData(String padId, Context context) {
         Map<String, String> params = new HashMap();
-        params.put("bedId",padId);
-        params.put("disabled","1");
+        params.put("bedId", padId);
+        params.put("disabled", "1");
         String sign = Signature.getSign(params, MobileInfoUtil.getICCID(context));
         OkGo.<String>post(UrlUtil.getGetPaitentInfo()).tag(this)
                 .headers("SIGN", sign)
@@ -82,11 +85,13 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
                     public void onSuccess(Response<String> response) {
 //                        LogFactory.l().i("response==="+response.body());
                         Gson gson = new Gson();
-                        PatientResponse patientResponse = gson.fromJson(response.body(), PatientResponse.class);
-                        if (patientResponse.getCode() == 200 && patientResponse.getData().size() > 0) {
+                        PatientResponse patientResponse = gson.fromJson(response.body(),
+                                PatientResponse.class);
+                        if (patientResponse.getCode() == 200 && patientResponse.getData().size()
+                                > 0) {
                             PatientResponse.DataBean patient = patientResponse.getData().get(0);
                             if (patient.getDisabled()) {
-                                SPUtil.saveDataList(Constants.PATIENT,patientResponse.getData());
+                                SPUtil.saveDataList(Constants.PATIENT, patientResponse.getData());
                                 mView.patientInfo(patient);
                             } else {
                                 mView.notPatientInfo();
@@ -109,14 +114,14 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
     }
 
     /**
-     *  获取播放记录
+     * 获取播放记录
      */
     @Override
     public void getVideoHis() {
         LitePal.limit(20).order("createTime desc").findAsync(VideoHisDao.class).listen(new FindMultiCallback<VideoHisDao>() {
             @Override
             public void onFinish(List<VideoHisDao> list) {
-                if(list==null||list.size()<=0){
+                if (list == null || list.size() <= 0) {
                     mView.getVideoHisNull();
                     return;
                 }
@@ -126,20 +131,21 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
     }
 
     /**
-     *  获取首页推荐影视
+     * 获取首页推荐影视
      */
     @Override
     public void getTopVideo() {
-        LitePal.findAllAsync(VideoInfoTopDao.class).listen(new FindMultiCallback<VideoInfoTopDao>() {
+        LitePal.findAllAsync(VideoInfoTopDao.class).listen(new FindMultiCallback<VideoInfoTopDao>
+                () {
             @Override
             public void onFinish(List<VideoInfoTopDao> list) {
-                if(list==null||list.size()<=0){
+                if (list == null || list.size() <= 0) {
                     mView.getVideoTopNull();
                     return;
                 }
-                List<VideoInfoDao> topDaos=new ArrayList<>();
-                for (VideoInfoTopDao dao:list){
-                    VideoInfoDao infoDao=new VideoInfoDao();
+                List<VideoInfoDao> topDaos = new ArrayList<>();
+                for (VideoInfoTopDao dao : list) {
+                    VideoInfoDao infoDao = new VideoInfoDao();
                     infoDao.setImgUrl(dao.getImgUrl());
                     infoDao.setColumnId(dao.getColumnId());
                     infoDao.setVideoType(dao.getVideoType());
@@ -158,8 +164,31 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
         });
     }
 
+    @Override
+    public void getTaskList(String userId, String hospitalId, String depId) {
+        Map<String, String> params = new HashMap();
+        params.put("userId", userId);
+        params.put("hospitalId", hospitalId);
+        params.put("depId", depId);
+        OkGo.<String>post(UrlUtil.getTaskList())
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                             @Override
+                             public void onSuccess(Response<String> response) {
+                                 LogUtil.i(TAG,response.body());
+                             }
 
-    public void onDestroy(){
+                             @Override
+                             public void onError(Response<String> response) {
+                                 super.onError(response);
+                             }
+                         }
+                );
+    }
+
+
+    public void onDestroy() {
         RxUtil.closeDisposable(diDateTimer);
     }
 

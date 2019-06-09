@@ -7,6 +7,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.muju.note.launcher.app.adtask.TaskListBean;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.base.LauncherApplication;
 
@@ -126,6 +127,24 @@ public class SPUtil {
         }
         Gson gson = new Gson();
         datalist = gson.fromJson(strJson, new TypeToken<List<PatientResponse.DataBean>>() {}.getType());
+        return datalist;
+    }
+
+
+    /**
+     * 获取任务列表
+     * @param tag
+     * @return
+     */
+    public static  List<TaskListBean> getTaskList(String tag) {
+        List<TaskListBean> datalist=new ArrayList<>();
+        String strJson = getSharedPreferences().getString(tag, null);
+//        LogFactory.l().i("getPatientList-strJson=="+strJson);
+        if (null == strJson) {
+            return datalist;
+        }
+        Gson gson = new Gson();
+        datalist = gson.fromJson(strJson, new TypeToken<List<TaskListBean>>() {}.getType());
         return datalist;
     }
 }

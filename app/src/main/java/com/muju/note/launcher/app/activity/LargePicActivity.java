@@ -87,17 +87,15 @@ public class LargePicActivity extends Activity {
 
 
     private void doFinish() {
+        long currentTime=System.currentTimeMillis();
+        NewAdvertsUtil.getInstance().addData(advertId, NewAdvertsUtil.TAG_BROWSETIME,
+                 currentTime-startTime);
         NewAdvertsUtil.getInstance().addDataInfo(advertId, NewAdvertsUtil.TAG_BROWSETIME,
-                startTime, System.currentTimeMillis());
+                startTime, currentTime);
 //        EventBus.getDefault().post(new VideoCodeFailEvent(true));
         finish();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-    }
 
     @OnClick(R.id.iv_dissmiss)
     public void onViewClicked() {

@@ -7,6 +7,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
+import com.muju.note.launcher.app.adtask.TaskListBean;
+import com.muju.note.launcher.app.adtask.event.UserInfoEvent;
+import com.muju.note.launcher.app.adtask.presenter.MainPresenter;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.app.home.event.PatientInfoEvent;
 import com.muju.note.launcher.app.home.ui.HomeFragment;
@@ -23,15 +26,18 @@ import com.muju.note.launcher.entity.PushAutoMsgEntity;
 import com.muju.note.launcher.entity.PushCustomMessageEntity;
 import com.muju.note.launcher.service.MainService;
 import com.muju.note.launcher.util.ActiveUtils;
+import com.muju.note.launcher.util.Constants;
 import com.muju.note.launcher.util.FormatUtils;
 import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.rx.RxUtil;
+import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.view.EBDrawerLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -42,7 +48,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import me.yokeyword.fragmentation.SupportFragment;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity<MainPresenter> implements MainPresenter.TaskListener {
 
     @BindView(R.id.drawlayout)
     EBDrawerLayout drawlayout;
@@ -68,7 +74,7 @@ public class MainActivity extends BaseActivity {
 
     private Disposable disposableProtection;
     private boolean isStartProtection = true;
-
+    private static String TAG="MainActivity";
     @Override
     public int getLayout() {
         return R.layout.activity_main;
@@ -76,6 +82,8 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void initData() {
+        mPresenter=new MainPresenter();
+        mPresenter.setOnTaskListener(this);
         EventBus.getDefault().register(this);
         startService(new Intent(this, MainService.class));
 
@@ -96,11 +104,6 @@ public class MainActivity extends BaseActivity {
         });
 
         startProtectionCountDown();
-
-       /* List<AdvertsBean> adverts = CacheUtil.getDataList(AdvertsTopics.CODE_VERTICAL);
-        if (adverts != null && adverts.size() > 0) {
-            NewAdvertsUtil.getInstance().showByImageView(adverts, ivAd);
-        }*/
     }
 
 
@@ -231,4 +234,21 @@ public class MainActivity extends BaseActivity {
     }
 
 
+
+    /**
+     *  广告任务列表
+     * @param
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getTaskList(UserInfoEvent userInfo){
+        int userId=userInfo.userBean.getId();
+        int hospitalId=activeInfo.getHospitalId();
+        int depId=activeInfo.getDeptId();
+        mPresenter.getTaskList(userId,hospitalId,depId);
+    }
+
+    @Override
+    public void getTaskListSuccess(List<TaskListBean> taskListBeans) {
+        SPUtil.saveDataList(Constants.AD_TASK_LIST,taskListBeans);
+    }
 }

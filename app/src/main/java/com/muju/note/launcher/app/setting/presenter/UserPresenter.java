@@ -4,6 +4,7 @@ package com.muju.note.launcher.app.setting.presenter;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
+import com.muju.note.launcher.app.adtask.event.UserInfoEvent;
 import com.muju.note.launcher.app.setting.contract.UserContract;
 import com.muju.note.launcher.app.video.bean.UserBean;
 import com.muju.note.launcher.base.BasePresenter;
@@ -13,6 +14,8 @@ import com.muju.note.launcher.okgo.JsonCallback;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.user.UserUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 public class UserPresenter extends BasePresenter<UserContract.View> implements UserContract.Presenter {
     private UserListener listener;
@@ -34,7 +37,7 @@ public class UserPresenter extends BasePresenter<UserContract.View> implements U
                             return;
                         }else {
                             UserUtil.setUserBean(response.body().getData());
-//                            mView.startQueryUser(response.body().getData());
+                            EventBus.getDefault().post(new UserInfoEvent(response.body().getData()));
                             if(listener!=null)
                                 listener.startQueryUser(response.body().getData());
                         }

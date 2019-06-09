@@ -16,9 +16,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
+
 import com.muju.note.launcher.R;
+import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
+import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.util.system.SystemUtils;
 
 import java.lang.annotation.Retention;
@@ -226,9 +229,13 @@ public class VideoPlayControlView extends FrameLayout {
 
         //初始化获取音量属性
         mAudioManager = (AudioManager)getContext().getSystemService(Service.AUDIO_SERVICE);
-        maxVolume = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+//        if(SPUtil.getLong())
 
-
+        if(SPUtil.getLong(SpTopics.PAD_CONFIG_VOLUME_RATE)>=0){
+            maxVolume=(int)SPUtil.getLong(SpTopics.PAD_CONFIG_VOLUME_RATE);
+        }else {
+            maxVolume = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        }
 
         setVideoGestureListener(new VideoGestureListener() {
             @Override

@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="360dp"
-        android:text="每日大礼包"
+        android:text="做任务赢取大礼包"
         android:textColor="#333333"
         android:textSize="16sp" />
     <TextView
@@ -71,6 +71,7 @@
         android:gravity="center">
 
         <ImageView
+            android:id="@+id/iv_"
             android:layout_marginRight="20dp"
             android:layout_width="265px"
             android:layout_height="160px"

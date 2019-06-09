@@ -53,7 +53,9 @@ public class AdVideoViewActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        NewAdvertsUtil.getInstance().addDataInfo(advertId,NewAdvertsUtil.TAG_BROWSETIME,startTime,System.currentTimeMillis());
+        long currentTime=System.currentTimeMillis();
+        NewAdvertsUtil.getInstance().addData(advertId,NewAdvertsUtil.TAG_BROWSETIME,currentTime-startTime);
+        NewAdvertsUtil.getInstance().addDataInfo(advertId,NewAdvertsUtil.TAG_BROWSETIME,startTime,currentTime);
         if (mVvVideoView != null) {
             mVvVideoView.onDestroy();
         }

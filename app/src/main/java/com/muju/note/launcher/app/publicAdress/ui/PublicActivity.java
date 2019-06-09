@@ -65,8 +65,6 @@ public class PublicActivity extends BaseActivity<PublicPresenter> implements Pub
             advertCode = advertsBean.getCode();
             startTime = System.currentTimeMillis();
         }
-
-//        NewAdvertsUtil.getInstance().getToken(Constants.ZKYS_PAD_DB);
     }
 
 
@@ -85,13 +83,9 @@ public class PublicActivity extends BaseActivity<PublicPresenter> implements Pub
 
 
     private void doFinish() {
-//        NewAdvertsUtil.getInstance().upCountDb(20); //测试上传数据
-        NewAdvertsUtil.getInstance().addData(adverId, NewAdvertsUtil.TAG_BROWSETIME, System
-                .currentTimeMillis() - startTime);
-//        NewAdvertsUtil.getInstance().addDataInfo(adverId,NewAdvertsUtil.TAG_SHOWTIME,startTime,
-// System.currentTimeMillis());
-        NewAdvertsUtil.getInstance().addData(adverId, NewAdvertsUtil.TAG_SHOWTIME, System
-                .currentTimeMillis() - startTime);
+        long currentTime=System.currentTimeMillis();
+        NewAdvertsUtil.getInstance().addData(adverId, NewAdvertsUtil.TAG_BROWSETIME, currentTime - startTime);
+        NewAdvertsUtil.getInstance().addDataInfo(adverId, NewAdvertsUtil.TAG_SHOWTIME, startTime,currentTime);
         finish();
     }
 
