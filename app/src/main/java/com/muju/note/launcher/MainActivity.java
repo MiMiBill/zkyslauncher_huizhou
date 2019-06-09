@@ -159,6 +159,7 @@ public class MainActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(VideoNoLockEvent event) {
         LogFactory.l().i("event.VideoNoLockEvent==" + event.isLock);
+        isStartProtection=event.isLock;
         if (!event.isLock) {
             stopProtectionCountDown();
         }else {

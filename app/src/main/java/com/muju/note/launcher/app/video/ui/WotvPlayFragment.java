@@ -26,6 +26,7 @@ import com.muju.note.launcher.app.video.db.VideoHisDao;
 import com.muju.note.launcher.app.video.dialog.LoginDialog;
 import com.muju.note.launcher.app.video.dialog.VideoOrImageDialog;
 import com.muju.note.launcher.app.video.dialog.VideoPayDialog;
+import com.muju.note.launcher.app.video.dialog.WotvPlayErrorDialog;
 import com.muju.note.launcher.app.video.event.VideoCodeFailEvent;
 import com.muju.note.launcher.app.video.event.VideoNoLockEvent;
 import com.muju.note.launcher.app.video.event.VideoPauseEvent;
@@ -120,6 +121,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
 
     private long startTime;
     private LoginDialog loginDialog;
+    private WotvPlayErrorDialog errorDialog;
 
     public void setHisDao(VideoHisDao videoHisDao) {
         this.videoHisDao = videoHisDao;
@@ -239,6 +241,13 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
+        if(payDialog!=null&&payDialog.isShowing()){
+            LogUtil.i(TAG,"支付窗口弹出，不发送锁屏消息");
+            return;
+        }
+        if(errorDialog!=null&&errorDialog.isShowing()){
+            return;
+        }
         EventBus.getDefault().post(new VideoNoLockEvent(true));
     }
 
@@ -322,32 +331,42 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                     //TODO VideoErrorInfo配套查阅错误代码
                     LogUtil.e(TAG, "错误代码：" + e.getCode());
                     LogUtil.e(TAG, "错误信息：" + e.getMessage());
-                    switch (e.getCode()) {
-                        case VideoErrorInfo.CODE_ACCOUNT_CHECK_ERROR:
-                        case VideoErrorInfo.CODE_VIDEO_CONTENTE_PERMISSION:
-                            if (VideoSdkConfig.getInstance().getUser().isLogined()) {
-                                //这里发生错误就先重新登录
-                                showToast("没有权限播放此视频");
-                                pop();
-                            } else {
-                                WoTvUtil.getInstance().login();
-                                showToast("网络环境异常，请检查！");
-                            }
-                            break;
-                        case VideoErrorInfo.CODE_VIDEO_INNER_ERROR:
-                        case VideoErrorInfo.CODE_VIDEO_GET_ERROR:
-                            showToast(e.getMessage() + "");
+                    errorDialog=new WotvPlayErrorDialog(getActivity(), R.style.DialogFullscreen, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            errorDialog.dismiss();
                             pop();
-                            break;
-                        case VideoErrorInfo.CODE_ORDER_CHECK_ERROR:
-                        case VideoErrorInfo.CODE_VIDEO_URL_ERROR:
-                            WoTvUtil.getInstance().login();
-                            showToast(e.getMessage() + "");
-                            pop();
-                            break;
-                    }
+                        }
+                    });
+                    errorDialog.setCanceledOnTouchOutside(false);
+                    errorDialog.show();
+//                    switch (e.getCode()) {
+//                        case VideoErrorInfo.CODE_ACCOUNT_CHECK_ERROR:
+//                        case VideoErrorInfo.CODE_VIDEO_CONTENTE_PERMISSION:
+//                            if (VideoSdkConfig.getInstance().getUser().isLogined()) {
+//                                //这里发生错误就先重新登录
+//                                showToast("没有权限播放此视频");
+//                                pop();
+//                            } else {
+//                                WoTvUtil.getInstance().login();
+//                                showToast("网络环境异常，请检查！");
+//                            }
+//                            break;
+//                        case VideoErrorInfo.CODE_VIDEO_INNER_ERROR:
+//                        case VideoErrorInfo.CODE_VIDEO_GET_ERROR:
+//                            showToast(e.getMessage() + "");
+//                            pop();
+//                            break;
+//                        case VideoErrorInfo.CODE_ORDER_CHECK_ERROR:
+//                        case VideoErrorInfo.CODE_VIDEO_URL_ERROR:
+//                            WoTvUtil.getInstance().login();
+//                            showToast(e.getMessage() + "");
+//                            pop();
+//                            break;
+//                    }
                 }catch (Exception es){
                     es.printStackTrace();
+                    pop();
                 }
             }
         });
