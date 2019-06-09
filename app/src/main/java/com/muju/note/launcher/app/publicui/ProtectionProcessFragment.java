@@ -126,8 +126,12 @@ public class ProtectionProcessFragment extends BaseFragment {
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        tvTime.setText(FormatUtils.FormatDateUtil.formatDateHHmm());
-                        tvDate.setText(FormatUtils.FormatDateUtil.formatDateWeek());
+                        try {
+                            tvTime.setText(FormatUtils.FormatDateUtil.formatDateHHmm());
+                            tvDate.setText(FormatUtils.FormatDateUtil.formatDateWeek());
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
                 });
     }

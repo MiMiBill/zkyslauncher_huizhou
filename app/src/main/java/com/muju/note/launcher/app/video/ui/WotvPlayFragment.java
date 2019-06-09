@@ -142,6 +142,9 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                             });
                 }
                 if (msg.what == 0x01) {
+                    if(llDes==null){
+                        return;
+                    }
                     llDes.setVisibility(View.GONE);
                 }
             } catch (Exception e) {
@@ -331,7 +334,10 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                     //TODO VideoErrorInfo配套查阅错误代码
                     LogUtil.e(TAG, "错误代码：" + e.getCode());
                     LogUtil.e(TAG, "错误信息：" + e.getMessage());
-                    errorDialog=new WotvPlayErrorDialog(getActivity(), R.style.DialogFullscreen, new View.OnClickListener() {
+                    if(errorDialog!=null&&errorDialog.isShowing()){
+                        return;
+                    }
+                    errorDialog=new WotvPlayErrorDialog(getActivity(), R.style.DialogFullscreen,e.getMessage(), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             errorDialog.dismiss();
@@ -367,6 +373,9 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                 }catch (Exception es){
                     es.printStackTrace();
                     pop();
+                    if(errorDialog!=null&&errorDialog.isShowing()){
+                        errorDialog.dismiss();
+                    }
                 }
             }
         });
@@ -836,6 +845,9 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                 RxUtil.closeDisposable(disposableSlPay);
                 if (videoOrImageDialog != null && videoOrImageDialog.isShowing()) {
                     videoOrImageDialog.dismiss();
+                }
+                if(payDialog!=null&&payDialog.isShowing()){
+                    payDialog.dismiss();
                 }
                 videoView.start();
                 break;

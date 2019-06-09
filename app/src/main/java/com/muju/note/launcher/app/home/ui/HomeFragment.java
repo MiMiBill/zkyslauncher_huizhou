@@ -60,6 +60,7 @@ import com.muju.note.launcher.util.gilde.GlideUtil;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.qr.QrCodeUtils;
 import com.muju.note.launcher.util.sp.SPUtil;
+import com.muju.note.launcher.util.system.SystemUtils;
 import com.muju.note.launcher.util.user.UserUtil;
 import com.muju.note.launcher.view.banana.Banner;
 import com.unicom.common.VideoSdkConfig;
@@ -541,6 +542,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 break;
             case R.id.lly_cabinet: // 屏安柜
                 showToast("更多精彩,敬请期待");
+                SystemUtils.screenOff();
                 break;
         }
     }
