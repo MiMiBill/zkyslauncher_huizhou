@@ -108,8 +108,8 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
      * 7：今日看啥
      * 8：短视频
      */
-    public static final String VIDEO_TYPE_EPISODE = "2";
-    public static final String VIDEO_TYPE_VARIETY = "4";
+    public static final int VIDEO_TYPE_EPISODE = 2;
+    public static final int VIDEO_TYPE_VARIETY = 4;
     private VideoOrImageDialog videoOrImageDialog;
     // 当前播放的集数
     private static int EPISODE_POSITION;
@@ -295,7 +295,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                 try {
                     //TODO 视频播放完成（一个视频达到duration的末尾），通知业务层
                     LogUtil.e(TAG, "onVideoComplete:");
-                    switch (videoHisDao.getPlayType()) {
+                    switch (videoHisDao.getVideoType()) {
                         case VIDEO_TYPE_EPISODE:
                         case VIDEO_TYPE_VARIETY:
                             EPISODE_POSITION = videoView.getEpisodePosition();
@@ -318,6 +318,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                     return true;
                 }catch (Exception e){
                     e.printStackTrace();
+                    pop();
                 }
                 return true;
             }
