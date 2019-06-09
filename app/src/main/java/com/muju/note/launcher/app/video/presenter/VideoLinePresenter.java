@@ -31,7 +31,7 @@ public class VideoLinePresenter extends BasePresenter<VideoLineContract.View> im
     public void queryVideo() {
         String sql;
         sql="columnName like '%"+"电视"+"%' and status = 1";
-        LitePal.where(sql).findAsync(VideoInfoDao.class).listen(new FindMultiCallback<VideoInfoDao>() {
+        LitePal.where(sql).order("number desc").findAsync(VideoInfoDao.class).listen(new FindMultiCallback<VideoInfoDao>() {
             @Override
             public void onFinish(List<VideoInfoDao> list) {
                 if(list==null||list.size()<=0){
