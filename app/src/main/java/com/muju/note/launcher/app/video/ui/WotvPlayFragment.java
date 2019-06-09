@@ -805,6 +805,9 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                                                 .isShowing()) {
                                             videoOrImageDialog.dismiss();
                                         }
+                                        if(payDialog!=null&&payDialog.isShowing()){
+                                            payDialog.dismiss();
+                                        }
                                     }
                                 }
                             }

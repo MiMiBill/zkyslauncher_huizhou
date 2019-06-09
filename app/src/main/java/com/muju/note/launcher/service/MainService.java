@@ -94,7 +94,7 @@ public class MainService extends Service {
             // 自启动状态，不做操作
         }else {
             // 非自启动状态，10分钟内初始化操作
-            Observable.timer((long) (Math.random() * 10), TimeUnit.SECONDS)
+            Observable.timer((long) (Math.random() * 600), TimeUnit.SECONDS)
                     .subscribe(new Consumer<Long>() {
                         @Override
                         public void accept(Long aLong) throws Exception {

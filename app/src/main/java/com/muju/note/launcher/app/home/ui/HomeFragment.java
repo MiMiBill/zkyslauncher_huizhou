@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.gson.Gson;
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
 import com.muju.note.launcher.app.dialog.AdvertsDialog;
@@ -63,6 +64,7 @@ import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.util.system.SystemUtils;
 import com.muju.note.launcher.util.user.UserUtil;
 import com.muju.note.launcher.view.banana.Banner;
+import com.orhanobut.logger.Logger;
 import com.unicom.common.VideoSdkConfig;
 
 import org.greenrobot.eventbus.EventBus;
@@ -153,7 +155,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     LinearLayout llyCabinet;
     @BindView(R.id.tv_hos_info)
     TextView tvHosInfo;
-    Unbinder unbinder;
     @BindView(R.id.tv_no_hos_info)
     TextView tvNoHosInfo;
 
@@ -374,6 +375,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     public void onSupportVisible() {
         super.onSupportVisible();
         mPresenter.updateDate();
+        mPresenter.getTopVideo();
+        mPresenter.getVideoHis();
     }
 
     @Override
@@ -424,6 +427,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void getVideoHisSuccess(List<VideoHisDao> list) {
+        videoHisDaos.clear();
         videoHisDaos.addAll(list);
         homeHisVideoAdapter.notifyDataSetChanged();
     }
@@ -436,6 +440,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void getVideoTopSuccess(List<VideoInfoDao> list) {
+        videoInfoDaos.clear();
         videoInfoDaos.addAll(list);
         homeTopVideoAdapter.notifyDataSetChanged();
     }
@@ -569,19 +574,5 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         loginDialog.show();
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
-            savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
-        return rootView;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
 }
 
