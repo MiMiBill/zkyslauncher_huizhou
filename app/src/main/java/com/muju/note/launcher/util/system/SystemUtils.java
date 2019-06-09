@@ -3,13 +3,12 @@ package com.muju.note.launcher.util.system;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.media.AudioManager;
-import android.media.RingtoneManager;
 import android.os.PowerManager;
 import android.provider.Settings;
 
 import com.muju.note.launcher.base.LauncherApplication;
+import com.muju.note.launcher.broadcast.ScreenOffAdminReceiver;
 import com.muju.note.launcher.util.log.LogUtil;
 
 import java.lang.reflect.Method;
@@ -79,7 +78,7 @@ public class SystemUtils {
         DevicePolicyManager policyManager = (DevicePolicyManager) LauncherApplication.getContext().getSystemService(Context.DEVICE_POLICY_SERVICE);
         ComponentName adminReceiver = new ComponentName(LauncherApplication.getContext(), ScreenOffAdminReceiver.class);
         boolean admin = policyManager.isAdminActive(adminReceiver);
-
+        LogUtil.i("admin:"+admin);
         if (admin) {
             // isScreenOn = false;
             policyManager.lockNow();

@@ -255,11 +255,11 @@
             <meta-data
                 android:name="android.app.device_admin"
                 android:resource="@xml/lock_screen" />
-
             <intent-filter>
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
             </intent-filter>
         </receiver>
+
         <!-- 开机流程 -->
         <receiver android:name=".broadcast.BootBroadcastReceiver">
             <intent-filter>

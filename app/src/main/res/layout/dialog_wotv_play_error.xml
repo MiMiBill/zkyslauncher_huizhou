@@ -40,5 +40,14 @@
         android:layout_centerHorizontal="true"
         android:textColor="@color/black_gray"
         android:layout_marginTop="@dimen/px250"/>
+
+    <TextView
+        android:id="@+id/tv_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/black_gray"
+        android:layout_marginTop="280px"
+        android:textSize="15px"/>
     
 </RelativeLayout>

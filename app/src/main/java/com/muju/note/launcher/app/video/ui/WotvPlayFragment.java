@@ -106,8 +106,8 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
      * 7：今日看啥
      * 8：短视频
      */
-    public static final String VIDEO_TYPE_EPISODE = "2";
-    public static final String VIDEO_TYPE_VARIETY = "4";
+    public static final int VIDEO_TYPE_EPISODE = 2;
+    public static final int VIDEO_TYPE_VARIETY = 4;
     private VideoOrImageDialog videoOrImageDialog;
     // 当前播放的集数
     private static int EPISODE_POSITION;
@@ -140,6 +140,9 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                             });
                 }
                 if (msg.what == 0x01) {
+                    if(llDes==null){
+                        return;
+                    }
                     llDes.setVisibility(View.GONE);
                 }
             } catch (Exception e) {
@@ -286,7 +289,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                 try {
                     //TODO 视频播放完成（一个视频达到duration的末尾），通知业务层
                     LogUtil.e(TAG, "onVideoComplete:");
-                    switch (videoHisDao.getPlayType()) {
+                    switch (videoHisDao.getVideoType()) {
                         case VIDEO_TYPE_EPISODE:
                         case VIDEO_TYPE_VARIETY:
                             EPISODE_POSITION = videoView.getEpisodePosition();
@@ -309,6 +312,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                     return true;
                 }catch (Exception e){
                     e.printStackTrace();
+                    pop();
                 }
                 return true;
             }
@@ -325,7 +329,10 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                     //TODO VideoErrorInfo配套查阅错误代码
                     LogUtil.e(TAG, "错误代码：" + e.getCode());
                     LogUtil.e(TAG, "错误信息：" + e.getMessage());
-                    errorDialog=new WotvPlayErrorDialog(getActivity(), R.style.DialogFullscreen, new View.OnClickListener() {
+                    if(errorDialog!=null&&errorDialog.isShowing()){
+                        return;
+                    }
+                    errorDialog=new WotvPlayErrorDialog(getActivity(), R.style.DialogFullscreen,e.getMessage(), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             errorDialog.dismiss();
@@ -361,6 +368,9 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                 }catch (Exception es){
                     es.printStackTrace();
                     pop();
+                    if(errorDialog!=null&&errorDialog.isShowing()){
+                        errorDialog.dismiss();
+                    }
                 }
             }
         });
@@ -792,6 +802,9 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                                                 .isShowing()) {
                                             videoOrImageDialog.dismiss();
                                         }
+                                        if(payDialog!=null&&payDialog.isShowing()){
+                                            payDialog.dismiss();
+                                        }
                                     }
                                 }
                             }
@@ -833,6 +846,9 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                 RxUtil.closeDisposable(disposableSlPay);
                 if (videoOrImageDialog != null && videoOrImageDialog.isShowing()) {
                     videoOrImageDialog.dismiss();
+                }
+                if(payDialog!=null&&payDialog.isShowing()){
+                    payDialog.dismiss();
                 }
                 videoView.start();
                 break;
