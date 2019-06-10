@@ -81,14 +81,16 @@ public class NewAdvertsUtil {
                 .params("codes", code)
                 .params("hospitalId", ActiveUtils.getPadActiveInfo().getHospitalId())
                 .params("deptId", ActiveUtils.getPadActiveInfo().getDeptId())
-                .cacheMode(CacheMode.FIRST_CACHE_THEN_REQUEST)
+//                .params("deptId", 10000)
+//                .cacheMode(CacheMode.FIRST_CACHE_THEN_REQUEST)
+                .cacheMode(CacheMode.NO_CACHE)
                 .cacheTime(-1)
                 .cacheKey(code)
                 .tag(code)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        LogFactory.l().i("queryNewAdverts_onCacheSuccess");
+                        LogFactory.l().i("queryNewAdverts_onSuccess");
                         SPUtil.putString(Constants.ZKYS_ADVERTS, response.body());
                         try {
                             getNewAdvertsSuccess();
@@ -152,21 +154,6 @@ public class NewAdvertsUtil {
         }
         banner.setSlide(true);
         banner.setDataPlay(pageList, 0);
-        banner.setOnBannerListener(new OnBannerListener() {
-            @Override
-            public void OnBannerClick(int position) {
-                AdvertsBean bean = list.get(position);
-                try {
-                    if (bean.getResourceUrl().endsWith("png") || bean.getResourceUrl().endsWith("jpg")) {
-                        jump(bean);
-                    }
-                } catch (Exception e) {
-                    LogFactory.l().i("e==" + e.getMessage());
-                    e.printStackTrace();
-                }
-            }
-        });
-
         final int[] id = {0};
         final long[] startTime = {System.currentTimeMillis()};
         banner.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -213,6 +200,20 @@ public class NewAdvertsUtil {
             @Override
             public void onPageScrollStateChanged(int status) {
 //                LogFactory.l().i("status==="+status);
+            }
+        });
+        banner.setOnBannerListener(new OnBannerListener() {
+            @Override
+            public void OnBannerClick(int position) {
+                AdvertsBean bean = list.get(position);
+                try {
+                    if (bean.getResourceUrl().endsWith("png") || bean.getResourceUrl().endsWith("jpg")) {
+                        jump(bean);
+                    }
+                } catch (Exception e) {
+                    LogFactory.l().i("e==" + e.getMessage());
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -346,6 +347,7 @@ public class NewAdvertsUtil {
         addDataInfo(bean.getId(), TAG_CLICKCOUNT);
         LogFactory.l().i("跳转类型===" + bean.getLinkType());
         if (bean.getLinkType() == 1) {
+
             EventBus.getDefault().post(new AdvertWebEntity(bean.getId(), bean.getName(), bean
                     .getLinkContent()));
         } else if (bean.getLinkType() == 5) {
@@ -363,7 +365,7 @@ public class NewAdvertsUtil {
 
 
     //展示图片
-    public void showByImageView(final List<AdvertsBean> list, ImageView imageView) {
+    public void showByImageView(final List<AdvertsBean> list, final ImageView imageView) {
         final AdvertsBean bean = list.get(0);
         Glide.with(LauncherApplication.getContext()).load(bean.getResourceUrl()).into(imageView);
         addData(bean.getId(), TAG_SHOWCOUNT);
@@ -429,6 +431,7 @@ public class NewAdvertsUtil {
             public void onClick(View view) {
                 try {
                     jump(bean);
+                    dialog.dismiss();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

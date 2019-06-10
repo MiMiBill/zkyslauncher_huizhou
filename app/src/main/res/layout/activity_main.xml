@@ -37,7 +37,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text="20床"
+                    android:text=""
                     android:textColor="@color/white" />
 
                 <TextView
@@ -61,7 +61,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text="张洋"
+                    android:text=""
                     android:textColor="@color/white" />
 
                 <TextView
@@ -69,7 +69,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text="30岁"
+                    android:text=""
                     android:layout_marginLeft="@dimen/px10"
                     android:textColor="@color/white" />
 

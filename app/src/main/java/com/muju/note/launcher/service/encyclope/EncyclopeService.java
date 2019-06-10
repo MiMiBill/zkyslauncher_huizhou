@@ -101,7 +101,7 @@ public class EncyclopeService {
                                              for (InfoDao infoBean : encyUpdateBean.getColumns()){
                                                  InfoDao dao=LitePal.where("id = ?",infoBean.getId()+"").findFirst(InfoDao.class);
                                                  if(dao==null){
-                                                     dao.setId(dao.getId());
+                                                     dao.setId(infoBean.getId());
                                                      dao.save();
                                                  }else {
                                                      LitePal.delete(InfoDao.class,dao.getId());
@@ -121,7 +121,7 @@ public class EncyclopeService {
                                             for (InfomationDao infoBean : encyUpdateBean.getMes()){
                                                 InfomationDao dao=LitePal.where("id = ?",infoBean.getId()+"").findFirst(InfomationDao.class);
                                                 if(dao==null){
-                                                    dao.setId(dao.getId());
+                                                    dao.setId(infoBean.getId());
                                                     dao.save();
                                                 }else {
                                                     LitePal.delete(InfomationDao.class,dao.getId());

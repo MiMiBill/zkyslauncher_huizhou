@@ -11,6 +11,7 @@ import com.muju.note.launcher.R;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.topics.SpTopics;
+import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.util.system.SystemUtils;
 import com.muju.note.launcher.view.light.RectProgress;
@@ -26,6 +27,8 @@ public class VoiceFragment extends BaseFragment {
     Unbinder unbinder;
     private boolean isRelease = true; //判断MediaPlayer是否释放的标志
     private MediaPlayer mediaPlayer = null;
+    private long maxVoice;
+
     @Override
     public int getLayout() {
         return R.layout.fragment_voice;
@@ -35,15 +38,14 @@ public class VoiceFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         rectProgressLight.setMax(255);
-        long maxVoice = SPUtil.getLong(SpTopics.PAD_CONFIG_VOLUME_RATE);
-        if(maxVoice>=0){
-            rectProgressVoice.setMax((int)maxVoice);
-        }else {
+        maxVoice = SPUtil.getLong(SpTopics.PAD_CONFIG_VOLUME_RATE);
+        /*if (maxVoice >= 0) {
+            rectProgressVoice.setMax((int) maxVoice);
+        } else {*/
             rectProgressVoice.setMax(SystemUtils.getMaxVolume(LauncherApplication.getContext()));
-        }
-        rectProgressLight.setProgress(SystemUtils.getScreenBrightness());
+//        }
         rectProgressVoice.setProgress(SystemUtils.getCurrentVolume(getContext()));
-
+        rectProgressLight.setProgress(SystemUtils.getScreenBrightness());
         rectProgressLight.setChangedListener(new RectProgress.OnProgressChangedListener() {
             @Override
             public void onProgressChanged(int currentValue, int percent) {
@@ -54,8 +56,15 @@ public class VoiceFragment extends BaseFragment {
         rectProgressVoice.setChangedListener(new RectProgress.OnProgressChangedListener() {
             @Override
             public void onProgressChanged(int currentValue, int percent) {
-                int rateValue = (int) (currentValue / 1.0 / SystemUtils.getMaxVolume(getContext())*100);
                 if (currentValue != SystemUtils.getCurrentVolume(getContext())) {
+                    int rateValue = 0;
+                    /*if (maxVoice >= 0) {
+                        rateValue = (int) (currentValue / 1.0 / maxVoice * 100);
+                    } else {*/
+                        rateValue = (int) (currentValue / 1.0 / SystemUtils.getMaxVolume(getContext()) * 100);
+//                    }
+                    LogFactory.l().i("currentValue===" + currentValue);
+                    LogFactory.l().i("rateValue===" + rateValue);
                     SystemUtils.setVolume(getContext(), rateValue);
                 }
             }
@@ -64,9 +73,10 @@ public class VoiceFragment extends BaseFragment {
         rectProgressVoice.setOnActionUpListener(new RectProgress.OnActionUpListener() {
             @Override
             public void onActionUp() {
-                if (isRelease){
+                if (isRelease) {
                     //在raw下的资源
-                    mediaPlayer = MediaPlayer.create(LauncherApplication.getContext(),R.raw.messagetips);
+                    mediaPlayer = MediaPlayer.create(LauncherApplication.getContext(), R.raw
+                            .messagetips);
                     isRelease = false;
                 }
                 mediaPlayer.start(); //开始播放
@@ -76,7 +86,7 @@ public class VoiceFragment extends BaseFragment {
                     public void onCompletion(MediaPlayer mp) {
                         mediaPlayer.reset();
                         mediaPlayer.release();
-                        isRelease=true;
+                        isRelease = true;
                     }
                 });
             }
@@ -93,7 +103,8 @@ public class VoiceFragment extends BaseFragment {
                 Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
         //保存到系统中
         Uri uri = android.provider.Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS);
-        android.provider.Settings.System.putInt(resolver, Settings.System.SCREEN_BRIGHTNESS, brightness);
+        android.provider.Settings.System.putInt(resolver, Settings.System.SCREEN_BRIGHTNESS,
+                brightness);
         resolver.notifyChange(uri, null);
     }
 

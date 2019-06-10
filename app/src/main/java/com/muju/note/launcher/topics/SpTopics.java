@@ -34,6 +34,7 @@ public class SpTopics {
      *  音量推送
      */
     public static final String PAD_CONFIG_VOLUME_RATE = "PadConfigEntityVolume";
+    public static final String PAD_LOCAL_VOLUME = "PadLocalVolume";
 
 
 }

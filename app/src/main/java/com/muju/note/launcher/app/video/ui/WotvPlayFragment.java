@@ -3,6 +3,7 @@ package com.muju.note.launcher.app.video.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
@@ -173,14 +174,21 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
 
             // 获取当前播放的集数
             EPISODE_POSITION = videoView.getEpisodePosition();
-
             // 开始播放
             playVideoAndSetUI();
 
             // 监听支付
             checkIsValid();
-
-
+           /* int maxVoice = (int) SPUtil.getLong(SpTopics.PAD_CONFIG_VOLUME_RATE);
+            LogFactory.l().i("maxVoice==="+maxVoice);
+            LogFactory.l().i("currentVolume==="+SystemUtils.getCurrentVolume(LauncherApplication.getContext()));
+            if(maxVoice>=0){
+                videoView.setSystemVolume(maxVoice);
+            }else {
+                int maxVolume = SystemUtils.getMaxVolume(LauncherApplication.getContext());
+                videoView.setSystemVolume(maxVolume);
+            }*/
+//            videoView.setVideoVolume(SystemUtils.getCurrentVolume(LauncherApplication.getContext()));
             // 视频开始播放后，展示上下菜单
             videoView.setOnPreparedListener(new OnVideoPreparedListener() {
                 @Override
@@ -374,8 +382,6 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                 }
             }
         });
-
-
     }
 
     /**
@@ -756,7 +762,9 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                     @Override
                     public void run() throws Exception {
                         LogUtil.d("执行完成：超时");
+                        Looper.prepare();
                         showToast("支付超时");
+                        Looper.loop();
 //                        pop();
                     }
                 });

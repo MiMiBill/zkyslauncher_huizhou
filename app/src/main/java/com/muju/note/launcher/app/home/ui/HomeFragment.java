@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.google.gson.Gson;
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
 import com.muju.note.launcher.app.dialog.AdvertsDialog;
@@ -61,7 +60,6 @@ import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.util.system.SystemUtils;
 import com.muju.note.launcher.util.user.UserUtil;
 import com.muju.note.launcher.view.banana.Banner;
-import com.orhanobut.logger.Logger;
 import com.unicom.common.VideoSdkConfig;
 
 import org.greenrobot.eventbus.EventBus;
@@ -73,7 +71,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.Unbinder;
 import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -293,20 +290,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 }
             });
 
-            NewAdvertsUtil.getInstance().setOnDialogSuccessLisinter(new NewAdvertsUtil
-                    .OnDialogSuccessLisinter() {
-                @Override
-                public void success() {
-                    List<AdvertsBean> dataList = CacheUtil.getDataList(AdvertsTopics
-                            .CODE_HOME_DIALOG);
-                    if (dataList.size() > 0) {
-                        NewAdvertsUtil.getInstance().showByDialog(CacheUtil.getDataList
-                                (AdvertsTopics
-                                        .CODE_HOME_DIALOG), dialog);
-                    }
-                }
-            });
-
             NewAdvertsUtil.getInstance().setOnBannerSuccessLisinter(new NewAdvertsUtil
                     .OnBannerSuccessLisinter() {
                 @Override
@@ -317,6 +300,18 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                     } else {
                         NewAdvertsUtil.getInstance().showByBanner(CacheUtil.getDataList
                                 (AdvertsTopics.CODE_HOME_LB), banner);
+                    }
+                }
+            });
+
+            NewAdvertsUtil.getInstance().setOnDialogSuccessLisinter(new NewAdvertsUtil
+                    .OnDialogSuccessLisinter() {
+                @Override
+                public void success() {
+                    List<AdvertsBean> dataList = CacheUtil.getDataList(AdvertsTopics.CODE_HOME_DIALOG);
+                    if (dataList.size() > 0) {
+                        NewAdvertsUtil.getInstance().showByDialog(CacheUtil.getDataList
+                                (AdvertsTopics.CODE_HOME_DIALOG), dialog);
                     }
                 }
             });

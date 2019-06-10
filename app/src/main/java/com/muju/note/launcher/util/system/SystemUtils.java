@@ -9,7 +9,9 @@ import android.provider.Settings;
 
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.broadcast.ScreenOffAdminReceiver;
+import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.util.log.LogUtil;
+import com.muju.note.launcher.util.sp.SPUtil;
 
 import java.lang.reflect.Method;
 
@@ -50,7 +52,13 @@ public class SystemUtils {
      * @param volumeRate
      */
     public static void setVolume(Context context, int volumeRate){
-        int volume = (int) (getMaxVolume(context) / 100D * volumeRate);
+        int maxVoice = (int) SPUtil.getLong(SpTopics.PAD_CONFIG_VOLUME_RATE);
+        int volume;
+       /* if (maxVoice >= 0) {
+            volume =(int) (maxVoice /100D * volumeRate);
+        } else {*/
+            volume = (int) (getMaxVolume(context) / 100D * volumeRate);
+//        }
         int currentVolume = SystemUtils.getCurrentVolume(LauncherApplication.getContext());
         LogUtil.d("设置音量:需要设置的比率:%s 需要设置的音量:%s  当前系统音量:%s 需要设置音量有没有超过系统音量:%s", volumeRate, volume, currentVolume, currentVolume > volume);
         AudioManager manager = (AudioManager) context.getSystemService(AUDIO_SERVICE);
