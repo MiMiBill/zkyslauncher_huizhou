@@ -157,6 +157,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     TextView tvNoHosInfo;
     @BindView(R.id.tv_net)
     TextView tvNet;
+    @BindView(R.id.tv_net_type)
+    TextView tvNetType;
 
     private ActivePadInfo.DataBean activeInfo;
     private List<PatientResponse.DataBean> patientList = new ArrayList<>();
@@ -385,11 +387,12 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
      * @param week
      */
     @Override
-    public void getDate(String date, String time, String week,String net) {
+    public void getDate(String date, String time, String week, String net,String netType) {
         tvDate.setText(date);
         tvTime.setText(time);
         tvWeek.setText(week);
         tvNet.setText(net);
+        tvNetType.setText(netType);
     }
 
     @Override
