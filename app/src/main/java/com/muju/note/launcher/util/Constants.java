@@ -21,7 +21,6 @@ public class Constants {
     public static final String HOST_VERSION = "host_version";
     public static final String PAD_CONFIG_SIGNAL_LEVEL = "PAD_CONFIG_SIGNAL_LEVEL";
     public static final String PAD_CONFIG_SIGNAL_TYPE = "PAD_CONFIG_SIGNAL_TYPE";
-    public static final String PAD_CONFIG_VOLUME_RATE = "PadConfigEntityVolume";
 
     /**
      *  沃TV
@@ -53,4 +52,8 @@ public class Constants {
     public static final String ACTION_SHOW_DEV = "mid.settings.show_dev";
     public static final String ACTION_HIDE_DEV = "mid.settings.hide_dev";
     public static final String ACTION_UMENG_WATCH_VIDEO = "umeng.watch.video";
+
+
+    //任务广告列表
+    public static final String AD_TASK_LIST = "advert_task_list";
 }

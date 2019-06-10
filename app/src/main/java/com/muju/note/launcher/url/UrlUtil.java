@@ -3,23 +3,24 @@ package com.muju.note.launcher.url;
 public class UrlUtil {
 //        public static final String HOST_DEFAULT = "http://pad.zgzkys.com";
     public static final String HOST_DEFAULT = "http://test.pad.zgzkys.com";
-//    public static final String HOST_DEFAULT = "http://192.168.1.114:8086";
 //    public static final String HOST_DEFAULT = "http://192.168.1.200:8086";
 
-    public static String getHost(){
+    public static String getHost() {
         return HOST_DEFAULT;
     }
 
     /**
-     *   获取平板配置信息
+     * 获取平板配置信息
+     *
      * @return
      */
-    public static String getPadConfigsNew(){
-        return getHost()+"/padConfig/getConfig";
+    public static String getPadConfigsNew() {
+        return getHost() + "/padConfig/getConfig";
     }
 
     /**
-     *   医院风采
+     * 医院风采
+     *
      * @return
      */
     public static String getHospitalInfo() {
@@ -27,35 +28,39 @@ public class UrlUtil {
     }
 
     /**
-     *  获取视频本地化信息
+     * 获取视频本地化信息
+     *
      * @return
      */
-    public static String getVideoDownLoadUrl(){
-        return getHost()+"/video/downloadUrl";
+    public static String getVideoDownLoadUrl() {
+        return getHost() + "/video/downloadUrl";
     }
 
     /**
-     *  获取每日影视更新列表
+     * 获取每日影视更新列表
+     *
      * @return
      */
-    public static String getVideoUpdate(){
-        return getHost()+"/video/getLately";
+    public static String getVideoUpdate() {
+        return getHost() + "/video/getLately";
     }
 
     /**
-     *  获取影视类型及所有标签
+     * 获取影视类型及所有标签
+     *
      * @return
      */
-    public static String getVideoColumnsTags(){
-        return getHost()+"/video/columnTags";
+    public static String getVideoColumnsTags() {
+        return getHost() + "/video/columnTags";
     }
 
     /**
-     *  根据条件查询视频
+     * 根据条件查询视频
+     *
      * @return
      */
-    public static String getSerchVideo(){
-        return getHost()+"/video/search";
+    public static String getSerchVideo() {
+        return getHost() + "/video/search";
     }
 
     //医疗百科获取数据库压缩包
@@ -89,7 +94,8 @@ public class UrlUtil {
     }
 
     /**
-     *  查询影视支付数据
+     * 查询影视支付数据
+     *
      * @return
      */
     public static String getGetDeviceStatus() {
@@ -97,15 +103,17 @@ public class UrlUtil {
     }
 
     /**
-     *  根据集合获取广告列表
+     * 根据集合获取广告列表
+     *
      * @return
      */
-    public static String getAdvertsByCodes(){
-        return getHost()+"/advert/getAdvertsByCodes";
+    public static String getAdvertsByCodes() {
+        return getHost() + "/advert/getAdvertsByCodes";
     }
 
     /**
-     *  医院宣教标记已读
+     * 医院宣教标记已读
+     *
      * @return
      */
     public static String updateReadFlag() {
@@ -113,31 +121,35 @@ public class UrlUtil {
     }
 
     /**
-     *  广告浏览次数增加
+     * 广告浏览次数增加
+     *
      * @return
      */
-    public static String getAdvertShowCount(){
-        return getHost()+"/advert/updateShowCount";
+    public static String getAdvertShowCount() {
+        return getHost() + "/advert/updateShowCount";
     }
 
     /**
-     *  上传广告统计数据
+     * 上传广告统计数据
+     *
      * @return
      */
-    public static String getUpCountDb(){
-        return getHost()+"/advert/statistics";
+    public static String getUpCountDb() {
+        return getHost() + "/advert/statistics";
     }
 
     /**
-     *  获取七牛云token
+     * 获取七牛云token
+     *
      * @return
      */
-    public static String getQnToken(){
-        return getHost()+"/qn/cloud/getToken?bucketName=%s";
+    public static String getQnToken() {
+        return getHost() + "/qn/cloud/getToken?bucketName=%s";
     }
 
     /**
-     *  开机心跳率上传
+     * 开机心跳率上传
+     *
      * @return
      */
     public static String padLogInsert() {
@@ -145,32 +157,35 @@ public class UrlUtil {
     }
 
     /**
-     *  上传影视统计数据
+     * 上传影视统计数据
+     *
      * @return
      */
-    public static String getUpVideoCountDb(){
+    public static String getUpVideoCountDb() {
         return getHost() + "/video/statistics";
     }
 
     //获取病人信息
-    public static String getGetPaitentInfo(){
+    public static String getGetPaitentInfo() {
         return getHost() + "/hospitalBedTabb/list";
     }
 
     /**
-     *  微信登录二维码链接
+     * 微信登录二维码链接
+     *
      * @return
      */
-    public static String getWxLogin(){
-        return getHost()+"/login/wxLogin/";
+    public static String getWxLogin() {
+        return getHost() + "/login/wxLogin/";
     }
 
     /**
-     *  获取用户信息
+     * 获取用户信息
+     *
      * @return
      */
-    public static String getUserInfo(){
-        return getHost()+"/login/getUserInfo/";
+    public static String getUserInfo() {
+        return getHost() + "/login/getUserInfo/";
     }
 
     //公众号平台页面验证验证码
@@ -179,7 +194,8 @@ public class UrlUtil {
     }
 
     /**
-     *  医院宣教
+     * 医院宣教
+     *
      * @return
      */
     public static String getHospitalMission() {
@@ -216,5 +232,26 @@ public class UrlUtil {
      */
     public static String getGetSurveyData() {
         return getHost() + "/survey/%s/data";
+    }
+
+
+    //获取任务列表
+    public static String getTaskList() {
+        return getHost() + "/point/type/taskList";
+    }
+
+    //做任务
+    public static String doTask() {
+        return getHost() + "/point/type/doTask";
+    }
+
+    //获取奖品列表
+    public static String getPointList() {
+        return getHost() + "/point/type/pointList";
+    }
+
+    //兑奖
+    public static String useReward() {
+        return getHost() + "/point/type/useReward";
     }
 }

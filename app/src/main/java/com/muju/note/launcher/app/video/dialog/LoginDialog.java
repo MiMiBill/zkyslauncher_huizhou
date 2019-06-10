@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.model.Response;
 import com.muju.note.launcher.R;
+import com.muju.note.launcher.app.adtask.event.UserInfoEvent;
 import com.muju.note.launcher.app.video.bean.UserBean;
 import com.muju.note.launcher.okgo.BaseBean;
 import com.muju.note.launcher.okgo.JsonCallback;
@@ -24,6 +25,8 @@ import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.qr.QrCodeUtils;
 import com.muju.note.launcher.util.user.UserUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -100,6 +103,7 @@ public class LoginDialog extends Dialog {
                             return;
                         }
                         UserUtil.setUserBean(response.body().getData());
+                        EventBus.getDefault().post(new UserInfoEvent(response.body().getData()));
                         loginListener.onSuccess();
                     }
 

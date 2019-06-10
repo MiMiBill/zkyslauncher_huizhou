@@ -10,6 +10,8 @@ import android.support.annotation.Nullable;
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
+import com.muju.note.launcher.topics.SpTopics;
+import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.util.system.SystemUtils;
 import com.muju.note.launcher.view.light.RectProgress;
 
@@ -33,7 +35,12 @@ public class VoiceFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         rectProgressLight.setMax(255);
-        rectProgressVoice.setMax(SystemUtils.getMaxVolume(getContext()));
+        long maxVoice = SPUtil.getLong(SpTopics.PAD_CONFIG_VOLUME_RATE);
+        if(maxVoice>=0){
+            rectProgressVoice.setMax((int)maxVoice);
+        }else {
+            rectProgressVoice.setMax(SystemUtils.getMaxVolume(LauncherApplication.getContext()));
+        }
         rectProgressLight.setProgress(SystemUtils.getScreenBrightness());
         rectProgressVoice.setProgress(SystemUtils.getCurrentVolume(getContext()));
 

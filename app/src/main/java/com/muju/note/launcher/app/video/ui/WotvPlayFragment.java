@@ -47,7 +47,6 @@ import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
 import com.muju.note.launcher.util.user.UserUtil;
-import com.unicom.common.VideoSdkConfig;
 import com.unicom.common.base.video.IVideoEvent;
 import com.unicom.common.base.video.expand.ExpandVideoListener;
 
@@ -63,7 +62,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.Unbinder;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -161,11 +159,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void initData() {
         try {
-
-            startTime = System.currentTimeMillis();
-
             EventBus.getDefault().register(this);
-
             startTime = System.currentTimeMillis();
             ivBack.setOnClickListener(this);
 
@@ -380,6 +374,8 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                 }
             }
         });
+
+
     }
 
     /**
@@ -485,11 +481,12 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
         if (event.isStart) {
             if (videoOrImageDialog != null && videoOrImageDialog.isShowing()) {
                 videoOrImageDialog.dismiss();
-            }
-            List<AdvertsBean> adverts = CacheUtil.getDataList(AdvertsTopics.CODE_VIDEO_CORNER);
-            if (adverts != null && adverts.size() > 0) {
-                NewAdvertsUtil.getInstance().showByImageView(getActivity(), adverts,
-                        ivCorner, ivColse, relCornor);
+
+                List<AdvertsBean> adverts = CacheUtil.getDataList(AdvertsTopics.CODE_VIDEO_CORNER);
+                if (adverts != null && adverts.size() > 0) {
+                    NewAdvertsUtil.getInstance().showByImageView(getActivity(), adverts,
+                            ivCorner, ivColse, relCornor);
+                }
             }
         }
     }

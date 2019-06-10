@@ -6,10 +6,12 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.HttpParams;
 import com.lzy.okgo.model.Response;
 import com.muju.note.launcher.app.hostipal.bean.EncyUpdateBean;
+import com.muju.note.launcher.app.hostipal.bean.GetDownloadBean;
 import com.muju.note.launcher.app.hostipal.db.InfoDao;
 import com.muju.note.launcher.app.hostipal.db.InfomationDao;
-import com.muju.note.launcher.app.hostipal.db.MienInfoDao;
 import com.muju.note.launcher.litepal.LitePalDb;
+import com.muju.note.launcher.okgo.BaseBean;
+import com.muju.note.launcher.okgo.JsonCallback;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.Constants;
 import com.muju.note.launcher.util.log.LogFactory;
@@ -38,15 +40,37 @@ public class EncyclopeService {
     }
 
     public void start(){
-        LitePal.countAsync(MienInfoDao.class).listen(new CountCallback() {
+        LitePal.countAsync(InfomationDao.class).listen(new CountCallback() {
             @Override
             public void onFinish(int count) {
                 if(count<=0){
-                    getLately();
+//                    querEncy();
+                }
+            }
+        });
+
+
+    }
+
+    //查询医疗百科本地信息
+    private void querEncy() {
+        OkGo.<BaseBean<GetDownloadBean>>get(UrlUtil.getDb()).tag(this).execute(new JsonCallback<BaseBean<GetDownloadBean>>() {
+            @Override
+            public void onSuccess(Response<BaseBean<GetDownloadBean>> response) {
+                try{
+                    downEncyDb(response.body().getData().getPath(),response.body().getData().getTableName());
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
             }
         });
     }
+
+
+    private void downEncyDb(String path, String tableName) {
+
+    }
+
 
     /**
      *   获取医院风采信息并保存到数据库
