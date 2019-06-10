@@ -20,6 +20,7 @@ import com.muju.note.launcher.app.home.adapter.HomeTopVideoAdapter;
 import com.muju.note.launcher.app.home.bean.AdvertsBean;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.app.home.contract.HomeContract;
+import com.muju.note.launcher.app.home.event.OutHospitalEvent;
 import com.muju.note.launcher.app.home.event.PatientEvent;
 import com.muju.note.launcher.app.home.event.PatientInfoEvent;
 import com.muju.note.launcher.app.home.presenter.HomePresenter;
@@ -51,7 +52,6 @@ import com.muju.note.launcher.util.FormatUtils;
 import com.muju.note.launcher.util.UIUtils;
 import com.muju.note.launcher.util.adverts.NewAdvertsUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
-import com.muju.note.launcher.util.file.CacheUtil;
 import com.muju.note.launcher.util.file.FileUtils;
 import com.muju.note.launcher.util.gilde.GlideUtil;
 import com.muju.note.launcher.util.log.LogUtil;
@@ -294,11 +294,11 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                     .OnBannerSuccessLisinter() {
                 @Override
                 public void success() {
-                    List<AdvertsBean> dataList = CacheUtil.getDataList(AdvertsTopics.CODE_HOME_LB);
+                    List<AdvertsBean> dataList = SPUtil.getAdList(AdvertsTopics.CODE_HOME_LB);
                     if (dataList.size() == 0) {
                         NewAdvertsUtil.getInstance().showDefaultBanner(banner, 1);
                     } else {
-                        NewAdvertsUtil.getInstance().showByBanner(CacheUtil.getDataList
+                        NewAdvertsUtil.getInstance().showByBanner(SPUtil.getAdList
                                 (AdvertsTopics.CODE_HOME_LB), banner);
                     }
                 }
@@ -308,9 +308,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                     .OnDialogSuccessLisinter() {
                 @Override
                 public void success() {
-                    List<AdvertsBean> dataList = CacheUtil.getDataList(AdvertsTopics.CODE_HOME_DIALOG);
+                    List<AdvertsBean> dataList = SPUtil.getAdList(AdvertsTopics.CODE_HOME_DIALOG);
                     if (dataList.size() > 0) {
-                        NewAdvertsUtil.getInstance().showByDialog(CacheUtil.getDataList
+                        NewAdvertsUtil.getInstance().showByDialog(SPUtil.getAdList
                                 (AdvertsTopics.CODE_HOME_DIALOG), dialog);
                     }
                 }
@@ -402,6 +402,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void notPatientInfo() {
+        EventBus.getDefault().post(new OutHospitalEvent());
         tvNoHosInfo.setText(activeInfo.getHospitalName() + "-" + activeInfo.getDeptName() + "-" +
                 activeInfo.getBedNumber() + "床");
         ivPersonQrCode.setImageBitmap(QrCodeUtils.generateBitmap(MobileInfoUtil.getICCID

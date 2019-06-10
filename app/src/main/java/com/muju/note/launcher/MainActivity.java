@@ -11,6 +11,7 @@ import com.muju.note.launcher.app.adtask.TaskListBean;
 import com.muju.note.launcher.app.adtask.event.UserInfoEvent;
 import com.muju.note.launcher.app.adtask.presenter.MainPresenter;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
+import com.muju.note.launcher.app.home.event.OutHospitalEvent;
 import com.muju.note.launcher.app.home.event.PatientInfoEvent;
 import com.muju.note.launcher.app.home.ui.HomeFragment;
 import com.muju.note.launcher.app.msg.dialog.CustomMsgDialog;
@@ -113,6 +114,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
         setPatientInfo(info);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(OutHospitalEvent event) {
+        outHospital();
+    }
+
 
     private void setPatientInfo(PatientResponse.DataBean entity){
         tvName.setText(entity.getUserName());
@@ -121,6 +127,16 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
         tvHosTime.setText(FormatUtils.FormatDateUtil.parseLong(Long.parseLong(entity.getCreateTime())));
         tvBed.setText(activeInfo.getHospitalName()+"-"+activeInfo.getDeptName()+"-"+activeInfo.getBedNumber()+"床");
         tvPaitent.setText(entity.getSex() == 1 ? "男" : "女");
+    }
+
+
+    private void outHospital(){
+        tvName.setText("");
+        tvAge.setText("");
+        tvHosDoctor.setText("");
+        tvHosTime.setText("");
+        tvBed.setText(activeInfo.getHospitalName()+"-"+activeInfo.getDeptName()+"-"+activeInfo.getBedNumber()+"床");
+        tvPaitent.setText("");
     }
 
     /**

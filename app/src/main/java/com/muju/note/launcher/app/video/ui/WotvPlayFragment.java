@@ -43,10 +43,10 @@ import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.DateUtil;
 import com.muju.note.launcher.util.adverts.NewAdvertsUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
-import com.muju.note.launcher.util.file.CacheUtil;
 import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
+import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.util.user.UserUtil;
 import com.unicom.common.base.video.IVideoEvent;
 import com.unicom.common.base.video.expand.ExpandVideoListener;
@@ -488,7 +488,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
             if (videoOrImageDialog != null && videoOrImageDialog.isShowing()) {
                 videoOrImageDialog.dismiss();
 
-                List<AdvertsBean> adverts = CacheUtil.getDataList(AdvertsTopics.CODE_VIDEO_CORNER);
+                List<AdvertsBean> adverts = SPUtil.getAdList(AdvertsTopics.CODE_VIDEO_CORNER);
                 if (adverts != null && adverts.size() > 0) {
                     NewAdvertsUtil.getInstance().showByImageView(getActivity(), adverts,
                             ivCorner, ivColse, relCornor);
@@ -557,7 +557,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
     public void onEvent(VideoPauseEvent event) {
 //        LogFactory.l().i("VideoPauseEvent==" + event.isPause);
         if (event.isPause && isShowDialog) {
-            List<AdvertsBean> adverts = CacheUtil.getDataList(AdvertsTopics.CODE_VIDEO_DIALOG);
+            List<AdvertsBean> adverts = SPUtil.getAdList(AdvertsTopics.CODE_VIDEO_DIALOG);
             for (int i = 0; i < adverts.size(); i++) {
                 LogFactory.l().i("id==="+adverts.get(i).getId());
             }

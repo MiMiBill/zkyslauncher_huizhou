@@ -29,10 +29,10 @@ import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.topics.AdvertsTopics;
 import com.muju.note.launcher.util.adverts.NewAdvertsUtil;
-import com.muju.note.launcher.util.file.CacheUtil;
 import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
+import com.muju.note.launcher.util.sp.SPUtil;
 import com.unicom.common.VideoSdkConfig;
 import com.unicom.common.base.video.IVideoEvent;
 import com.unicom.common.base.video.expand.ExpandVideoListener;
@@ -178,7 +178,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
     public void onEvent(VideoPauseEvent event) {
         LogFactory.l().i("VideoPauseEvent==" + event.isPause);
         if (event.isPause && isShowDialog) {
-            List<AdvertsBean> adverts = CacheUtil.getDataList(AdvertsTopics.CODE_VIDEO_DIALOG);
+            List<AdvertsBean> adverts = SPUtil.getAdList(AdvertsTopics.CODE_VIDEO_DIALOG);
             try {
                 if (videoOrImageDialog == null) {
                     videoOrImageDialog = new VideoOrImageDialog(getActivity(), R.style.dialog);

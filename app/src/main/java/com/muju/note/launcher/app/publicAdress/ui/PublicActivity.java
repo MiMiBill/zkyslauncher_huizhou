@@ -15,8 +15,8 @@ import com.muju.note.launcher.app.video.event.VideoReStartEvent;
 import com.muju.note.launcher.base.BaseActivity;
 import com.muju.note.launcher.topics.AdvertsTopics;
 import com.muju.note.launcher.util.adverts.NewAdvertsUtil;
-import com.muju.note.launcher.util.file.CacheUtil;
 import com.muju.note.launcher.util.log.LogFactory;
+import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.view.password.OnPasswordFinish;
 import com.muju.note.launcher.view.password.PopEnterPassword;
 
@@ -56,7 +56,7 @@ public class PublicActivity extends BaseActivity<PublicPresenter> implements Pub
     public void initData() {
         mPresenter = new PublicPresenter();
         mPresenter.setOnPublicListener(this);
-        adverts = CacheUtil.getDataList(AdvertsTopics.CODE_PUBLIC);
+        adverts = SPUtil.getAdList(AdvertsTopics.CODE_PUBLIC);
         if (adverts != null && adverts.size() > 0) {
             NewAdvertsUtil.getInstance().showByImageView(adverts, ivImg);
             AdvertsBean advertsBean = adverts.get(0);

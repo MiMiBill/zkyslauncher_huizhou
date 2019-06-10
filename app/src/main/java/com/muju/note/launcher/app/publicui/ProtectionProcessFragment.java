@@ -1,9 +1,6 @@
 package com.muju.note.launcher.app.publicui;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -16,8 +13,8 @@ import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.topics.AdvertsTopics;
 import com.muju.note.launcher.util.FormatUtils;
 import com.muju.note.launcher.util.adverts.NewAdvertsUtil;
-import com.muju.note.launcher.util.file.CacheUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
+import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.util.system.SystemUtils;
 import com.muju.note.launcher.view.banana.Banner;
 
@@ -28,8 +25,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -175,7 +170,7 @@ public class ProtectionProcessFragment extends BaseFragment {
      * 查询广告列表
      */
     private void queryNewAdverts() {
-        adverts = CacheUtil.getDataList(AdvertsTopics.CODE_LOCK);
+        adverts = SPUtil.getAdList(AdvertsTopics.CODE_LOCK);
         if(adverts!=null && adverts.size()>0){
             NewAdvertsUtil.getInstance().showByBanner(adverts,bannerLc);
         }
@@ -183,7 +178,7 @@ public class ProtectionProcessFragment extends BaseFragment {
                 .OnBannerSuccessLisinter() {
             @Override
             public void success() {
-                List<AdvertsBean> adverts = CacheUtil.getDataList(AdvertsTopics.CODE_LOCK);
+                List<AdvertsBean> adverts = SPUtil.getAdList(AdvertsTopics.CODE_LOCK);
                 NewAdvertsUtil.getInstance().showByBanner(adverts,bannerLc);
                 RxUtil.closeDisposable(disposableAdjust);
                 addBrightness();

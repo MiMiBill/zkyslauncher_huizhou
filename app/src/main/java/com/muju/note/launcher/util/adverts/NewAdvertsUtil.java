@@ -19,11 +19,11 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
-import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 import com.muju.note.launcher.app.activity.AdVideoViewActivity;
 import com.muju.note.launcher.app.activity.LargePicActivity;
 import com.muju.note.launcher.app.dialog.AdvertsDialog;
+import com.muju.note.launcher.app.home.bean.AdverNewBean;
 import com.muju.note.launcher.app.home.bean.AdvertsBean;
 import com.muju.note.launcher.app.home.db.AdvertsCountDao;
 import com.muju.note.launcher.app.home.db.AdvertsInfoDao;
@@ -34,9 +34,11 @@ import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.entity.AdvertWebEntity;
 import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.litepal.UpAdvertInfoDao;
+import com.muju.note.launcher.okgo.BaseBean;
+import com.muju.note.launcher.okgo.JsonCallback;
+import com.muju.note.launcher.topics.AdvertsTopics;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.ActiveUtils;
-import com.muju.note.launcher.util.Constants;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.sp.SPUtil;
@@ -77,7 +79,7 @@ public class NewAdvertsUtil {
     //请求广告列表数据
     public void queryCodeListAdverts(final String code, final Banner banner, final ImageView
             imageView, final AdvertsDialog dialog) throws Exception {
-        OkGo.<String>post(UrlUtil.getAdvertsByCodes())
+        OkGo.<BaseBean<List<AdverNewBean>>>post(UrlUtil.getAdvertsByCodes())
                 .params("codes", code)
                 .params("hospitalId", ActiveUtils.getPadActiveInfo().getHospitalId())
                 .params("deptId", ActiveUtils.getPadActiveInfo().getDeptId())
@@ -87,32 +89,33 @@ public class NewAdvertsUtil {
                 .cacheTime(-1)
                 .cacheKey(code)
                 .tag(code)
-                .execute(new StringCallback() {
+                .execute(new JsonCallback<BaseBean<List<AdverNewBean>>>() {
                     @Override
-                    public void onSuccess(Response<String> response) {
+                    public void onSuccess(Response<BaseBean<List<AdverNewBean>>> response) {
                         LogFactory.l().i("queryNewAdverts_onSuccess");
-                        SPUtil.putString(Constants.ZKYS_ADVERTS, response.body());
+//                        SPUtil.putString(Constants.ZKYS_ADVERTS, response.body());
                         try {
-                            getNewAdvertsSuccess();
+                            getNewAdvertsSuccess(response.body().getData());
                         } catch (Exception e) {
+                            LogFactory.l().i("e");
                             e.printStackTrace();
                         }
                     }
 
                     @Override
-                    public void onCacheSuccess(Response<String> response) {
+                    public void onCacheSuccess(Response<BaseBean<List<AdverNewBean>>> response) {
                         super.onCacheSuccess(response);
                         LogFactory.l().i("queryNewAdverts_onCacheSuccess");
-                        SPUtil.putString(Constants.ZKYS_ADVERTS, response.body());
+//                        SPUtil.putString(Constants.ZKYS_ADVERTS, response.body());
                         try {
-                            getNewAdvertsSuccess();
+                            getNewAdvertsSuccess(response.body().getData());
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
 
                     @Override
-                    public void onError(Response<String> response) {
+                    public void onError(Response<BaseBean<List<AdverNewBean>>> response) {
                         super.onError(response);
                         try {
                             if (failLisinter != null) {
@@ -127,7 +130,42 @@ public class NewAdvertsUtil {
 
 
     //展示广告
-    private void getNewAdvertsSuccess() {
+    private void getNewAdvertsSuccess(List<AdverNewBean> dataList) {
+        for (AdverNewBean adverNewBean : dataList) {
+            if (adverNewBean.getCode().equals(AdvertsTopics.CODE_HOME_LB)) {
+                if (adverNewBean.getAdverts().size() > 0) {
+                    SPUtil.saveDataList(AdvertsTopics.CODE_HOME_LB, adverNewBean.getAdverts());
+                }
+            } else if (adverNewBean.getCode().equals(AdvertsTopics.CODE_HOME_DIALOG)) {
+                if (adverNewBean.getAdverts().size() > 0) {
+                    SPUtil.saveDataList(AdvertsTopics.CODE_HOME_DIALOG, adverNewBean.getAdverts());
+                }
+            } else if (adverNewBean.getCode().equals(AdvertsTopics.CODE_LOCK)) {
+                if (adverNewBean.getAdverts().size() > 0)
+                    SPUtil.saveDataList(AdvertsTopics.CODE_LOCK, adverNewBean.getAdverts());
+            } else if (adverNewBean.getCode().equals(AdvertsTopics.CODE_PUBLIC)) {
+                if (adverNewBean.getAdverts().size() > 0) {
+                    SPUtil.saveDataList(AdvertsTopics.CODE_PUBLIC, adverNewBean.getAdverts());
+                }
+            } else if (adverNewBean.getCode().equals(AdvertsTopics.CODE_VERTICAL)) {
+                if (adverNewBean.getAdverts().size() > 0) {
+                    SPUtil.saveDataList(AdvertsTopics.CODE_VERTICAL, adverNewBean.getAdverts());
+                }
+            } else if (adverNewBean.getCode().equals(AdvertsTopics.CODE_VIDEO_CORNER)) {
+                if (adverNewBean.getAdverts().size() > 0) {
+                    SPUtil.saveDataList(AdvertsTopics.CODE_VIDEO_CORNER, adverNewBean.getAdverts());
+                }
+            } else if (adverNewBean.getCode().equals(AdvertsTopics.CODE_VIDEO_DIALOG)) {
+                if (adverNewBean.getAdverts().size() > 0) {
+                    SPUtil.saveDataList(AdvertsTopics.CODE_VIDEO_DIALOG, adverNewBean.getAdverts());
+                }
+            } else if (adverNewBean.getCode().equals(AdvertsTopics.CODE_ROAD)) {
+                if (adverNewBean.getAdverts().size() > 0) {
+                    SPUtil.saveDataList(AdvertsTopics.CODE_ROAD, adverNewBean.getAdverts());
+                }
+            }
+        }
+
         if (lisinter != null) {
             lisinter.success();
         }
@@ -178,12 +216,16 @@ public class NewAdvertsUtil {
                         }
                         if (position == 1) {
                             long currentTime = System.currentTimeMillis();
-                            addData(list.get(list.size() - 1).getId(), TAG_SHOWTIME, currentTime - startTime[0]);
-                            addDataInfo(list.get(list.size() - 1).getId(), TAG_SHOWTIME, startTime[0], currentTime);
+                            addData(list.get(list.size() - 1).getId(), TAG_SHOWTIME, currentTime
+                                    - startTime[0]);
+                            addDataInfo(list.get(list.size() - 1).getId(), TAG_SHOWTIME,
+                                    startTime[0], currentTime);
                         } else {
                             long currentTime = System.currentTimeMillis();
-                            addData(list.get(position - 2).getId(), TAG_SHOWTIME, currentTime - startTime[0]);
-                            addDataInfo(list.get(position - 2).getId(), TAG_SHOWTIME, startTime[0], currentTime);
+                            addData(list.get(position - 2).getId(), TAG_SHOWTIME, currentTime -
+                                    startTime[0]);
+                            addDataInfo(list.get(position - 2).getId(), TAG_SHOWTIME,
+                                    startTime[0], currentTime);
                         }
                         startTime[0] = System.currentTimeMillis();
                     }
@@ -207,7 +249,8 @@ public class NewAdvertsUtil {
             public void OnBannerClick(int position) {
                 AdvertsBean bean = list.get(position);
                 try {
-                    if (bean.getResourceUrl().endsWith("png") || bean.getResourceUrl().endsWith("jpg")) {
+                    if (bean.getResourceUrl().endsWith("png") || bean.getResourceUrl().endsWith
+                            ("jpg")) {
                         jump(bean);
                     }
                 } catch (Exception e) {
@@ -384,11 +427,12 @@ public class NewAdvertsUtil {
 
     //图片击进入长图
     public void showByImageView(final Context context, final List<AdvertsBean> list, final
-    ImageView imageView,final ImageView img, final RelativeLayout relCorner) {
+    ImageView imageView, final ImageView img, final RelativeLayout relCorner) {
         final AdvertsBean bean = list.get(0);
         Glide.with(LauncherApplication.getContext()).load(bean.getResourceUrl()).into(new SimpleTarget<Drawable>() {
             @Override
-            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super
+                    Drawable> transition) {
                 imageView.setImageDrawable(resource);
                 if (showImgLoadListener != null) {
                     showImgLoadListener.success();
@@ -462,7 +506,8 @@ public class NewAdvertsUtil {
     }
 
 
-    public void showVideoDialog(final List<AdvertsBean> list, final VideoOrImageDialog dialog) throws Exception {
+    public void showVideoDialog(final List<AdvertsBean> list, final VideoOrImageDialog dialog)
+            throws Exception {
         final AdvertsBean bean = list.get(0);
         final long time = System.currentTimeMillis();
         dialog.setOnImgClickListener(new View.OnClickListener() {

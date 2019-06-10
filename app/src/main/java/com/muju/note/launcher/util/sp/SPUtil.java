@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.muju.note.launcher.app.adtask.TaskListBean;
+import com.muju.note.launcher.app.home.bean.AdvertsBean;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.base.LauncherApplication;
 
@@ -101,7 +102,8 @@ public class SPUtil {
     }
 
     public static <T> void saveDataList(String tag, List<T> datalist) {
-        if (null == datalist || datalist.size() <= 0)
+//        LogFactory.l().i("save===dataList");
+        if (null == datalist)
             return;
         SharedPreferences sp = getSharedPreferences();
         SharedPreferences.Editor editor = sp.edit();
@@ -111,6 +113,18 @@ public class SPUtil {
 //        Log.e("zkpad","saveDataList-strJson=="+strJson);
         editor.putString(tag, strJson);
         editor.commit();
+    }
+
+    //根据code获取广告list
+    public static List<AdvertsBean>  getAdList(String tag) {
+        List<AdvertsBean> datalist=new ArrayList<AdvertsBean>();
+        String strJson = getSharedPreferences().getString(tag, null);
+        if (null == strJson) {
+            return datalist;
+        }
+        Gson gson = new Gson();
+        datalist = gson.fromJson(strJson, new TypeToken<List<AdvertsBean>>() {}.getType());
+        return datalist;
     }
 
     /**
