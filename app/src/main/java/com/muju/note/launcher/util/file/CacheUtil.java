@@ -22,23 +22,23 @@ public class CacheUtil {
      * @return
      */
     public static List<AdvertsBean> getDataList(final String code) {
-        final String response = SPUtil.getString(Constants.ZKYS_ADVERTS);
-//        LogFactory.l().i("response==="+response);
-        final Gson gson = new Gson();
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
+                    String response = SPUtil.getString(Constants.ZKYS_ADVERTS);
                     JSONObject jsonObject = new JSONObject(response);
+                    Gson gson = new Gson();
                     if(jsonObject.optInt("code")==200){
                         JSONArray data = jsonObject.getJSONArray("data");
                         for (int i = 0; i < data.length(); i++) {
                             JSONObject obj=data.getJSONObject(i);
-//                            LogFactory.l().i("广告code=="+obj.optString("code"));
                             if(obj.optString("code").equals(code)){
+                                LogFactory.l().i("obj.optString(\"code\")==="+obj.optString("code"));
                                 String adverts=obj.optString("adverts");
                                 if(!adverts.equals("[]")){
                                     datalist =gson.fromJson(adverts, new TypeToken<List<AdvertsBean>>() {}.getType());
+                                    LogFactory.l().i("size==="+datalist.size());
                                 }
                             }
                         }

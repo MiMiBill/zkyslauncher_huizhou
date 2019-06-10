@@ -558,6 +558,9 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
 //        LogFactory.l().i("VideoPauseEvent==" + event.isPause);
         if (event.isPause && isShowDialog) {
             List<AdvertsBean> adverts = CacheUtil.getDataList(AdvertsTopics.CODE_VIDEO_DIALOG);
+            for (int i = 0; i < adverts.size(); i++) {
+                LogFactory.l().i("id==="+adverts.get(i).getId());
+            }
             try {
                 if (videoOrImageDialog == null) {
                     videoOrImageDialog = new VideoOrImageDialog(getActivity(), R.style.dialog);
