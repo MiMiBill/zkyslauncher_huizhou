@@ -17,6 +17,7 @@ import com.muju.note.launcher.util.Constants;
 import com.muju.note.launcher.util.DateUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.log.LogUtil;
+import com.muju.note.launcher.util.net.NetWorkUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
 import com.muju.note.launcher.util.sign.Signature;
 import com.muju.note.launcher.util.sp.SPUtil;
@@ -55,7 +56,7 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
                     @Override
                     public void onNext(Long aLong) {
                         mView.getDate(DateUtil.getDate("yyyy年MM月dd日"), DateUtil.getDate
-                                ("HH:mm:ss"), DateUtil.getWeek());
+                                ("HH:mm:ss"), DateUtil.getWeek(), NetWorkUtil.getNetWorkLine());
                     }
 
                     @Override

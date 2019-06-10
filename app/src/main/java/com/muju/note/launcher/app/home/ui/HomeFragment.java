@@ -1,11 +1,14 @@
 package com.muju.note.launcher.app.home.ui;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -71,6 +74,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -150,6 +155,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     TextView tvHosInfo;
     @BindView(R.id.tv_no_hos_info)
     TextView tvNoHosInfo;
+    @BindView(R.id.tv_net)
+    TextView tvNet;
 
     private ActivePadInfo.DataBean activeInfo;
     private List<PatientResponse.DataBean> patientList = new ArrayList<>();
@@ -378,10 +385,11 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
      * @param week
      */
     @Override
-    public void getDate(String date, String time, String week) {
+    public void getDate(String date, String time, String week,String net) {
         tvDate.setText(date);
         tvTime.setText(time);
         tvWeek.setText(week);
+        tvNet.setText(net);
     }
 
     @Override
@@ -564,6 +572,5 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         });
         loginDialog.show();
     }
-
 }
 

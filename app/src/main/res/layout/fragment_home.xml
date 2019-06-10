@@ -32,11 +32,11 @@
                 android:textColor="@color/black_gray"
                 android:textSize="@dimen/px14" />
 
-            <ImageView
-                android:layout_width="@dimen/px23"
-                android:layout_height="@dimen/px21"
-                android:src="@mipmap/ic_home_tianqi"
-                android:layout_marginLeft="@dimen/px10"/>
+            <!--<ImageView-->
+                <!--android:layout_width="@dimen/px23"-->
+                <!--android:layout_height="@dimen/px21"-->
+                <!--android:src="@mipmap/ic_home_tianqi"-->
+                <!--android:layout_marginLeft="@dimen/px10"/>-->
         </LinearLayout>
 
         <LinearLayout
@@ -48,11 +48,19 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/tv_net"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/px14"
+                android:textColor="@color/black_gray" />
+
+            <TextView
                 android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black_gray"
-                android:textSize="@dimen/px14" />
+                android:textSize="@dimen/px14"
+                android:layout_marginLeft="@dimen/px10"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -67,6 +75,14 @@
                 android:layout_height="@dimen/px20"
                 android:layout_marginLeft="@dimen/px10"
                 android:src="@mipmap/ic_home_wifi" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/px14"
+                android:textColor="@color/black_gray"
+                android:text="0kb" />
+
         </LinearLayout>
 
     </RelativeLayout>

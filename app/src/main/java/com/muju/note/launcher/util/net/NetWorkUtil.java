@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.TrafficStats;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.telephony.CellLocation;
@@ -14,6 +15,8 @@ import android.telephony.TelephonyManager;
 import android.telephony.cdma.CdmaCellLocation;
 import android.telephony.gsm.GsmCellLocation;
 
+import java.text.DecimalFormat;
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -21,12 +24,12 @@ import io.reactivex.functions.Consumer;
 public class NetWorkUtil {
 
     public static final String NETWORK_NONE = "NULL"; // 没有网络连接
-    public static final String  NETWORK_WIFI = "WIFI"; // wifi连接
+    public static final String NETWORK_WIFI = "WIFI"; // wifi连接
     public static final String NETWORK_2G = "002G"; // 2G
     public static final String NETWORK_3G = "003G"; // 3G
     public static final String NETWORK_4G = "004G"; // 4G
     public static final String NETWORK_MOBILE = "00LL"; // 手机流量
-    public static String NETWORK_LEVEN="";
+    public static String NETWORK_LEVEN = "";
 
     /**
      * 获取当前网络连接的类型
@@ -209,6 +212,34 @@ public class NetWorkUtil {
             }
         }
         return false;
+    }
+
+    /**
+     * 获取实时网速
+     */
+    private static long rxtxTotal=0;
+    public static String getNetWorkLine() {
+        long tempSum = TrafficStats.getTotalRxBytes() + TrafficStats.getTotalTxBytes();
+        long rxtxLast = tempSum - rxtxTotal;
+        double totalSpeed = rxtxLast * 1000 / 2000d;
+        rxtxTotal=tempSum;
+        return showSpeed(totalSpeed);
+    }
+
+    /**
+     *  网络格式转换
+     * @param speed
+     * @return
+     */
+    public static String showSpeed(double speed) {
+        DecimalFormat showFloatFormat =new DecimalFormat("0.00");
+        String speedString;
+        if (speed >= 1048576d) {
+            speedString = showFloatFormat.format(speed / 1048576d) + "MB/s";
+        } else {
+            speedString = showFloatFormat.format(speed / 1024d) + "KB/s";
+        }
+        return speedString;
     }
 
 }
