@@ -6,11 +6,11 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/px100">
+        android:layout_height="@dimen/px63">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/px100"
+            android:layout_height="@dimen/px63"
             android:gravity="center_vertical">
 
             <LinearLayout
@@ -73,7 +73,7 @@
             android:gravity="center"
             android:text="医疗百科"
             android:textColor="@color/color_38B4E9"
-            android:textSize="26sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
     </RelativeLayout>
 
@@ -111,7 +111,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textColor="@color/color_38B4E9"
-                        android:textSize="30sp" />
+                        android:textSize="24sp" />
 
                     <TextView
                         android:id="@+id/tv_author"
@@ -467,7 +467,6 @@
 
             <ProgressBar
                 android:id="@+id/progress"
-                style="@android:style/Widget.ProgressBar.Large.Inverse"
                 android:layout_width="@dimen/px130"
                 android:layout_height="@dimen/px130"
                 android:layout_gravity="center" />

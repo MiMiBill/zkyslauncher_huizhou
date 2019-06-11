@@ -39,12 +39,15 @@ public class VoiceFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         rectProgressLight.setMax(255);
         maxVoice = SPUtil.getLong(SpTopics.PAD_CONFIG_VOLUME_RATE);
-        /*if (maxVoice >= 0) {
-            rectProgressVoice.setMax((int) maxVoice);
-        } else {*/
+        if (maxVoice >= 0) {
+            rectProgressVoice.setMax((int)(maxVoice/100D*15));
+        } else {
             rectProgressVoice.setMax(SystemUtils.getMaxVolume(LauncherApplication.getContext()));
-//        }
-        rectProgressVoice.setProgress(SystemUtils.getCurrentVolume(getContext()));
+        }
+        int currentVolume = SystemUtils.getCurrentVolume(LauncherApplication.getContext());
+        LogFactory.l().i("currentVolume==="+currentVolume);
+        LogFactory.l().i("maxVoice==="+maxVoice);
+        rectProgressVoice.setProgress(currentVolume);
         rectProgressLight.setProgress(SystemUtils.getScreenBrightness());
         rectProgressLight.setChangedListener(new RectProgress.OnProgressChangedListener() {
             @Override
@@ -56,15 +59,17 @@ public class VoiceFragment extends BaseFragment {
         rectProgressVoice.setChangedListener(new RectProgress.OnProgressChangedListener() {
             @Override
             public void onProgressChanged(int currentValue, int percent) {
+//                LogFactory.l().i("percent===" + percent);
+//                LogFactory.l().i("currentValue===" + SystemUtils.getCurrentVolume(getContext()));
                 if (currentValue != SystemUtils.getCurrentVolume(getContext())) {
                     int rateValue = 0;
-                    /*if (maxVoice >= 0) {
-                        rateValue = (int) (currentValue / 1.0 / maxVoice * 100);
-                    } else {*/
+                    if (maxVoice >= 0) {
+                        rateValue = percent;
+                    } else {
                         rateValue = (int) (currentValue / 1.0 / SystemUtils.getMaxVolume(getContext()) * 100);
-//                    }
-                    LogFactory.l().i("currentValue===" + currentValue);
-                    LogFactory.l().i("rateValue===" + rateValue);
+                    }
+//                    LogFactory.l().i("currentValue===" + currentValue);
+//                    LogFactory.l().i("rateValue===" + rateValue);
                     SystemUtils.setVolume(getContext(), rateValue);
                 }
             }
@@ -75,8 +80,7 @@ public class VoiceFragment extends BaseFragment {
             public void onActionUp() {
                 if (isRelease) {
                     //在raw下的资源
-                    mediaPlayer = MediaPlayer.create(LauncherApplication.getContext(), R.raw
-                            .messagetips);
+                    mediaPlayer = MediaPlayer.create(LauncherApplication.getContext(), R.raw.messagetips);
                     isRelease = false;
                 }
                 mediaPlayer.start(); //开始播放

@@ -1,8 +1,8 @@
 package com.muju.note.launcher.litepal;
 
+import com.muju.note.launcher.app.home.db.AdvertsCacheDao;
 import com.muju.note.launcher.app.home.db.AdvertsCountDao;
 import com.muju.note.launcher.app.home.db.AdvertsInfoDao;
-import com.muju.note.launcher.app.home.db.AdvertsCacheDao;
 import com.muju.note.launcher.app.hostipal.db.InfoDao;
 import com.muju.note.launcher.app.hostipal.db.InfomationDao;
 import com.muju.note.launcher.app.hostipal.db.MienInfoDao;
@@ -21,15 +21,13 @@ import com.muju.note.launcher.service.db.PadConfigSubDao;
 
 import org.litepal.LitePal;
 import org.litepal.LitePalDB;
-import org.litepal.crud.callback.CountCallback;
-import org.litepal.tablemanager.callback.DatabaseListener;
 
 import java.io.File;
 
 public class LitePalDb {
 
-    public static final LitePalDB zkysDataDb=new LitePalDB("zkys-data",20);
-    public static final LitePalDB zkysDb=new LitePalDB("zkys",20);
+    public static final LitePalDB zkysDataDb=new LitePalDB("zkys-data",22);
+    public static final LitePalDB zkysDb=new LitePalDB("zkys",22);
 
     public static final String DBNAME_ZKYS_DATA="/sdcard/zkysdb/zkys-data.db";
 

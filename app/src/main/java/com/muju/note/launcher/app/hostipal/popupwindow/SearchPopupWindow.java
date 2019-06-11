@@ -20,10 +20,11 @@ import com.muju.note.launcher.app.hostipal.adapter.SearchAdapter;
 import com.muju.note.launcher.app.hostipal.db.InfomationDao;
 
 import java.util.ArrayList;
+import java.util.List;
 
 //文章分类
 public class SearchPopupWindow extends PopupWindow implements SearchAdapter.OnItemClickListener{
-    private ArrayList<InfomationDao> datas=new ArrayList<>();
+    private List<InfomationDao> datas=new ArrayList<>();
     private Context mContext;
     private LayoutInflater mInflater;
     private RecyclerView recyclerView;
@@ -31,7 +32,7 @@ public class SearchPopupWindow extends PopupWindow implements SearchAdapter.OnIt
     private Activity mActivity;
     private OnClickListener listener;
     private int selectPosition=-1;
-    public SearchPopupWindow(Context context, ArrayList<InfomationDao> list) {
+    public SearchPopupWindow(Context context, List<InfomationDao> list) {
         this.mContext = context;
         this.datas = list;
         mInflater = LayoutInflater.from(mContext);

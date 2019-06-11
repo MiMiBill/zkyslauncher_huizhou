@@ -24,7 +24,7 @@ import com.muju.note.launcher.app.home.event.OutHospitalEvent;
 import com.muju.note.launcher.app.home.event.PatientEvent;
 import com.muju.note.launcher.app.home.event.PatientInfoEvent;
 import com.muju.note.launcher.app.home.presenter.HomePresenter;
-import com.muju.note.launcher.app.hostipal.ui.EncyclopediasFragment;
+import com.muju.note.launcher.app.hostipal.ui.EncyFragment;
 import com.muju.note.launcher.app.hostipal.ui.HosPitalMissionFragment;
 import com.muju.note.launcher.app.hostipal.ui.HospitalMienFragment;
 import com.muju.note.launcher.app.luckdraw.ui.LuckDrawFragment;
@@ -54,6 +54,7 @@ import com.muju.note.launcher.util.adverts.NewAdvertsUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.file.FileUtils;
 import com.muju.note.launcher.util.gilde.GlideUtil;
+import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.qr.QrCodeUtils;
 import com.muju.note.launcher.util.sp.SPUtil;
@@ -76,11 +77,8 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 
-public class HomeFragment extends BaseFragment<HomePresenter> implements HomeContract.View, View
-        .OnClickListener {
-
+public class HomeFragment extends BaseFragment<HomePresenter> implements HomeContract.View, View.OnClickListener {
     private static final String TAG = "HomeFragment";
-
     public static HomeFragment homeFragment = null;
     @BindView(R.id.tv_time)
     TextView tvTime;
@@ -224,6 +222,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         homeHisVideoAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                LogFactory.l().i("当前音量="+SystemUtils.getCurrentVolume(LauncherApplication.getContext()));
                 WotvPlayFragment wotvPlayFragment = new WotvPlayFragment();
                 wotvPlayFragment.setHisDao(videoHisDaos.get(position));
                 start(wotvPlayFragment);
@@ -498,7 +497,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 start(new HospitalMienFragment());
                 break;
             case R.id.ll_hostipal_ency:  // 医疗百科
-                start(new EncyclopediasFragment());
+//                start(new EncyclopediasFragment());
+                start(new EncyFragment());
                 break;
             case R.id.ll_video:     // 视频
                 start(VideoFragment.getIntance());
@@ -509,7 +509,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             case R.id.ll_video_line: // 直播TV
                 start(new WoTvVideoLineFragment());
                 break;
-
             case R.id.ll_his_mission: // 医院宣教
                 start(new HosPitalMissionFragment());
                 break;

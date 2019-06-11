@@ -13,7 +13,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.devbrackets.android.api.video.impl.VideoErrorInfo;
+import com.devbrackets.android.media.BaseEMVideoView;
 import com.devbrackets.android.media.listener.OnVideoPreparedListener;
+import com.devbrackets.android.media.ui.widget.TouchEventHandler;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
@@ -39,6 +41,7 @@ import com.muju.note.launcher.app.video.util.WoTvUtil;
 import com.muju.note.launcher.app.video.util.wotv.ExpandVideoView2;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.topics.AdvertsTopics;
+import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.DateUtil;
 import com.muju.note.launcher.util.adverts.NewAdvertsUtil;
@@ -92,7 +95,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
     ImageView ivColse;
     @BindView(R.id.rel_cornor)
     RelativeLayout relCornor;
-
+    private boolean isChangeVolumn=true;
     private boolean isCodeFail = false;
     private static final String TAG = "WotvPlayFragment";
     private boolean isShowDialog=true;
@@ -121,6 +124,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
     private long startTime;
     private LoginDialog loginDialog;
     private WotvPlayErrorDialog errorDialog;
+    private long maxVoice=-1;
 
     public void setHisDao(VideoHisDao videoHisDao) {
         this.videoHisDao = videoHisDao;
@@ -179,16 +183,6 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
 
             // 监听支付
             checkIsValid();
-           /* int maxVoice = (int) SPUtil.getLong(SpTopics.PAD_CONFIG_VOLUME_RATE);
-            LogFactory.l().i("maxVoice==="+maxVoice);
-            LogFactory.l().i("currentVolume==="+SystemUtils.getCurrentVolume(LauncherApplication.getContext()));
-            if(maxVoice>=0){
-                videoView.setSystemVolume(maxVoice);
-            }else {
-                int maxVolume = SystemUtils.getMaxVolume(LauncherApplication.getContext());
-                videoView.setSystemVolume(maxVolume);
-            }*/
-//            videoView.setVideoVolume(SystemUtils.getCurrentVolume(LauncherApplication.getContext()));
             // 视频开始播放后，展示上下菜单
             videoView.setOnPreparedListener(new OnVideoPreparedListener() {
                 @Override
@@ -202,6 +196,45 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                 }
             });
 
+            //设置播放器音量
+            maxVoice = SPUtil.getLong(SpTopics.PAD_CONFIG_VOLUME_RATE);
+            if (maxVoice >= 0) {
+                videoView.setOnVolumeChangeListener(new BaseEMVideoView.OnVolumeChangeListener() {
+                    @Override
+                    public void onVolumeChanged(int volumn) {
+//                        LogFactory.l().i("volumn==="+volumn);
+                        if(isChangeVolumn){
+                            int currentVolumn = (int) (volumn * maxVoice / 100d);
+                            LogFactory.l().i("currentVolumn==="+currentVolumn);
+                            videoView.setSystemVolume(currentVolumn);
+                            isChangeVolumn=false;
+                        }
+//                        LogFactory.l().i("当前音量==="+SystemUtils.getCurrentVolume(LauncherApplication.getContext()));
+                    }
+                });
+                videoView.registerVideoTouchEventObserver(new TouchEventHandler.TouchEventObserver() {
+                    @Override
+                    public void onShortUpTouched(int i, int i1) {
+
+                    }
+
+                    @Override
+                    public void onHorizontalTouched(int i, int i1) {
+
+                    }
+
+                    @Override
+                    public void onVerticalLeftTouched(int i, int i1) {
+
+                    }
+
+                    @Override
+                    public void onVerticalRightTouched(int i, int i1) {
+                        isChangeVolumn=true;
+                    }
+                });
+            }
+
             // 添加历史记录
             videoHisDao.setCreateTime(System.currentTimeMillis() + "");
             VideoService.getInstance().addVideoHisInfo(videoHisDao);
@@ -210,6 +243,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
         }
 
     }
+
 
     @Override
     public void initPresenter() {
@@ -583,7 +617,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
      * 检查是否需要支付
      */
     private Disposable disposableIsValid;
-    private long pay_cuntDown = 60 * 1000 * 6;//倒计时收费
+    private long pay_cuntDown = 60 * 1000 * 16;//倒计时收费
     public static final int SHOW_PAY_DIALOG = 0X123;
 
     private void checkIsValid() {
@@ -897,5 +931,4 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
         }
         super.onDestroy();
     }
-
 }

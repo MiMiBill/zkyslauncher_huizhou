@@ -20,8 +20,6 @@ import com.bumptech.glide.request.transition.Transition;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.Response;
-import com.muju.note.launcher.app.activity.AdVideoViewActivity;
-import com.muju.note.launcher.app.activity.LargePicActivity;
 import com.muju.note.launcher.app.dialog.AdvertsDialog;
 import com.muju.note.launcher.app.home.bean.AdverNewBean;
 import com.muju.note.launcher.app.home.bean.AdvertsBean;
@@ -390,15 +388,11 @@ public class NewAdvertsUtil {
         addDataInfo(bean.getId(), TAG_CLICKCOUNT);
         LogFactory.l().i("跳转类型===" + bean.getLinkType());
         if (bean.getLinkType() == 1) {
-
-            EventBus.getDefault().post(new AdvertWebEntity(bean.getId(), bean.getName(), bean
-                    .getLinkContent()));
+            EventBus.getDefault().post(new AdvertWebEntity(bean.getId(), bean.getName(), bean.getLinkContent(),1));
         } else if (bean.getLinkType() == 5) {
-            String url = bean.getLinkContent();
-            LargePicActivity.launch(LauncherApplication.getContext(), url, bean.getId());
+            EventBus.getDefault().post(new AdvertWebEntity(bean.getId(), bean.getName(), bean.getLinkContent(),5));
         } else if (bean.getLinkType() == 3) {
-            AdVideoViewActivity.launch(LauncherApplication.getContext(), bean.getLinkContent(),
-                    bean.getId());
+            EventBus.getDefault().post(new AdvertWebEntity(bean.getId(), bean.getName(), bean.getLinkContent(),3));
         } else if (bean.getLinkType() == 2) {
 
         } else if (bean.getLinkType() == 4) {

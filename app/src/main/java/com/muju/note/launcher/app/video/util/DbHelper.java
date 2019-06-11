@@ -4,20 +4,15 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-
-import com.muju.note.launcher.app.home.db.AdvertsInfoDao;
+import com.muju.note.launcher.app.hostipal.db.InfoDao;
+import com.muju.note.launcher.app.hostipal.db.InfomationDao;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
-import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.litepal.UpAdvertInfoDao;
 import com.muju.note.launcher.litepal.UpVideoInfoDao;
 import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.sp.SPUtil;
 
-import org.litepal.LitePal;
-import org.litepal.crud.callback.FindMultiCallback;
-
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -139,6 +134,153 @@ public class DbHelper {
         values.put("endTime",dao.getEndTime());
         values.put("cid",dao.getCid());
         database.insert("UpVideoInfoDao",null,values);
+    }
+
+
+    /**
+     *  插入科室数据
+     * @throws Exception
+     */
+    public static void insertEncyInfoDb(final String dbPath, final String tableName) throws Exception {
+        LogUtil.i(TAG,"数据插入开始时间："+System.currentTimeMillis());
+        ExecutorService service=Executors.newSingleThreadExecutor();
+        service.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    SQLiteDatabase database=getDataBase(dbPath);
+                    Cursor cursor=database.query(tableName,null,null,null,null,null,null);
+                    while (cursor.moveToNext()){
+                        InfoDao dao=new InfoDao();
+                        dao.setColumnId(cursor.getInt(cursor.getColumnIndex("id")));
+                        dao.setName(cursor.getString(cursor.getColumnIndex("name")));
+                        dao.saveDb(dao);
+                    }
+                    cursor.close();
+                    database.close();
+//                    SPUtil.putLong(SpTopics.SP_VIDEO_UPDATE_TIME,(System.currentTimeMillis()/1000));
+                    LogUtil.i(TAG,"数据插入结束时间："+System.currentTimeMillis());
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+
+    /**
+     *  插入病例数据
+     * @param dbPath
+     * @param tableName
+     * @throws Exception
+     */
+    public static void insertEncyInfoMationDb(final String dbPath, final String tableName) throws Exception {
+        LogUtil.i(TAG,"数据插入开始时间："+System.currentTimeMillis());
+        ExecutorService service=Executors.newSingleThreadExecutor();
+        service.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    SQLiteDatabase database=getDataBase(dbPath);
+                    Cursor cursor=database.query(tableName,null,null,null,null,null,null);
+                    while (cursor.moveToNext()){
+                        InfomationDao dao=new InfomationDao();
+                        String source = cursor.getString(cursor.getColumnIndex("source"));
+                        String title = cursor.getString(cursor.getColumnIndex("title"));
+                        String summary = cursor.getString(cursor.getColumnIndex("summary"));
+                        String cause = cursor.getString(cursor.getColumnIndex("cause"));
+                        String check = cursor.getString(cursor.getColumnIndex("check"));
+                        String diacrsis = cursor.getString(cursor.getColumnIndex("diacrisis"));
+                        String antidiastole = cursor.getString(cursor.getColumnIndex("antidiastole"));
+                        String cure = cursor.getString(cursor.getColumnIndex("cure"));
+                        String prognosis = cursor.getString(cursor.getColumnIndex("prognosis"));
+                        String prophylaxis = cursor.getString(cursor.getColumnIndex("prophylaxis"));
+                        String complicatingDisease = cursor.getString(cursor.getColumnIndex("complicatingDisease"));
+                        String author = cursor.getString(cursor.getColumnIndex("author"));
+                        int columnid = cursor.getInt(cursor.getColumnIndex("columnId"));
+                        String classification = cursor.getString(cursor.getColumnIndex("classification"));
+                        String clinicalManifestation = cursor.getString(cursor.getColumnIndex
+                                ("clinicalManifestation"));
+                        String dietCare = cursor.getString(cursor.getColumnIndex("dietCare"));
+                        String tag = cursor.getString(cursor.getColumnIndex("tag"));
+                        int clickCount = cursor.getInt(cursor.getColumnIndex("clickCount"));
+                        if (null == title) {
+                            title = "";
+                        }
+                        if (null == source) {
+                            source = "";
+                        }
+                        if (null == summary) {
+                            summary = "";
+                        }
+                        if (null == cause) {
+                            cause = "";
+                        }
+                        if (null == check) {
+                            check = "";
+                        }
+                        if (null == diacrsis) {
+                            diacrsis = "";
+                        }
+                        if (null == antidiastole) {
+                            antidiastole = "";
+                        }
+                        if (null == cure) {
+                            cure = "";
+                        }
+                        if (null == prognosis) {
+                            prognosis = "";
+                        }
+                        if (null == prophylaxis) {
+                            prophylaxis = "";
+                        }
+                        if (null == complicatingDisease) {
+                            complicatingDisease = "";
+                        }
+                        if (null == author) {
+                            author = "";
+                        }
+                        if (null == classification) {
+                            classification = "";
+                        }
+                        if (null == clinicalManifestation) {
+                            clinicalManifestation = "";
+                        }
+                        if (null == dietCare) {
+                            dietCare = "";
+                        }
+                        if (null == tag) {
+                            tag = "";
+                        }
+                        dao.setTitle(title);
+                        dao.setSource(source);
+                        dao.setSummary(summary);
+                        dao.setCause(cause);
+                        dao.setCheck(check);
+                        dao.setDiacrsis(diacrsis);
+                        dao.setAntidiastole(antidiastole);
+                        dao.setCure(cure);
+                        dao.setPrognosis(prognosis);
+                        dao.setProphylaxis(prophylaxis);
+                        dao.setComplicatingDisease(complicatingDisease);
+                        dao.setAuthor(author);
+                        dao.setColumnid(columnid);
+                        dao.setClickCount(clickCount);
+                        dao.setTag(tag);
+                        dao.setDassification(classification);
+                        dao.setClinicalManifestation(clinicalManifestation);
+                        dao.setDietCare(dietCare);
+                        dao.saveDb(dao);
+                    }
+                    cursor.close();
+                    database.close();
+//                    SPUtil.putLong(SpTopics.SP_VIDEO_UPDATE_TIME,(System.currentTimeMillis()/1000));
+                    LogUtil.i(TAG,"数据插入结束时间："+System.currentTimeMillis());
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     /**

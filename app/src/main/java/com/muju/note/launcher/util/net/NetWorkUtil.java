@@ -14,6 +14,8 @@ import android.telephony.TelephonyManager;
 import android.telephony.cdma.CdmaCellLocation;
 import android.telephony.gsm.GsmCellLocation;
 
+import com.muju.note.launcher.util.log.LogFactory;
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -180,6 +182,7 @@ public class NetWorkUtil {
 
                                     NETWORK_LEVEN = "dbm:" + dbm + "\n" + "没有4G信号,网络很差" + "\n level" + level + "\nasu:" + asu;
                                 }
+                                LogFactory.l().i("NETWORK_LEVEN==="+NETWORK_LEVEN);
                                 onSignalStrengthsChanged(signalStrength);
                             }
                         };

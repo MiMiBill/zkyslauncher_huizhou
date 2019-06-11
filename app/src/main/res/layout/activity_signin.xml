@@ -71,13 +71,14 @@
         android:gravity="center">
 
         <ImageView
-            android:id="@+id/iv_"
+            android:id="@+id/iv_video"
             android:layout_marginRight="20dp"
             android:layout_width="265px"
             android:layout_height="160px"
             android:src="@mipmap/gift" />
 
         <ImageView
+            android:id="@+id/iv_pub"
             android:layout_width="265px"
             android:layout_height="160px"
             android:layout_marginRight="20dp"

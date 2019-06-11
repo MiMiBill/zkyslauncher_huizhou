@@ -343,18 +343,6 @@
             android:process=":remote" />
 
         <activity
-            android:name=".app.activity.AdVideoViewActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name=".app.activity.WebActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name=".app.activity.LargePicActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="landscape" />
-        <activity
             android:name=".app.publicAdress.ui.PublicActivity"
             android:launchMode="singleTask"
             android:screenOrientation="landscape" />

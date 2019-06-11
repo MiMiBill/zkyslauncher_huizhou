@@ -65,7 +65,7 @@ public class MainService extends Service {
         VideoService.getInstance().start();
 
         //医疗百科科室
-//        EncyclopeService.getInstance().start();
+        EncyclopeService.getInstance().start();
 
         // 检查医院宣教数据
         MissionService.getInstance().start();
@@ -114,7 +114,7 @@ public class MainService extends Service {
                             VideoService.getInstance().getVideoCloumns();
 
                             //医疗百科科室
-//                            EncyclopeService.getInstance().getLately();
+                            EncyclopeService.getInstance().getLately();
 
                             // 检查医院宣教数据
                             MissionService.getInstance().updateMission(1);

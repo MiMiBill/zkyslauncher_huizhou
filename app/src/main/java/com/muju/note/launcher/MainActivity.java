@@ -15,6 +15,8 @@ import com.muju.note.launcher.app.home.event.OutHospitalEvent;
 import com.muju.note.launcher.app.home.event.PatientInfoEvent;
 import com.muju.note.launcher.app.home.ui.HomeFragment;
 import com.muju.note.launcher.app.msg.dialog.CustomMsgDialog;
+import com.muju.note.launcher.app.publicui.AdvideoViewFragment;
+import com.muju.note.launcher.app.publicui.LargePicFragment;
 import com.muju.note.launcher.app.publicui.ProtectionProcessFragment;
 import com.muju.note.launcher.app.publicui.WebViewFragment;
 import com.muju.note.launcher.app.video.event.VideoNoLockEvent;
@@ -246,10 +248,23 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void toAdverWebView(AdvertWebEntity entity){
-        start(WebViewFragment.newInstance(entity.getTitle(),entity.getUrl(),entity.getAdvertId()));
+        switch (entity.getType()){
+            case 1:
+                start(WebViewFragment.newInstance(entity.getTitle(),entity.getUrl(),entity.getAdvertId()));
+                break;
+            case 2:
+                break;
+            case 3:
+                start(AdvideoViewFragment.newInstance(entity.getAdvertId(),entity.getUrl()));
+                break;
+            case 4:
+                break;
+            case 5:
+                start(LargePicFragment.newInstance(entity.getTitle(),entity.getAdvertId(),entity.getUrl()));
+                break;
+        }
+
     }
-
-
 
     /**
      *  广告任务列表

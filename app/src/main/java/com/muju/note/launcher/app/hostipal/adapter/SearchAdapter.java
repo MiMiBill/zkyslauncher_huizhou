@@ -19,7 +19,7 @@ public class SearchAdapter extends BaseQuickAdapter<InfomationDao,SearchAdapter.
     private List<InfomationDao> spinerList;
     private Context context;
     public OnItemClickListener mItemClickListener;
-    public SearchAdapter(Context context, ArrayList<InfomationDao> data) {
+    public SearchAdapter(Context context, List<InfomationDao> data) {
         super(R.layout.spiner_window_layout_item,data);
         this.context=context;
         this.spinerList = new ArrayList<>();

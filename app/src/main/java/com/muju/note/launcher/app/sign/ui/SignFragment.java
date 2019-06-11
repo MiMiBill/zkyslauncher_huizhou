@@ -1,6 +1,7 @@
 package com.muju.note.launcher.app.sign.ui;
 
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -11,15 +12,20 @@ import com.muju.note.launcher.app.sign.presenter.SignPresenter;
 import com.muju.note.launcher.app.userinfo.bean.SignBean;
 import com.muju.note.launcher.app.userinfo.bean.SignStatusBean;
 import com.muju.note.launcher.base.BaseFragment;
+import com.muju.note.launcher.entity.AdvertWebEntity;
 import com.muju.note.launcher.util.Constants;
 import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.util.user.UserUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import butterknife.Unbinder;
+
 //签到
 public class SignFragment extends BaseFragment<SignPresenter> implements SignContract.View {
     @BindView(R.id.tv_sign)
@@ -30,9 +36,15 @@ public class SignFragment extends BaseFragment<SignPresenter> implements SignCon
     TextView tvIntegral;
     @BindView(R.id.ll_back)
     LinearLayout llBack;
+    @BindView(R.id.iv_video)
+    ImageView ivVideo;
+    @BindView(R.id.iv_pub)
+    ImageView ivPub;
+    Unbinder unbinder;
     private boolean isSign = false;
-    private List<TaskListBean> adList=new ArrayList<>();
-
+    private List<TaskListBean> adList = new ArrayList<>();
+    private TaskListBean videoBean;
+    private TaskListBean pubBean;
     @Override
     public int getLayout() {
         return R.layout.activity_signin;
@@ -44,6 +56,13 @@ public class SignFragment extends BaseFragment<SignPresenter> implements SignCon
         tvIntegral.setText("您总共有" + UserUtil.getUserBean().getIntegral() + "积分");
 
         adList = SPUtil.getTaskList(Constants.AD_TASK_LIST);
+        for (TaskListBean bean : adList) {
+            if (bean.getTaskType() == 2) {
+                videoBean=bean;
+            } else if (bean.getTaskType() == 1) {
+                pubBean=bean;
+            }
+        }
     }
 
     @Override
@@ -57,20 +76,29 @@ public class SignFragment extends BaseFragment<SignPresenter> implements SignCon
     }
 
 
-    @OnClick({R.id.tv_sign, R.id.ll_back})
+    @OnClick({R.id.tv_sign, R.id.ll_back,R.id.iv_video, R.id.iv_pub})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_sign:
-                if (!isSign){
+                if (!isSign) {
                     mPresenter.checkSign(UserUtil.getUserBean().getId());
                 }
                 break;
             case R.id.ll_back:
                 pop();
                 break;
+            case R.id.iv_video:
+                if(videoBean!=null){
+                    EventBus.getDefault().post(new AdvertWebEntity(videoBean.getId(), videoBean.getName(), videoBean.getResourceUrl(),3));
+                }
+                break;
+            case R.id.iv_pub:
+                if(pubBean!=null){
+
+                }
+                break;
         }
     }
-
 
 
     @Override

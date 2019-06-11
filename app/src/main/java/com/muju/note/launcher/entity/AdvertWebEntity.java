@@ -8,11 +8,21 @@ public class AdvertWebEntity {
     private int advertId;
     private String title;
     private String url;
+    private int type;
 
-    public AdvertWebEntity(int advertId, String title, String url) {
+    public AdvertWebEntity(int advertId, String title, String url,int type) {
         this.advertId = advertId;
         this.title = title;
         this.url = url;
+        this.type = type;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public int getAdvertId() {

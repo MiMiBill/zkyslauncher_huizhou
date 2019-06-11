@@ -1,5 +1,8 @@
 package com.muju.note.launcher.app.hostipal.db;
 
+import com.muju.note.launcher.litepal.LitePalDb;
+
+import org.litepal.LitePal;
 import org.litepal.crud.LitePalSupport;
 
 public class InfomationDao extends LitePalSupport {
@@ -22,6 +25,14 @@ public class InfomationDao extends LitePalSupport {
     private String prophylaxis;
     private String complicatingDisease;
     private String dietCare;
+    /**
+     *   新增数据
+     * @param dao
+     */
+    public void saveDb(InfomationDao dao){
+        LitePal.use(LitePalDb.zkysDb);
+        dao.save();
+    }
 
     public int getId() {
         return id;
