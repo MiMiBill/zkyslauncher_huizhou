@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.TrafficStats;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.telephony.CellLocation;
@@ -16,6 +17,10 @@ import android.telephony.gsm.GsmCellLocation;
 
 import com.muju.note.launcher.util.log.LogFactory;
 
+import com.muju.note.launcher.base.LauncherApplication;
+
+import java.text.DecimalFormat;
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -23,12 +28,12 @@ import io.reactivex.functions.Consumer;
 public class NetWorkUtil {
 
     public static final String NETWORK_NONE = "NULL"; // 没有网络连接
-    public static final String  NETWORK_WIFI = "WIFI"; // wifi连接
+    public static final String NETWORK_WIFI = "WIFI"; // wifi连接
     public static final String NETWORK_2G = "002G"; // 2G
     public static final String NETWORK_3G = "003G"; // 3G
     public static final String NETWORK_4G = "004G"; // 4G
     public static final String NETWORK_MOBILE = "00LL"; // 手机流量
-    public static String NETWORK_LEVEN="";
+    public static String NETWORK_LEVEN = "";
 
     /**
      * 获取当前网络连接的类型
@@ -212,6 +217,90 @@ public class NetWorkUtil {
             }
         }
         return false;
+    }
+
+    /**
+     * 获取实时网速
+     */
+    private static long rxtxTotal = 0;
+
+    public static String getNetWorkLine() {
+        long tempSum = TrafficStats.getTotalRxBytes() + TrafficStats.getTotalTxBytes();
+        long rxtxLast = tempSum - rxtxTotal;
+        double totalSpeed = rxtxLast * 1000 / 2000d;
+        rxtxTotal = tempSum;
+        return showSpeed(totalSpeed);
+    }
+
+    /**
+     * 网络格式转换
+     *
+     * @param speed
+     * @return
+     */
+    public static String showSpeed(double speed) {
+        DecimalFormat showFloatFormat = new DecimalFormat("0.00");
+        String speedString;
+        if (speed >= 1048576d) {
+            speedString = showFloatFormat.format(speed / 1048576d) + "MB/s";
+        } else {
+            speedString = showFloatFormat.format(speed / 1024d) + "KB/s";
+        }
+        return speedString;
+    }
+
+
+    /**
+     *  获取当前网络连接类型
+     * @return
+     */
+    public static String getNetworkType() {
+        String strNetworkType = "";
+        final ConnectivityManager connectivityManager = (ConnectivityManager) LauncherApplication.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        //获取链接网络信息
+        final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                strNetworkType = "WIFI";
+            } else if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+                String _strSubTypeName = networkInfo.getSubtypeName();
+                // TD-SCDMA   networkType is 17
+                int networkType = networkInfo.getSubtype();
+                switch (networkType) {
+                    case TelephonyManager.NETWORK_TYPE_GPRS:
+                    case TelephonyManager.NETWORK_TYPE_EDGE:
+                    case TelephonyManager.NETWORK_TYPE_CDMA:
+                    case TelephonyManager.NETWORK_TYPE_1xRTT:
+                    case TelephonyManager.NETWORK_TYPE_IDEN: //api<8 : replace by 11
+                        strNetworkType = "2G";
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_UMTS:
+                    case TelephonyManager.NETWORK_TYPE_EVDO_0:
+                    case TelephonyManager.NETWORK_TYPE_EVDO_A:
+                    case TelephonyManager.NETWORK_TYPE_HSDPA:
+                    case TelephonyManager.NETWORK_TYPE_HSUPA:
+                    case TelephonyManager.NETWORK_TYPE_HSPA:
+                    case TelephonyManager.NETWORK_TYPE_EVDO_B: //api<9 : replace by 14
+                    case TelephonyManager.NETWORK_TYPE_EHRPD:  //api<11 : replace by 12
+                    case TelephonyManager.NETWORK_TYPE_HSPAP:  //api<13 : replace by 15
+                        strNetworkType = "3G";
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_LTE:    //api<11 : replace by 13
+                        strNetworkType = "4G";
+                        break;
+                    default:
+                        // http://baike.baidu.com/item/TD-SCDMA 中国移动 联通 电信 三种3G制式
+                        if (_strSubTypeName.equalsIgnoreCase("TD-SCDMA") || _strSubTypeName.equalsIgnoreCase("WCDMA") || _strSubTypeName.equalsIgnoreCase("CDMA2000")) {
+                            strNetworkType = "3G";
+                        } else {
+                            strNetworkType = _strSubTypeName;
+                        }
+
+                        break;
+                }
+            }
+        }
+        return strNetworkType;
     }
 
 }
