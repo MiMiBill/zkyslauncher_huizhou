@@ -52,7 +52,7 @@
         android:textColor="#333333"
         android:textSize="16sp" />
     <TextView
-        android:text="您有100积分"
+        android:text=""
         android:layout_toRightOf="@id/tv_gift"
         android:id="@+id/tv_integral"
         android:textSize="16sp"
@@ -97,13 +97,16 @@
     </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="40px"
-        android:layout_marginTop="20px"
-        android:layout_marginLeft="20px">
+        android:layout_height="63px"
+        android:layout_marginTop="10px"
+        >
         <LinearLayout
             android:id="@+id/ll_back"
+            android:paddingLeft="@dimen/px20"
+            android:paddingRight="@dimen/px20"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
             <ImageView
                 android:layout_width="40px"

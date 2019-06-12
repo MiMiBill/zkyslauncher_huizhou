@@ -79,6 +79,7 @@
                 android:textSize="@dimen/px14" />
 
             <ImageView
+                android:id="@+id/iv_wifi"
                 android:layout_width="@dimen/px26"
                 android:layout_height="@dimen/px20"
                 android:layout_marginLeft="@dimen/px10"
@@ -519,7 +520,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/px14"
-                            android:text="视频"
+                            android:text="海量影视"
                             android:textColor="@color/black_gray"
                             android:textSize="@dimen/px25" />
                     </LinearLayout>
@@ -541,7 +542,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/px14"
-                            android:text="直播TV"
+                            android:text="电视直播"
                             android:textColor="@color/black_gray"
                             android:textSize="@dimen/px25" />
                     </LinearLayout>
@@ -570,7 +571,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/px14"
-                            android:text="通知"
+                            android:text="住院通知"
                             android:layout_gravity="center_horizontal"
                             android:textColor="@color/black_gray"
                             android:textSize="@dimen/px25" />

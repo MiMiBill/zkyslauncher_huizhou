@@ -15,5 +15,6 @@ public interface SignContract {
     interface Presenter extends IPresenter<SignContract.View> {
         void checkSign(int id);
         void checkSignStatus(int id);
+        void doTask(int userId,int advertId);
     }
 }

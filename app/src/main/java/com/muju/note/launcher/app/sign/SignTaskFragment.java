@@ -1,4 +1,4 @@
-package com.muju.note.launcher.app.sign.ui;
+package com.muju.note.launcher.app.sign;
 
 import android.view.View;
 import android.widget.ImageView;
@@ -25,7 +25,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 //签到
-public class SignFragment extends BaseFragment<SignPresenter> implements SignContract.View {
+public class SignTaskFragment extends BaseFragment<SignPresenter> implements SignContract.View {
     @BindView(R.id.tv_sign)
     TextView tvSign;
     @BindView(R.id.tv_gift)
@@ -52,31 +52,20 @@ public class SignFragment extends BaseFragment<SignPresenter> implements SignCon
 
     @Override
     public void initData() {
-        if (UserUtil.getUserBean() != null) {
+        if (UserUtil.getUserBean() != null){
             setTask();
         }
 
-        llBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pop();
-            }
-        });
+       llBack.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               pop();
+           }
+       });
     }
 
     private void setTask() {
         mPresenter.checkSignStatus(UserUtil.getUserBean().getId());
-//        tvIntegral.setText("您总共有" + UserUtil.getUserBean().getIntegral() + "积分");
-       /* adList = SPUtil.getTaskList(Constants.AD_TASK_LIST);
-        for (TaskListBean bean : adList) {
-            if (bean.getTaskType() == 2) {
-                videoBean=bean;
-            } else if (bean.getTaskType() == 1) {
-                pubBean=bean;
-            }else if(bean.getTaskType()==3){
-                signBean=bean;
-            }
-        }*/
     }
 
     @Override
@@ -90,26 +79,28 @@ public class SignFragment extends BaseFragment<SignPresenter> implements SignCon
     }
 
 
-    @OnClick({R.id.tv_sign, R.id.iv_video, R.id.iv_pub})
+    @OnClick({R.id.tv_sign,R.id.iv_video, R.id.iv_pub})
     public void onViewClicked(View view) {
-        if (UserUtil.getUserBean() == null) {
+        if (UserUtil.getUserBean() == null){
             showLoginDialog();
             return;
         }
         switch (view.getId()) {
             case R.id.tv_sign:
                 if (!isSign) {
-                    mPresenter.checkSign(UserUtil.getUserBean().getId());
+                    if(signBean!=null){
+                        mPresenter.checkSign(UserUtil.getUserBean().getId());
+//                        mPresenter.doTask(UserUtil.getUserBean().getId(),signBean.getId());
+                    }
                 }
                 break;
             case R.id.iv_video:
-                if (videoBean != null) {
-                    EventBus.getDefault().post(new AdvertWebEntity(videoBean.getId(), videoBean
-                            .getName(), videoBean.getResourceUrl(), 3));
+                if(videoBean!=null){
+                    EventBus.getDefault().post(new AdvertWebEntity(videoBean.getId(), videoBean.getName(), videoBean.getResourceUrl(),3));
                 }
                 break;
             case R.id.iv_pub:
-                if (pubBean != null) {
+                if(pubBean!=null){
 
                 }
                 break;

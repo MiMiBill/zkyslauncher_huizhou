@@ -153,7 +153,10 @@ public class EncyFragment extends BaseFragment<EncyPresenter> implements EncyHos
                 break;
             case R.id.btn_next:
                 pageNum++;
-                type=2;
+                if(infomationBeans.size()<12){
+                    showToast("已经是最后一页了");
+                    return;
+                }
                 mPresenter.queryEncyClopediapage(itenId,pageNum,type);
                 break;
             case R.id.lly_back:
@@ -186,10 +189,7 @@ public class EncyFragment extends BaseFragment<EncyPresenter> implements EncyHos
         llyProgress.setVisibility(View.GONE);
         infomationBeans.clear();
         infomationBeans.addAll(list);
-        if(type==2 && infomationBeans.size()<11){
-            showToast("已经是最后一页了");
-            return;
-        }
+
         pathologyAdapter.setNewData(list);
         llyItem.setVisibility(View.VISIBLE);
     }
@@ -297,6 +297,7 @@ public class EncyFragment extends BaseFragment<EncyPresenter> implements EncyHos
 
 
     private void setUi(InfomationDao bean) {
+        llyFrmlayout.setVisibility(View.VISIBLE);
         if(!"".equals(bean.getTitle())){
             tvTitle.setText(bean.getTitle());
         }else {

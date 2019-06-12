@@ -40,6 +40,7 @@ public class EncyPresenter extends BasePresenter<EncyHosContract.View> implement
     public void queryTopEncyClopedia() {
         LitePalDb.setZkysDb();
         InfomationDao infomationDao = LitePal.findFirst(InfomationDao.class);
+        if(infomationDao!=null)
         mView.setTopInfomation(infomationDao);
     }
 
@@ -51,6 +52,7 @@ public class EncyPresenter extends BasePresenter<EncyHosContract.View> implement
     public void queryEncyClopediaById(int id) {
         LitePalDb.setZkysDb();
         InfomationDao infomationDao= LitePal.find(InfomationDao.class,id);
+        if(infomationDao!=null)
         mView.setInfomationById(infomationDao);
     }
 

@@ -140,27 +140,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
                     LogFactory.l().i("当前音量==="+SystemUtils.getCurrentVolume(LauncherApplication.getContext()));
                 }
             });
-            videoView.registerVideoTouchEventObserver(new TouchEventHandler.TouchEventObserver() {
-                @Override
-                public void onShortUpTouched(int i, int i1) {
-
-                }
-
-                @Override
-                public void onHorizontalTouched(int i, int i1) {
-
-                }
-
-                @Override
-                public void onVerticalLeftTouched(int i, int i1) {
-
-                }
-
-                @Override
-                public void onVerticalRightTouched(int i, int i1) {
-                    isChangeVolumn=true;
-                }
-            });
+            videoView.registerVideoTouchEventObserver(observer);
         }
 
         lineAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -176,6 +156,28 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
         });
 
     }
+
+    TouchEventHandler.TouchEventObserver observer=new TouchEventHandler.TouchEventObserver() {
+        @Override
+        public void onShortUpTouched(int i, int i1) {
+
+        }
+
+        @Override
+        public void onHorizontalTouched(int i, int i1) {
+
+        }
+
+        @Override
+        public void onVerticalLeftTouched(int i, int i1) {
+
+        }
+
+        @Override
+        public void onVerticalRightTouched(int i, int i1) {
+            isChangeVolumn=true;
+        }
+    };
 
     @Override
     public void initPresenter() {
@@ -253,6 +255,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
+        videoView.unregisterVideoTouchEventObserver(observer);
         EventBus.getDefault().post(new VideoNoLockEvent(true));
     }
 

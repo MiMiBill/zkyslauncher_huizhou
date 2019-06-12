@@ -16,7 +16,7 @@
     <string name="pay_success_payment">支付方式:</string>
     <string name="pay_success_money">支付金额:</string>
     <string name="next">下一步</string>
-    <string name="pad_has_actived_success">PAD已成功激活</string>
+    <string name="pad_has_actived_success">PAD已激活</string>
     <string name="pad_has_actived_fail">PAD激活失败</string>
     <string name="pad_has_actived_tip">辛苦了运维同事，感谢您的不辞辛劳！</string>
     <string name="vip_count_down_time">VIP剩余时长:</string>

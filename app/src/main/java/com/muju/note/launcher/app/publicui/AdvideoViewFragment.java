@@ -6,7 +6,6 @@ import android.os.Bundle;
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.util.adverts.NewAdvertsUtil;
-import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.view.VideoPlayControlView;
 
 import butterknife.BindView;
@@ -44,7 +43,7 @@ public class AdvideoViewFragment extends BaseFragment {
         advertId = getArguments().getInt(VIDEO_ID, 0);
         videoUrl = getArguments().getString(VIDEO_URL_FLAG);
         if (videoUrl != null && !videoUrl.equals("")) {
-            LogFactory.l().i("url==="+videoUrl);
+//            LogFactory.l().i("url==="+videoUrl);
             mVvVideoView.getVideoView().setVideoPath(videoUrl);
             mVvVideoView.getVideoView().setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override

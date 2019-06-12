@@ -12,14 +12,14 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/px70">
+            android:layout_height="@dimen/px63">
 
             <LinearLayout
                 android:id="@+id/ll_back"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:layout_marginLeft="@dimen/px20"
+                android:paddingLeft="@dimen/px20"
                 android:layout_centerVertical="true"
                 android:gravity="center_vertical">
                 <ImageView
@@ -27,7 +27,7 @@
                     android:layout_height="@dimen/px34"
                     android:src="@mipmap/ic_back_black"/>
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/px60"
                     android:layout_height="wrap_content"
                     android:text="返回"
                     android:textSize="@dimen/px20"

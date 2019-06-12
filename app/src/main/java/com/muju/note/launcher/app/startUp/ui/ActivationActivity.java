@@ -29,7 +29,6 @@ import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.Constants;
 import com.muju.note.launcher.util.UIUtils;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
-import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.net.NetWorkUtil;
 import com.muju.note.launcher.util.qr.QrCodeUtils;
 import com.muju.note.launcher.util.rx.RxUtil;
@@ -130,7 +129,7 @@ public class ActivationActivity extends BaseActivity<ActivationPresenter> implem
         String iccid = MobileInfoUtil.getICCID(this);
 
         if (MobileInfoUtil.haveSIMCard(this) && !TextUtils.isEmpty(iccid)) {
-            LogFactory.l().i("有手机卡");
+//            LogFactory.l().i("有手机卡");
             boolean isConnect = NetWorkUtil.isConnected(this);
             if (!isConnect) {
                 llyNoInternet.setVisibility(View.VISIBLE);
@@ -151,7 +150,7 @@ public class ActivationActivity extends BaseActivity<ActivationPresenter> implem
                 }
             }
         } else {
-            LogFactory.l().i("没有手机卡");
+//            LogFactory.l().i("没有手机卡");
             llyNoInternet.setVisibility(View.VISIBLE);
             tvReason.setText("没有检测到手机卡,请重试");
             tvRetry.setText("重新加载");

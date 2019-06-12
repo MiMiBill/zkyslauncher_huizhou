@@ -1,73 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="632px"
-    android:layout_height="664px"
-    android:background="@android:color/white"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_width="400px"
+    android:layout_height="400px"
+    android:background="@mipmap/login_bg">
 
     <LinearLayout
-        android:orientation="vertical"
         android:id="@+id/llPayCode"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="30px">
-
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:background="@android:color/transparent"
-            android:layout_height="84px">
-
-
-            <TextView
-                android:id="@+id/tvTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#2994f1"
-                android:textSize="34px"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:text="登录" />
-
-
+        android:orientation="vertical">
+        <RelativeLayout
+            android:id="@+id/rel_dismiss"
+            android:layout_gravity="right"
+            android:layout_width="@dimen/px48"
+            android:layout_height="@dimen/px48">
             <ImageView
                 android:id="@+id/iv_dissmiss"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:paddingLeft="18dp"
-                android:paddingRight="18dp"
-                android:src="@mipmap/icon_close"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
-
-
-            <View
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#dedede" />
-
-        </android.support.constraint.ConstraintLayout>
+                android:layout_width="@dimen/px26"
+                android:layout_height="@dimen/px26"
+                android:layout_marginTop="@dimen/px10"
+                android:layout_marginRight="@dimen/px10"
+                android:src="@mipmap/icon_login_close" />
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/tvTitle"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="请用微信扫码登录"
+            android:textColor="#155069"
+            android:textSize="24px"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/iv_login_code"
-            android:layout_width="418px"
-            android:layout_height="418px"
+            android:layout_width="260px"
+            android:layout_height="260px"
             android:layout_gravity="center"
-            android:layout_marginTop="40px" />
-
-
-        <TextView
-            android:layout_marginTop="15px"
-            android:layout_width="wrap_content"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content"
-            android:text="请使用微信扫码登录"
-            android:textColor="#333333"
-            android:textSize="28px" />
-
+            android:layout_marginTop="@dimen/px20"
+            android:layout_marginBottom="50px" />
     </LinearLayout>
 
 </RelativeLayout>

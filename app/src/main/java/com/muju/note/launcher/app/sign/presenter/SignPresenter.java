@@ -10,6 +10,7 @@ import com.muju.note.launcher.base.BasePresenter;
 import com.muju.note.launcher.okgo.BaseBean;
 import com.muju.note.launcher.okgo.JsonCallback;
 import com.muju.note.launcher.url.UrlUtil;
+import com.muju.note.launcher.util.ActiveUtils;
 
 public class SignPresenter extends BasePresenter<SignContract.View> implements SignContract.Presenter {
 
@@ -46,5 +47,27 @@ public class SignPresenter extends BasePresenter<SignContract.View> implements S
                         super.onError(response);
                     }
                 });
+    }
+
+
+    @Override
+    public void doTask(int userId,int advertId) {
+        OkGo.<BaseBean<SignBean>>post(UrlUtil.doTask())
+                .tag(this)
+                .params("userId", userId)
+                .params("hospitalId", ActiveUtils.getPadActiveInfo().getHospitalId())
+                .params("deptId", ActiveUtils.getPadActiveInfo().getDeptId())
+                .params("advertId", advertId)
+                .execute(new JsonCallback<BaseBean<SignBean>>() {
+            @Override
+            public void onSuccess(Response<BaseBean<SignBean>> response) {
+//                mView.checkSign(response.body().getData());
+            }
+
+            @Override
+            public void onError(Response<BaseBean<SignBean>> response) {
+                super.onError(response);
+            }
+        });
     }
 }

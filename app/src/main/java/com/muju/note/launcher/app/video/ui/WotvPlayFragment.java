@@ -212,27 +212,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
 //                        LogFactory.l().i("当前音量==="+SystemUtils.getCurrentVolume(LauncherApplication.getContext()));
                     }
                 });
-                videoView.registerVideoTouchEventObserver(new TouchEventHandler.TouchEventObserver() {
-                    @Override
-                    public void onShortUpTouched(int i, int i1) {
-
-                    }
-
-                    @Override
-                    public void onHorizontalTouched(int i, int i1) {
-
-                    }
-
-                    @Override
-                    public void onVerticalLeftTouched(int i, int i1) {
-
-                    }
-
-                    @Override
-                    public void onVerticalRightTouched(int i, int i1) {
-                        isChangeVolumn=true;
-                    }
-                });
+                videoView.registerVideoTouchEventObserver(observer);
             }
 
             // 添加历史记录
@@ -243,6 +223,29 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
         }
 
     }
+
+
+    TouchEventHandler.TouchEventObserver observer=new TouchEventHandler.TouchEventObserver() {
+        @Override
+        public void onShortUpTouched(int i, int i1) {
+
+        }
+
+        @Override
+        public void onHorizontalTouched(int i, int i1) {
+
+        }
+
+        @Override
+        public void onVerticalLeftTouched(int i, int i1) {
+
+        }
+
+        @Override
+        public void onVerticalRightTouched(int i, int i1) {
+            isChangeVolumn=true;
+        }
+    };
 
 
     @Override
@@ -287,6 +290,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
         if(errorDialog!=null&&errorDialog.isShowing()){
             return;
         }
+//        videoView.unregisterVideoTouchEventObserver(observer);
         EventBus.getDefault().post(new VideoNoLockEvent(true));
     }
 

@@ -1,14 +1,11 @@
 package com.muju.note.launcher.app.home.ui;
 
 import android.annotation.SuppressLint;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,6 +13,7 @@ import android.widget.VideoView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.muju.note.launcher.R;
+import com.muju.note.launcher.app.Cabinet.CabinetFragment;
 import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
 import com.muju.note.launcher.app.dialog.AdvertsDialog;
 import com.muju.note.launcher.app.home.adapter.HomeHisVideoAdapter;
@@ -62,7 +60,6 @@ import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.qr.QrCodeUtils;
 import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.util.system.SystemUtils;
-import com.muju.note.launcher.util.user.UserUtil;
 import com.muju.note.launcher.view.banana.Banner;
 import com.unicom.common.VideoSdkConfig;
 
@@ -75,14 +72,13 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 
-public class HomeFragment extends BaseFragment<HomePresenter> implements HomeContract.View, View.OnClickListener {
+public class HomeFragment extends BaseFragment<HomePresenter> implements HomeContract.View, View
+        .OnClickListener {
     private static final String TAG = "HomeFragment";
     public static HomeFragment homeFragment = null;
     @BindView(R.id.tv_time)
@@ -157,6 +153,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     TextView tvNet;
     @BindView(R.id.tv_net_type)
     TextView tvNetType;
+    @BindView(R.id.iv_wifi)
+    ImageView ivWifi;
 
     private ActivePadInfo.DataBean activeInfo;
     private List<PatientResponse.DataBean> patientList = new ArrayList<>();
@@ -231,7 +229,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         homeHisVideoAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                LogFactory.l().i("当前音量="+SystemUtils.getCurrentVolume(LauncherApplication.getContext()));
+                LogFactory.l().i("当前音量=" + SystemUtils.getCurrentVolume(LauncherApplication
+                        .getContext()));
                 WotvPlayFragment wotvPlayFragment = new WotvPlayFragment();
                 wotvPlayFragment.setHisDao(videoHisDaos.get(position));
                 start(wotvPlayFragment);
@@ -386,14 +385,22 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
      * @param week
      */
     @Override
-    public void getDate(String date, String time, String week, String net,String netType) {
+    public void getDate(String date, String time, String week, String net, String netType) {
         tvDate.setText(date);
         tvTime.setText(time);
         tvWeek.setText(week);
         tvNet.setText(net);
-        tvNetType.setText(netType);
+        if(netType.equals("WIFI")){
+            tvNetType.setVisibility(View.GONE);
+            ivWifi.setVisibility(View.VISIBLE);
+        }else {
+            ivWifi.setVisibility(View.GONE);
+            tvNetType.setVisibility(View.VISIBLE);
+            tvNetType.setText(netType);
+        }
     }
 
+    //设置病人信息
     @Override
     public void patientInfo(PatientResponse.DataBean entity) {
         EventBus.getDefault().post(new PatientInfoEvent(entity));
@@ -410,6 +417,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 activeInfo.getBedNumber() + "床");
     }
 
+    //没有入院信息
     @Override
     public void notPatientInfo() {
         EventBus.getDefault().post(new OutHospitalEvent());
@@ -452,10 +460,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         GlideUtil.loadImg(dao.getScreenUrl(), ivImg, R.mipmap.ic_video_load_default);
     }
 
-    @Override
-    public void getTaskListSuccess() {
-
-    }
 
     /**
      * 保存RegisterId到后台
@@ -515,7 +519,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 start(VideoFragment.getIntance());
                 break;
             case R.id.ll_hos_service:     //医疗服务
-                showToast("更多精彩,敬请期待");
+                start(new CabinetFragment());
                 break;
             case R.id.ll_video_line: // 直播TV
                 start(new WoTvVideoLineFragment());
@@ -533,46 +537,15 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 start(new GuideFragment());
                 break;
             case R.id.lly_sign: // 签到中心
-                if (UserUtil.getUserBean() != null) {
-                    start(new SignFragment());
-                } else {
-                    showLoginDialog(0);
-                }
+                start(new SignFragment());
                 break;
             case R.id.lly_luck: // 抽奖中心
-                if (UserUtil.getUserBean() != null) {
-                    start(new LuckDrawFragment());
-                } else {
-                    showLoginDialog(1);
-                }
+                start(new LuckDrawFragment());
                 break;
             case R.id.lly_cabinet: // 屏安柜
-                showToast("更多精彩,敬请期待");
-                SystemUtils.screenOff();
+                start(new CabinetFragment());
                 break;
         }
-    }
-
-
-    private void showLoginDialog(final int type) {
-        loginDialog = new LoginDialog(getActivity(), R.style.DialogFullscreen, new LoginDialog
-                .OnLoginListener() {
-            @Override
-            public void onSuccess() {
-                loginDialog.dismiss();
-                if (type == 0) {
-                    start(new SignFragment());
-                } else {
-                    start(new LuckDrawFragment());
-                }
-            }
-
-            @Override
-            public void onFail() {
-
-            }
-        });
-        loginDialog.show();
     }
 }
 

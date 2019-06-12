@@ -16,8 +16,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.muju.note.launcher.base.LauncherApplication;
-import com.muju.note.launcher.util.log.LogUtil;
-import com.muju.note.launcher.util.toast.FancyToast;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -194,7 +192,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
         sb.append(result);
         try {
             long timestamp = System.currentTimeMillis();
-            String time = formatter.format(new Date());
+            String time = formatter.format(new Date()).replaceAll(":","-");
             String fileName = "crash-" + time + "-" + timestamp + ".log";
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
                 String path = "/mnt/sdcard/crash/";

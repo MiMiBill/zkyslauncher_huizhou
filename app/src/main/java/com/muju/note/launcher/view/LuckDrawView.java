@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.userinfo.bean.LuckDrawBean;
+import com.muju.note.launcher.app.video.dialog.LoginDialog;
 import com.muju.note.launcher.util.user.UserUtil;
 
 import java.util.ArrayList;
@@ -35,27 +36,28 @@ public class LuckDrawView extends FrameLayout {
 
     private long startTime;
     private long endTime;
+    private LoginDialog loginDialog;
 
     public LuckDrawView(@NonNull Context context) {
         super(context);
         this.context=context;
-        init();
+        init(context);
     }
 
     public LuckDrawView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.context=context;
-        init();
+        init(context);
     }
 
     public LuckDrawView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.context=context;
-        init();
+        init(context);
     }
 
 
-    private void init(){
+    private void init(final Context context){
         list=new ArrayList<>();
         View view=LayoutInflater.from(context).inflate(R.layout.view_luckdraw,null);
         initData("杯子", (ImageView) view.findViewById(R.id.iv_one));
@@ -76,19 +78,40 @@ public class LuckDrawView extends FrameLayout {
         rlStart.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(UserUtil.getUserBean().getIntegral()>=10){
-                    start();
-                    if(startListener!=null){
-                        startListener.start();
+                if (UserUtil.getUserBean() != null){
+                    if(UserUtil.getUserBean().getIntegral()>=10){
+                        start();
+                        if(startListener!=null){
+                            startListener.start();
+                        }
+                    }else {
+                        Toast.makeText(context,"积分不够,无法抽奖,快去做任务转去积分吧",Toast.LENGTH_SHORT).show();
                     }
                 }else {
-                    Toast.makeText(context,"积分不够,无法抽奖,快去做任务转去积分吧",Toast.LENGTH_SHORT).show();
+                    showLoginDialog(context);
                 }
             }
         });
 
         addView(view);
     }
+
+    private void showLoginDialog(Context context) {
+        loginDialog = new LoginDialog(context, R.style.DialogFullscreen, new LoginDialog
+                .OnLoginListener() {
+            @Override
+            public void onSuccess() {
+                loginDialog.dismiss();
+            }
+
+            @Override
+            public void onFail() {
+
+            }
+        });
+        loginDialog.show();
+    }
+
 
     private void initData(String tag, ImageView imageView){
         LuckDrawBean bean=new LuckDrawBean();

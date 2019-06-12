@@ -16,7 +16,6 @@ import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.Constants;
 import com.muju.note.launcher.util.DateUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
-import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.net.NetWorkUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
 import com.muju.note.launcher.util.sign.Signature;
@@ -164,30 +163,6 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
             }
         });
     }
-
-    @Override
-    public void getTaskList(String userId, String hospitalId, String depId) {
-        Map<String, String> params = new HashMap();
-        params.put("userId", userId);
-        params.put("hospitalId", hospitalId);
-        params.put("depId", depId);
-        OkGo.<String>post(UrlUtil.getTaskList())
-                .tag(this)
-                .params(params)
-                .execute(new StringCallback() {
-                             @Override
-                             public void onSuccess(Response<String> response) {
-                                 LogUtil.i(TAG,response.body());
-                             }
-
-                             @Override
-                             public void onError(Response<String> response) {
-                                 super.onError(response);
-                             }
-                         }
-                );
-    }
-
 
     public void onDestroy() {
         RxUtil.closeDisposable(diDateTimer);

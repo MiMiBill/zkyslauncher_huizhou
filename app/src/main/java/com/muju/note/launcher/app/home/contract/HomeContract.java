@@ -28,8 +28,6 @@ public interface HomeContract {
         void getVideoTopNull();
 
         void getVideoTopImg(VideoInfoDao dao);
-
-        void getTaskListSuccess();
     }
 
 
@@ -41,7 +39,5 @@ public interface HomeContract {
         void getVideoHis();
 
         void getTopVideo();
-
-        void getTaskList(String userId,String hospitalId,String depId);
     }
 }

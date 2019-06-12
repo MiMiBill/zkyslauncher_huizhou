@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lzy.okgo.OkGo;
@@ -35,8 +36,8 @@ public class LoginDialog extends Dialog {
 
     @BindView(R.id.tvTitle)
     TextView tvTitle;
-    @BindView(R.id.iv_dissmiss)
-    ImageView ivDissmiss;
+    @BindView(R.id.rel_dismiss)
+    RelativeLayout ivDissmiss;
     @BindView(R.id.iv_login_code)
     ImageView ivLoginCode;
     @BindView(R.id.llPayCode)
