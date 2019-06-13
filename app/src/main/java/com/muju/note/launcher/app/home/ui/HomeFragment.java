@@ -13,7 +13,7 @@ import android.widget.VideoView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.muju.note.launcher.R;
-import com.muju.note.launcher.app.Cabinet.CabinetFragment;
+import com.muju.note.launcher.app.Cabinet.ui.CabinetFragment;
 import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
 import com.muju.note.launcher.app.dialog.AdvertsDialog;
 import com.muju.note.launcher.app.home.adapter.HomeHisVideoAdapter;
@@ -28,6 +28,7 @@ import com.muju.note.launcher.app.home.presenter.HomePresenter;
 import com.muju.note.launcher.app.hostipal.ui.EncyFragment;
 import com.muju.note.launcher.app.hostipal.ui.HosPitalMissionFragment;
 import com.muju.note.launcher.app.hostipal.ui.HospitalMienFragment;
+import com.muju.note.launcher.app.hostipal.ui.MedicalServiceFragment;
 import com.muju.note.launcher.app.luckdraw.ui.LuckDrawFragment;
 import com.muju.note.launcher.app.msg.ui.MsgFragment;
 import com.muju.note.launcher.app.setting.ui.GuideFragment;
@@ -57,6 +58,7 @@ import com.muju.note.launcher.util.file.FileUtils;
 import com.muju.note.launcher.util.gilde.GlideUtil;
 import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.log.LogUtil;
+import com.muju.note.launcher.util.net.NetWorkUtil;
 import com.muju.note.launcher.util.qr.QrCodeUtils;
 import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.util.system.SystemUtils;
@@ -155,6 +157,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     TextView tvNetType;
     @BindView(R.id.iv_wifi)
     ImageView ivWifi;
+    @BindView(R.id.iv_net)
+    ImageView ivNet;
 
     private ActivePadInfo.DataBean activeInfo;
     private List<PatientResponse.DataBean> patientList = new ArrayList<>();
@@ -392,11 +396,45 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         tvNet.setText(net);
         if(netType.equals("WIFI")){
             tvNetType.setVisibility(View.GONE);
+            ivNet.setVisibility(View.GONE);
             ivWifi.setVisibility(View.VISIBLE);
-        }else {
-            ivWifi.setVisibility(View.GONE);
+            int wifi=NetWorkUtil.getWifiLevel(LauncherApplication.getContext());
+            if (wifi > -50 && wifi < 0) {//最强
+                ivWifi.setImageResource(R.mipmap.wifi_level_good);
+            } else if (wifi > -70 && wifi < -50) {//较强
+                ivWifi.setImageResource(R.mipmap.wifi_level_better);
+            } else if (wifi > -80 && wifi < -70) {//较弱
+                ivWifi.setImageResource(R.mipmap.wifi_level_normal);
+            } else if (wifi > -100 && wifi < -80) {//微弱
+                ivWifi.setImageResource(R.mipmap.wifi_level_bad);
+            }else {
+                ivWifi.setImageResource(R.mipmap.wifi_level_none);
+            }
+        }else if(netType.equals("无网络连接") || netType.equals("未知")){
+            ivWifi.setVisibility(View.VISIBLE);
+            ivNet.setVisibility(View.VISIBLE);
             tvNetType.setVisibility(View.VISIBLE);
             tvNetType.setText(netType);
+            ivWifi.setImageResource(R.mipmap.wifi_level_none);
+            ivNet.setImageResource(R.mipmap.net_level_none);
+
+        }else {
+            ivWifi.setVisibility(View.GONE);
+            ivNet.setVisibility(View.VISIBLE);
+            tvNetType.setVisibility(View.VISIBLE);
+            tvNetType.setText(netType);
+            int netDbm=NetWorkUtil.getCurrentNetDBM(LauncherApplication.getContext());
+            if (netDbm > -75) {
+                ivNet.setImageResource(R.mipmap.net_level_good);
+            } else if (netDbm > -85) {
+                ivNet.setImageResource(R.mipmap.net_level_better);
+            } else if (netDbm > -95) {
+                ivNet.setImageResource(R.mipmap.net_level_normal);
+            } else if (netDbm > -100) {
+                ivNet.setImageResource(R.mipmap.net_level_bad);
+            } else {
+                ivNet.setImageResource(R.mipmap.net_level_none);
+            }
         }
     }
 
@@ -519,7 +557,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 start(VideoFragment.getIntance());
                 break;
             case R.id.ll_hos_service:     //医疗服务
-                start(new CabinetFragment());
+                start(new MedicalServiceFragment());
                 break;
             case R.id.ll_video_line: // 直播TV
                 start(new WoTvVideoLineFragment());

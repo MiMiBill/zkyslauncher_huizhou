@@ -21,4 +21,8 @@
     <string name="pad_has_actived_tip">辛苦了运维同事，感谢您的不辞辛劳！</string>
     <string name="vip_count_down_time">VIP剩余时长:</string>
     <string name="ble_dddw_tip">您的点滴已打完\n请呼叫护士为您拔针</string>
+    <string name="cabinet_dec">屏安柜是中科云上自主研发的，针对住院病人\n及其陪护人员的一体化服务设备。</string>
+    <string name="company_dec">
+                            中科云上开发一款专属定制平板电脑，专利气囊摇臂支架连接宝柜，不仅为患者提供丰富的娱乐、服务、医疗信息等服务 功能，更方便医院自身宣传信息、科普知识等内容，极大的节省了护士工作量。
+                        </string>
 </resources>

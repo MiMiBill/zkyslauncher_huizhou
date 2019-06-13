@@ -79,11 +79,18 @@
                 android:textSize="@dimen/px14" />
 
             <ImageView
+                android:id="@+id/iv_net"
+                android:layout_width="@dimen/px26"
+                android:layout_height="@dimen/px20"
+                android:layout_marginLeft="@dimen/px10"
+                />
+
+            <ImageView
                 android:id="@+id/iv_wifi"
                 android:layout_width="@dimen/px26"
                 android:layout_height="@dimen/px20"
                 android:layout_marginLeft="@dimen/px10"
-                android:src="@mipmap/ic_home_wifi" />
+                 />
 
         </LinearLayout>
 

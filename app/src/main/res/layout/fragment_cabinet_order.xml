@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/main_bg">
+
+    <include layout="@layout/title_bar"/>
+    <LinearLayout
+        android:layout_margin="@dimen/px20"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_marginTop="68px"
+                android:layout_marginLeft="40px"
+                android:layout_width="match_parent"
+                android:layout_height="122px">
+                <ImageView
+                    android:src="@mipmap/icon_home_bed"
+                    android:layout_marginTop="26px"
+                    android:layout_width="116px"
+                    android:layout_height="52px" />
+                <TextView
+                    android:id="@+id/tv_status"
+                    android:text="正在使用中"
+                    android:textSize="24sp"
+                    android:layout_marginLeft="14px"
+                    android:layout_marginTop="6px"
+                    android:textColor="@color/color_333333"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/tv_day"
+                    android:text="0天"
+                    android:gravity="center"
+                    android:textSize="30sp"
+                    android:layout_marginLeft="20px"
+                    android:background="@color/color_F2F2F2"
+                    android:textColor="@color/color_333333"
+                    android:layout_width="154px"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:id="@+id/tv_hour"
+                    android:text="12时"
+                    android:textSize="30sp"
+                    android:gravity="center"
+                    android:layout_marginLeft="30px"
+                    android:background="@color/color_F2F2F2"
+                    android:textColor="@color/color_333333"
+                    android:layout_width="154px"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="32px"
+                android:layout_gravity="right"
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_height="50px">
+                <TextView
+                    android:text="开始时间"
+                    android:textSize="26sp"
+                    android:textStyle="bold"
+                    android:layout_marginRight="40px"
+                    android:textColor="@color/color_333333"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/tv_start"
+                    android:text="2019年6月8日"
+                    android:textSize="26sp"
+                    android:textColor="@color/color_888888"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="32px"
+                android:layout_gravity="right"
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_height="50px">
+                <TextView
+                    android:text="结束时间"
+                    android:textSize="26sp"
+                    android:textStyle="bold"
+                    android:layout_marginRight="40px"
+                    android:textColor="@color/color_333333"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/tv_end"
+                    android:text="2019年6月8日"
+                    android:textSize="26sp"
+                    android:textColor="@color/color_888888"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/tv_open"
+                android:text="开柜"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:layout_marginTop="100px"
+                android:layout_gravity="right"
+                android:background="@color/color_38B4E9"
+                android:layout_width="360px"
+                android:layout_height="50px" />
+            <TextView
+                android:id="@+id/tv_back"
+                android:text="归还"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:layout_marginTop="30px"
+                android:layout_gravity="right"
+                android:background="@color/color_FF6339"
+                android:layout_width="360px"
+                android:layout_height="50px" />
+
+            <TextView
+                android:layout_marginTop="10px"
+                android:layout_gravity="right"
+                android:textSize="20sp"
+                android:layout_marginRight="60px"
+                android:text="客服电话：400-110-6217"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <RelativeLayout
+            android:layout_width="552px"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/iv_normal"
+                android:src="@mipmap/order_bg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <RelativeLayout
+                android:visibility="gone"
+                android:id="@+id/rel_exception"
+                android:background="@mipmap/order_ex_bg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:src="@mipmap/order_ex"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="114px"
+                    android:layout_height="114px" />
+                <ImageView
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/order_icon"
+                    android:layout_width="200px"
+                    android:layout_height="200px" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

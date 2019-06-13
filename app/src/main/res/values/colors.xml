@@ -44,4 +44,6 @@
     <color name="line_de">#dedede</color>
     <color name="btn_call_default">#427bea</color>
     <color name="btn_call_pressed">#2455b4</color>
+    <color name="color_1a153e">#1A153E</color>
+    <color name="color_F2F2F2">#F2F2F2</color>
 </resources>

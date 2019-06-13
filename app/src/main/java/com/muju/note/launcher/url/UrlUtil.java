@@ -237,21 +237,38 @@ public class UrlUtil {
 
     //获取任务列表
     public static String getTaskList() {
-        return getHost() + "/point/type/taskList";
+        return getHost() + "/point/record/taskList";
     }
 
     //做任务
     public static String doTask() {
-        return getHost() + "/point/type/doTask";
+        return getHost() + "/point/record/doTask";
     }
 
     //获取奖品列表
     public static String getPointList() {
-        return getHost() + "/point/type/pointList";
+        return getHost() + "/point/record/pointList";
     }
 
     //兑奖
     public static String useReward() {
-        return getHost() + "/point/type/useReward";
+        return getHost() + "/point/record/useReward";
+    }
+
+
+    //屏安柜
+    public static String getCabnetOrder() {
+        return getHost() + "/cabinet/order?deviceCode=%s";
+    }
+
+    //屏开锁
+    public static String unLock() {
+        return getHost() + "/cabinet/unlock";
+    }
+
+
+    //屏还床
+    public static String returnBed() {
+        return getHost() + "/cabinet/returnBed";
     }
 }

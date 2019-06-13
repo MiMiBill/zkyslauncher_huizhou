@@ -2,6 +2,9 @@ package com.muju.note.launcher.util;
 
 import android.text.TextUtils;
 
+import com.muju.note.launcher.util.log.LogFactory;
+
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -92,6 +95,7 @@ public class DateUtil {
 
     /**
      * 判断时间戳是否在有效期之内
+     *
      * @param date
      * @return
      */
@@ -102,12 +106,13 @@ public class DateUtil {
     }
 
     /**
-     *  判断时间是否相等
+     * 判断时间是否相等
+     *
      * @param t1
      * @param t2
      * @return
      */
-    public static boolean isTimeRight(String t1, String t2){
+    public static boolean isTimeRight(String t1, String t2) {
         if (TextUtils.isEmpty(t1) || t1.equals("")) {
             return false;
         }
@@ -121,5 +126,89 @@ public class DateUtil {
         int t1time = t1hour * 60 + t1min;
         int t2time = t2hour * 60 + t2min;
         return t1time == t2time ? true : false;
+    }
+
+
+    //时间格式化成时间戳
+    public static long formartTime(String formartTime) {
+        long time = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse(formartTime, new
+                ParsePosition(0)).getTime() / 1000;
+        LogFactory.l().i("time===" + time);
+        return time;
+    }
+
+
+    //获取倒计时
+    public static String getTime(int tempTime) {
+        LogFactory.l().i("tempTime===" + tempTime);
+
+        if (tempTime > 0) {
+            if (tempTime > 60 * 60 * 24) {
+                int day = tempTime / (3600 * 24);
+                int hour = tempTime % 3600 / 3600;
+                int minitue = tempTime % 3600 / 60;
+                return day + "天" + hour + "小时" + minitue + "分";
+            } else {
+                if (tempTime > 60 * 60) {
+                    return tempTime / 3600 + "小时" + tempTime % 3600 / 60 + "分";
+                } else {
+                    return tempTime / 60 + "分";
+                }
+            }
+        } else {
+            int absTime = Math.abs(tempTime);
+            if (absTime > 60 * 60 * 24) {
+                int day = absTime / (3600 * 24);
+                int hour = absTime % 3600 / 3600;
+                int minitue = absTime % 3600 / 60;
+                return "-" + day + "天" + "-" + hour + "小时" + "-" + minitue + "分";
+            } else {
+                if (absTime > 60 * 60) {
+                    return "-" + absTime / 3600 + "小时" + "-" + absTime % 3600 / 60 + "分";
+                } else {
+                    return "-" + absTime / 60 + "分";
+                }
+            }
+        }
+    }
+
+
+    //获取倒计时天
+    public static String getDay(int tempTime) {
+        if (tempTime > 0) {
+            if (tempTime > 60 * 60 * 24) {
+                int day = tempTime / (3600 * 24);
+                return day + "天";
+            } else {
+                return "0天";
+            }
+        } else {
+            int absTime = Math.abs(tempTime);
+            if (absTime > 60 * 60 * 24) {
+                int day = absTime / (3600 * 24);
+                return "-" + day + "天";
+            } else {
+                return "0天";
+            }
+        }
+    }
+
+    //获取倒计时小时时长
+    public static String getHour(int tempTime) {
+        LogFactory.l().i("tempTime===" + tempTime);
+        if (tempTime > 0) {
+            if (tempTime > 60 * 60) {
+                return tempTime / 3600 + "小时";
+            } else {
+                return "0小时";
+            }
+        } else {
+            int absTime = Math.abs(tempTime);
+            if (absTime > 60 * 60) {
+                return "-" + absTime / 3600 + "小时";
+            } else {
+                return "0小时";
+            }
+        }
     }
 }
