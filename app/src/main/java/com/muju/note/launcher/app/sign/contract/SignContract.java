@@ -1,5 +1,6 @@
 package com.muju.note.launcher.app.sign.contract;
 
+import com.muju.note.launcher.app.sign.bean.TaskBean;
 import com.muju.note.launcher.app.userinfo.bean.SignBean;
 import com.muju.note.launcher.app.userinfo.bean.SignStatusBean;
 import com.muju.note.launcher.base.IPresenter;
@@ -9,6 +10,7 @@ public interface SignContract {
     interface View extends IView {
         void chesignStatus(SignStatusBean bean);
         void checkSign(SignBean data);
+        void doTask(TaskBean taskBean);
     }
 
 

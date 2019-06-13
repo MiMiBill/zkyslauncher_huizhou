@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.adtask.TaskListBean;
+import com.muju.note.launcher.app.sign.bean.TaskBean;
 import com.muju.note.launcher.app.sign.contract.SignContract;
 import com.muju.note.launcher.app.sign.presenter.SignPresenter;
 import com.muju.note.launcher.app.userinfo.bean.SignBean;
@@ -149,5 +150,10 @@ public class SignFragment extends BaseFragment<SignPresenter> implements SignCon
         tvIntegral.setText("您总共有" + bean.getIntegral() + "积分");
         UserUtil.getUserBean().setIntegral(bean.getIntegral());
         tvSign.setText("已签到");
+    }
+
+    @Override
+    public void doTask(TaskBean taskBean) {
+
     }
 }

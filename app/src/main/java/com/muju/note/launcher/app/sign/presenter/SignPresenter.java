@@ -3,6 +3,7 @@ package com.muju.note.launcher.app.sign.presenter;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.Response;
+import com.muju.note.launcher.app.sign.bean.TaskBean;
 import com.muju.note.launcher.app.sign.contract.SignContract;
 import com.muju.note.launcher.app.userinfo.bean.SignBean;
 import com.muju.note.launcher.app.userinfo.bean.SignStatusBean;
@@ -52,20 +53,20 @@ public class SignPresenter extends BasePresenter<SignContract.View> implements S
 
     @Override
     public void doTask(int userId,int advertId) {
-        OkGo.<BaseBean<SignBean>>post(UrlUtil.doTask())
+        OkGo.<BaseBean<TaskBean>>post(UrlUtil.doTask())
                 .tag(this)
                 .params("userId", userId)
                 .params("hospitalId", ActiveUtils.getPadActiveInfo().getHospitalId())
                 .params("deptId", ActiveUtils.getPadActiveInfo().getDeptId())
                 .params("advertId", advertId)
-                .execute(new JsonCallback<BaseBean<SignBean>>() {
+                .execute(new JsonCallback<BaseBean<TaskBean>>() {
             @Override
-            public void onSuccess(Response<BaseBean<SignBean>> response) {
-//                mView.checkSign(response.body().getData());
+            public void onSuccess(Response<BaseBean<TaskBean>> response) {
+
             }
 
             @Override
-            public void onError(Response<BaseBean<SignBean>> response) {
+            public void onError(Response<BaseBean<TaskBean>> response) {
                 super.onError(response);
             }
         });

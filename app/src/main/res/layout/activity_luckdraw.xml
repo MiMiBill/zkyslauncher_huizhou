@@ -105,11 +105,12 @@
                 android:layout_marginTop="21px"/>
 
             <Button
+                android:id="@+id/btn_list"
                 android:layout_width="200px"
                 android:layout_height="45px"
                 android:background="@mipmap/ic_luck_draw_btn_bg"
                 android:layout_marginTop="20px"
-                android:text="我的奖品"
+                android:text="奖品列表"
                 android:textColor="@color/white"
                 android:textSize="18px"/>
 

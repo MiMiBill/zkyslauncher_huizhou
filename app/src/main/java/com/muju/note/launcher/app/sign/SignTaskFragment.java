@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.adtask.TaskListBean;
+import com.muju.note.launcher.app.publicAdress.ui.PublicNumFragment;
+import com.muju.note.launcher.app.sign.bean.TaskBean;
 import com.muju.note.launcher.app.sign.contract.SignContract;
 import com.muju.note.launcher.app.sign.presenter.SignPresenter;
 import com.muju.note.launcher.app.userinfo.bean.SignBean;
@@ -14,6 +16,8 @@ import com.muju.note.launcher.app.userinfo.bean.SignStatusBean;
 import com.muju.note.launcher.app.video.dialog.LoginDialog;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.entity.AdvertWebEntity;
+import com.muju.note.launcher.util.Constants;
+import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.util.user.UserUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -52,20 +56,29 @@ public class SignTaskFragment extends BaseFragment<SignPresenter> implements Sig
 
     @Override
     public void initData() {
-        if (UserUtil.getUserBean() != null){
+        if (UserUtil.getUserBean() != null) {
             setTask();
         }
 
-       llBack.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               pop();
-           }
-       });
+        llBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pop();
+            }
+        });
     }
 
     private void setTask() {
-        mPresenter.checkSignStatus(UserUtil.getUserBean().getId());
+        adList = SPUtil.getTaskList(Constants.AD_TASK_LIST);
+        for (TaskListBean bean : adList) {
+            if (bean.getTaskType() == 2) {
+                videoBean = bean;
+            } else if (bean.getTaskType() == 1) {
+                pubBean = bean;
+            } else if (bean.getTaskType() == 3) {
+                signBean = bean;
+            }
+        }
     }
 
     @Override
@@ -79,29 +92,29 @@ public class SignTaskFragment extends BaseFragment<SignPresenter> implements Sig
     }
 
 
-    @OnClick({R.id.tv_sign,R.id.iv_video, R.id.iv_pub})
+    @OnClick({R.id.tv_sign, R.id.iv_video, R.id.iv_pub})
     public void onViewClicked(View view) {
-        if (UserUtil.getUserBean() == null){
+        if (UserUtil.getUserBean() == null) {
             showLoginDialog();
             return;
         }
         switch (view.getId()) {
             case R.id.tv_sign:
-                if (!isSign) {
-                    if(signBean!=null){
-                        mPresenter.checkSign(UserUtil.getUserBean().getId());
-//                        mPresenter.doTask(UserUtil.getUserBean().getId(),signBean.getId());
-                    }
+                setTask();
+                if (signBean != null) {
+                    mPresenter.doTask(UserUtil.getUserBean().getId(),signBean.getId());
                 }
                 break;
             case R.id.iv_video:
-                if(videoBean!=null){
-                    EventBus.getDefault().post(new AdvertWebEntity(videoBean.getId(), videoBean.getName(), videoBean.getResourceUrl(),3));
+                setTask();
+                if (videoBean != null) {
+                    EventBus.getDefault().post(new AdvertWebEntity(videoBean.getId(), videoBean.getName(), videoBean.getResourceUrl(), 3));
                 }
                 break;
             case R.id.iv_pub:
-                if(pubBean!=null){
-
+                setTask();
+                if (pubBean != null) {
+                    start(PublicNumFragment.newInstance(pubBean.getId(),pubBean.getResourceUrl()));
                 }
                 break;
         }
@@ -140,5 +153,18 @@ public class SignTaskFragment extends BaseFragment<SignPresenter> implements Sig
         tvIntegral.setText("您总共有" + bean.getIntegral() + "积分");
         UserUtil.getUserBean().setIntegral(bean.getIntegral());
         tvSign.setText("已签到");
+    }
+
+    @Override
+    public void doTask(TaskBean taskBean) {
+        if(taskBean!=null){
+            if(taskBean.getAdverts()!=null){
+                SPUtil.saveDataList(Constants.AD_TASK_LIST,taskBean.getAdverts());
+            }
+            if(taskBean.getPointRecords()!=null){
+                TaskBean.PointRecordsBean recordsBean = taskBean.getPointRecords().get(0);
+                tvIntegral.setText("您总共有" + recordsBean.getCount() + "积分");
+            }
+        }
     }
 }

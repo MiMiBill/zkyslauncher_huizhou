@@ -32,7 +32,7 @@ import com.muju.note.launcher.app.luckdraw.ui.LuckDrawFragment;
 import com.muju.note.launcher.app.msg.ui.MsgFragment;
 import com.muju.note.launcher.app.setting.ui.GuideFragment;
 import com.muju.note.launcher.app.setting.ui.SettingFragment;
-import com.muju.note.launcher.app.sign.ui.SignFragment;
+import com.muju.note.launcher.app.sign.SignTaskFragment;
 import com.muju.note.launcher.app.video.bean.PayEntity;
 import com.muju.note.launcher.app.video.bean.PayEvent;
 import com.muju.note.launcher.app.video.bean.VideoEvent;
@@ -537,7 +537,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 start(new GuideFragment());
                 break;
             case R.id.lly_sign: // 签到中心
-                start(new SignFragment());
+//                start(new SignFragment());
+                start(new SignTaskFragment());
                 break;
             case R.id.lly_luck: // 抽奖中心
                 start(new LuckDrawFragment());
