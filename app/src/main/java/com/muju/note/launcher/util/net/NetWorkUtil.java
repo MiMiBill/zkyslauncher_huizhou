@@ -18,6 +18,7 @@ import android.telephony.gsm.GsmCellLocation;
 import com.muju.note.launcher.util.log.LogFactory;
 
 import com.muju.note.launcher.base.LauncherApplication;
+import com.muju.note.launcher.util.log.LogUtil;
 
 import java.text.DecimalFormat;
 
@@ -27,12 +28,15 @@ import io.reactivex.functions.Consumer;
 
 public class NetWorkUtil {
 
-    public static final String NETWORK_NONE = "NULL"; // 没有网络连接
+    private static final String TAG=NetWorkUtil.class.getSimpleName();
+
+    public static final String NETWORK_NONE = "无网络连接"; // 没有网络连接
     public static final String NETWORK_WIFI = "WIFI"; // wifi连接
-    public static final String NETWORK_2G = "002G"; // 2G
-    public static final String NETWORK_3G = "003G"; // 3G
-    public static final String NETWORK_4G = "004G"; // 4G
-    public static final String NETWORK_MOBILE = "00LL"; // 手机流量
+    public static final String NETWORK_2G = "2G"; // 2G
+    public static final String NETWORK_3G = "3G"; // 3G
+    public static final String NETWORK_4G = "4G"; // 4G
+    public static final String NETWORK_MOBILE = "未知"; // 手机流量
+    public static int NETWORK_TYPE=0; // 0.4G  1.WIFI 2.无网络连接
     public static String NETWORK_LEVEN = "";
 
     /**
@@ -44,11 +48,13 @@ public class NetWorkUtil {
     public static String getNetworkState(Context context) {
         ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE); // 获取网络服务
         if (null == connManager) { // 为空则认为无网络
+            NETWORK_TYPE=2;
             return NETWORK_NONE;
         }
         // 获取网络类型，如果为空，返回无网络
         NetworkInfo activeNetInfo = connManager.getActiveNetworkInfo();
         if (activeNetInfo == null || !activeNetInfo.isAvailable()) {
+            NETWORK_TYPE=2;
             return NETWORK_NONE;
         }
         // 判断是否为WIFI
@@ -57,6 +63,7 @@ public class NetWorkUtil {
             NetworkInfo.State state = wifiInfo.getState();
             if (null != state) {
                 if (state == NetworkInfo.State.CONNECTED || state == NetworkInfo.State.CONNECTING) {
+                    NETWORK_TYPE=1;
                     return NETWORK_WIFI;
                 }
             }
@@ -88,6 +95,7 @@ public class NetWorkUtil {
             case TelephonyManager.NETWORK_TYPE_EDGE:
             case TelephonyManager.NETWORK_TYPE_1xRTT:
             case TelephonyManager.NETWORK_TYPE_IDEN:
+                NETWORK_TYPE=0;
                 return NETWORK_2G;
             // 3G网络
             case TelephonyManager.NETWORK_TYPE_EVDO_A:
@@ -99,11 +107,14 @@ public class NetWorkUtil {
             case TelephonyManager.NETWORK_TYPE_EVDO_B:
             case TelephonyManager.NETWORK_TYPE_EHRPD:
             case TelephonyManager.NETWORK_TYPE_HSPAP:
+                NETWORK_TYPE=0;
                 return NETWORK_3G;
             // 4G网络
             case TelephonyManager.NETWORK_TYPE_LTE:
+                NETWORK_TYPE=0;
                 return NETWORK_4G;
             default:
+                NETWORK_TYPE=0;
                 return NETWORK_MOBILE;
         }
     }
@@ -187,7 +198,6 @@ public class NetWorkUtil {
 
                                     NETWORK_LEVEN = "dbm:" + dbm + "\n" + "没有4G信号,网络很差" + "\n level" + level + "\nasu:" + asu;
                                 }
-                                LogFactory.l().i("NETWORK_LEVEN==="+NETWORK_LEVEN);
                                 onSignalStrengthsChanged(signalStrength);
                             }
                         };
@@ -248,59 +258,4 @@ public class NetWorkUtil {
         }
         return speedString;
     }
-
-
-    /**
-     *  获取当前网络连接类型
-     * @return
-     */
-    public static String getNetworkType() {
-        String strNetworkType = "";
-        final ConnectivityManager connectivityManager = (ConnectivityManager) LauncherApplication.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        //获取链接网络信息
-        final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()) {
-            if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-                strNetworkType = "WIFI";
-            } else if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
-                String _strSubTypeName = networkInfo.getSubtypeName();
-                // TD-SCDMA   networkType is 17
-                int networkType = networkInfo.getSubtype();
-                switch (networkType) {
-                    case TelephonyManager.NETWORK_TYPE_GPRS:
-                    case TelephonyManager.NETWORK_TYPE_EDGE:
-                    case TelephonyManager.NETWORK_TYPE_CDMA:
-                    case TelephonyManager.NETWORK_TYPE_1xRTT:
-                    case TelephonyManager.NETWORK_TYPE_IDEN: //api<8 : replace by 11
-                        strNetworkType = "2G";
-                        break;
-                    case TelephonyManager.NETWORK_TYPE_UMTS:
-                    case TelephonyManager.NETWORK_TYPE_EVDO_0:
-                    case TelephonyManager.NETWORK_TYPE_EVDO_A:
-                    case TelephonyManager.NETWORK_TYPE_HSDPA:
-                    case TelephonyManager.NETWORK_TYPE_HSUPA:
-                    case TelephonyManager.NETWORK_TYPE_HSPA:
-                    case TelephonyManager.NETWORK_TYPE_EVDO_B: //api<9 : replace by 14
-                    case TelephonyManager.NETWORK_TYPE_EHRPD:  //api<11 : replace by 12
-                    case TelephonyManager.NETWORK_TYPE_HSPAP:  //api<13 : replace by 15
-                        strNetworkType = "3G";
-                        break;
-                    case TelephonyManager.NETWORK_TYPE_LTE:    //api<11 : replace by 13
-                        strNetworkType = "4G";
-                        break;
-                    default:
-                        // http://baike.baidu.com/item/TD-SCDMA 中国移动 联通 电信 三种3G制式
-                        if (_strSubTypeName.equalsIgnoreCase("TD-SCDMA") || _strSubTypeName.equalsIgnoreCase("WCDMA") || _strSubTypeName.equalsIgnoreCase("CDMA2000")) {
-                            strNetworkType = "3G";
-                        } else {
-                            strNetworkType = _strSubTypeName;
-                        }
-
-                        break;
-                }
-            }
-        }
-        return strNetworkType;
-    }
-
 }
