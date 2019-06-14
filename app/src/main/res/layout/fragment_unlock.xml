@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_bg"
+    android:orientation="vertical">
+
+    <include layout="@layout/title_bar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/px20"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_height="52px"
+            android:layout_marginLeft="40px"
+            android:layout_marginTop="68px">
+
+            <ImageView
+                android:layout_width="116px"
+                android:layout_height="52px"
+                android:src="@mipmap/icon_home_bed" />
+
+            <TextView
+                android:id="@+id/tv_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="14px"
+                android:text=""
+                android:textColor="@color/color_333333"
+                android:textSize="24sp" />
+        </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/rel_status"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="80px"
+            android:layout_width="280px"
+            android:layout_height="280px">
+            <ImageView
+                android:id="@+id/iv_status"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/tv_su"
+            android:textStyle="bold"
+            android:textColor="@color/color_333333"
+            android:textSize="30sp"
+            android:layout_below="@id/rel_status"
+            android:layout_marginTop="25px"
+            android:text=""
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/btn_su"
+            android:text="完成"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:layout_below="@id/tv_su"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30px"
+            android:background="@color/blue_gray"
+            android:layout_width="360px"
+            android:layout_height="50px" />
+    </RelativeLayout>
+</LinearLayout>

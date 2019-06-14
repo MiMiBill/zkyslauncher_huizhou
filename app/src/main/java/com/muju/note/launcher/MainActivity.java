@@ -255,7 +255,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
             case 2:
                 break;
             case 3:
-                start(AdvideoViewFragment.newInstance(entity.getAdvertId(),entity.getUrl()));
+                start(AdvideoViewFragment.newInstance(entity.getAdvertId(),entity.getUrl(),0,0));
                 break;
             case 4:
                 break;

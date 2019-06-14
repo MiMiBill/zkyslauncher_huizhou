@@ -78,7 +78,7 @@ public class CabinetBean implements Serializable {
         private String cabinetCode;
         private String channel;
         private String createTime;
-        private int deposit;
+        private double deposit;
         private int deptId;
         private int deviceType;
         private int expireFee;
@@ -134,11 +134,11 @@ public class CabinetBean implements Serializable {
             this.createTime = createTime;
         }
 
-        public int getDeposit() {
+        public double getDeposit() {
             return deposit;
         }
 
-        public void setDeposit(int deposit) {
+        public void setDeposit(double deposit) {
             this.deposit = deposit;
         }
 

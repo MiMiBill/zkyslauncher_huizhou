@@ -1,5 +1,7 @@
 package com.muju.note.launcher.app.Cabinet.ui;
 
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -62,7 +64,20 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
     Button btnLock;
     private boolean isOrder = false;
     private CabinetBean.DataBean dataBean;
-
+    private Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 1:
+                    handler.removeMessages(1);
+                    if(isOrder){
+                        setTime();
+                    }
+                    break;
+            }
+        }
+    };
     @Override
     public int getLayout() {
         return R.layout.fragment_cabinet;
@@ -87,6 +102,7 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
     @Override
     public void onDestroy() {
         super.onDestroy();
+        handler.removeMessages(1);
         EventBus.getDefault().unregister(this);
     }
 
@@ -120,7 +136,8 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
         }
     }
 
-    //订单页面归还成功
+
+    //推送成功或者订单页面归还成功,重新拉取订单
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(ReturnBedEvent event) {
         mPresenter.getCabnetOrder();
@@ -145,9 +162,7 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
                 tvEnd.setText(dataBean.getExpireTime());
                 tvStart.setText(dataBean.getLeaseTime());
                 tvRentTime.setText(dataBean.getNum() + "天");
-                long currentTimeMillis = System.currentTimeMillis() / 1000;
-                long lastTime = DateUtil.formartTime(dataBean.getExpireTime());
-                tvTime.setText(DateUtil.getTime((int) (lastTime - currentTimeMillis)));
+                setTime();
             } else {
                 noOrder();
             }
@@ -155,6 +170,14 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
             e.printStackTrace();
         }
 
+    }
+
+    //设置归还倒计时
+    private void setTime() {
+        handler.sendEmptyMessageDelayed(1,1000*60);
+        long currentTimeMillis = System.currentTimeMillis() / 1000;
+        long lastTime = DateUtil.formartTime(dataBean.getExpireTime());
+        tvTime.setText(DateUtil.getTime((int) (lastTime - currentTimeMillis)));
     }
 
     //无订单
@@ -170,6 +193,8 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
         tvRentTime.setText("暂无信息");
         btnLock.setEnabled(false);
         btnUnlock.setEnabled(false);
+        btnUnlock.setBackgroundColor(getResources().getColor(R.color.black_gray1));
+        btnLock.setBackgroundColor(getResources().getColor(R.color.black_gray1));
     }
 
     @Override
@@ -180,12 +205,12 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
                 LockBean lockBean = new Gson().fromJson(data, LockBean.class);
                 if (lockBean != null && lockBean.getData()!=null && lockBean.getData().getCode()==200
                         && lockBean.getData().getObject()!=null && lockBean.getData().getObject().getCode()==200) {
-                    showToast("柜子打开成功");
+                    start(UnlockFragment.newInstance(1,dataBean));
                 } else {
-                    showToast("打开柜子失败,请稍后重试");
+                    start(UnlockFragment.newInstance(2,dataBean));
                 }
             } else {
-                showToast("打开柜子失败,请稍后重试");
+                start(UnlockFragment.newInstance(2,dataBean));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -199,12 +224,12 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
 
     @Override
     public void unLockFail() {
-        showToast("开柜失败");
+        start(UnlockFragment.newInstance(2,dataBean));
     }
 
     @Override
     public void returnBedFail() {
-        showToast("归还失败,请稍后再试");
+        start(ReturnBedFragment.newInstance(2,dataBean));
     }
 
     @Override
@@ -213,10 +238,10 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
             JSONObject jsonObject = new JSONObject(data);
             if (jsonObject.optInt("code") == 200) {
                 isOrder=false;
-                showError("归还成功");
-               mPresenter.getCabnetOrder();
+                start(ReturnBedFragment.newInstance(1,dataBean));
+                mPresenter.getCabnetOrder();
             } else {
-                showToast("归还失败,请稍后再试");
+                start(ReturnBedFragment.newInstance(2,dataBean));
             }
         } catch (Exception e) {
             e.printStackTrace();

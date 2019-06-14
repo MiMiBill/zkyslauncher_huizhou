@@ -15,9 +15,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.muju.note.launcher.R;
+import com.muju.note.launcher.app.luckdraw.event.GetGiftListEvent;
+import com.muju.note.launcher.app.sign.bean.PriseBean;
 import com.muju.note.launcher.app.userinfo.bean.LuckDrawBean;
 import com.muju.note.launcher.app.video.dialog.LoginDialog;
+import com.muju.note.launcher.topics.TaskTopics;
+import com.muju.note.launcher.util.Constants;
+import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.util.user.UserUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +35,13 @@ public class LuckDrawView extends FrameLayout {
 
     private Context context;
     private List<LuckDrawBean> list=new ArrayList<>();
+    private List<PriseBean.PointListBean> pointList=new ArrayList<>();
 
     private int luckIndex=0; // 上次中奖的下标
     private int luckingIndex=0; // 抽奖中的index
     private TextView tvStart;
     private RelativeLayout rlStart;
-
+    private int luckCount=0;
     private long startTime;
     private long endTime;
     private LoginDialog loginDialog;
@@ -58,6 +66,7 @@ public class LuckDrawView extends FrameLayout {
 
 
     private void init(final Context context){
+        pointList=SPUtil.getPriseTaskList(Constants.PRISE_TASK_LIST);
         list=new ArrayList<>();
         View view=LayoutInflater.from(context).inflate(R.layout.view_luckdraw,null);
         initData("杯子", (ImageView) view.findViewById(R.id.iv_one));
@@ -79,13 +88,18 @@ public class LuckDrawView extends FrameLayout {
             @Override
             public void onClick(View view) {
                 if (UserUtil.getUserBean() != null){
-                    if(UserUtil.getUserBean().getIntegral()>=10){
+                    for (PriseBean.PointListBean pointListBean: pointList){
+                        if(pointListBean.getCode().equals(TaskTopics.TASK_CJ_CODE)){
+                            luckCount=pointListBean.getCount();
+                        }
+                    }
+                    if(luckCount>0){
                         start();
                         if(startListener!=null){
                             startListener.start();
                         }
                     }else {
-                        Toast.makeText(context,"积分不够,无法抽奖,快去做任务转去积分吧",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,"抽奖次数不够,快去做任务获取抽奖机会吧",Toast.LENGTH_SHORT).show();
                     }
                 }else {
                     showLoginDialog(context);
@@ -101,6 +115,7 @@ public class LuckDrawView extends FrameLayout {
                 .OnLoginListener() {
             @Override
             public void onSuccess() {
+                EventBus.getDefault().post(new GetGiftListEvent());
                 loginDialog.dismiss();
             }
 

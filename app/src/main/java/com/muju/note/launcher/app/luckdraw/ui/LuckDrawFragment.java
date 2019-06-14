@@ -8,13 +8,24 @@ import android.widget.LinearLayout;
 
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.luckdraw.contract.LuckContract;
+import com.muju.note.launcher.app.luckdraw.event.GetGiftListEvent;
 import com.muju.note.launcher.app.luckdraw.presenter.LuckPresenter;
+import com.muju.note.launcher.app.sign.bean.PriseBean;
 import com.muju.note.launcher.app.sign.ui.PriseFragment;
 import com.muju.note.launcher.app.video.dialog.LoginDialog;
 import com.muju.note.launcher.base.BaseFragment;
+import com.muju.note.launcher.util.Constants;
+import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.util.toast.ToastUtil;
 import com.muju.note.launcher.util.user.UserUtil;
 import com.muju.note.launcher.view.LuckDrawView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -26,7 +37,9 @@ public class LuckDrawFragment extends BaseFragment<LuckPresenter> implements Luc
     LuckDrawView luckdrawView;
     @BindView(R.id.btn_list)
     Button btnList;
-
+    private LoginDialog loginDialog;
+    private List<PriseBean.GiftListBean> giftBeans = new ArrayList<>();
+    private List<PriseBean.PointListBean> pointList=new ArrayList<>();
     private int[] luckIndex = {1, 4, 6, 9, 11};
     private Handler handler = new Handler() {
         @Override
@@ -40,7 +53,6 @@ public class LuckDrawFragment extends BaseFragment<LuckPresenter> implements Luc
             }
         }
     };
-    private LoginDialog loginDialog;
 
     @Override
     public int getLayout() {
@@ -49,6 +61,10 @@ public class LuckDrawFragment extends BaseFragment<LuckPresenter> implements Luc
 
     @Override
     public void initData() {
+        EventBus.getDefault().register(this);
+        if(UserUtil.getUserBean()!=null){
+            mPresenter.getPointList(UserUtil.getUserBean().getId());
+        }
 
         luckdrawView.setOnLuckStartListener(new LuckDrawView.OnStartListener() {
             @Override
@@ -70,6 +86,17 @@ public class LuckDrawFragment extends BaseFragment<LuckPresenter> implements Luc
         });
     }
 
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
+        EventBus.getDefault().unregister(this);
+    }
+
+    //获取奖品列表个人信息
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(GetGiftListEvent event) {
+       mPresenter.getPointList(UserUtil.getUserBean().getId());
+    }
 
     @Override
     public void initPresenter() {
@@ -126,5 +153,13 @@ public class LuckDrawFragment extends BaseFragment<LuckPresenter> implements Luc
     @Override
     public void startFail() {
 
+    }
+
+    @Override
+    public void setPrise(PriseBean priseBeans) {
+        giftBeans = priseBeans.getGiftList();
+        pointList = priseBeans.getPointList();
+        SPUtil.saveDataList(Constants.PRISE_TASK_LIST, pointList);
+        SPUtil.saveDataList(Constants.USER_TASK_LIST,giftBeans);
     }
 }

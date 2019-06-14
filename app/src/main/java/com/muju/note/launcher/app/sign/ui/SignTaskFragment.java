@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.adtask.TaskListBean;
+import com.muju.note.launcher.app.publicAdress.ui.PublicNumFragment;
+import com.muju.note.launcher.app.publicui.AdvideoViewFragment;
 import com.muju.note.launcher.app.sign.bean.TaskBean;
 import com.muju.note.launcher.app.sign.contract.SignContract;
 import com.muju.note.launcher.app.sign.presenter.SignPresenter;
@@ -14,10 +16,9 @@ import com.muju.note.launcher.app.userinfo.bean.SignBean;
 import com.muju.note.launcher.app.userinfo.bean.SignStatusBean;
 import com.muju.note.launcher.app.video.dialog.LoginDialog;
 import com.muju.note.launcher.base.BaseFragment;
-import com.muju.note.launcher.entity.AdvertWebEntity;
+import com.muju.note.launcher.util.Constants;
+import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.util.user.UserUtil;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 //签到
-public class SignFragment extends BaseFragment<SignPresenter> implements SignContract.View {
+public class SignTaskFragment extends BaseFragment<SignPresenter> implements SignContract.View {
     @BindView(R.id.tv_sign)
     TextView tvSign;
     @BindView(R.id.tv_gift)
@@ -66,18 +67,25 @@ public class SignFragment extends BaseFragment<SignPresenter> implements SignCon
     }
 
     private void setTask() {
-        mPresenter.checkSignStatus(UserUtil.getUserBean().getId());
-//        tvIntegral.setText("您总共有" + UserUtil.getUserBean().getIntegral() + "积分");
-       /* adList = SPUtil.getTaskList(Constants.AD_TASK_LIST);
+        videoBean=null;
+        pubBean=null;
+        signBean=null;
+        adList.clear();
+        adList = SPUtil.getTaskList(Constants.AD_TASK_LIST);
         for (TaskListBean bean : adList) {
             if (bean.getTaskType() == 2) {
-                videoBean=bean;
+                videoBean = bean;
             } else if (bean.getTaskType() == 1) {
-                pubBean=bean;
-            }else if(bean.getTaskType()==3){
-                signBean=bean;
+                pubBean = bean;
+            } else if (bean.getTaskType() == 3) {
+                signBean = bean;
             }
-        }*/
+        }
+        if(signBean==null){
+            tvSign.setTextColor(getResources().getColor(R.color.white_gray3));
+        }else {
+            tvSign.setTextColor(getResources().getColor(R.color.white));
+        }
     }
 
     @Override
@@ -99,19 +107,21 @@ public class SignFragment extends BaseFragment<SignPresenter> implements SignCon
         }
         switch (view.getId()) {
             case R.id.tv_sign:
-                if (!isSign) {
-                    mPresenter.checkSign(UserUtil.getUserBean().getId());
+                setTask();
+                if (signBean != null) {
+                    mPresenter.doTask(UserUtil.getUserBean().getId(),signBean.getId());
                 }
                 break;
             case R.id.iv_video:
+                setTask();
                 if (videoBean != null) {
-                    EventBus.getDefault().post(new AdvertWebEntity(videoBean.getId(), videoBean
-                            .getName(), videoBean.getResourceUrl(), 3));
+                    start(AdvideoViewFragment.newInstance(videoBean.getId(),videoBean.getResourceUrl(),1,videoBean.getSecond()));
                 }
                 break;
             case R.id.iv_pub:
+                setTask();
                 if (pubBean != null) {
-
+                    start(PublicNumFragment.newInstance(pubBean.getId(),pubBean.getResourceUrl()));
                 }
                 break;
         }
@@ -154,6 +164,14 @@ public class SignFragment extends BaseFragment<SignPresenter> implements SignCon
 
     @Override
     public void doTask(TaskBean taskBean) {
-
+        if(taskBean!=null){
+            if(taskBean.getAdverts()!=null){
+                SPUtil.saveDataList(Constants.AD_TASK_LIST,taskBean.getAdverts());
+            }
+            if(taskBean.getPointRecords()!=null){
+                TaskBean.PointRecordsBean recordsBean = taskBean.getPointRecords().get(0);
+                tvIntegral.setText("您总共有" + recordsBean.getCount() + "积分");
+            }
+        }
     }
 }

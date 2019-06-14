@@ -8,23 +8,25 @@ import com.muju.note.launcher.base.BasePresenter;
 import com.muju.note.launcher.okgo.BaseBean;
 import com.muju.note.launcher.okgo.JsonCallback;
 import com.muju.note.launcher.url.UrlUtil;
-
-import java.util.ArrayList;
+import com.muju.note.launcher.util.user.UserUtil;
 
 public class PrisePresenter extends BasePresenter<PriseContract.View> implements PriseContract.Presenter {
+
     @Override
-    public void getPointList(int userId) {
-        OkGo.<BaseBean<ArrayList<PriseBean>>>post(UrlUtil.getPointList())
+    public void useReward(int typeId, int count) {
+        OkGo.<BaseBean<PriseBean>>post(UrlUtil.useReward())
                 .tag(this)
-                .params("userId", userId)
-                .execute(new JsonCallback<BaseBean<ArrayList<PriseBean>>>() {
+                .params("userId", UserUtil.getUserBean().getId())
+                .params("typeId", typeId)
+                .params("count", count)
+                .execute(new JsonCallback<BaseBean<PriseBean>>() {
                     @Override
-                    public void onSuccess(Response<BaseBean<ArrayList<PriseBean>>> response) {
-                        mView.setPrise(response.body().getData());
+                    public void onSuccess(Response<BaseBean<PriseBean>> response) {
+                        mView.useReward(response.body().getData());
                     }
 
                     @Override
-                    public void onError(Response<BaseBean<ArrayList<PriseBean>>> response) {
+                    public void onError(Response<BaseBean<PriseBean>> response) {
                         super.onError(response);
                     }
                 });

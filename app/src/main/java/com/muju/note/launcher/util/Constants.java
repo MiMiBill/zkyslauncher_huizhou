@@ -56,4 +56,9 @@ public class Constants {
 
     //任务广告列表
     public static final String AD_TASK_LIST = "advert_task_list";
+    //奖品列表
+    public static final String PRISE_TASK_LIST = "prise_task_list";
+
+    //个人积分信息
+    public static final String USER_TASK_LIST = "user_task_list";
 }

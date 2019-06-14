@@ -8,6 +8,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.muju.note.launcher.R;
+import com.muju.note.launcher.app.Cabinet.event.ReturnBedEvent;
 import com.muju.note.launcher.app.home.event.PatientEvent;
 import com.muju.note.launcher.app.msg.db.CustomMessageDao;
 import com.muju.note.launcher.app.satisfaction.SatisfactionSurveyActivity;
@@ -90,6 +91,7 @@ public class JPUSHReceiver extends BroadcastReceiver {
                             PayUtils.setPaied(payEntity);
                             EventBus.getDefault().post(new VideoEvent(VideoEvent.RESUME));
                             EventBus.getDefault().post(new PayEvent(PayEntity.ORDER_TYPE_VIDEO));
+                            EventBus.getDefault().post(new ReturnBedEvent());
                         }
 
                         break;

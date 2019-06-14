@@ -12,12 +12,16 @@ import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.Cabinet.bean.CabinetBean;
 import com.muju.note.launcher.app.Cabinet.bean.LockBean;
 import com.muju.note.launcher.app.Cabinet.contract.CabinetOrderContract;
+import com.muju.note.launcher.app.Cabinet.event.OrderCloseEvent;
 import com.muju.note.launcher.app.Cabinet.event.ReturnBedEvent;
 import com.muju.note.launcher.app.Cabinet.presenter.CabinetOrderPresenter;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.util.DateUtil;
+import com.muju.note.launcher.util.log.LogFactory;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
 import butterknife.BindView;
@@ -26,8 +30,7 @@ import butterknife.OnClick;
 /**
  * 屏安柜
  */
-public class CabinetOrderFragment extends BaseFragment<CabinetOrderPresenter> implements
-        CabinetOrderContract.View {
+public class CabinetOrderFragment extends BaseFragment<CabinetOrderPresenter> implements CabinetOrderContract.View {
     @BindView(R.id.ll_back)
     LinearLayout llBack;
     @BindView(R.id.tv_status)
@@ -50,7 +53,6 @@ public class CabinetOrderFragment extends BaseFragment<CabinetOrderPresenter> im
     RelativeLayout relException;
     private static final String CABINET_BEAN="cabinet_bean";
     private CabinetBean.DataBean dataBean;
-
     public static CabinetOrderFragment newInstance(CabinetBean.DataBean dataBean) {
         Bundle args = new Bundle();
         args.putSerializable(CABINET_BEAN, dataBean);
@@ -66,22 +68,50 @@ public class CabinetOrderFragment extends BaseFragment<CabinetOrderPresenter> im
 
     @Override
     public void initData() {
+        EventBus.getDefault().register(this);
         dataBean = (CabinetBean.DataBean) getArguments().getSerializable(CABINET_BEAN);
         if(dataBean!=null){
             tvStart.setText(dataBean.getLeaseTime());
             tvEnd.setText(dataBean.getExpireTime());
             if(dataBean.getStatus()==2){    //正在使用
                 tvStatus.setText("正在使用中");
+                ivNormal.setVisibility(View.VISIBLE);
+                relException.setVisibility(View.GONE);
                 tvStatus.setTextColor(getResources().getColor(R.color.color_333333));
             }else {     //逾期使用
                 tvStatus.setText("逾期使用中");
+                ivNormal.setVisibility(View.GONE);
+                relException.setVisibility(View.VISIBLE);
                 tvStatus.setTextColor(getResources().getColor(R.color.color_FF6339));
+
             }
-            long cuTime = System.currentTimeMillis()/1000;
-            long lastTime=DateUtil.formartTime(dataBean.getExpireTime());
-            tvDay.setText(DateUtil.getDay((int)(lastTime-cuTime)));
-            tvHour.setText(DateUtil.getHour((int)(lastTime-cuTime)));
+            setTime();
         }
+    }
+
+
+
+
+    //推送成功或者订单页面归还成功,重新拉取订单
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(OrderCloseEvent event) {
+        EventBus.getDefault().post(new ReturnBedEvent());
+        pop();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LogFactory.l().i("onDestroy");
+        EventBus.getDefault().unregister(this);
+    }
+
+    //设置时间显示
+    private void setTime() {
+        long cuTime = System.currentTimeMillis()/1000;
+        long lastTime=DateUtil.formartTime(dataBean.getExpireTime());
+        tvDay.setText(DateUtil.getDay((int)(lastTime-cuTime)));
+        tvHour.setText(DateUtil.getHour((int)(lastTime-cuTime)));
     }
 
     @Override
@@ -94,7 +124,6 @@ public class CabinetOrderFragment extends BaseFragment<CabinetOrderPresenter> im
 
     }
 
-
     @OnClick({R.id.ll_back, R.id.tv_back, R.id.tv_open})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -102,6 +131,7 @@ public class CabinetOrderFragment extends BaseFragment<CabinetOrderPresenter> im
                 pop();
                 break;
             case R.id.tv_back:
+                mPresenter.returnBed(dataBean.getId());
                 break;
             case R.id.tv_open:
                 mPresenter.unLock(dataBean.getCabinetCode());
@@ -117,12 +147,12 @@ public class CabinetOrderFragment extends BaseFragment<CabinetOrderPresenter> im
                 LockBean lockBean = new Gson().fromJson(data, LockBean.class);
                 if (lockBean != null && lockBean.getData()!=null && lockBean.getData().getCode()==200
                         && lockBean.getData().getObject()!=null && lockBean.getData().getObject().getCode()==200) {
-                    showToast("柜子打开成功");
+                    start(UnlockFragment.newInstance(1,dataBean));
                 } else {
-                    showToast("打开柜子失败,请稍后重试");
+                    start(UnlockFragment.newInstance(2,dataBean));
                 }
             } else {
-                showToast("打开柜子失败,请稍后重试");
+                start(UnlockFragment.newInstance(2,dataBean));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -131,12 +161,12 @@ public class CabinetOrderFragment extends BaseFragment<CabinetOrderPresenter> im
 
     @Override
     public void unLockFail() {
-        showToast("打开柜子失败,请稍后重试");
+        start(UnlockFragment.newInstance(2,dataBean));
     }
 
     @Override
     public void returnBedFail() {
-        showToast("归还失败,请稍后再试");
+        start(ReturnBedFragment.newInstance(2,dataBean));
     }
 
     @Override
@@ -144,10 +174,9 @@ public class CabinetOrderFragment extends BaseFragment<CabinetOrderPresenter> im
         try {
             JSONObject jsonObject = new JSONObject(data);
             if (jsonObject.optInt("code") == 200) {
-                showError("归还成功");
-                EventBus.getDefault().post(new ReturnBedEvent());
+                start(ReturnBedFragment.newInstance(1,dataBean));
             } else {
-                showToast("归还失败,请稍后再试");
+                start(ReturnBedFragment.newInstance(2,dataBean));
             }
         } catch (Exception e) {
             e.printStackTrace();

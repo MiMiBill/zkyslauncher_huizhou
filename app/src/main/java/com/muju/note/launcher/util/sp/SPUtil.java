@@ -10,6 +10,7 @@ import com.google.gson.reflect.TypeToken;
 import com.muju.note.launcher.app.adtask.TaskListBean;
 import com.muju.note.launcher.app.home.bean.AdvertsBean;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
+import com.muju.note.launcher.app.sign.bean.PriseBean;
 import com.muju.note.launcher.base.LauncherApplication;
 
 import java.lang.reflect.Type;
@@ -159,6 +160,40 @@ public class SPUtil {
         }
         Gson gson = new Gson();
         datalist = gson.fromJson(strJson, new TypeToken<List<TaskListBean>>() {}.getType());
+        return datalist;
+    }
+
+    /**
+     * 获取个人信息积分
+     * @param tag
+     * @return
+     */
+    public static  List<PriseBean.GiftListBean> getUserTaskList(String tag) {
+        List<PriseBean.GiftListBean> datalist=new ArrayList<>();
+        String strJson = getSharedPreferences().getString(tag, null);
+//        LogFactory.l().i("getPatientList-strJson=="+strJson);
+        if (null == strJson) {
+            return datalist;
+        }
+        Gson gson = new Gson();
+        datalist = gson.fromJson(strJson, new TypeToken<List<PriseBean.GiftListBean>>() {}.getType());
+        return datalist;
+    }
+
+    /**
+     * 获取奖品列表
+     * @param tag
+     * @return
+     */
+    public static  List<PriseBean.PointListBean> getPriseTaskList(String tag) {
+        List<PriseBean.PointListBean> datalist=new ArrayList<>();
+        String strJson = getSharedPreferences().getString(tag, null);
+//        LogFactory.l().i("getPatientList-strJson=="+strJson);
+        if (null == strJson) {
+            return datalist;
+        }
+        Gson gson = new Gson();
+        datalist = gson.fromJson(strJson, new TypeToken<List<PriseBean.PointListBean>>() {}.getType());
         return datalist;
     }
 }

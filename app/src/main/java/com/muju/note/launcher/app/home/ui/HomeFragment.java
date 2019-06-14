@@ -33,7 +33,7 @@ import com.muju.note.launcher.app.luckdraw.ui.LuckDrawFragment;
 import com.muju.note.launcher.app.msg.ui.MsgFragment;
 import com.muju.note.launcher.app.setting.ui.GuideFragment;
 import com.muju.note.launcher.app.setting.ui.SettingFragment;
-import com.muju.note.launcher.app.sign.SignTaskFragment;
+import com.muju.note.launcher.app.sign.ui.SignTaskFragment;
 import com.muju.note.launcher.app.video.bean.PayEntity;
 import com.muju.note.launcher.app.video.bean.PayEvent;
 import com.muju.note.launcher.app.video.bean.VideoEvent;

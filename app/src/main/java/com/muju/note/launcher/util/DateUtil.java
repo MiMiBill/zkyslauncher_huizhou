@@ -2,8 +2,6 @@ package com.muju.note.launcher.util;
 
 import android.text.TextUtils;
 
-import com.muju.note.launcher.util.log.LogFactory;
-
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -133,15 +131,13 @@ public class DateUtil {
     public static long formartTime(String formartTime) {
         long time = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse(formartTime, new
                 ParsePosition(0)).getTime() / 1000;
-        LogFactory.l().i("time===" + time);
+//        LogFactory.l().i("time===" + time);
         return time;
     }
 
 
     //获取倒计时
     public static String getTime(int tempTime) {
-        LogFactory.l().i("tempTime===" + tempTime);
-
         if (tempTime > 0) {
             if (tempTime > 60 * 60 * 24) {
                 int day = tempTime / (3600 * 24);
@@ -161,12 +157,12 @@ public class DateUtil {
                 int day = absTime / (3600 * 24);
                 int hour = absTime % 3600 / 3600;
                 int minitue = absTime % 3600 / 60;
-                return "-" + day + "天" + "-" + hour + "小时" + "-" + minitue + "分";
+                return "-" + day + "天"  + hour + "小时"  + minitue + "分";
             } else {
                 if (absTime > 60 * 60) {
-                    return "-" + absTime / 3600 + "小时" + "-" + absTime % 3600 / 60 + "分";
+                    return  absTime / 3600 + "小时"  + absTime % 3600 / 60 + "分";
                 } else {
-                    return "-" + absTime / 60 + "分";
+                    return  absTime / 60 + "分";
                 }
             }
         }
@@ -195,20 +191,17 @@ public class DateUtil {
 
     //获取倒计时小时时长
     public static String getHour(int tempTime) {
-        LogFactory.l().i("tempTime===" + tempTime);
-        if (tempTime > 0) {
-            if (tempTime > 60 * 60) {
-                return tempTime / 3600 + "小时";
-            } else {
-                return "0小时";
-            }
+        int absTime = Math.abs(tempTime);
+        if (absTime > 60 * 60 * 24) {
+            int hour = absTime % 3600 / 3600;
+            return  hour + "小时";
         } else {
-            int absTime = Math.abs(tempTime);
             if (absTime > 60 * 60) {
-                return "-" + absTime / 3600 + "小时";
+                return  absTime / 3600 + "小时";
             } else {
-                return "0小时";
+                return  "0小时";
             }
         }
+
     }
 }

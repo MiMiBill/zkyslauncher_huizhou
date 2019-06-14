@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:paddingRight="@dimen/px10"
     android:paddingLeft="@dimen/px10"
-    android:orientation="vertical">
+    android:id="@+id/rel_gift"
+    >
 
     <ImageView
         android:id="@+id/iv_img"
@@ -18,10 +19,10 @@
         android:layout_below="@id/iv_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="name"
+        android:text=""
         android:textSize="@dimen/px22"
         android:textColor="@color/black1"
-        android:layout_gravity="center_horizontal"/>
+        />
 
     <TextView
         android:id="@+id/tv_count"
@@ -33,5 +34,5 @@
         android:layout_marginLeft="@dimen/px15"
         android:textSize="@dimen/px22"
         android:textColor="@color/black1"
-        android:layout_gravity="center_horizontal"/>
+        />
 </RelativeLayout>

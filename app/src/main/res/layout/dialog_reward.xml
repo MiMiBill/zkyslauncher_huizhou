@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="match_parent"
+        android:layout_height="480px"
+        android:layout_marginTop="-3px"
+        android:layout_marginLeft="2px"
+        android:layout_marginRight="2px"
+        android:gravity="center"
+        android:textSize="24px"
+        android:textColor="#333"
+        android:background="#ffffff"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="40px">
+        <TextView
+            android:layout_gravity="center"
+            android:id="@+id/btn_positive"
+            android:layout_width="160px"
+            android:layout_height="40px"
+            android:clickable="true"
+            android:gravity="center"
+            android:textColor="@color/message_dialog_txt_color"
+            android:text="确定兑换"
+            android:background="@color/color_FF6339"/>
+        <TextView
+            android:layout_gravity="center"
+            android:id="@+id/btn_native"
+            android:layout_width="160px"
+            android:layout_height="40px"
+            android:clickable="true"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/px25"
+            android:textColor="@color/message_dialog_txt_color"
+            android:text="取消"
+            android:background="@color/color_FF6339"/>
+    </LinearLayout>
+
+</LinearLayout>
