@@ -51,6 +51,7 @@ import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
 import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.util.user.UserUtil;
+import com.unicom.common.VideoSdkConfig;
 import com.unicom.common.base.video.IVideoEvent;
 import com.unicom.common.base.video.expand.ExpandVideoListener;
 
@@ -387,30 +388,24 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                     });
                     errorDialog.setCanceledOnTouchOutside(false);
                     errorDialog.show();
-//                    switch (e.getCode()) {
-//                        case VideoErrorInfo.CODE_ACCOUNT_CHECK_ERROR:
-//                        case VideoErrorInfo.CODE_VIDEO_CONTENTE_PERMISSION:
-//                            if (VideoSdkConfig.getInstance().getUser().isLogined()) {
-//                                //这里发生错误就先重新登录
-//                                showToast("没有权限播放此视频");
-//                                pop();
-//                            } else {
-//                                WoTvUtil.getInstance().login();
-//                                showToast("网络环境异常，请检查！");
-//                            }
-//                            break;
-//                        case VideoErrorInfo.CODE_VIDEO_INNER_ERROR:
-//                        case VideoErrorInfo.CODE_VIDEO_GET_ERROR:
-//                            showToast(e.getMessage() + "");
-//                            pop();
-//                            break;
-//                        case VideoErrorInfo.CODE_ORDER_CHECK_ERROR:
-//                        case VideoErrorInfo.CODE_VIDEO_URL_ERROR:
-//                            WoTvUtil.getInstance().login();
-//                            showToast(e.getMessage() + "");
-//                            pop();
-//                            break;
-//                    }
+                    RxUtil.closeDisposable(diVerifyPlayingStatus);
+                    switch (e.getCode()) {
+                        case VideoErrorInfo.CODE_ACCOUNT_CHECK_ERROR:
+                        case VideoErrorInfo.CODE_VIDEO_CONTENTE_PERMISSION:
+                            if (VideoSdkConfig.getInstance().getUser().isLogined()) {
+                                //这里发生错误就先重新登录
+                            } else {
+                                WoTvUtil.getInstance().login();
+                            }
+                            break;
+                        case VideoErrorInfo.CODE_VIDEO_INNER_ERROR:
+                        case VideoErrorInfo.CODE_VIDEO_GET_ERROR:
+                            break;
+                        case VideoErrorInfo.CODE_ORDER_CHECK_ERROR:
+                        case VideoErrorInfo.CODE_VIDEO_URL_ERROR:
+                            WoTvUtil.getInstance().login();
+                            break;
+                    }
                 }catch (Exception es){
                     es.printStackTrace();
                     pop();

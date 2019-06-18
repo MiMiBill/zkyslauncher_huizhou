@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/px15"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/holo_red_dark"
+        android:text="正在初始化数据，请勿重启或拔掉电源"
+        android:layout_marginTop="@dimen/px20"
+        android:textSize="@dimen/px25"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_check"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/px5"
+        android:layout_marginBottom="@dimen/px10">
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

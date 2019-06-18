@@ -14,6 +14,15 @@ public class VideoDownLoadBean {
     private int id;
     private long createDate;
     private String tableName;
+    private int count;
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
 
     public String getPath() {
         return path;

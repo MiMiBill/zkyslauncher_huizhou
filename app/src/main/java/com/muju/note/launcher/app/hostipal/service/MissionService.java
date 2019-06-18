@@ -9,6 +9,7 @@ import com.lzy.okgo.request.GetRequest;
 import com.lzy.okserver.OkDownload;
 import com.lzy.okserver.download.DownloadListener;
 import com.muju.note.launcher.app.hostipal.db.MissionInfoDao;
+import com.muju.note.launcher.app.startUp.event.StartCheckDataEvent;
 import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.okgo.BaseBean;
 import com.muju.note.launcher.okgo.JsonCallback;
@@ -18,6 +19,7 @@ import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.sdcard.SdcardConfig;
 
+import org.greenrobot.eventbus.EventBus;
 import org.litepal.LitePal;
 import org.litepal.crud.callback.CountCallback;
 import org.litepal.crud.callback.FindMultiCallback;
@@ -52,10 +54,25 @@ public class MissionService {
         });
     }
 
+    public void startMiss(){
+        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_MISS_START));
+        LitePal.countAsync(MissionInfoDao.class).listen(new CountCallback() {
+            @Override
+            public void onFinish(int count) {
+                if(count<=10){
+                    updateMission(1);
+                }else {
+                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_MISS_SUCCESS));
+                }
+            }
+        });
+    }
+
     /**
      *  更新宣教信息
      */
     public void updateMission(final int status){
+        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_MISS_HTTP_START));
         Map<String, String> params = new HashMap();
         params.put("hospitalId", "" + ActiveUtils.getPadActiveInfo().getHospitalId());
         params.put("deptId", "" + ActiveUtils.getPadActiveInfo().getDeptId());
@@ -64,6 +81,7 @@ public class MissionService {
                 .execute(new JsonCallback<BaseBean<List<MissionInfoDao>>>() {
                     @Override
                     public void onSuccess(final Response<BaseBean<List<MissionInfoDao>>> response) {
+                        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_MISS_DB_START));
                         ExecutorService service= Executors.newSingleThreadExecutor();
                         service.execute(new Runnable() {
                             @Override
@@ -77,8 +95,15 @@ public class MissionService {
                                 if(status==1){
                                     downMission();
                                 }
+                                EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_MISS_SUCCESS));
                             }
                         });
+                    }
+
+                    @Override
+                    public void onError(Response<BaseBean<List<MissionInfoDao>>> response) {
+                        super.onError(response);
+                        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_MISS_HTTP_FAIL));
                     }
                 });
 

@@ -4,20 +4,25 @@ import android.os.Environment;
 
 import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.FileCallback;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.HttpParams;
+import com.lzy.okgo.model.Progress;
 import com.lzy.okgo.model.Response;
 import com.muju.note.launcher.app.activeApp.entity.ResourceEntity;
 import com.muju.note.launcher.app.hostipal.bean.EncyUpdateBean;
 import com.muju.note.launcher.app.hostipal.bean.GetDownloadBean;
 import com.muju.note.launcher.app.hostipal.db.InfoDao;
 import com.muju.note.launcher.app.hostipal.db.InfomationDao;
+import com.muju.note.launcher.app.startUp.event.StartCheckDataEvent;
+import com.muju.note.launcher.app.video.db.VideoInfoDao;
 import com.muju.note.launcher.app.video.util.DbHelper;
 import com.muju.note.launcher.listener.OnZipSuccessListener;
 import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.okgo.BaseBean;
 import com.muju.note.launcher.okgo.JsonCallback;
 import com.muju.note.launcher.service.http.ServiceHttp;
+import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.Constants;
 import com.muju.note.launcher.util.log.LogFactory;
@@ -37,55 +42,116 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- *  医疗百科
+ * 医疗百科
  */
 public class EncyclopeService {
 
-    public static EncyclopeService encyService=null;
+    public static EncyclopeService encyService = null;
     private String dbName;
     private String outPathName = "medical.db";
     private String outPathString = Environment.getExternalStorageDirectory().getAbsolutePath() + File
             .separator + "zkysdb/" + outPathName;
-    public static EncyclopeService getInstance(){
-        if(encyService==null){
-            encyService=new EncyclopeService();
+
+    public static EncyclopeService getInstance() {
+        if (encyService == null) {
+            encyService = new EncyclopeService();
         }
         return encyService;
     }
 
-    public void start(){
+    public void start() {
         EventBus.getDefault().register(this);
 //        LitePal.deleteAll(InfoDao.class);
 //        LitePal.deleteAll(InfomationDao.class);
         LitePal.countAsync(InfomationDao.class).listen(new CountCallback() {
             @Override
             public void onFinish(int count) {
-                if(count<=0){
+                if (count <= 0) {
                     getDownLoadUrl();
                 }
             }
         });
     }
 
-
-     public void getDownLoadUrl() {
-            OkGo.<BaseBean<GetDownloadBean>>get(UrlUtil.getDb()).tag(this).execute(new
-                JsonCallback<BaseBean<GetDownloadBean>>() {
-                @Override
-                public void onSuccess(Response<BaseBean<GetDownloadBean>> response) {
-                    try {
-                        String path = response.body().getData().getPath();
-                        dbName = path.substring(path.lastIndexOf("/") + 1);
-                        if (!dbName.equals(SPUtil.getString(Constants.ENCY_ZIP))) {
-                            SPUtil.putString(Constants.ENCY_ZIP, dbName);
-                        }
-                        ServiceHttp.getInstance().downloadFile(new ResourceEntity(ResourceEntity.ENCY_ZIP, path, dbName));
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
+    public void startEncy() {
+        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_START));
+        LitePal.countAsync(InfomationDao.class).listen(new CountCallback() {
+            @Override
+            public void onFinish(int count) {
+                if (count <= 10000) {
+                    getDownLoadUrl();
+                }else {
+                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_SUCCESS));
                 }
-            });
-        }
+            }
+        });
+    }
+
+
+    public void getDownLoadUrl() {
+        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_HTTP_START));
+        OkGo.<BaseBean<GetDownloadBean>>get(UrlUtil.getDb())
+                .tag(this)
+                .execute(new JsonCallback<BaseBean<GetDownloadBean>>() {
+                    @Override
+                    public void onSuccess(Response<BaseBean<GetDownloadBean>> response) {
+                        downLoadZip(response.body());
+                    }
+
+                    @Override
+                    public void onError(Response<BaseBean<GetDownloadBean>> response) {
+                        super.onError(response);
+                        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_HTTP_FAIL));
+                    }
+                });
+    }
+
+    private void downLoadZip(final BaseBean<GetDownloadBean> bean) {
+        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_DOWNLOAD_START));
+        OkGo.<File>get(bean.getData().getPath())
+                .execute(new FileCallback("/sdcard/zkys/resource/", "encyclope.zip") {
+                    @Override
+                    public void onSuccess(Response<File> response) {
+                        unZip(bean);
+                    }
+
+                    @Override
+                    public void downloadProgress(Progress progress) {
+                        super.downloadProgress(progress);
+                        int pro=(int)(progress.fraction*100);
+                        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_DOWNLOAD_PROGRESS,pro));
+                    }
+
+                    @Override
+                    public void onError(Response<File> response) {
+                        super.onError(response);
+                        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_DOWNLOAD_FAIL));
+                    }
+                });
+    }
+
+    private void unZip(final BaseBean<GetDownloadBean> bean) {
+        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_UNZIP_START));
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        service.execute(new Runnable() {
+            @Override
+            public void run() {
+                ZipUtils.UnZipFolder("/sdcard/zkys/resource/encyclope.zip", "/sdcard/zkysdb/encyclope.db", new OnZipSuccessListener() {
+                    @Override
+                    public void OnZipSuccess() {
+                        ExecutorService service = Executors.newSingleThreadExecutor();
+                        service.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                insertInfoDb("/sdcard/zkysdb/encyclope.db", "medical_column",bean.getData().getCreateDate(),bean.getData().getCount());
+//                                insertInfomationDb("/sdcard/zkysdb/encyclope.db", "medical_encyclopedia",bean.getData().getCreateDate(),bean.getData().getCount());
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -99,8 +165,8 @@ public class EncyclopeService {
                     LitePal.countAsync(InfoDao.class).listen(new CountCallback() {
                         @Override
                         public void onFinish(int count) {
-                            if(count<=0){
-                                insertInfoDb(outPathString,"medical_column");
+                            if (count <= 0) {
+//                                insertInfoDb(outPathString, "medical_column");
                             }
                         }
                     });
@@ -108,8 +174,8 @@ public class EncyclopeService {
                     LitePal.countAsync(InfomationDao.class).listen(new CountCallback() {
                         @Override
                         public void onFinish(int count) {
-                            if(count<=0){
-                                insertInfomationDb(outPathString,"medical_encyclopedia");
+                            if (count <= 0) {
+//                                insertInfomationDb(outPathString, "medical_encyclopedia");
                             }
                         }
                     });
@@ -119,31 +185,30 @@ public class EncyclopeService {
     }
 
 
-
     //插入病例列表
-    private void insertInfomationDb(String path, String table) {
+    private void insertInfomationDb(String path, String table,long createTime,int count) {
         try {
-            DbHelper.insertEncyInfoMationDb(path,table);
+            DbHelper.insertEncyInfoMationDb(path, table,createTime,count);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     //插入科室列表
-    private void insertInfoDb(String path, String table) {
+    private void insertInfoDb(String path, String table,long createTime,int count) {
         try {
-            DbHelper.insertEncyInfoDb(path,table);
+            DbHelper.insertEncyInfoDb(path, table,createTime,count);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     /**
-     *   获取医院风采信息并保存到数据库
+     * 获取医院风采信息并保存到数据库
      */
-    public void getLately(){
-        HttpParams params=new HttpParams();
-        params.put("timeStamp",SPUtil.getLong(Constants.SP_ENCY_UPDATE_TIME));
+    public void getLately() {
+        HttpParams params = new HttpParams();
+        params.put("timeStamp", SPUtil.getLong(Constants.SP_ENCY_UPDATE_TIME));
         OkGo.<String>post(UrlUtil.getLately())
                 .params(params)
                 .tag(this)
@@ -151,54 +216,92 @@ public class EncyclopeService {
                     @Override
                     public void onSuccess(Response<String> response) {
                         LogFactory.l().e(response.body());
-                        Gson gson=new Gson();
+                        Gson gson = new Gson();
                         try {
                             JSONObject jsonObject = new JSONObject(response.body());
                             if (jsonObject.optInt("code") == 200) {
-                                ExecutorService service=Executors.newSingleThreadExecutor();
+                                ExecutorService service = Executors.newSingleThreadExecutor();
                                 String data = jsonObject.optString("data");
                                 final EncyUpdateBean encyUpdateBean = gson.fromJson(data, EncyUpdateBean.class);
-                                //更新科室
-                                if(encyUpdateBean.getColumns()!=null && encyUpdateBean.getColumns().size()>0){
-                                    service.execute(new Runnable() {
-                                        @Override
-                                        public void run() {
+
+                                service.execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        //更新科室
+                                        if (encyUpdateBean.getColumns() != null && encyUpdateBean.getColumns().size() > 0) {
                                             LitePalDb.setZkysDb();
-                                             for (InfoDao infoBean : encyUpdateBean.getColumns()){
-                                                 InfoDao dao=LitePal.where("id = ?",infoBean.getColumnId()+"").findFirst(InfoDao.class);
-                                                 if(dao==null){
-                                                     dao.setId(infoBean.getColumnId());
-                                                     dao.save();
-                                                 }else {
-                                                     LitePal.delete(InfoDao.class,dao.getColumnId());
-                                                     dao.setId(dao.getColumnId());
-                                                     dao.save();
-                                                 }
-                                             }
+                                            for (InfoDao infoBean : encyUpdateBean.getColumns()) {
+                                                InfoDao dao = LitePal.where("id = ?", infoBean.getColumnId() + "").findFirst(InfoDao.class);
+                                                if (dao == null) {
+                                                    dao.setId(infoBean.getColumnId());
+                                                    dao.save();
+                                                } else {
+                                                    LitePal.delete(InfoDao.class, dao.getColumnId());
+                                                    dao.setId(dao.getColumnId());
+                                                    dao.save();
+                                                }
+                                            }
                                         }
-                                   });
-                                }
-                                //更新第二张表
-                                if(encyUpdateBean.getMes()!=null && encyUpdateBean.getMes().size()>0){
-                                    service.execute(new Runnable() {
-                                        @Override
-                                        public void run() {
+                                        //更新第二张表
+                                        if (encyUpdateBean.getMes() != null && encyUpdateBean.getMes().size() > 0) {
                                             LitePalDb.setZkysDb();
-                                            for (InfomationDao infoBean : encyUpdateBean.getMes()){
-                                                InfomationDao dao=LitePal.where("id = ?",infoBean.getColumnid()+"").findFirst(InfomationDao.class);
-                                                if(dao==null){
+                                            for (InfomationDao infoBean : encyUpdateBean.getMes()) {
+                                                InfomationDao dao = LitePal.where("id = ?", infoBean.getColumnid() + "").findFirst(InfomationDao.class);
+                                                if (dao == null) {
                                                     dao.setColumnid(infoBean.getId());
                                                     dao.save();
-                                                }else {
-                                                    LitePal.delete(InfomationDao.class,dao.getColumnid());
+                                                } else {
+                                                    LitePal.delete(InfomationDao.class, dao.getColumnid());
                                                     dao.setId(dao.getColumnid());
                                                     dao.save();
                                                 }
                                             }
                                         }
-                                    });
-                                }
-                                SPUtil.putLong(Constants.SP_ENCY_UPDATE_TIME,System.currentTimeMillis()/1000);
+                                        SPUtil.putLong(Constants.SP_ENCY_UPDATE_TIME, System.currentTimeMillis() / 1000);
+                                    }
+                                });
+
+//                                //更新科室
+//                            if (encyUpdateBean.getColumns() != null && encyUpdateBean.getColumns().size() > 0) {
+//                                service.execute(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        LitePalDb.setZkysDb();
+//                                        for (InfoDao infoBean : encyUpdateBean.getColumns()) {
+//                                            InfoDao dao = LitePal.where("id = ?", infoBean.getColumnId() + "").findFirst(InfoDao.class);
+//                                            if (dao == null) {
+//                                                dao.setId(infoBean.getColumnId());
+//                                                dao.save();
+//                                            } else {
+//                                                LitePal.delete(InfoDao.class, dao.getColumnId());
+//                                                dao.setId(dao.getColumnId());
+//                                                dao.save();
+//                                            }
+//                                        }
+//                                    }
+//                                });
+//                            }
+//                            //更新第二张表
+//                            if (encyUpdateBean.getMes() != null && encyUpdateBean.getMes().size() > 0) {
+//                                service.execute(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        LitePalDb.setZkysDb();
+//                                        for (InfomationDao infoBean : encyUpdateBean.getMes()) {
+//                                            InfomationDao dao = LitePal.where("id = ?", infoBean.getColumnid() + "").findFirst(InfomationDao.class);
+//                                            if (dao == null) {
+//                                                dao.setColumnid(infoBean.getId());
+//                                                dao.save();
+//                                            } else {
+//                                                LitePal.delete(InfomationDao.class, dao.getColumnid());
+//                                                dao.setId(dao.getColumnid());
+//                                                dao.save();
+//                                            }
+//                                        }
+//                                    }
+//                                });
+//                            }
+//                            SPUtil.putLong(Constants.SP_ENCY_UPDATE_TIME, System.currentTimeMillis() / 1000);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

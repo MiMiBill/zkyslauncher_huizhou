@@ -123,6 +123,11 @@ public class ActivationActivity extends BaseActivity<ActivationPresenter> implem
         checkNetWork();
     }
 
+    @Override
+    public void initPresenter() {
+        mPresenter=new ActivationPresenter();
+    }
+
 
     private void checkNetWork() {
         boolean isReboot = SPUtil.getBoolean(SpTopics.SP_REBOOT);

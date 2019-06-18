@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.toast.FancyToast;
 
 import butterknife.ButterKnife;
@@ -28,9 +29,7 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator;
  * Created by YoKey on 17/6/24.
  */
 public abstract class BaseActivity<T extends BasePresenter> extends AppCompatActivity implements ISupportActivity,IView {
-    private boolean isStartProtection = true;
     public final SupportActivityDelegate mDelegate = new SupportActivityDelegate(this);
-    private Disposable disposableProtection;
     @Override
     public SupportActivityDelegate getSupportDelegate() {
         return mDelegate;
@@ -54,6 +53,9 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     @Override
     protected void onDestroy() {
         mDelegate.onDestroy();
+        if (mPresenter != null) {
+            mPresenter.detachView();
+        }
         super.onDestroy();
     }
 
@@ -162,9 +164,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     }
 
     /**
-     * It is recommended to use {@link SupportFragment#startWithPopTo(ISupportFragment, Class, boolean)}.
      *
-     * @see #popTo(Class, boolean)
      * +
      * @see #start(ISupportFragment)
      */
@@ -219,15 +219,13 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        LogUtil.i(this.getClass().getSimpleName()+"    onCreate");
         super.onCreate(savedInstanceState);
-//        sendBroadcast(new Intent("mid.systemui.hide_statusbar"));
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        hideBottomUIMenu();
         hideActionBar();
         setContentView(getLayout());
         mDelegate.onCreate(savedInstanceState);
-
+        initPresenter();
         if (mPresenter != null) {
             mPresenter.attachView(this);
         }
@@ -238,6 +236,8 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     public abstract int getLayout() ;
 
     public abstract void initData();
+
+    public abstract void initPresenter();
 
     @Override
     public void showError(String msg) {

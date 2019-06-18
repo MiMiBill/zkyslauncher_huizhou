@@ -67,6 +67,11 @@ public class PublicActivity extends BaseActivity<PublicPresenter> implements Pub
         }
     }
 
+    @Override
+    public void initPresenter() {
+        mPresenter=new PublicPresenter();
+    }
+
 
     @OnClick({R.id.btn_code, R.id.iv_back})
     public void onViewClicked(View view) {
