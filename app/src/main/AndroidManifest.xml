@@ -492,10 +492,6 @@
             android:name=".app.startUp.ui.HideActivity"
             android:launchMode="singleTask"
             android:screenOrientation="landscape" />
-        <activity
-            android:name=".app.satisfaction.SatisfactionSurveyActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="landscape" />
     </application>
 
 </manifest>

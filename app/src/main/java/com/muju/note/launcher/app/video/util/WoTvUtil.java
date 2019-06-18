@@ -203,7 +203,8 @@ public class WoTvUtil {
 
     private void setPlayerUi(ExpandVideoView videoView, int status) {
         // Exo的升级版，使用硬解，兼容性好， 较稳定
-        videoView.setPlayerType(BasicVideoView.PlayerType.EXO2);
+//        videoView.setPlayerType(BasicVideoView.PlayerType.EXO2);
+        videoView.setPlayerType(BasicVideoView.PlayerType.IJK);
         //是否设置为WIFI下自动播放视频
         videoView.setAutoLink(true);
 

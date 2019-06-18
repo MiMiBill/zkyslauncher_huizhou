@@ -10,7 +10,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
- * 屏安柜
+ *医疗服务
  */
 public class MedicalServiceFragment extends BaseFragment {
     private static final String TAG = "CabinetFragment";

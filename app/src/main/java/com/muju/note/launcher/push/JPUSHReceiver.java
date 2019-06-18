@@ -11,7 +11,7 @@ import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.Cabinet.event.ReturnBedEvent;
 import com.muju.note.launcher.app.home.event.PatientEvent;
 import com.muju.note.launcher.app.msg.db.CustomMessageDao;
-import com.muju.note.launcher.app.satisfaction.SatisfactionSurveyActivity;
+import com.muju.note.launcher.app.satisfaction.event.GotoSatisfationEvent;
 import com.muju.note.launcher.app.video.bean.PayEntity;
 import com.muju.note.launcher.app.video.bean.PayEvent;
 import com.muju.note.launcher.app.video.bean.VideoEvent;
@@ -22,7 +22,6 @@ import com.muju.note.launcher.entity.PushCustomMessageEntity;
 import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.topics.FileTopics;
 import com.muju.note.launcher.topics.SpTopics;
-import com.muju.note.launcher.util.Constants;
 import com.muju.note.launcher.util.DateUtil;
 import com.muju.note.launcher.util.file.FileUtils;
 import com.muju.note.launcher.util.log.LogUtil;
@@ -113,20 +112,15 @@ public class JPUSHReceiver extends BroadcastReceiver {
                     case 10:
 ////                        if (LauncherApplication.getInstance().getPatient().getDisabled()) {//患者已入院
                             FileUtils.playReplay(LauncherApplication.getInstance().getApplicationContext(), R.raw.messagetips);
-                            Intent msgIntent = new Intent(context, SatisfactionSurveyActivity.class);
-                            msgIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            msgIntent.putExtra(Constants.PAD_SURVEY_ID, bundle.getString(JPushInterface.EXTRA_MESSAGE));
-                            context.startActivity(msgIntent);
+                            EventBus.getDefault().post(new GotoSatisfationEvent(bundle.getString(JPushInterface.EXTRA_MESSAGE)));
+//                            Intent msgIntent = new Intent(context, SatisfactionSurveyActivity.class);
+//                            msgIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                            msgIntent.putExtra(Constants.PAD_SURVEY_ID, bundle.getString(JPushInterface.EXTRA_MESSAGE));
+//                            context.startActivity(msgIntent);
 ////                        }
                         break;
                 }
                 //processCustomMessage(context, bundle);
-
-               /* Intent msgIntent = new Intent(context, WebActivity.class);
-                msgIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                msgIntent.putExtra(WebActivity.WEB_URL, bundle.getString(JPushInterface.EXTRA_MESSAGE));
-                msgIntent.putExtra(WebActivity.WEB_TITLE, "测试测试");
-                context.startActivity(msgIntent);*/
 
             } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
                 LogUtil.d("[JPUSHReceiver] 接收到推送下来的通知");

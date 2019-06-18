@@ -1,4 +1,4 @@
-package com.muju.note.launcher.app.satisfaction;
+package com.muju.note.launcher.app.satisfaction.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -19,6 +19,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.util.MultiTypeDelegate;
 import com.muju.note.launcher.R;
+import com.muju.note.launcher.app.satisfaction.response.SatisfactionDetailResponse;
 import com.muju.note.launcher.util.toast.FancyToast;
 
 import org.json.JSONArray;

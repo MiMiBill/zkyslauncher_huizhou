@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/main_bg"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:src="@mipmap/egan_bg"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px348" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/px184"
+            android:layout_marginLeft="@dimen/px20"
+            android:layout_marginRight="@dimen/px20"
+            android:layout_marginBottom="@dimen/px12"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/px40"
+                android:layout_marginLeft="@dimen/px60"
+                android:layout_marginRight="@dimen/px60"
+                android:layout_width="match_parent"
+                android:layout_height="258px">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="@dimen/px514"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:src="@mipmap/egan_6"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/px222" />
+                    <TextView
+                        android:text="血液病研究团队"
+                        android:gravity="center"
+                        android:textSize="10sp"
+                        android:textColor="@color/color_38B4E9"
+                        android:layout_marginTop="@dimen/px16"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginLeft="@dimen/px94"
+                    android:orientation="vertical"
+                    android:layout_width="@dimen/px514"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:src="@mipmap/egan_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/px222" />
+                    <TextView
+                        android:text="呼吸内科团队"
+                        android:gravity="center"
+                        android:textSize="10sp"
+                        android:textColor="@color/color_38B4E9"
+                        android:layout_marginTop="@dimen/px16"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/px40"
+                android:layout_marginLeft="@dimen/px60"
+                android:layout_marginRight="@dimen/px60"
+                android:layout_width="match_parent"
+                android:layout_height="258px">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="@dimen/px514"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:src="@mipmap/egan_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/px222" />
+                    <TextView
+                        android:text="消化内科团队"
+                        android:gravity="center"
+                        android:textSize="10sp"
+                        android:textColor="@color/color_38B4E9"
+                        android:layout_marginTop="@dimen/px16"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginLeft="@dimen/px94"
+                    android:orientation="vertical"
+                    android:layout_width="@dimen/px514"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:src="@mipmap/egan_3"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/px222" />
+                    <TextView
+                        android:text="心脏外科团队"
+                        android:gravity="center"
+                        android:textSize="10sp"
+                        android:textColor="@color/color_38B4E9"
+                        android:layout_marginTop="@dimen/px16"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/px40"
+                android:layout_marginLeft="@dimen/px60"
+                android:layout_marginRight="@dimen/px60"
+                android:layout_width="match_parent"
+                android:layout_height="258px">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="@dimen/px514"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:src="@mipmap/egan_4"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/px222" />
+                    <TextView
+                        android:text="神经外科团队"
+                        android:gravity="center"
+                        android:textSize="10sp"
+                        android:textColor="@color/color_38B4E9"
+                        android:layout_marginTop="@dimen/px16"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginLeft="@dimen/px94"
+                    android:orientation="vertical"
+                    android:layout_width="@dimen/px514"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:src="@mipmap/egan_5"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/px222" />
+                    <TextView
+                        android:text="放射治疗科团队"
+                        android:gravity="center"
+                        android:textSize="10sp"
+                        android:textColor="@color/color_38B4E9"
+                        android:layout_marginTop="@dimen/px16"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+    <include layout="@layout/title_bar" />
+</RelativeLayout>

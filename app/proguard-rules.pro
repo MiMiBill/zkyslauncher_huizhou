@@ -30,3 +30,6 @@
 -keep class * extends org.litepal.crud.LitePalSupport {
     *;
     }
+
+    -dontwarn com.tencent.bugly.**
+    -keep public class com.tencent.bugly.**{*;}

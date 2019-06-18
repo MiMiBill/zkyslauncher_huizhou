@@ -101,6 +101,9 @@ public class UpLoadDataService {
                 // 上传广告统计总数信息
                 upAdvertCountDb();
 
+                //上传广告详情数据
+                upAdvertInfoDb();
+
                 // 上传影视统计总数信息
                 upVideoCountDb();
 
@@ -129,6 +132,23 @@ public class UpLoadDataService {
                     }
                 });
     }
+
+    /**
+     * 上传广告详情信息
+     */
+    public void upAdvertInfoDb() {
+        List<UpAdvertInfoDao> daoList = LitePal.findAll(UpAdvertInfoDao.class);
+        OkGo.<BaseBean<Void>>post(UrlUtil.getUpCountDb())
+                .params("data", new Gson().toJson(daoList))
+                .execute(new JsonCallback<BaseBean<Void>>() {
+                    @Override
+                    public void onSuccess(Response<BaseBean<Void>> response) {
+                        LitePalDb.setZkysDataDb();
+                        LitePal.deleteAll(UpAdvertInfoDao.class);
+                    }
+                });
+    }
+
 
     /**
      *  上传影视数据

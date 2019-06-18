@@ -14,11 +14,17 @@ import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.app.home.event.OutHospitalEvent;
 import com.muju.note.launcher.app.home.event.PatientInfoEvent;
 import com.muju.note.launcher.app.home.ui.HomeFragment;
+import com.muju.note.launcher.app.luckdraw.ui.LuckDrawFragment;
 import com.muju.note.launcher.app.msg.dialog.CustomMsgDialog;
 import com.muju.note.launcher.app.publicui.AdvideoViewFragment;
 import com.muju.note.launcher.app.publicui.LargePicFragment;
 import com.muju.note.launcher.app.publicui.ProtectionProcessFragment;
 import com.muju.note.launcher.app.publicui.WebViewFragment;
+import com.muju.note.launcher.app.satisfaction.ui.SatisfactionSurveyFragment;
+import com.muju.note.launcher.app.satisfaction.event.GotoSatisfationEvent;
+import com.muju.note.launcher.app.setting.event.GotoLuckEvent;
+import com.muju.note.launcher.app.setting.event.GotoSignEvent;
+import com.muju.note.launcher.app.sign.ui.SignTaskFragment;
 import com.muju.note.launcher.app.video.event.VideoNoLockEvent;
 import com.muju.note.launcher.app.video.util.WoTvUtil;
 import com.muju.note.launcher.base.BaseActivity;
@@ -276,6 +282,34 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
         int hospitalId=activeInfo.getHospitalId();
         int depId=activeInfo.getDeptId();
         mPresenter.getTaskList(userId,hospitalId,depId);
+    }
+
+
+    /**
+     *  签到页面
+     * @param entity
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void goToSign(GotoSignEvent entity){
+        start(new SignTaskFragment());
+    }
+
+    /**
+     *  抽奖页面
+     * @param entity
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void goToSign(GotoLuckEvent entity){
+        start(new LuckDrawFragment());
+    }
+
+    /**
+     *  问卷调查
+     * @param entity
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void goToSign(GotoSatisfationEvent entity){
+        start(SatisfactionSurveyFragment.newInstance(entity.padsurvey));
     }
 
     @Override

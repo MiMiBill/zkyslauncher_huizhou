@@ -1,24 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.muju.note.launcher.view.BackTitleView
-        android:id="@+id/title"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80px"
-        android:background="@color/titleView_bg"
-        app:title="满意度调查" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/satisfaction_data"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:paddingLeft="28px"
-        android:paddingRight="28px" />
-
-
-</LinearLayout>
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+        <com.muju.note.launcher.view.BackTitleView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="80px"
+            android:background="@color/titleView_bg"
+            app:title="满意度调查" />
+        <TextView
+            android:text="@string/staisfaction_tip"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:textColor="@color/color_38B4E9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/satisfaction_data"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:paddingLeft="28px"
+            android:paddingRight="28px" />
+    </LinearLayout>
+    <Button
+        android:id="@+id/btn_commit"
+        android:text="提交"
+        android:textColor="@color/white"
+        android:background="@drawable/zf_button_bg_ok"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_width="80px"
+        android:layout_height="80px" />
+</RelativeLayout>

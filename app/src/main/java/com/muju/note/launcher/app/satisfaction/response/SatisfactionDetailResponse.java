@@ -1,4 +1,4 @@
-package com.muju.note.launcher.app.satisfaction;
+package com.muju.note.launcher.app.satisfaction.response;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 

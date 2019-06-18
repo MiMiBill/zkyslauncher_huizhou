@@ -16,6 +16,7 @@ import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.Cabinet.ui.CabinetFragment;
 import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
 import com.muju.note.launcher.app.dialog.AdvertsDialog;
+import com.muju.note.launcher.app.finance.FinanceFragment;
 import com.muju.note.launcher.app.home.adapter.HomeHisVideoAdapter;
 import com.muju.note.launcher.app.home.adapter.HomeTopVideoAdapter;
 import com.muju.note.launcher.app.home.bean.AdvertsBean;
@@ -28,18 +29,16 @@ import com.muju.note.launcher.app.home.presenter.HomePresenter;
 import com.muju.note.launcher.app.hostipal.ui.EncyFragment;
 import com.muju.note.launcher.app.hostipal.ui.HosPitalMissionFragment;
 import com.muju.note.launcher.app.hostipal.ui.HospitalMienFragment;
-import com.muju.note.launcher.app.hostipal.ui.MedicalServiceFragment;
-import com.muju.note.launcher.app.luckdraw.ui.LuckDrawFragment;
-import com.muju.note.launcher.app.msg.ui.MsgFragment;
-import com.muju.note.launcher.app.setting.ui.GuideFragment;
-import com.muju.note.launcher.app.setting.ui.SettingFragment;
-import com.muju.note.launcher.app.sign.ui.SignTaskFragment;
+import com.muju.note.launcher.app.hostipal.ui.HospitalelEganceFragment;
+import com.muju.note.launcher.app.insurance.InsureanceFragment;
+import com.muju.note.launcher.app.orderfood.OrderFoodFragment;
+import com.muju.note.launcher.app.setting.ui.UserSettingFragment;
+import com.muju.note.launcher.app.shop.ShopFragment;
 import com.muju.note.launcher.app.video.bean.PayEntity;
 import com.muju.note.launcher.app.video.bean.PayEvent;
 import com.muju.note.launcher.app.video.bean.VideoEvent;
 import com.muju.note.launcher.app.video.db.VideoHisDao;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
-import com.muju.note.launcher.app.video.dialog.LoginDialog;
 import com.muju.note.launcher.app.video.ui.VideoFragment;
 import com.muju.note.launcher.app.video.ui.WoTvVideoLineFragment;
 import com.muju.note.launcher.app.video.ui.WotvPlayFragment;
@@ -99,8 +98,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     LinearLayout llVideoLine;
     @BindView(R.id.banner)
     Banner banner;
-    @BindView(R.id.ll_hos_service)
-    LinearLayout llHosService;
+    @BindView(R.id.ll_hos_elegance)
+    LinearLayout llElegance;
     @BindView(R.id.tv_name)
     TextView tvName;
     @BindView(R.id.tv_age)
@@ -135,16 +134,16 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     LinearLayout llTopVideoNull;
     @BindView(R.id.iv_img)
     ImageView ivImg;
-    @BindView(R.id.ll_msg)
-    LinearLayout llMsg;
+    @BindView(R.id.ll_shop)
+    LinearLayout llShop;
     @BindView(R.id.videoview)
     VideoView videoview;
-    @BindView(R.id.lly_guide)
-    LinearLayout llyGuide;
-    @BindView(R.id.lly_sign)
-    LinearLayout llySign;
-    @BindView(R.id.lly_luck)
-    LinearLayout llyLuck;
+    @BindView(R.id.lly_finance)
+    LinearLayout llyFinance;
+    @BindView(R.id.lly_insureance)
+    LinearLayout llyInsureance;
+    @BindView(R.id.lly_order)
+    LinearLayout llyOrder;
     @BindView(R.id.lly_cabinet)
     LinearLayout llyCabinet;
     @BindView(R.id.tv_hos_info)
@@ -161,17 +160,13 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     ImageView ivNet;
 
     private ActivePadInfo.DataBean activeInfo;
-    private List<PatientResponse.DataBean> patientList = new ArrayList<>();
 
     private List<VideoHisDao> videoHisDaos;
     private HomeHisVideoAdapter homeHisVideoAdapter;
 
     private List<VideoInfoDao> videoInfoDaos;
     private HomeTopVideoAdapter homeTopVideoAdapter;
-
     private VideoInfoDao imgVideoInfo;
-    private LoginDialog loginDialog;
-
 
     public static HomeFragment newInstance() {
         if (homeFragment == null) {
@@ -192,26 +187,22 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         activeInfo = ActiveUtils.getPadActiveInfo();
         initBanner();
         saveRegisterId();
-        patientList = SPUtil.getPatientList(Constants.PATIENT);
-//        if (patientList.size() > 0) {
-//            patientInfo(patientList.get(0));
-//        } else {
+
         if (activeInfo != null) {
             mPresenter.getPatientData(String.valueOf(activeInfo.getBedId()), getActivity());
         }
-//        }
         llHostipal.setOnClickListener(this);
         llVideo.setOnClickListener(this);
         llHostipalEncy.setOnClickListener(this);
         llVideoLine.setOnClickListener(this);
         llHisMission.setOnClickListener(this);
         llSetting.setOnClickListener(this);
-        llMsg.setOnClickListener(this);
-        llyGuide.setOnClickListener(this);
-        llySign.setOnClickListener(this);
-        llyLuck.setOnClickListener(this);
+        llShop.setOnClickListener(this);
+        llyFinance.setOnClickListener(this);
+        llyInsureance.setOnClickListener(this);
+        llyOrder.setOnClickListener(this);
         llyCabinet.setOnClickListener(this);
-        llHosService.setOnClickListener(this);
+        llElegance.setOnClickListener(this);
 
         // 加载首页历史记录
         videoHisDaos = new ArrayList<>();
@@ -550,14 +541,13 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 start(new HospitalMienFragment());
                 break;
             case R.id.ll_hostipal_ency:  // 医疗百科
-//                start(new EncyclopediasFragment());
                 start(new EncyFragment());
                 break;
             case R.id.ll_video:     // 视频
                 start(VideoFragment.getIntance());
                 break;
-            case R.id.ll_hos_service:     //医疗服务
-                start(new MedicalServiceFragment());
+            case R.id.ll_hos_elegance:     //医院风采
+                start(new HospitalelEganceFragment());
                 break;
             case R.id.ll_video_line: // 直播TV
                 start(new WoTvVideoLineFragment());
@@ -565,21 +555,21 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             case R.id.ll_his_mission: // 医院宣教
                 start(new HosPitalMissionFragment());
                 break;
-            case R.id.ll_setting: // 设置
-                start(new SettingFragment());
+            case R.id.ll_setting: // 个人中心
+                start(new UserSettingFragment());
                 break;
-            case R.id.ll_msg: // 通知
-                start(new MsgFragment());
+            case R.id.ll_shop: // 严选好物
+                start(new ShopFragment());
                 break;
-            case R.id.lly_guide: // 新手引导
-                start(new GuideFragment());
+            case R.id.lly_finance: // 金融财富
+                start(new FinanceFragment());
                 break;
-            case R.id.lly_sign: // 签到中心
-//                start(new SignFragment());
-                start(new SignTaskFragment());
+            case R.id.lly_insureance: // 保险服务
+                start(new InsureanceFragment());
                 break;
-            case R.id.lly_luck: // 抽奖中心
-                start(new LuckDrawFragment());
+            case R.id.lly_order: // 点餐服务
+                start(new OrderFoodFragment());
+//                start(new BedSideCardFragment());
                 break;
             case R.id.lly_cabinet: // 屏安柜
                 start(new CabinetFragment());

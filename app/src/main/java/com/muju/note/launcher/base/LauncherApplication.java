@@ -7,13 +7,10 @@ import android.content.Intent;
 import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.okgo.OkGoUtil;
 import com.muju.note.launcher.util.carsh.CrashHandler;
-import com.muju.note.launcher.util.location.LocationUtil;
 import com.muju.note.launcher.util.log.LogUtil;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import org.litepal.LitePal;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -38,6 +35,8 @@ public class LauncherApplication extends Application {
 
         // 日志初始化
         LogUtil.init();
+
+        CrashReport.initCrashReport(this, "dcea390c6e", false);
 
         // litepal 初始化
         LitePal.initialize(instance);

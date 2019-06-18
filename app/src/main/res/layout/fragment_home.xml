@@ -444,6 +444,27 @@
                             android:textColor="@color/black_gray"
                             android:textSize="@dimen/px25" />
                     </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/ll_hos_elegance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/px102"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="@dimen/px100"
+                            android:layout_height="@dimen/px100"
+                            android:src="@mipmap/icon_home_item_egan" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="@dimen/px14"
+                            android:text="医院风采"
+                            android:textColor="@color/black_gray"
+                            android:textSize="@dimen/px25" />
+                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/ll_hostipal_ency"
@@ -466,8 +487,10 @@
                             android:textSize="@dimen/px25" />
                     </LinearLayout>
 
+
+
                     <LinearLayout
-                        android:id="@+id/ll_his_mission"
+                        android:id="@+id/ll_video_line"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/px102"
@@ -476,36 +499,14 @@
                         <ImageView
                             android:layout_width="@dimen/px100"
                             android:layout_height="@dimen/px100"
-                            android:src="@mipmap/ic_home_item_his_mission" />
+                            android:src="@mipmap/ic_home_item_video_line" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/px14"
-                            android:text="医疗宣教"
-                            android:textColor="@color/black_gray"
-                            android:textSize="@dimen/px25" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/ll_hos_service"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/px102"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="@dimen/px100"
-                            android:layout_height="@dimen/px100"
-                            android:src="@mipmap/icon_home_hos_service" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="@dimen/px14"
-                            android:text="医疗服务"
+                            android:text="电视直播"
                             android:textColor="@color/black_gray"
                             android:textSize="@dimen/px25" />
                     </LinearLayout>
@@ -533,58 +534,6 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/ll_video_line"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/px102"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="@dimen/px100"
-                            android:layout_height="@dimen/px100"
-                            android:src="@mipmap/ic_home_item_video_line" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="@dimen/px14"
-                            android:text="电视直播"
-                            android:textColor="@color/black_gray"
-                            android:textSize="@dimen/px25" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/px190"
-                    android:background="@color/white"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:id="@+id/ll_msg"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/px61"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="@dimen/px100"
-                            android:layout_height="@dimen/px100"
-                            android:src="@mipmap/ic_home_item_msg" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/px14"
-                            android:text="住院通知"
-                            android:layout_gravity="center_horizontal"
-                            android:textColor="@color/black_gray"
-                            android:textSize="@dimen/px25" />
-                    </LinearLayout>
-
-                    <LinearLayout
                         android:id="@+id/ll_setting"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -600,61 +549,24 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/px14"
-                            android:text="设置"
+                            android:text="个人中心"
                             android:layout_gravity="center_horizontal"
                             android:textColor="@color/black_gray"
                             android:textSize="@dimen/px25" />
                     </LinearLayout>
+                </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/lly_sign"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/px102"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="@dimen/px100"
-                            android:layout_height="@dimen/px100"
-                            android:src="@mipmap/ic_home_item_signin" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="@dimen/px14"
-                            android:text="签到中心"
-                            android:textColor="@color/black_gray"
-                            android:textSize="@dimen/px25" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/lly_luck"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/px102"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="@dimen/px100"
-                            android:layout_height="@dimen/px100"
-                            android:src="@mipmap/ic_home_item_drawluck" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="@dimen/px14"
-                            android:text="活动抽奖"
-                            android:textColor="@color/black_gray"
-                            android:textSize="@dimen/px25" />
-                    </LinearLayout>
-
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/px190"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
                     <LinearLayout
                         android:id="@+id/lly_cabinet"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/px102"
+                        android:layout_marginLeft="@dimen/px61"
                         android:orientation="vertical">
 
                         <ImageView
@@ -671,8 +583,97 @@
                             android:textColor="@color/black_gray"
                             android:textSize="@dimen/px25" />
                     </LinearLayout>
+
                     <LinearLayout
-                        android:id="@+id/lly_guide"
+                        android:id="@+id/ll_his_mission"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/px102"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="@dimen/px100"
+                            android:layout_height="@dimen/px100"
+                            android:src="@mipmap/ic_home_item_his_mission" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="@dimen/px14"
+                            android:text="医疗宣教"
+                            android:textColor="@color/black_gray"
+                            android:textSize="@dimen/px25" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_shop"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/px102"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="@dimen/px100"
+                            android:layout_height="@dimen/px100"
+                            android:src="@mipmap/ic_home_item_msg" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/px14"
+                            android:text="严选好物"
+                            android:layout_gravity="center_horizontal"
+                            android:textColor="@color/black_gray"
+                            android:textSize="@dimen/px25" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/lly_finance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/px102"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="@dimen/px100"
+                            android:layout_height="@dimen/px100"
+                            android:src="@mipmap/ic_home_item_signin" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="@dimen/px14"
+                            android:text="金融财富"
+                            android:textColor="@color/black_gray"
+                            android:textSize="@dimen/px25" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/lly_insureance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/px102"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="@dimen/px100"
+                            android:layout_height="@dimen/px100"
+                            android:src="@mipmap/ic_home_item_drawluck" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="@dimen/px14"
+                            android:text="保险服务"
+                            android:textColor="@color/black_gray"
+                            android:textSize="@dimen/px25" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/lly_order"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/px102"
@@ -688,7 +689,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/px14"
-                            android:text="新手引导"
+                            android:text="点餐服务"
                             android:textColor="@color/black_gray"
                             android:textSize="@dimen/px25" />
                     </LinearLayout>

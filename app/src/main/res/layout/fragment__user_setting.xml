@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e0e0e0"
+    android:orientation="vertical">
+
+    <include layout="@layout/title_bar" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/px34"
+        android:layout_marginRight="@dimen/px32"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <RadioGroup
+            android:id="@+id/radio_group"
+            android:orientation="vertical"
+            android:layout_width="@dimen/px240"
+            android:background="@color/color_F2F2F2"
+            android:layout_height="match_parent">
+            <RadioButton
+                android:id="@+id/rbt_user"
+                android:text="账号设置"
+                android:background="@drawable/rbt_user_bg"
+                android:textColor="@color/rbt_user_item_tv_bg"
+                android:textSize="15sp"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px100" />
+            <RadioButton
+                android:id="@+id/rbt_order"
+                android:text="我的订单"
+                android:background="@drawable/rbt_user_bg"
+                android:textColor="@color/rbt_user_item_tv_bg"
+                android:textSize="15sp"
+                android:button="@null"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px100" />
+            <RadioButton
+                android:id="@+id/rbt_tool"
+                android:text="运维工具"
+                android:background="@drawable/rbt_user_bg"
+                android:textColor="@color/rbt_user_item_tv_bg"
+                android:textSize="15sp"
+                android:button="@null"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px100" />
+            <RadioButton
+                android:id="@+id/rbt_feedback"
+                android:text="意见反馈"
+                android:background="@drawable/rbt_user_bg"
+                android:textColor="@color/rbt_user_item_tv_bg"
+                android:textSize="15sp"
+                android:button="@null"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px100" />
+            <RadioButton
+                android:id="@+id/rbt_guide"
+                android:text="新手引导"
+                android:background="@drawable/rbt_user_bg"
+                android:textColor="@color/rbt_user_item_tv_bg"
+                android:textSize="15sp"
+                android:button="@null"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px100" />
+            <RadioButton
+                android:id="@+id/rbt_setting"
+                android:text="平板设置"
+                android:background="@drawable/rbt_user_bg"
+                android:textColor="@color/rbt_user_item_tv_bg"
+                android:textSize="15sp"
+                android:button="@null"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px100" />
+        </RadioGroup>
+
+        <FrameLayout
+            android:id="@+id/fl_container"
+            android:background="@color/white"
+            android:layout_marginLeft="@dimen/px34"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></FrameLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_version"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px86"
+        android:gravity="center"
+        android:text=""
+        android:textColor="@color/color_888888"
+        android:textSize="18sp" />
+</LinearLayout>

@@ -5,8 +5,8 @@
     >
 
     <RelativeLayout
-        android:id="@+id/rel_login"
         android:visibility="gone"
+        android:id="@+id/rel_login"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
@@ -147,7 +147,25 @@
             android:layout_marginTop="20px"
             android:layout_alignParentRight="true"
             android:layout_marginRight="96px"/>
-
+        
+       <LinearLayout
+           android:layout_alignParentBottom="true"
+           android:layout_width="match_parent"
+           android:layout_height="@dimen/px200">
+           <ImageView
+               android:id="@+id/iv_sign"
+               android:src="@mipmap/ic_userinfo_signin"
+               android:layout_width="0dp"
+               android:layout_weight="1"
+               android:layout_height="match_parent" />
+           <ImageView
+               android:id="@+id/iv_luck"
+               android:layout_marginLeft="@dimen/px30"
+               android:layout_width="0dp"
+               android:layout_weight="1"
+               android:src="@mipmap/ic_userinfo_luckdraw"
+               android:layout_height="match_parent" />
+       </LinearLayout>
     </RelativeLayout>
 
     <RelativeLayout

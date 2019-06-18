@@ -2,131 +2,82 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#e0e0e0"
-    >
-    <include layout="@layout/title_bar"/>
+    android:orientation="vertical">
+
+    <include layout="@layout/title_bar" />
+
     <LinearLayout
-        android:layout_marginLeft="@dimen/px74"
-        android:layout_marginRight="@dimen/px72"
-        android:orientation="horizontal"
-        android:background="@color/white"
         android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/px34"
+        android:layout_marginRight="@dimen/px32"
         android:layout_weight="1"
-        android:layout_height="0dp">
+        android:background="@color/white"
+        android:orientation="horizontal">
+
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="@dimen/px240"
             android:layout_height="match_parent"
-            android:background="@color/blue_gray">
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/lly_user"
+            <TextView
+                android:id="@+id/tv_user"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="@dimen/px100"
+                android:background="@color/blue_gray"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:text="个人中心"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
 
-                <ImageView
-                    android:id="@+id/iv_user"
-                    android:layout_width="@dimen/px48"
-                    android:layout_height="@dimen/px48"
-                    android:src="@mipmap/setting_user" />
-
-                <TextView
-                    android:id="@+id/tv_user"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="个人中心"
-                    android:layout_marginTop="@dimen/px12"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
-            </LinearLayout>
             <View
-                android:background="@color/color_585858"
                 android:layout_width="match_parent"
-                android:layout_height="1px"/>
-            <LinearLayout
-                android:id="@+id/lly_ma"
+                android:layout_height="1px"
+                android:background="@color/color_585858" />
+
+
+            <TextView
+                android:id="@+id/tv_ma"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="@dimen/px100"
                 android:gravity="center"
-                android:background="@color/white"
-                android:orientation="vertical">
+                android:text="运维工具二维码"
+                android:textColor="@color/blue_gray"
+                android:textSize="15sp" />
 
-                <ImageView
-                    android:id="@+id/iv_ma"
-                    android:layout_width="@dimen/px48"
-                    android:layout_height="@dimen/px48"
-                    android:src="@mipmap/setting_ma_select" />
 
-                <TextView
-                    android:id="@+id/tv_ma"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="运维工具二维码"
-                    android:layout_marginTop="@dimen/px12"
-                    android:textColor="@color/blue_gray"
-                    android:textSize="15sp"  />
-            </LinearLayout>
             <View
-                android:background="@color/color_585858"
                 android:layout_width="match_parent"
-                android:layout_height="1px"/>
-            <LinearLayout
-                android:id="@+id/lly_message"
+                android:layout_height="1px"
+                android:background="@color/color_585858" />
+
+
+            <TextView
+                android:id="@+id/tv_message"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="@dimen/px100"
                 android:gravity="center"
-                android:background="@color/white"
-                android:orientation="vertical">
+                android:text="意见反馈"
+                android:textColor="@color/blue_gray"
+                android:textSize="15sp" />
 
-                <ImageView
-                    android:id="@+id/iv_message"
-                    android:layout_width="@dimen/px48"
-                    android:layout_height="@dimen/px48"
-                    android:src="@mipmap/setting_message_select" />
 
-                <TextView
-                    android:id="@+id/tv_message"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="意见反馈"
-                    android:layout_marginTop="@dimen/px12"
-                    android:textColor="@color/blue_gray"
-                    android:textSize="15sp"  />
-            </LinearLayout>
             <View
-                android:background="@color/color_585858"
                 android:layout_width="match_parent"
-                android:layout_height="1px"/>
-            <LinearLayout
-                android:id="@+id/lly_voice"
+                android:layout_height="1px"
+                android:background="@color/color_585858" />
+
+
+            <TextView
+                android:id="@+id/tv_voice"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="@dimen/px100"
                 android:gravity="center"
-                android:background="@color/white"
-                android:orientation="vertical">
+                android:text="声音/屏幕"
+                android:textColor="@color/blue_gray"
+                android:textSize="15sp" />
 
-                <ImageView
-                    android:id="@+id/iv_voice"
-                    android:layout_width="@dimen/px48"
-                    android:layout_height="@dimen/px48"
-                    android:src="@mipmap/setting_voice_select" />
-
-                <TextView
-                    android:id="@+id/tv_voice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="声音/屏幕"
-                    android:layout_marginTop="@dimen/px12"
-                    android:textColor="@color/blue_gray"
-                    android:textSize="15sp"  />
-            </LinearLayout>
         </LinearLayout>
 
         <FrameLayout
@@ -134,12 +85,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"></FrameLayout>
     </LinearLayout>
+
     <TextView
         android:id="@+id/tv_version"
-        android:text="宝屏V1.4.5-alphaeta   固件版本：3.4.5-4clientd-all"
-        android:gravity="center"
-        android:textSize="18sp"
-        android:textColor="@color/color_888888"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/px86" />
+        android:layout_height="@dimen/px86"
+        android:gravity="center"
+        android:text="宝屏V1.4.5-alphaeta   固件版本：3.4.5-4clientd-all"
+        android:textColor="@color/color_888888"
+        android:textSize="18sp" />
 </LinearLayout>

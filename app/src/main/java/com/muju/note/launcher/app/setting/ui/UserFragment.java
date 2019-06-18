@@ -16,6 +16,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.muju.note.launcher.R;
+import com.muju.note.launcher.app.setting.event.GotoLuckEvent;
+import com.muju.note.launcher.app.setting.event.GotoSignEvent;
 import com.muju.note.launcher.app.setting.presenter.UserPresenter;
 import com.muju.note.launcher.app.video.bean.UserBean;
 import com.muju.note.launcher.base.BaseFragment;
@@ -26,11 +28,15 @@ import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.qr.QrCodeUtils;
 import com.muju.note.launcher.util.user.UserUtil;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class UserFragment extends BaseFragment<UserPresenter> implements UserPresenter.UserListener {
+public class UserFragment extends BaseFragment<UserPresenter> implements UserPresenter
+        .UserListener {
     @BindView(R.id.tv_wechat)
     TextView tvWechat;
     @BindView(R.id.iv_ma)
@@ -46,6 +52,10 @@ public class UserFragment extends BaseFragment<UserPresenter> implements UserPre
     TextView tvAddress;
     @BindView(R.id.iv_head)
     ImageView ivHead;
+    @BindView(R.id.iv_sign)
+    ImageView ivSign;
+    @BindView(R.id.iv_luck)
+    ImageView ivLuck;
     @BindView(R.id.rel_not_login)
     RelativeLayout relNotLogin;
     @BindView(R.id.rel_login)
@@ -104,7 +114,6 @@ public class UserFragment extends BaseFragment<UserPresenter> implements UserPre
     }
 
 
-
     @Override
     public void initPresenter() {
 //        mPresenter=new UserPresenter();
@@ -119,14 +128,14 @@ public class UserFragment extends BaseFragment<UserPresenter> implements UserPre
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
             savedInstanceState) {
         // TODO: inflate a fragment view
-        View rootView = inflater.inflate(R.layout.fragment_user,container,false);
+        View rootView = inflater.inflate(R.layout.fragment_user, container, false);
         unbinder = ButterKnife.bind(this, rootView);
         showView();
         return rootView;
     }
 
     private void showView() {
-        mPresenter=new UserPresenter();
+        mPresenter = new UserPresenter();
         mPresenter.setOnUserListener(this);
         if (UserUtil.getUserBean() != null) {
             //登录成功
@@ -167,7 +176,7 @@ public class UserFragment extends BaseFragment<UserPresenter> implements UserPre
 
     @Override
     public void qeryNotLogin() {
-        handler.sendEmptyMessageDelayed(0x01,1000*3);
+        handler.sendEmptyMessageDelayed(0x01, 1000 * 3);
     }
 
     @Override
@@ -175,4 +184,15 @@ public class UserFragment extends BaseFragment<UserPresenter> implements UserPre
 
     }
 
+    @OnClick({R.id.iv_sign, R.id.iv_luck})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.iv_sign:
+                EventBus.getDefault().post(new GotoSignEvent());
+                break;
+            case R.id.iv_luck:
+                EventBus.getDefault().post(new GotoLuckEvent());
+                break;
+        }
+    }
 }

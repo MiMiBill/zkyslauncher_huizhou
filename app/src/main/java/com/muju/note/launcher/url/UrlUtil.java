@@ -221,6 +221,7 @@ public class UrlUtil {
         return getHost() + "/padFeedBack/insert";
     }
 
+    //提交满意度
     public static String getGetCommitSurveyData() {
         return getHost() + "/survey/saveAnswer";
     }

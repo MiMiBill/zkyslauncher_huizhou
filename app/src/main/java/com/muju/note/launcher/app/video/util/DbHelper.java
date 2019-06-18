@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
 import com.muju.note.launcher.app.hostipal.db.InfoDao;
 import com.muju.note.launcher.app.hostipal.db.InfomationDao;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
@@ -134,6 +135,14 @@ public class DbHelper {
         values.put("endTime",dao.getEndTime());
         values.put("cid",dao.getCid());
         database.insert("UpVideoInfoDao",null,values);
+    }
+
+
+    /**
+     *  插入广告数据
+     */
+    public static void insertToAdvertListData(String dbPath, AdvertsCodeDao dao) throws Exception{
+        LogUtil.i(TAG,"数据插入开始时间："+System.currentTimeMillis());
     }
 
 
