@@ -6,9 +6,8 @@ import com.muju.note.launcher.base.IView;
 public interface MainContract {
 
     interface View extends IView {
-
-
         void getTaskListSuccess();
+        void getDate(String time,String net,String netType);
     }
 
 
