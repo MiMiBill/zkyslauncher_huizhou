@@ -17,6 +17,7 @@ import com.muju.note.launcher.app.video.bean.PayEvent;
 import com.muju.note.launcher.app.video.bean.VideoEvent;
 import com.muju.note.launcher.app.video.util.PayUtils;
 import com.muju.note.launcher.base.LauncherApplication;
+import com.muju.note.launcher.entity.BedSideEvent;
 import com.muju.note.launcher.entity.PushAutoMsgEntity;
 import com.muju.note.launcher.entity.PushCustomMessageEntity;
 import com.muju.note.launcher.litepal.LitePalDb;
@@ -118,6 +119,14 @@ public class JPUSHReceiver extends BroadcastReceiver {
 //                            msgIntent.putExtra(Constants.PAD_SURVEY_ID, bundle.getString(JPushInterface.EXTRA_MESSAGE));
 //                            context.startActivity(msgIntent);
 ////                        }
+                        break;
+
+                    case 13: // 展示床头卡模式
+                        EventBus.getDefault().post(new BedSideEvent(13));
+                        break;
+
+                    case 14: // 取消床头卡模式
+                        EventBus.getDefault().post(new BedSideEvent(14));
                         break;
                 }
                 //processCustomMessage(context, bundle);
