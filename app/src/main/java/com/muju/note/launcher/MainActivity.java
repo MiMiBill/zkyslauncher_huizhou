@@ -39,6 +39,7 @@ import com.muju.note.launcher.base.BaseActivity;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.entity.AdvertWebEntity;
+import com.muju.note.launcher.entity.BedSideEvent;
 import com.muju.note.launcher.entity.PushAutoMsgEntity;
 import com.muju.note.launcher.entity.PushCustomMessageEntity;
 import com.muju.note.launcher.service.MainService;
@@ -378,6 +379,19 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
     public void goToBedSide(GotoBedsideEvent entity){
         PatientResponse.DataBean info = entity.info;
         start(BedSideCardFragment.newInstance(info));
+    }
+
+    /**
+     *  床头卡模式
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void bedSide(BedSideEvent event){
+        if(event.getCode()==13){
+            start(BedSideCardFragment.newInstance(HomeFragment.entity));
+        }else {
+            pop();
+        }
     }
 
     @Override

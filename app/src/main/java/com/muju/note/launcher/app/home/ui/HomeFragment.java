@@ -160,7 +160,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     ImageView ivNet;
 
     private ActivePadInfo.DataBean activeInfo;
-    private PatientResponse.DataBean entity;
+    public static PatientResponse.DataBean entity;
     private List<VideoHisDao> videoHisDaos;
     private HomeHisVideoAdapter homeHisVideoAdapter;
     private List<VideoInfoDao> videoInfoDaos;
