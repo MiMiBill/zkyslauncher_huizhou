@@ -5,51 +5,60 @@ import com.muju.note.launcher.okgo.BaseBean;
 public class GetDownloadBean extends BaseBean {
 
 
-        private String path;
-        private String remark;
-        private int id;
-        private String createDate;
-        private String tableName;
+    private String path;
+    private String remark;
+    private int id;
+    private long createDate;
+    private String tableName;
+    private int count;
 
-        public String getPath() {
-            return path;
-        }
+    public int getCount() {
+        return count;
+    }
 
-        public void setPath(String path) {
-            this.path = path;
-        }
+    public void setCount(int count) {
+        this.count = count;
+    }
 
-        public String getRemark() {
-            return remark;
-        }
+    public String getPath() {
+        return path;
+    }
 
-        public void setRemark(String remark) {
-            this.remark = remark;
-        }
+    public void setPath(String path) {
+        this.path = path;
+    }
 
-        public int getId() {
-            return id;
-        }
+    public String getRemark() {
+        return remark;
+    }
 
-        public void setId(int id) {
-            this.id = id;
-        }
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
-        public String getCreateDate() {
-            return createDate;
-        }
+    public int getId() {
+        return id;
+    }
 
-        public void setCreateDate(String createDate) {
-            this.createDate = createDate;
-        }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-        public String getTableName() {
-            return tableName;
-        }
+    public long getCreateDate() {
+        return createDate;
+    }
 
-        public void setTableName(String tableName) {
-            this.tableName = tableName;
-        }
+    public void setCreateDate(long createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
 
 
 }

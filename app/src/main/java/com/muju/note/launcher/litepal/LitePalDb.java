@@ -9,6 +9,7 @@ import com.muju.note.launcher.app.hostipal.db.InfomationDao;
 import com.muju.note.launcher.app.hostipal.db.MienInfoDao;
 import com.muju.note.launcher.app.hostipal.db.MissionInfoDao;
 import com.muju.note.launcher.app.msg.db.CustomMessageDao;
+import com.muju.note.launcher.app.startUp.db.ActivitionDao;
 import com.muju.note.launcher.app.video.db.VideoColumnsDao;
 import com.muju.note.launcher.app.video.db.VideoHisDao;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
@@ -69,6 +70,7 @@ public class LitePalDb {
         zkysDb.addClassName(VideoHisDao.class.getName());
         zkysDb.addClassName(VideoHisDao.class.getName());
         zkysDb.addClassName(CustomMessageDao.class.getName());
+        zkysDb.addClassName(ActivitionDao.class.getName());
         zkysDb.addClassName(AdvertsCodeDao.class.getName());
         LitePal.use(zkysDb);
     }

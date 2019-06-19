@@ -323,6 +323,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
                     LogUtil.e(TAG, "错误信息：" + e.getMessage());
                     llError.setVisibility(View.VISIBLE);
                     llLoading.setVisibility(View.GONE);
+                    RxUtil.closeDisposable(diVerifyPlayingStatus);
                     switch (e.getCode()) {
                         case VideoErrorInfo.CODE_ACCOUNT_CHECK_ERROR:
                         case VideoErrorInfo.CODE_VIDEO_CONTENTE_PERMISSION:

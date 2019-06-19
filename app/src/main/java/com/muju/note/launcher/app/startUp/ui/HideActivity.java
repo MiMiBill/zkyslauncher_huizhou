@@ -92,6 +92,11 @@ public class HideActivity extends BaseActivity {
 
     }
 
+    @Override
+    public void initPresenter() {
+
+    }
+
     private void setSpeedText() {
         btnOpenNetwork.setChecked(SPUtil.getBoolean(Constants.PAD_CONFIG_OPEN_NETWORK_SPEEK));
     }

@@ -91,7 +91,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
 
     @Override
     public void initData() {
-        mPresenter=new MainPresenter();
         mPresenter.setOnTaskListener(this);
         EventBus.getDefault().register(this);
         startService(new Intent(this, MainService.class));
@@ -113,6 +112,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
         });
 
         startProtectionCountDown();
+    }
+
+    @Override
+    public void initPresenter() {
+        mPresenter=new MainPresenter();
     }
 
 

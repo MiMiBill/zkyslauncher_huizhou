@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:id="@+id/lly_active"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/px87"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!-- 标题 -->
+        <ImageView
+            android:id="@+id/iv_hide"
+            android:layout_width="@dimen/px156"
+            android:layout_height="@dimen/px42"
+            android:layout_marginTop="@dimen/px104"
+            android:background="@mipmap/jhym_logo" />
+
+        <TextView
+            android:id="@+id/tv_active_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/px18"
+            android:text="@string/this_pad_has_not_actived"
+            android:textColor="#ff333333"
+            android:textSize="@dimen/px30" />
+
+        <TextView
+            android:id="@+id/tv_tip_maintain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_active_result"
+            android:layout_marginTop="@dimen/px18"
+            android:text="@string/active_pad_tip"
+            android:textColor="#ff00b7ff"
+            android:textSize="@dimen/px16" />
+
+
+        <TextView
+            android:id="@+id/tvIccid"
+            style="@style/txt_333_16"
+            android:layout_marginTop="@dimen/px12"
+            tools:text="iccid:123456798798978564654"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tvImei"
+            style="@style/txt_333_16"
+            android:layout_marginTop="12px"
+            tools:text="imei:123456798798978564654"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!-- 二维码 -->
+        <ImageView
+            android:id="@+id/iv_active_pad_qrcode"
+            android:layout_width="@dimen/px208"
+            android:layout_height="@dimen/px208"
+            android:layout_marginTop="@dimen/px30" />
+    </LinearLayout>
+
+</RelativeLayout>

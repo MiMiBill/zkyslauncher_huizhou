@@ -9,13 +9,18 @@ import com.muju.note.launcher.app.home.bean.AdvertsBean;
 import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
 import com.muju.note.launcher.app.hostipal.db.InfoDao;
 import com.muju.note.launcher.app.hostipal.db.InfomationDao;
+import com.muju.note.launcher.app.startUp.event.StartCheckDataEvent;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
 import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.litepal.UpAdvertInfoDao;
 import com.muju.note.launcher.litepal.UpVideoInfoDao;
 import com.muju.note.launcher.topics.SpTopics;
+import com.muju.note.launcher.util.Constants;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.sp.SPUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.litepal.LitePal;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -41,18 +46,22 @@ public class DbHelper {
      *  插入影视数据
      * @param dbPath
      * @param tableName
-     * @throws Exception
      */
-    public static void insertToVideo(final String dbPath, final String tableName) throws Exception {
-        LogUtil.i(TAG,"数据插入开始时间："+System.currentTimeMillis());
+    public static void insertToVideo(final String dbPath, final String tableName, final int count, final long createTime) throws Exception {
+        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_DB_START));
+        final int[] num = {0};
+        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_DB_PROGRESS,num[0]+"/"+count));
         ExecutorService service=Executors.newSingleThreadExecutor();
         service.execute(new Runnable() {
             @Override
             public void run() {
                 try {
+                    LitePal.deleteAll(VideoInfoDao.class);
                     SQLiteDatabase database=getDataBase(dbPath);
                     Cursor cursor=database.query(tableName,null,null,null,null,null,null);
                     while (cursor.moveToNext()){
+                        num[0]++;
+                        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_DB_PROGRESS,num[0]+"/"+count));
                         VideoInfoDao dao=new VideoInfoDao();
                         dao.setSerialVersionUID(cursor.getInt(cursor.getColumnIndex("serialVersionUID")));
                         dao.setVideoId(cursor.getInt(cursor.getColumnIndex("id")));
@@ -90,10 +99,12 @@ public class DbHelper {
                     }
                     cursor.close();
                     database.close();
-                    SPUtil.putLong(SpTopics.SP_VIDEO_UPDATE_TIME,(System.currentTimeMillis()/1000));
+                    SPUtil.putLong(SpTopics.SP_VIDEO_UPDATE_TIME,(createTime/1000));
                     LogUtil.i(TAG,"数据插入结束时间："+System.currentTimeMillis());
+                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_SUCCESS));
                 }catch (Exception e){
                     e.printStackTrace();
+                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_CARSH,e));
                 }
             }
         });
@@ -103,7 +114,6 @@ public class DbHelper {
      *  插入广告详情数据
      * @param dbPath
      * @param dao
-     * @throws Exception
      */
     public static void insertToAdvertData(String dbPath, UpAdvertInfoDao dao) throws Exception{
         SQLiteDatabase database=getDataBase(dbPath);
@@ -124,7 +134,6 @@ public class DbHelper {
      *  插入影视统计数据
      * @param dbPath
      * @param dao
-     * @throws Exception
      */
     public static void insertToVideoData(String dbPath, UpVideoInfoDao dao) throws Exception{
         SQLiteDatabase database=getDataBase(dbPath);
@@ -233,15 +242,17 @@ public class DbHelper {
 
     /**
      *  插入科室数据
-     * @throws Exception
      */
-    public static void insertEncyInfoDb(final String dbPath, final String tableName) throws Exception {
+    public static void insertEncyInfoDb(final String dbPath, final String tableName, final long createTime, final int count) throws Exception {
         LogUtil.i(TAG,"数据插入开始时间："+System.currentTimeMillis());
+        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_FIRST_DB_START));
         ExecutorService service=Executors.newSingleThreadExecutor();
         service.execute(new Runnable() {
             @Override
             public void run() {
                 try {
+                    LitePalDb.setZkysDb();
+                    LitePal.deleteAll(InfoDao.class);
                     SQLiteDatabase database=getDataBase(dbPath);
                     Cursor cursor=database.query(tableName,null,null,null,null,null,null);
                     while (cursor.moveToNext()){
@@ -252,6 +263,8 @@ public class DbHelper {
                     }
                     cursor.close();
                     database.close();
+                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_FIRST_DB_END));
+                    insertEncyInfoMationDb(dbPath,"medical_encyclopedia",createTime,count);
 //                    SPUtil.putLong(SpTopics.SP_VIDEO_UPDATE_TIME,(System.currentTimeMillis()/1000));
                     LogUtil.i(TAG,"数据插入结束时间："+System.currentTimeMillis());
                 }catch (Exception e){
@@ -266,18 +279,24 @@ public class DbHelper {
      *  插入病例数据
      * @param dbPath
      * @param tableName
-     * @throws Exception
      */
-    public static void insertEncyInfoMationDb(final String dbPath, final String tableName) throws Exception {
+    public static void insertEncyInfoMationDb(final String dbPath, final String tableName, final long createTime, final int count) throws Exception {
         LogUtil.i(TAG,"数据插入开始时间："+System.currentTimeMillis());
+        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_TWO_DB_START));
+        final int[] num = {0};
+        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_TWO_DB_PROGRESS,num[0]+"/"+count));
         ExecutorService service=Executors.newSingleThreadExecutor();
         service.execute(new Runnable() {
             @Override
             public void run() {
                 try {
+                    LitePalDb.setZkysDb();
+                    LitePal.deleteAll(InfomationDao.class);
                     SQLiteDatabase database=getDataBase(dbPath);
                     Cursor cursor=database.query(tableName,null,null,null,null,null,null);
                     while (cursor.moveToNext()){
+                        num[0]++;
+                        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_TWO_DB_PROGRESS,num[0]+"/"+count));
                         InfomationDao dao=new InfomationDao();
                         String source = cursor.getString(cursor.getColumnIndex("source"));
                         String title = cursor.getString(cursor.getColumnIndex("title"));
@@ -368,7 +387,8 @@ public class DbHelper {
                     }
                     cursor.close();
                     database.close();
-//                    SPUtil.putLong(SpTopics.SP_VIDEO_UPDATE_TIME,(System.currentTimeMillis()/1000));
+                    SPUtil.putLong(Constants.SP_ENCY_UPDATE_TIME, createTime / 1000);
+                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_SUCCESS));
                     LogUtil.i(TAG,"数据插入结束时间："+System.currentTimeMillis());
                 }catch (Exception e){
                     e.printStackTrace();

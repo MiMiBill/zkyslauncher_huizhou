@@ -59,18 +59,6 @@ public class MainService extends Service {
         // 6小时心跳开始执行
         SixHourDisposable.getInstance().start();
 
-        //检查医院宣教视频数据
-        MienService.getInstance().start();
-
-        // 检查影视数据
-        VideoService.getInstance().start();
-
-        //医疗百科科室
-        EncyclopeService.getInstance().start();
-
-        // 检查医院宣教数据
-        MissionService.getInstance().start();
-
         NetWorkService.getInstance().start();
 //        NetWorkService.getInstance().getNet();
 

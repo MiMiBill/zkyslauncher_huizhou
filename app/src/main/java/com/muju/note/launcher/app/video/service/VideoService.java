@@ -3,7 +3,10 @@ package com.muju.note.launcher.app.video.service;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.FileCallback;
 import com.lzy.okgo.model.HttpParams;
+import com.lzy.okgo.model.Progress;
 import com.lzy.okgo.model.Response;
+import com.muju.note.launcher.app.startUp.CheckMsgEvent;
+import com.muju.note.launcher.app.startUp.event.StartCheckDataEvent;
 import com.muju.note.launcher.app.video.bean.VideoDownLoadBean;
 import com.muju.note.launcher.app.video.db.VideoColumnsDao;
 import com.muju.note.launcher.app.video.db.VideoHisDao;
@@ -22,8 +25,10 @@ import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
+import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.sp.SPUtil;
 
+import org.greenrobot.eventbus.EventBus;
 import org.litepal.LitePal;
 import org.litepal.crud.callback.CountCallback;
 import org.litepal.crud.callback.FindCallback;
@@ -43,6 +48,8 @@ import java.util.concurrent.Executors;
 
 public class VideoService {
 
+    private static final String TAG=VideoService.class.getSimpleName();
+
     public static VideoService videoService=null;
 
     public static VideoService getInstance(){
@@ -51,8 +58,6 @@ public class VideoService {
         }
         return videoService;
     }
-
-    private boolean isUpdate=false;
 
     public void start(){
         LitePal.countAsync(VideoInfoDao.class).listen(new CountCallback() {
@@ -84,19 +89,82 @@ public class VideoService {
     }
 
     /**
+     *  加载影视分类数据
+     */
+    public void startColumns(){
+        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_COLUMN_START));
+        LitePal.countAsync(VideoColumnsDao.class).listen(new CountCallback() {
+            @Override
+            public void onFinish(int count) {
+                if(count<=0){
+                    getVideoCloumns();
+                }else {
+                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_COLUMN_SUCCESS));
+                }
+            }
+        });
+    }
+
+    /**
+     *  加载影视首页推荐数据
+     */
+    public void startVideoTop(){
+        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_TOP_START));
+        LitePal.countAsync(VideoInfoTopDao.class).listen(new CountCallback() {
+            @Override
+            public void onFinish(int count) {
+                if(count<=0){
+                    getVideoTopInfo();
+                }else {
+                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_TOP_SUCCESS));
+                }
+            }
+        });
+    }
+
+    /**
+     *  加载影视分类，并界面展示
+     */
+    public void startVideoInfo(){
+        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_START));
+        LitePal.countAsync(VideoInfoDao.class).listen(new CountCallback() {
+            @Override
+            public void onFinish(int count) {
+                if(count<10000){
+                    queryVideo();
+                }else {
+                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_SUCCESS));
+                }
+            }
+        });
+    }
+
+
+    /**
      *  查询视频本地化信息
      */
     public void queryVideo(){
+        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_HTTP_START));
         OkGo.<BaseBean<VideoDownLoadBean>>get(UrlUtil.getVideoDownLoadUrl())
                 .execute(new JsonCallback<BaseBean<VideoDownLoadBean>>() {
                     @Override
                     public void onSuccess(Response<BaseBean<VideoDownLoadBean>> response) {
                         try{
-                            downVideoDb(response.body().getData().getPath(),response.body().getData().getTableName());
+                            if(response.body().getData()==null){
+                                EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_HTTP_DATA_NULL));
+                                return;
+                            }
+                            downVideoDb(response.body().getData().getPath(),response.body().getData().getTableName(),response.body().getData().getCount(),response.body().getData().getCreateDate());
                         }catch (Exception e){
                             e.printStackTrace();
+                            EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_CARSH,e));
                         }
+                    }
 
+                    @Override
+                    public void onError(Response<BaseBean<VideoDownLoadBean>> response) {
+                        super.onError(response);
+                        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_HTTP_FAIL));
                     }
                 });
     }
@@ -106,12 +174,26 @@ public class VideoService {
      * @param url
      * @param tableName
      */
-    private void downVideoDb(String url, final String tableName){
+    private void downVideoDb(String url, final String tableName, final int count, final long crateTime){
+        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_DOWNLOAD_START));
         OkGo.<File>get(url)
-                .execute(new FileCallback() {
+                .execute(new FileCallback("/sdcard/zkysdb/","video.db") {
                     @Override
                     public void onSuccess(Response<File> response) {
-                        insertVideoDb(response.body().getPath(),tableName);
+                        insertVideoDb(response.body().getPath(),tableName,count,crateTime);
+                    }
+
+                    @Override
+                    public void downloadProgress(Progress progress) {
+                        super.downloadProgress(progress);
+                        int pro=(int)(progress.fraction*100);
+                        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_DOWNLOAD_PROGRESS,pro));
+                    }
+
+                    @Override
+                    public void onError(Response<File> response) {
+                        super.onError(response);
+                        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_DOWNLOAD_FAIL));
                     }
                 });
     }
@@ -121,11 +203,12 @@ public class VideoService {
      * @param path
      * @param table
      */
-    private void insertVideoDb(String path, String table){
+    private void insertVideoDb(String path, String table,int count,long crateTime){
         try {
-            DbHelper.insertToVideo(path,table);
+            DbHelper.insertToVideo(path,table,count,crateTime);
         } catch (Exception e) {
             e.printStackTrace();
+            EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_CARSH,e));
         }
     }
 
@@ -168,6 +251,7 @@ public class VideoService {
      *  获取影视类型
      */
     public void getVideoCloumns(){
+        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_COLUMN_HTTP_START));
         Map<String, String> params = new HashMap();
         params.put("parentId", "" + 0);
         params.put("hospitalId",ActiveUtils.getPadActiveInfo().getHospitalId()+"");
@@ -179,8 +263,10 @@ public class VideoService {
                     @Override
                     public void onSuccess(final Response<BaseBean<List<VideoColumnsDao>>> response) {
                         if(response.body().getData()==null){
+                            EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_COLUMN_HTTP_DATA_NULL));
                             return;
                         }
+                        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_COLUMN_DB_START));
                         ExecutorService service=Executors.newSingleThreadExecutor();
                         service.execute(new Runnable() {
                             @Override
@@ -198,8 +284,15 @@ public class VideoService {
                                         }
                                     }
                                 }
+                                EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_COLUMN_SUCCESS));
                             }
                         });
+                    }
+
+                    @Override
+                    public void onError(Response<BaseBean<List<VideoColumnsDao>>> response) {
+                        super.onError(response);
+                        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_COLUMN_HTTP_FAIL));
                     }
                 });
     }
@@ -208,16 +301,6 @@ public class VideoService {
      *  更新分类
      */
     private void setColumns(VideoColumnsDao dao){
-//        VideoColumnsDao videoColumnsDao= LitePal.where("columnsId = ?",dao.getId()+"").findFirst(VideoColumnsDao.class);
-//        if(videoColumnsDao==null){
-//            videoColumnsDao=dao;
-//            videoColumnsDao.setColumnsId(dao.getId());
-//            videoColumnsDao.save();
-//        }else {
-//            videoColumnsDao.setColumnsId(dao.getId());
-//            videoColumnsDao.setName(dao.getName());
-//            videoColumnsDao.update(videoColumnsDao.getId());
-//        }
         dao.setColumnsId(dao.getId());
         dao.save();
     }
@@ -226,17 +309,6 @@ public class VideoService {
      *  更新标签分类
      */
     private void setTags(VideoTagsDao dao,int columnsId){
-//        VideoTagsDao tagsDao=LitePal.where("tagId = ?",dao.getId()+"").findFirst(VideoTagsDao.class);
-//        if(tagsDao==null){
-//            tagsDao=dao;
-//            tagsDao.setTagId(dao.getId());
-//            tagsDao.setCoulmnsId(columnsId);
-//            tagsDao.save();
-//        }else {
-//            tagsDao.setName(dao.getName());
-//            tagsDao.setTagId(dao.getId());
-//            tagsDao.update(tagsDao.getId());
-//        }
         dao.setTagId(dao.getId());
         dao.setCoulmnsId(columnsId);
         dao.save();
@@ -246,17 +318,6 @@ public class VideoService {
      *  更新标签子分类
      */
     private void setTagsSub(VideoTagSubDao dao){
-//        VideoTagSubDao subDao=LitePal.where("subId = ?",dao.getId()+"").findFirst(VideoTagSubDao.class);
-//        if(subDao==null){
-//            subDao=dao;
-//            subDao.setSubId(dao.getId());
-//            subDao.save();
-//
-//        }else {
-//            subDao.setName(dao.getName());
-//            subDao.setSubId(dao.getId());
-//            subDao.update(subDao.getId());
-//        }
         dao.setSubId(dao.getId());
         dao.save();
     }
@@ -265,6 +326,7 @@ public class VideoService {
      *  获取首页数据
      */
     public void getVideoTopInfo(){
+        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_TOP_HTTP_START));
         Map<String, String> params = new HashMap();
         params.put("columnId", "1");
         params.put("hospitalId",ActiveUtils.getPadActiveInfo().getHospitalId()+"");
@@ -278,8 +340,10 @@ public class VideoService {
                     @Override
                     public void onSuccess(final Response<BaseBean<List<VideoInfoTopDao>>> response) {
                         if(response.body().getData()==null){
+                            EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_TOP_HTTP_DATA_NULL));
                             return;
                         }
+                        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_TOP_DB_START));
                         ExecutorService service=Executors.newSingleThreadExecutor();
                         service.execute(new Runnable() {
                             @Override
@@ -292,44 +356,19 @@ public class VideoService {
                                     LitePalDb.setZkysDb();
                                     dao.save();
                                 }
+                                EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_TOP_SUCCESS));
                             }
                         });
+                    }
+
+                    @Override
+                    public void onError(Response<BaseBean<List<VideoInfoTopDao>>> response) {
+                        super.onError(response);
+                        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_TOP_HTTP_FAIL));
                     }
                 });
     }
 
-    public void checkUpdateVideo(){
-        int videoDay = SPUtil.getInt("UPDATE_VIDEO_DAY");
-        Calendar c = Calendar.getInstance();
-        final int day = c.get(Calendar.DAY_OF_MONTH);
-        if (day != videoDay) {
-            int hour = c.get(Calendar.HOUR_OF_DAY);
-            if (hour >= 22 || hour <= 7) {
-                if (isUpdate) {
-                    return;
-                }
-                isUpdate = true;
-                // 一个小时内随机获取
-                int num = new Random().nextInt(59) + 1;
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        // 更新影视相关信息
-                        getUpdateVideo();
-                        getVideoCloumns();
-                        getVideoTopInfo();
-                    }
-                }, 1000 * 60 * num);
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        // 以防万一，12个小时候重置状态
-                        isUpdate=false;
-                    }
-                },1000*60*60*12);
-            }
-        }
-    }
 
     /**
      *  添加播放count数据
