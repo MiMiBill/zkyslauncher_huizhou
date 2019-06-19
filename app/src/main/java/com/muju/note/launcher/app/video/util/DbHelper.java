@@ -116,18 +116,25 @@ public class DbHelper {
      * @param dao
      */
     public static void insertToAdvertData(String dbPath, UpAdvertInfoDao dao) throws Exception{
-        SQLiteDatabase database=getDataBase(dbPath);
-        ContentValues values=new ContentValues();
-        values.put("imei",dao.getImei());
-        values.put("advertId",dao.getAdvertId());
-        values.put("hosId",dao.getHosId());
-        values.put("depId",dao.getDepId());
-        values.put("date",dao.getDate());
-        values.put("type",dao.getType());
-        values.put("startTime",dao.getStartTime());
-        values.put("endTime",dao.getEndTime());
-        values.put("time",dao.getTime());
-        database.insert("UpAdvertInfoDao",null,values);
+        try {
+            SQLiteDatabase database=getDataBase(dbPath);
+            ContentValues values=new ContentValues();
+            values.put("imei",dao.getImei());
+            values.put("advertId",dao.getAdvertId());
+            values.put("hosId",dao.getHosId());
+            values.put("depId",dao.getDepId());
+            values.put("date",dao.getDate());
+            values.put("type",dao.getType());
+            values.put("startTime",dao.getStartTime());
+            values.put("endTime",dao.getEndTime());
+            values.put("time",dao.getTime());
+            database.insert("UpAdvertInfoDao",null,values);
+        }catch (Exception e){
+            e.printStackTrace();
+            UpAdvertInfoDao infoDao=new UpAdvertInfoDao();
+            infoDao.setImei("异常数据");
+            infoDao.save();
+        }
     }
 
     /**
@@ -136,18 +143,26 @@ public class DbHelper {
      * @param dao
      */
     public static void insertToVideoData(String dbPath, UpVideoInfoDao dao) throws Exception{
-        SQLiteDatabase database=getDataBase(dbPath);
-        ContentValues values=new ContentValues();
-        values.put("imei",dao.getImei());
-        values.put("videoId",dao.getVideoId());
-        values.put("hosId",dao.getHosId());
-        values.put("depId",dao.getDepId());
-        values.put("date",dao.getDate());
-        values.put("videoName",dao.getVideoName());
-        values.put("startTime",dao.getStartTime());
-        values.put("endTime",dao.getEndTime());
-        values.put("cid",dao.getCid());
-        database.insert("UpVideoInfoDao",null,values);
+        try {
+            SQLiteDatabase database=getDataBase(dbPath);
+            ContentValues values=new ContentValues();
+            values.put("imei",dao.getImei());
+            values.put("videoId",dao.getVideoId());
+            values.put("hosId",dao.getHosId());
+            values.put("depId",dao.getDepId());
+            values.put("date",dao.getDate());
+            values.put("videoName",dao.getVideoName());
+            values.put("startTime",dao.getStartTime());
+            values.put("endTime",dao.getEndTime());
+            values.put("cid",dao.getCid());
+            database.insert("UpVideoInfoDao",null,values);
+        }catch (Exception e){
+            e.printStackTrace();
+            LitePalDb.setZkysDataDb();
+            UpVideoInfoDao infoDao=new UpVideoInfoDao();
+            infoDao.setVideoName("异常数据");
+            infoDao.save();
+        }
     }
 
 

@@ -386,7 +386,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         tvWeek.setText(week);
         tvNet.setText(net);
         if(netType.equals("WIFI")){
-            tvNetType.setVisibility(View.GONE);
+            tvNetType.setVisibility(View.VISIBLE);
+            tvNetType.setText(netType);
             ivNet.setVisibility(View.GONE);
             ivWifi.setVisibility(View.VISIBLE);
             int wifi=NetWorkUtil.getWifiLevel(LauncherApplication.getContext());
@@ -547,7 +548,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 start(VideoFragment.getIntance());
                 break;
             case R.id.ll_hos_elegance:     //医院风采
-                start(new HospitalelEganceFragment());
+                start(new HospitalMienFragment());
                 break;
             case R.id.ll_video_line: // 直播TV
                 start(new WoTvVideoLineFragment());
