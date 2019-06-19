@@ -12,7 +12,6 @@ import com.muju.note.launcher.okgo.JsonCallback;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.log.LogFactory;
-import com.muju.note.launcher.util.user.UserUtil;
 
 public class PublicPresenter extends BasePresenter<PublicContract.View> implements PublicContract.Presenter {
     private PublicListener listener;
@@ -20,11 +19,9 @@ public class PublicPresenter extends BasePresenter<PublicContract.View> implemen
     public void verfycode(String code,int adverId,String advertCode) {
         OkGo.<String>post(UrlUtil.verCode())
                 .params("code", code)
-                .params("userId", UserUtil.getUserBean().getId())
-                .params("hospitalId", ActiveUtils.getPadActiveInfo().getHospitalId())
-                .params("deptId", ActiveUtils.getPadActiveInfo().getDeptId())
+                /*.params("userId", UserUtil.getUserBean().getId())
                 .params("advertId", adverId)
-                .params("advertCode", advertCode)
+                .params("advertCode", advertCode)*/
                 .tag(this)
                 .execute(new StringCallback() {
                     @Override

@@ -1,25 +1,19 @@
 package com.muju.note.launcher.app.startUp.ui;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.muju.note.launcher.MainActivity;
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.hostipal.service.MienService;
 import com.muju.note.launcher.app.hostipal.service.MissionService;
-import com.muju.note.launcher.app.startUp.CheckMsgEvent;
 import com.muju.note.launcher.app.startUp.adapter.ActivationCheckAdapter;
 import com.muju.note.launcher.app.startUp.event.StartCheckDataEvent;
 import com.muju.note.launcher.app.video.service.VideoService;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.service.encyclope.EncyclopeService;
-import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
 
 import org.greenrobot.eventbus.EventBus;

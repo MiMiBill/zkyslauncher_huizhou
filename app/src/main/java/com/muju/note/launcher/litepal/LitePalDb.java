@@ -1,6 +1,7 @@
 package com.muju.note.launcher.litepal;
 
 import com.muju.note.launcher.app.home.db.AdvertsCacheDao;
+import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
 import com.muju.note.launcher.app.home.db.AdvertsCountDao;
 import com.muju.note.launcher.app.home.db.AdvertsInfoDao;
 import com.muju.note.launcher.app.hostipal.db.InfoDao;
@@ -31,6 +32,7 @@ public class LitePalDb {
     public static final LitePalDB zkysDb=new LitePalDB("zkys",24);
 
     public static final String DBNAME_ZKYS_DATA="/sdcard/zkysdb/zkys-data.db";
+    public static final String DBNAME_ZKYS="/sdcard/zkysdb/zkys.db";
 
     /**
      *  初始化数据库
@@ -69,6 +71,7 @@ public class LitePalDb {
         zkysDb.addClassName(VideoHisDao.class.getName());
         zkysDb.addClassName(CustomMessageDao.class.getName());
         zkysDb.addClassName(ActivitionDao.class.getName());
+        zkysDb.addClassName(AdvertsCodeDao.class.getName());
         LitePal.use(zkysDb);
     }
 

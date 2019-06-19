@@ -129,6 +129,11 @@ public class NewAdvertsUtil {
 
     //展示广告
     private void getNewAdvertsSuccess(List<AdverNewBean> dataList) {
+        /*try {
+            DbHelper.setAdvertListData(dataList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
         for (AdverNewBean adverNewBean : dataList) {
             if (adverNewBean.getCode().equals(AdvertsTopics.CODE_HOME_LB)) {
                 if (adverNewBean.getAdverts().size() > 0) {

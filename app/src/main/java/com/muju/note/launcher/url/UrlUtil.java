@@ -190,7 +190,7 @@ public class UrlUtil {
 
     //公众号平台页面验证验证码
     public static String verCode() {
-        return getHost() + "/advert/verifyCode";
+        return getHost() + "/verifyCode";
     }
 
     /**
