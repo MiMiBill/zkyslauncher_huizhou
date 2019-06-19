@@ -22,7 +22,6 @@ import com.muju.note.launcher.okgo.BaseBean;
 import com.muju.note.launcher.okgo.JsonCallback;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.Constants;
-import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.util.zip.ZipUtils;
 
@@ -212,7 +211,7 @@ public class EncyclopeService {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        LogFactory.l().e(response.body());
+//                        LogFactory.l().e(response.body());
                         Gson gson = new Gson();
                         try {
                             JSONObject jsonObject = new JSONObject(response.body());

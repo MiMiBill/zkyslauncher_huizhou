@@ -34,7 +34,7 @@ public interface HomeContract {
 
         void getBananaList(List<AdvertsCodeDao> list);
 
-        void getDialogAd(AdvertsCodeDao dao);
+        void getDialogAd(List<AdvertsCodeDao> list);
     }
 
 

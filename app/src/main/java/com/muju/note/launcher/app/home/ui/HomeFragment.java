@@ -19,10 +19,10 @@ import com.muju.note.launcher.app.dialog.AdvertsDialog;
 import com.muju.note.launcher.app.finance.FinanceFragment;
 import com.muju.note.launcher.app.home.adapter.HomeHisVideoAdapter;
 import com.muju.note.launcher.app.home.adapter.HomeTopVideoAdapter;
-import com.muju.note.launcher.app.home.bean.AdvertsBean;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.app.home.contract.HomeContract;
 import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
+import com.muju.note.launcher.app.home.event.GetAdvertEvent;
 import com.muju.note.launcher.app.home.event.OutHospitalEvent;
 import com.muju.note.launcher.app.home.event.PatientEvent;
 import com.muju.note.launcher.app.home.event.PatientInfoEvent;
@@ -51,7 +51,7 @@ import com.muju.note.launcher.util.ClickTimeUtils;
 import com.muju.note.launcher.util.Constants;
 import com.muju.note.launcher.util.FormatUtils;
 import com.muju.note.launcher.util.UIUtils;
-import com.muju.note.launcher.util.adverts.NewAdvertsUtil;
+import com.muju.note.launcher.util.adverts.AdvertsUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.file.FileUtils;
 import com.muju.note.launcher.util.gilde.GlideUtil;
@@ -166,6 +166,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     private List<VideoInfoDao> videoInfoDaos;
     private HomeTopVideoAdapter homeTopVideoAdapter;
     private VideoInfoDao imgVideoInfo;
+    private AdvertsDialog dialog;
 
     public static HomeFragment newInstance() {
         if (homeFragment == null) {
@@ -274,56 +275,14 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     //加载广告
     private void initBanner() {
-        final AdvertsDialog dialog = new AdvertsDialog(getActivity(), R.style.dialog);
+        dialog = new AdvertsDialog(getActivity(), R.style.dialog);
         try {
-            NewAdvertsUtil.getInstance().queryAdverts(UIUtils.fun(AdvertsTopics.CODE_HOME_LB,
+            AdvertsUtil.getInstance().queryAdverts(UIUtils.fun(AdvertsTopics.CODE_HOME_LB,
                     AdvertsTopics.CODE_HOME_DIALOG, AdvertsTopics.CODE_LOCK,
                     AdvertsTopics.CODE_PUBLIC, AdvertsTopics.CODE_VERTICAL,
                     AdvertsTopics.CODE_VIDEO_CORNER, AdvertsTopics.CODE_VIDEO_DIALOG,
                     AdvertsTopics.CODE_ROAD), banner, dialog);
-
-           /* NewAdvertsUtil.getInstance().setOnBannerSuccessLisinter(new NewAdvertsUtil.OnBannerSuccessLisinter() {
-                @Override
-                public void success() {
-                    mPresenter.getBananaList(AdvertsTopics.CODE_HOME_LB);
-                }
-            });*/
-
-            NewAdvertsUtil.getInstance().setOnBannerFailLisinter(new NewAdvertsUtil
-                    .OnBannerFailLisinter() {
-                @Override
-                public void fail() {
-                    NewAdvertsUtil.getInstance().showDefaultBanner(banner, 1);
-                }
-            });
-
-            NewAdvertsUtil.getInstance().setOnBannerSuccessLisinter(new NewAdvertsUtil
-                    .OnBannerSuccessLisinter() {
-                @Override
-                public void success() {
-                    List<AdvertsBean> dataList = SPUtil.getAdList(AdvertsTopics.CODE_HOME_LB);
-                    if (dataList.size() == 0) {
-                        NewAdvertsUtil.getInstance().showDefaultBanner(banner, 1);
-                    } else {
-                        NewAdvertsUtil.getInstance().showByBanner(SPUtil.getAdList
-                                (AdvertsTopics.CODE_HOME_LB), banner);
-                    }
-                }
-            });
-
-            NewAdvertsUtil.getInstance().setOnDialogSuccessLisinter(new NewAdvertsUtil
-                    .OnDialogSuccessLisinter() {
-                @Override
-                public void success() {
-                    List<AdvertsBean> dataList = SPUtil.getAdList(AdvertsTopics.CODE_HOME_DIALOG);
-                    if (dataList.size() > 0) {
-                        NewAdvertsUtil.getInstance().showByDialog(SPUtil.getAdList
-                                (AdvertsTopics.CODE_HOME_DIALOG), dialog);
-                    }
-                }
-            });
         } catch (Exception e) {
-            LogFactory.l().i("e=="+e.getMessage());
             e.printStackTrace();
         }
     }
@@ -499,17 +458,17 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void getBananaNull() {
-        NewAdvertsUtil.getInstance().showDefaultBanner(banner, 1);
+        AdvertsUtil.getInstance().showDefaultBanner(banner, 1);
     }
 
     @Override
     public void getBananaList(List<AdvertsCodeDao> list) {
-        NewAdvertsUtil.getInstance().showByDbBanner(list, banner);
+        AdvertsUtil.getInstance().showByDbBanner(list, banner);
     }
 
     @Override
-    public void getDialogAd(AdvertsCodeDao dao) {
-//        NewAdvertsUtil.getInstance().showByDialog(), dialog);
+    public void getDialogAd(List<AdvertsCodeDao> list) {
+        AdvertsUtil.getInstance().showByDialog(list, dialog);
     }
 
 
@@ -552,6 +511,13 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 //                setHomeMissionData();
                 break;
         }
+    }
+
+    //获取广告
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(GetAdvertEvent event) {
+        mPresenter.getBananaList(AdvertsTopics.CODE_HOME_LB);
+        mPresenter.getDialogAd(AdvertsTopics.CODE_HOME_DIALOG);
     }
 
     @Override

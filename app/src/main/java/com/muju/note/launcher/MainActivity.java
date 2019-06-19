@@ -1,7 +1,6 @@
 package com.muju.note.launcher;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.DrawerLayout;
 import android.view.KeyEvent;
@@ -26,7 +25,7 @@ import com.muju.note.launcher.app.luckdraw.ui.LuckDrawFragment;
 import com.muju.note.launcher.app.msg.dialog.CustomMsgDialog;
 import com.muju.note.launcher.app.publicui.AdvideoViewFragment;
 import com.muju.note.launcher.app.publicui.LargePicFragment;
-import com.muju.note.launcher.app.publicui.ProtectionProcessFragment;
+import com.muju.note.launcher.app.publicui.ui.ProtectionProcessFragment;
 import com.muju.note.launcher.app.publicui.WebViewFragment;
 import com.muju.note.launcher.app.satisfaction.event.GotoSatisfationEvent;
 import com.muju.note.launcher.app.satisfaction.ui.SatisfactionSurveyFragment;
@@ -61,7 +60,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;

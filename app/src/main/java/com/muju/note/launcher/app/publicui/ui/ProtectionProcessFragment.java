@@ -1,4 +1,4 @@
-package com.muju.note.launcher.app.publicui;
+package com.muju.note.launcher.app.publicui.ui;
 
 import android.view.View;
 import android.view.Window;
@@ -7,20 +7,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.muju.note.launcher.R;
-import com.muju.note.launcher.app.home.bean.AdvertsBean;
+import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
+import com.muju.note.launcher.app.publicui.contract.ProtectionContract;
+import com.muju.note.launcher.app.publicui.presenter.ProtectionPresenter;
 import com.muju.note.launcher.app.video.event.VideoNoLockEvent;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.topics.AdvertsTopics;
 import com.muju.note.launcher.util.FormatUtils;
-import com.muju.note.launcher.util.adverts.NewAdvertsUtil;
+import com.muju.note.launcher.util.adverts.AdvertsUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
-import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.util.system.SystemUtils;
 import com.muju.note.launcher.view.banana.Banner;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -33,7 +33,7 @@ import io.reactivex.functions.Consumer;
 /**
  * 锁屏轮播界面
  */
-public class ProtectionProcessFragment extends BaseFragment {
+public class ProtectionProcessFragment extends BaseFragment<ProtectionPresenter> implements ProtectionContract.View {
     @BindView(R.id.iv_launcher)
     ImageView ivLauncher;
     @BindView(R.id.banner_lc)
@@ -44,13 +44,10 @@ public class ProtectionProcessFragment extends BaseFragment {
     TextView tvDate;
     @BindView(R.id.ivBtn)
     ImageView ivBtn;
-
-
     //调整亮度
     Disposable disposableAdjust;
     //时间自动增加
     private Disposable disposableTimeAdd;
-    private List<AdvertsBean> adverts=new ArrayList<>();
 
     @Override
     public int getLayout() {
@@ -73,7 +70,7 @@ public class ProtectionProcessFragment extends BaseFragment {
 
     @Override
     public void initPresenter() {
-
+        mPresenter=new ProtectionPresenter();
     }
 
 
@@ -170,31 +167,20 @@ public class ProtectionProcessFragment extends BaseFragment {
      * 查询广告列表
      */
     private void queryNewAdverts() {
-        adverts = SPUtil.getAdList(AdvertsTopics.CODE_LOCK);
-        if(adverts!=null && adverts.size()>0){
-            NewAdvertsUtil.getInstance().showByBanner(adverts,bannerLc);
-        }
-        NewAdvertsUtil.getInstance().setOnBannerSuccessLisinter(new NewAdvertsUtil
-                .OnBannerSuccessLisinter() {
-            @Override
-            public void success() {
-                List<AdvertsBean> adverts = SPUtil.getAdList(AdvertsTopics.CODE_LOCK);
-                NewAdvertsUtil.getInstance().showByBanner(adverts,bannerLc);
-                RxUtil.closeDisposable(disposableAdjust);
-                addBrightness();
-                ivLauncher.setVisibility(View.GONE);
-            }
-        });
-
-        NewAdvertsUtil.getInstance().setOnBannerFailLisinter(new NewAdvertsUtil.OnBannerFailLisinter() {
-            @Override
-            public void fail() {
-                NewAdvertsUtil.getInstance().showDefaultBanner(bannerLc,0);
-            }
-        });
-        if (adverts.size()==0){
-            NewAdvertsUtil.getInstance().showDefaultBanner(bannerLc,0);
-        }
+        mPresenter.getLockBananaList(AdvertsTopics.CODE_LOCK);
     }
 
+
+    @Override
+    public void getLockBananaList(List<AdvertsCodeDao> list) {
+        AdvertsUtil.getInstance().showByDbBanner(list,bannerLc);
+        RxUtil.closeDisposable(disposableAdjust);
+        addBrightness();
+        ivLauncher.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void getLockBananaNull() {
+        AdvertsUtil.getInstance().showDefaultBanner(bannerLc,0);
+    }
 }

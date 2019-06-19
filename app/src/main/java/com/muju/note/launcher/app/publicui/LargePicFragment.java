@@ -17,7 +17,7 @@ import com.davemorrissey.labs.subscaleview.ImageViewState;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.base.BaseFragment;
-import com.muju.note.launcher.util.adverts.NewAdvertsUtil;
+import com.muju.note.launcher.util.adverts.AdvertsUtil;
 
 import java.io.File;
 
@@ -92,9 +92,9 @@ public class LargePicFragment extends BaseFragment {
 
     private void doFinish() {
         long currentTime=System.currentTimeMillis();
-        NewAdvertsUtil.getInstance().addData(advertId, NewAdvertsUtil.TAG_BROWSETIME,
+        AdvertsUtil.getInstance().addData(advertId, AdvertsUtil.TAG_BROWSETIME,
                 currentTime-startTime);
-        NewAdvertsUtil.getInstance().addDataInfo(advertId, NewAdvertsUtil.TAG_BROWSETIME,
+        AdvertsUtil.getInstance().addDataInfo(advertId, AdvertsUtil.TAG_BROWSETIME,
                 startTime, currentTime);
 //        EventBus.getDefault().post(new VideoCodeFailEvent(true));
         pop();

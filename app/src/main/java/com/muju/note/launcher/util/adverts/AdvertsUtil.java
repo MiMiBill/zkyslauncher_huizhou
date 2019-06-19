@@ -18,7 +18,6 @@ import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.Response;
 import com.muju.note.launcher.app.dialog.AdvertsDialog;
 import com.muju.note.launcher.app.home.bean.AdverNewBean;
-import com.muju.note.launcher.app.home.bean.AdvertsBean;
 import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
 import com.muju.note.launcher.app.home.db.AdvertsCountDao;
 import com.muju.note.launcher.app.home.db.AdvertsInfoDao;
@@ -31,12 +30,10 @@ import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.litepal.UpAdvertInfoDao;
 import com.muju.note.launcher.okgo.BaseBean;
 import com.muju.note.launcher.okgo.JsonCallback;
-import com.muju.note.launcher.topics.AdvertsTopics;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.log.LogFactory;
-import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.view.banana.Banner;
 import com.muju.note.launcher.view.banana.BannerPage;
 import com.muju.note.launcher.view.banana.OnBannerListener;
@@ -49,13 +46,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class NewAdvertsUtil {
+public class AdvertsUtil {
 
-    public static NewAdvertsUtil advertsUtil = null;
+    public static AdvertsUtil advertsUtil = null;
 
-    public static NewAdvertsUtil getInstance() {
+    public static AdvertsUtil getInstance() {
         if (advertsUtil == null) {
-            advertsUtil = new NewAdvertsUtil();
+            advertsUtil = new AdvertsUtil();
         }
         return advertsUtil;
     }
@@ -125,40 +122,13 @@ public class NewAdvertsUtil {
 
     //展示广告
     private void getNewAdvertsSuccess(List<AdverNewBean> dataList) {
-        for (AdverNewBean adverNewBean : dataList) {
-            if (adverNewBean.getCode().equals(AdvertsTopics.CODE_HOME_LB)) {
-                if (adverNewBean.getAdverts().size() > 0) {
-                    SPUtil.saveDataList(AdvertsTopics.CODE_HOME_LB, adverNewBean.getAdverts());
-                }
-            } else if (adverNewBean.getCode().equals(AdvertsTopics.CODE_HOME_DIALOG)) {
-                if (adverNewBean.getAdverts().size() > 0) {
-                    SPUtil.saveDataList(AdvertsTopics.CODE_HOME_DIALOG, adverNewBean.getAdverts());
-                }
-            } else if (adverNewBean.getCode().equals(AdvertsTopics.CODE_LOCK)) {
-                if (adverNewBean.getAdverts().size() > 0)
-                    SPUtil.saveDataList(AdvertsTopics.CODE_LOCK, adverNewBean.getAdverts());
-            } else if (adverNewBean.getCode().equals(AdvertsTopics.CODE_PUBLIC)) {
-                if (adverNewBean.getAdverts().size() > 0) {
-                    SPUtil.saveDataList(AdvertsTopics.CODE_PUBLIC, adverNewBean.getAdverts());
-                }
-            } else if (adverNewBean.getCode().equals(AdvertsTopics.CODE_VERTICAL)) {
-                if (adverNewBean.getAdverts().size() > 0) {
-                    SPUtil.saveDataList(AdvertsTopics.CODE_VERTICAL, adverNewBean.getAdverts());
-                }
-            } else if (adverNewBean.getCode().equals(AdvertsTopics.CODE_VIDEO_CORNER)) {
-                if (adverNewBean.getAdverts().size() > 0) {
-                    SPUtil.saveDataList(AdvertsTopics.CODE_VIDEO_CORNER, adverNewBean.getAdverts());
-                }
-            } else if (adverNewBean.getCode().equals(AdvertsTopics.CODE_VIDEO_DIALOG)) {
-                if (adverNewBean.getAdverts().size() > 0) {
-                    SPUtil.saveDataList(AdvertsTopics.CODE_VIDEO_DIALOG, adverNewBean.getAdverts());
-                }
-            } else if (adverNewBean.getCode().equals(AdvertsTopics.CODE_ROAD)) {
-                if (adverNewBean.getAdverts().size() > 0) {
-                    SPUtil.saveDataList(AdvertsTopics.CODE_ROAD, adverNewBean.getAdverts());
-                }
-            }
+        try {
+            LitePal.deleteAll(AdvertsCodeDao.class);
+            DbHelper.insertAdvertListDb(dataList);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
         if (lisinter != null) {
             lisinter.success();
         }
@@ -169,93 +139,6 @@ public class NewAdvertsUtil {
             showImgListener.success();
         }
     }
-
-
-    public void showByBanner(final List<AdvertsBean> list, final Banner banner) {
-        banner.setVisibility(View.VISIBLE);
-        List<BannerPage> pageList = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getAdditionUrl() == null) {
-                list.get(i).setAdditionUrl("");
-            }
-            BannerPage page = new BannerPage(list.get(i).getResourceUrl(), 15000);
-//            BannerPage page = new BannerPage(list.get(i).getResourceUrl(), list.get(i)
-// .getInterval()*1000); //轮播时长
-            pageList.add(page);
-        }
-        banner.setSlide(true);
-        banner.setDataPlay(pageList, 0);
-        final int[] id = {0};
-        final long[] startTime = {System.currentTimeMillis()};
-        banner.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int i, float v, int i1) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-//                LogFactory.l().i("position:"+position);
-                try {
-                    if (id[0] != 0) {
-                        if (position == 0) {
-                            return;
-                        }
-                        if (position == list.size() + 1) {
-                            position = 1;
-                        }
-                        if (id[0] == list.get(position - 1).getId()) {
-                            return;
-                        }
-                        if (position == 1) {
-                            long currentTime = System.currentTimeMillis();
-                            addData(list.get(list.size() - 1).getId(), TAG_SHOWTIME, currentTime
-                                    - startTime[0]);
-                            addDataInfo(list.get(list.size() - 1).getId(), TAG_SHOWTIME,
-                                    startTime[0], currentTime);
-                        } else {
-                            long currentTime = System.currentTimeMillis();
-                            addData(list.get(position - 2).getId(), TAG_SHOWTIME, currentTime -
-                                    startTime[0]);
-                            addDataInfo(list.get(position - 2).getId(), TAG_SHOWTIME,
-                                    startTime[0], currentTime);
-                        }
-                        startTime[0] = System.currentTimeMillis();
-                    }
-                    if (id[0] != list.get(position - 1).getId()) {
-                        addData(list.get(position - 1).getId(), TAG_SHOWCOUNT);
-                        addDataInfo(list.get(position - 1).getId(), TAG_SHOWCOUNT);
-                    }
-                    id[0] = list.get(position - 1).getId();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int status) {
-//                LogFactory.l().i("status==="+status);
-            }
-        });
-        banner.setOnBannerListener(new OnBannerListener() {
-            @Override
-            public void OnBannerClick(int position) {
-                AdvertsBean bean = list.get(position);
-                try {
-                    if (bean.getResourceUrl().endsWith("png") || bean.getResourceUrl().endsWith
-                            ("jpg")) {
-                        jump(bean);
-                    }
-                } catch (Exception e) {
-                    LogFactory.l().i("e==" + e.getMessage());
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-
-
 
     //数据库获取数据
     public void showByDbBanner(final List<AdvertsCodeDao> list, final Banner banner) {
@@ -384,37 +267,20 @@ public class NewAdvertsUtil {
     }
 
 
-    //根据类型跳转不同页面
-    private void jump(AdvertsBean bean) throws Exception {
-        //linkType  1:url  2:游戏 3:视频  4:通道  5:图片
-        updateOnClickCount(bean.getId()); //图片增加点击
-        addDataInfo(bean.getId(), TAG_CLICKCOUNT);
-        LogFactory.l().i("跳转类型===" + bean.getLinkType());
-        if (bean.getLinkType() == 1) {
-            EventBus.getDefault().post(new AdvertWebEntity(bean.getId(), bean.getName(), bean.getLinkContent(),1));
-        } else if (bean.getLinkType() == 5) {
-            EventBus.getDefault().post(new AdvertWebEntity(bean.getId(), bean.getName(), bean.getLinkContent(),5));
-        } else if (bean.getLinkType() == 3) {
-            EventBus.getDefault().post(new AdvertWebEntity(bean.getId(), bean.getName(), bean.getLinkContent(),3));
-        } else if (bean.getLinkType() == 2) {
 
-        } else if (bean.getLinkType() == 4) {
-
-        }
-    }
 
 
     //展示图片
-    public void showByImageView(final List<AdvertsBean> list, final ImageView imageView) {
-        final AdvertsBean bean = list.get(0);
-        Glide.with(LauncherApplication.getContext()).load(bean.getResourceUrl()).into(imageView);
-        addData(bean.getId(), TAG_SHOWCOUNT);
-        addDataInfo(bean.getId(), TAG_SHOWCOUNT);
+    public void showByImageView(final List<AdvertsCodeDao> list, final ImageView imageView) {
+        final AdvertsCodeDao dao = list.get(0);
+        Glide.with(LauncherApplication.getContext()).load(dao.getResourceUrl()).into(imageView);
+        addData(dao.getAdid(), TAG_SHOWCOUNT);
+        addDataInfo(dao.getAdid(), TAG_SHOWCOUNT);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
-                    jump(bean);
+                    jumpByDb(dao);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -423,10 +289,9 @@ public class NewAdvertsUtil {
     }
 
     //图片击进入长图
-    public void showByImageView(final Context context, final List<AdvertsBean> list, final
+    public void showByImageView(final Context context, final AdvertsCodeDao dao, final
     ImageView imageView, final ImageView img, final RelativeLayout relCorner) {
-        final AdvertsBean bean = list.get(0);
-        Glide.with(LauncherApplication.getContext()).load(bean.getResourceUrl()).into(new SimpleTarget<Drawable>() {
+        Glide.with(LauncherApplication.getContext()).load(dao.getResourceUrl()).into(new SimpleTarget<Drawable>() {
             @Override
             public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super
                     Drawable> transition) {
@@ -438,13 +303,13 @@ public class NewAdvertsUtil {
             }
         });
         final long time = System.currentTimeMillis();
-        addData(bean.getId(), TAG_SHOWCOUNT);
-        addDataInfo(bean.getId(), TAG_SHOWCOUNT);
+        addData(dao.getAdid(), TAG_SHOWCOUNT);
+        addDataInfo(dao.getAdid(), TAG_SHOWCOUNT);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
-                    jump(bean);
+                    jumpByDb(dao);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -455,8 +320,8 @@ public class NewAdvertsUtil {
             @Override
             public void onClick(View v) {
                 long currentTime = System.currentTimeMillis();
-                addData(bean.getId(), TAG_SHOWTIME, currentTime - time);
-                addDataInfo(bean.getId(), TAG_SHOWTIME, time, currentTime);
+                addData(dao.getAdid(), TAG_SHOWTIME, currentTime - time);
+                addDataInfo(dao.getAdid(), TAG_SHOWTIME, time, currentTime);
                 relCorner.setVisibility(View.GONE);
             }
         });
@@ -464,14 +329,14 @@ public class NewAdvertsUtil {
 
 
     //dialog形式展示
-    public void showByDialog(final List<AdvertsBean> list, final AdvertsDialog dialog) {
-        final AdvertsBean bean = list.get(0);
+    public void showByDialog(final List<AdvertsCodeDao> list, final AdvertsDialog dialog) {
+        final AdvertsCodeDao dao = list.get(0);
         final long time = System.currentTimeMillis();
         dialog.setOnImgClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
-                    jump(bean);
+                    jumpByDb(dao);
                     dialog.dismiss();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -479,9 +344,9 @@ public class NewAdvertsUtil {
             }
         });
         dialog.show();
-        dialog.loadImg(bean.getResourceUrl(), bean.getCloseType(), bean.getSecond());
-        addData(bean.getId(), TAG_SHOWCOUNT);
-        addDataInfo(bean.getId(), TAG_SHOWCOUNT);
+        dialog.loadImg(dao.getResourceUrl(), dao.getCloseType(), dao.getSecond());
+        addData(dao.getAdid(), TAG_SHOWCOUNT);
+        addDataInfo(dao.getAdid(), TAG_SHOWCOUNT);
         dialog.setOnAdDialogDismissListener(new OnAdDialogDismissListener() {
             @Override
             public void OnAdDialogDismiss() {
@@ -493,35 +358,34 @@ public class NewAdvertsUtil {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
                 long currentTime = System.currentTimeMillis();
-                if (bean.getCloseType() == 2) {
+                if (dao.getCloseType() == 2) {
                     dialog.removeHandler();
                 }
-                addData(bean.getId(), TAG_SHOWTIME, currentTime - time);
-                addDataInfo(bean.getId(), TAG_SHOWTIME, time, currentTime);
+                addData(dao.getAdid(), TAG_SHOWTIME, currentTime - time);
+                addDataInfo(dao.getAdid(), TAG_SHOWTIME, time, currentTime);
             }
         });
     }
 
 
-    public void showVideoDialog(final List<AdvertsBean> list, final VideoOrImageDialog dialog)
+    public void showVideoDialog(final AdvertsCodeDao dao, final VideoOrImageDialog dialog)
             throws Exception {
-        final AdvertsBean bean = list.get(0);
         final long time = System.currentTimeMillis();
         dialog.setOnImgClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
-                    jump(bean);
+                    jumpByDb(dao);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
         dialog.show();
-        if (bean.getResourceUrl().endsWith("mp4")) {
-            dialog.startVideo(bean.getResourceUrl());
+        if (dao.getResourceUrl().endsWith("mp4")) {
+            dialog.startVideo(dao.getResourceUrl());
         } else {
-            dialog.loadImg(bean.getResourceUrl(), bean.getCloseType(), bean.getSecond());
+            dialog.loadImg(dao.getResourceUrl(), dao.getCloseType(), dao.getSecond());
         }
         dialog.setOnAdDialogDismissListener(new OnAdDialogDismissListener() {
             @Override
@@ -529,15 +393,15 @@ public class NewAdvertsUtil {
                 dialog.dismiss();
             }
         });
-        addData(bean.getId(), TAG_SHOWCOUNT);
-        addDataInfo(bean.getId(), TAG_SHOWCOUNT);
+        addData(dao.getAdid(), TAG_SHOWCOUNT);
+        addDataInfo(dao.getAdid(), TAG_SHOWCOUNT);
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
                 long currentTime = System.currentTimeMillis();
-                addData(bean.getId(), TAG_SHOWTIME, currentTime - time);
-                addDataInfo(bean.getId(), TAG_SHOWTIME, time, currentTime);
-                if (bean.getCloseType() == 2) {
+                addData(dao.getAdid(), TAG_SHOWTIME, currentTime - time);
+                addDataInfo(dao.getAdid(), TAG_SHOWTIME, time, currentTime);
+                if (dao.getCloseType() == 2) {
                     dialog.removeHandler();
                 }
             }

@@ -17,7 +17,7 @@ import com.devbrackets.android.media.BaseEMVideoView;
 import com.devbrackets.android.media.listener.OnVideoPreparedListener;
 import com.devbrackets.android.media.ui.widget.TouchEventHandler;
 import com.muju.note.launcher.R;
-import com.muju.note.launcher.app.home.bean.AdvertsBean;
+import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
 import com.muju.note.launcher.app.video.adapter.VideoLineAdapter;
 import com.muju.note.launcher.app.video.contract.VideoLineContract;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
@@ -31,7 +31,7 @@ import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.topics.AdvertsTopics;
 import com.muju.note.launcher.topics.SpTopics;
-import com.muju.note.launcher.util.adverts.NewAdvertsUtil;
+import com.muju.note.launcher.util.adverts.AdvertsUtil;
 import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
@@ -44,6 +44,7 @@ import com.unicom.common.base.video.expand.ExpandVideoListener;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.litepal.LitePal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -222,15 +223,16 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
     public void onEvent(VideoPauseEvent event) {
         LogFactory.l().i("VideoPauseEvent==" + event.isPause);
         if (event.isPause && isShowDialog) {
-            List<AdvertsBean> adverts = SPUtil.getAdList(AdvertsTopics.CODE_VIDEO_DIALOG);
+            AdvertsCodeDao codeDao = LitePal.where("code =?", AdvertsTopics.CODE_VIDEO_DIALOG).findFirst(AdvertsCodeDao.class);
             try {
                 if (videoOrImageDialog == null) {
                     videoOrImageDialog = new VideoOrImageDialog(getActivity(), R.style.dialog);
-                    if (adverts != null && adverts.size() > 0)
-                        NewAdvertsUtil.getInstance().showVideoDialog(adverts, videoOrImageDialog);
+                    if (codeDao != null ){
+                        AdvertsUtil.getInstance().showVideoDialog(codeDao, videoOrImageDialog);
+                    }
                 } else {
-                    if (adverts.get(0).getCloseType() == 2) {
-                        videoOrImageDialog.closeBySelf(adverts.get(0).getSecond());
+                    if(codeDao != null && codeDao.getCloseType()==2){
+                        videoOrImageDialog.closeBySelf(codeDao.getSecond());
                     }
                     videoOrImageDialog.show();
                 }

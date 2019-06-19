@@ -18,7 +18,6 @@ import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.Constants;
 import com.muju.note.launcher.util.DateUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
-import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.net.NetWorkUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
 import com.muju.note.launcher.util.sign.Signature;
@@ -123,10 +122,10 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
      */
     @Override
     public void getBananaList(String code) {
-        LitePal.where("code=?",code).findAsync(AdvertsCodeDao.class).listen(new FindMultiCallback<AdvertsCodeDao>() {
+        LitePal.where("code =?",code).findAsync(AdvertsCodeDao.class).listen(new FindMultiCallback<AdvertsCodeDao>() {
             @Override
             public void onFinish(List<AdvertsCodeDao> list) {
-                LogFactory.l().i("list"+list.size());
+//                LogFactory.l().i("list"+list.size());
                 if (list == null || list.size() <= 0) {
                     mView.getBananaNull();
                     return;
@@ -141,13 +140,14 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
      */
     @Override
     public void getDialogAd(String code) {
-        LitePal.where("code ="+code).findAsync(AdvertsCodeDao.class).listen(new FindMultiCallback<AdvertsCodeDao>() {
+        LitePal.where("code =?",code).findAsync(AdvertsCodeDao.class).listen(new FindMultiCallback<AdvertsCodeDao>() {
             @Override
             public void onFinish(List<AdvertsCodeDao> list) {
+//                LogFactory.l().i("list"+list.size());
                 if (list == null || list.size() <= 0) {
                     return;
                 }
-                mView.getDialogAd(list.get(0));
+                mView.getDialogAd(list);
             }
         });
     }

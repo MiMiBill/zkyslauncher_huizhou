@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.base.BaseFragment;
-import com.muju.note.launcher.util.adverts.NewAdvertsUtil;
+import com.muju.note.launcher.util.adverts.AdvertsUtil;
 
 import butterknife.BindView;
 
@@ -206,8 +206,8 @@ public class WebViewFragment extends BaseFragment implements View.OnClickListene
         super.onDestroy();
         long currentTime=System.currentTimeMillis();
         if (advertId != 0) {
-            NewAdvertsUtil.getInstance().addData(advertId, NewAdvertsUtil.TAG_BROWSETIME, currentTime - startTime);
-            NewAdvertsUtil.getInstance().addDataInfo(advertId, NewAdvertsUtil.TAG_BROWSETIME, startTime,currentTime);
+            AdvertsUtil.getInstance().addData(advertId, AdvertsUtil.TAG_BROWSETIME, currentTime - startTime);
+            AdvertsUtil.getInstance().addDataInfo(advertId, AdvertsUtil.TAG_BROWSETIME, startTime,currentTime);
         }
         if(web!=null){
             web.removeAllViews();

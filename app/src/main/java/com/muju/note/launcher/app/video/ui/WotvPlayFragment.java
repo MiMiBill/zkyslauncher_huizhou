@@ -20,7 +20,7 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 import com.muju.note.launcher.R;
-import com.muju.note.launcher.app.home.bean.AdvertsBean;
+import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
 import com.muju.note.launcher.app.publicAdress.ui.PublicActivity;
 import com.muju.note.launcher.app.video.bean.PayEntity;
 import com.muju.note.launcher.app.video.bean.PayEvent;
@@ -44,7 +44,7 @@ import com.muju.note.launcher.topics.AdvertsTopics;
 import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.DateUtil;
-import com.muju.note.launcher.util.adverts.NewAdvertsUtil;
+import com.muju.note.launcher.util.adverts.AdvertsUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.log.LogUtil;
@@ -60,6 +60,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.LitePal;
 
 import java.util.HashMap;
 import java.util.List;
@@ -520,12 +521,11 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
         if (event.isStart) {
             if (videoOrImageDialog != null && videoOrImageDialog.isShowing()) {
                 videoOrImageDialog.dismiss();
-
-                List<AdvertsBean> adverts = SPUtil.getAdList(AdvertsTopics.CODE_VIDEO_CORNER);
-                if (adverts != null && adverts.size() > 0) {
-                    NewAdvertsUtil.getInstance().showByImageView(getActivity(), adverts,
-                            ivCorner, ivColse, relCornor);
-                }
+            }
+            AdvertsCodeDao codeDao = LitePal.where("code =?", AdvertsTopics.CODE_VIDEO_CORNER).
+                    findFirst(AdvertsCodeDao.class);
+            if (codeDao != null ) {
+                AdvertsUtil.getInstance().showByImageView(getActivity(), codeDao, ivCorner, ivColse, relCornor);
             }
         }
     }
@@ -590,18 +590,17 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
     public void onEvent(VideoPauseEvent event) {
 //        LogFactory.l().i("VideoPauseEvent==" + event.isPause);
         if (event.isPause && isShowDialog) {
-            List<AdvertsBean> adverts = SPUtil.getAdList(AdvertsTopics.CODE_VIDEO_DIALOG);
-            for (int i = 0; i < adverts.size(); i++) {
-                LogFactory.l().i("id==="+adverts.get(i).getId());
-            }
+
+            AdvertsCodeDao codeDao = LitePal.where("code =?", AdvertsTopics.CODE_VIDEO_DIALOG).findFirst(AdvertsCodeDao.class);
             try {
                 if (videoOrImageDialog == null) {
                     videoOrImageDialog = new VideoOrImageDialog(getActivity(), R.style.dialog);
-                    if (adverts != null && adverts.size() > 0)
-                        NewAdvertsUtil.getInstance().showVideoDialog(adverts, videoOrImageDialog);
+                    if (codeDao != null ){
+                        AdvertsUtil.getInstance().showVideoDialog(codeDao, videoOrImageDialog);
+                    }
                 } else {
-                    if(adverts.get(0).getCloseType()==2){
-                        videoOrImageDialog.closeBySelf(adverts.get(0).getSecond());
+                    if(codeDao != null && codeDao.getCloseType()==2){
+                        videoOrImageDialog.closeBySelf(codeDao.getSecond());
                     }
                     videoOrImageDialog.show();
                 }

@@ -12,7 +12,7 @@ import com.muju.note.launcher.app.sign.bean.TaskBean;
 import com.muju.note.launcher.app.video.event.VideoNoLockEvent;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.util.Constants;
-import com.muju.note.launcher.util.adverts.NewAdvertsUtil;
+import com.muju.note.launcher.util.adverts.AdvertsUtil;
 import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.util.user.UserUtil;
 import com.muju.note.launcher.view.VideoPlayControlView;
@@ -96,8 +96,8 @@ public class AdvideoViewFragment extends BaseFragment<PublicPresenter> implement
 
     private void doFinish() {
         long currentTime=System.currentTimeMillis();
-        NewAdvertsUtil.getInstance().addData(advertId,NewAdvertsUtil.TAG_BROWSETIME,currentTime-startTime);
-        NewAdvertsUtil.getInstance().addDataInfo(advertId,NewAdvertsUtil.TAG_BROWSETIME,startTime,currentTime);
+        AdvertsUtil.getInstance().addData(advertId,AdvertsUtil.TAG_BROWSETIME,currentTime-startTime);
+        AdvertsUtil.getInstance().addDataInfo(advertId,AdvertsUtil.TAG_BROWSETIME,startTime,currentTime);
         if (mVvVideoView != null) {
             mVvVideoView.onDestroy();
         }

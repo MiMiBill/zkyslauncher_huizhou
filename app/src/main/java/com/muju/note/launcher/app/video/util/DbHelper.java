@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.muju.note.launcher.app.home.bean.AdverNewBean;
 import com.muju.note.launcher.app.home.bean.AdvertsBean;
 import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
+import com.muju.note.launcher.app.home.event.GetAdvertEvent;
 import com.muju.note.launcher.app.hostipal.db.InfoDao;
 import com.muju.note.launcher.app.hostipal.db.InfomationDao;
 import com.muju.note.launcher.app.startUp.event.StartCheckDataEvent;
@@ -169,7 +170,7 @@ public class DbHelper {
     /**
      *  插入广告数据
      */
-    public static void setAdvertListData(final List<AdverNewBean> dataList) throws Exception {
+    public static void insertAdvertListDb(final List<AdverNewBean> dataList) throws Exception {
         LogUtil.i(TAG,"数据插入开始时间："+System.currentTimeMillis());
         ExecutorService service=Executors.newSingleThreadExecutor();
         service.execute(new Runnable() {
@@ -214,6 +215,7 @@ public class DbHelper {
                             advertsCodeDao.saveDb(advertsCodeDao);
                         }
                     }
+                    EventBus.getDefault().post(new GetAdvertEvent());
                     LogUtil.i(TAG,"数据插入结束时间："+System.currentTimeMillis());
                 }catch (Exception e){
                     e.printStackTrace();
