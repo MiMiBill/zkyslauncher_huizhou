@@ -4,16 +4,20 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.muju.note.launcher.app.home.bean.AdverNewBean;
+import com.muju.note.launcher.app.home.bean.AdvertsBean;
 import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
 import com.muju.note.launcher.app.hostipal.db.InfoDao;
 import com.muju.note.launcher.app.hostipal.db.InfomationDao;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
+import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.litepal.UpAdvertInfoDao;
 import com.muju.note.launcher.litepal.UpVideoInfoDao;
 import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.sp.SPUtil;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -141,8 +145,89 @@ public class DbHelper {
     /**
      *  插入广告数据
      */
-    public static void insertToAdvertListData(String dbPath, AdvertsCodeDao dao) throws Exception{
+    public static void setAdvertListData(final List<AdverNewBean> dataList) throws Exception {
         LogUtil.i(TAG,"数据插入开始时间："+System.currentTimeMillis());
+        ExecutorService service=Executors.newSingleThreadExecutor();
+        service.execute(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    for (AdverNewBean adverNewBean : dataList) {
+//                        LitePal.deleteAll(AdvertsCodeDao.class);
+                        AdvertsCodeDao advertsCodeDao=new AdvertsCodeDao();
+                        advertsCodeDao.setCode(adverNewBean.getCode());
+                        List<AdvertsBean> adverts = adverNewBean.getAdverts();
+                        for (AdvertsBean adBean: adverts) {
+                            advertsCodeDao.setId(adBean.getId());
+                            String linkContent = adBean.getLinkContent();
+                            String resourceUrl = adBean.getResourceUrl();
+                            String name = adBean.getName();
+                            String advertType = adBean.getAdvertType();
+                            String additionUrl = adBean.getAdditionUrl();
+                            if(null==linkContent){
+                                linkContent="";
+                            }
+                            if(null==resourceUrl){
+                                resourceUrl="";
+                            }
+                            if(null==name){
+                                name="";
+                            }
+                            if(null==advertType){
+                                advertType="";
+                            }
+                            if(null==additionUrl){
+                                additionUrl="";
+                            }
+                            advertsCodeDao.setCloseType(adBean.getCloseType());
+                            advertsCodeDao.setSecond(adBean.getSecond());
+                            advertsCodeDao.setStatus(adBean.getStatus());
+                            advertsCodeDao.setLinkType(adBean.getLinkType());
+                            advertsCodeDao.setLinkContent(linkContent);
+                            advertsCodeDao.setResourceUrl(resourceUrl);
+                            advertsCodeDao.setName(name);
+                            advertsCodeDao.setAdvertType(advertType);
+                            advertsCodeDao.setAdditionUrl(additionUrl);
+                            advertsCodeDao.saveDb(advertsCodeDao);
+                        }
+//                        insertToAdvertListData(advertsCodeDao);
+                    }
+                    LogUtil.i(TAG,"数据插入结束时间："+System.currentTimeMillis());
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    /**
+     *  插入广告数据
+     */
+    public static void insertToAdvertListData(final AdvertsCodeDao dao) throws Exception {
+        ExecutorService service=Executors.newSingleThreadExecutor();
+        service.execute(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    SQLiteDatabase database=getDataBase(LitePalDb.DBNAME_ZKYS);
+                    ContentValues values=new ContentValues();
+                    values.put("id",dao.getId());
+                    values.put("code",dao.getCode());
+                    values.put("closeType",dao.getCloseType());
+                    values.put("linkContent",dao.getLinkContent());
+                    values.put("second",dao.getSecond());
+                    values.put("resourceUrl",dao.getResourceUrl());
+                    values.put("name",dao.getName());
+                    values.put("linkType",dao.getLinkType());
+                    values.put("advertType",dao.getAdvertType());
+                    values.put("additionUrl",dao.getAdditionUrl());
+                    values.put("status",dao.getStatus());
+                    database.insert("AdvertsCodeDao",null,values);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
 

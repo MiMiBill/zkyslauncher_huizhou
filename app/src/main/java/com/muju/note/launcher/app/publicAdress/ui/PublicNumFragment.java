@@ -23,6 +23,8 @@ import com.muju.note.launcher.view.password.OnPasswordFinish;
 import com.muju.note.launcher.view.password.PopEnterPassword;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -105,7 +107,8 @@ public class PublicNumFragment extends BaseFragment<PublicPresenter> implements 
         popEnterPassword.setOnPassFinish(new OnPasswordFinish() {
             @Override
             public void passwordFinish(String password) {
-                mPresenter.doTask(UserUtil.getUserBean().getId(),advertId);
+                mPresenter.verfycode(password, adverId, advertCode);
+//                mPresenter.doTask(UserUtil.getUserBean().getId(),advertId);
             }
         });
     }
@@ -113,7 +116,17 @@ public class PublicNumFragment extends BaseFragment<PublicPresenter> implements 
 
     @Override
     public void verfycode(String response) {
-
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            if (jsonObject.optInt("code") == 200) {
+                showToast("验证码验证成功");
+                mPresenter.doTask(UserUtil.getUserBean().getId(),advertId);
+            } else {
+                showToast("验证码验证失败");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
