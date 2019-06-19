@@ -17,7 +17,7 @@ public class AdvertsCodeDao extends LitePalSupport implements Serializable {
     private String resourceUrl;
     private String name;
     private int linkType;
-    private int id;
+    private int adid;
     private String advertType; //广告类型 1:轮播  2:插屏 3:公众号推广  4:通道
     private String additionUrl; //画中画url
     private int order;
@@ -101,12 +101,12 @@ public class AdvertsCodeDao extends LitePalSupport implements Serializable {
         this.linkType = linkType;
     }
 
-    public int getId() {
-        return id;
+    public int getAdid() {
+        return adid;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setAdid(int adid) {
+        this.adid = adid;
     }
 
     public String getAdvertType() {

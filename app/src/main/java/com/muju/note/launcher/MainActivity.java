@@ -10,6 +10,8 @@ import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
 import com.muju.note.launcher.app.adtask.TaskListBean;
 import com.muju.note.launcher.app.adtask.event.UserInfoEvent;
 import com.muju.note.launcher.app.adtask.presenter.MainPresenter;
+import com.muju.note.launcher.app.bedsidecard.ui.BedSideCardFragment;
+import com.muju.note.launcher.app.bedsidecard.event.GotoBedsideEvent;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.app.home.event.OutHospitalEvent;
 import com.muju.note.launcher.app.home.event.PatientInfoEvent;
@@ -314,6 +316,17 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void goToSign(GotoSatisfationEvent entity){
         start(SatisfactionSurveyFragment.newInstance(entity.padsurvey));
+    }
+
+
+    /**
+     *  问卷调查
+     * @param entity
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void goToBedSide(GotoBedsideEvent entity){
+        PatientResponse.DataBean info = entity.info;
+        start(BedSideCardFragment.newInstance(info));
     }
 
     @Override

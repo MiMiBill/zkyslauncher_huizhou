@@ -22,6 +22,7 @@ import com.muju.note.launcher.app.home.adapter.HomeTopVideoAdapter;
 import com.muju.note.launcher.app.home.bean.AdvertsBean;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.app.home.contract.HomeContract;
+import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
 import com.muju.note.launcher.app.home.event.OutHospitalEvent;
 import com.muju.note.launcher.app.home.event.PatientEvent;
 import com.muju.note.launcher.app.home.event.PatientInfoEvent;
@@ -29,7 +30,6 @@ import com.muju.note.launcher.app.home.presenter.HomePresenter;
 import com.muju.note.launcher.app.hostipal.ui.EncyFragment;
 import com.muju.note.launcher.app.hostipal.ui.HosPitalMissionFragment;
 import com.muju.note.launcher.app.hostipal.ui.HospitalMienFragment;
-import com.muju.note.launcher.app.hostipal.ui.HospitalelEganceFragment;
 import com.muju.note.launcher.app.insurance.InsureanceFragment;
 import com.muju.note.launcher.app.orderfood.OrderFoodFragment;
 import com.muju.note.launcher.app.setting.ui.UserSettingFragment;
@@ -160,10 +160,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     ImageView ivNet;
 
     private ActivePadInfo.DataBean activeInfo;
-
+    private PatientResponse.DataBean entity;
     private List<VideoHisDao> videoHisDaos;
     private HomeHisVideoAdapter homeHisVideoAdapter;
-
     private List<VideoInfoDao> videoInfoDaos;
     private HomeTopVideoAdapter homeTopVideoAdapter;
     private VideoInfoDao imgVideoInfo;
@@ -283,6 +282,12 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                     AdvertsTopics.CODE_VIDEO_CORNER, AdvertsTopics.CODE_VIDEO_DIALOG,
                     AdvertsTopics.CODE_ROAD), banner, dialog);
 
+           /* NewAdvertsUtil.getInstance().setOnBannerSuccessLisinter(new NewAdvertsUtil.OnBannerSuccessLisinter() {
+                @Override
+                public void success() {
+                    mPresenter.getBananaList(AdvertsTopics.CODE_HOME_LB);
+                }
+            });*/
 
             NewAdvertsUtil.getInstance().setOnBannerFailLisinter(new NewAdvertsUtil
                     .OnBannerFailLisinter() {
@@ -318,6 +323,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 }
             });
         } catch (Exception e) {
+            LogFactory.l().i("e=="+e.getMessage());
             e.printStackTrace();
         }
     }
@@ -433,6 +439,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     //设置病人信息
     @Override
     public void patientInfo(PatientResponse.DataBean entity) {
+        this.entity= entity;
         EventBus.getDefault().post(new PatientInfoEvent(entity));
         llyNoPatient.setVisibility(View.GONE);
         llyHavePaitent.setVisibility(View.VISIBLE);
@@ -488,6 +495,21 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     public void getVideoTopImg(VideoInfoDao dao) {
         imgVideoInfo = dao;
         GlideUtil.loadImg(dao.getScreenUrl(), ivImg, R.mipmap.ic_video_load_default);
+    }
+
+    @Override
+    public void getBananaNull() {
+        NewAdvertsUtil.getInstance().showDefaultBanner(banner, 1);
+    }
+
+    @Override
+    public void getBananaList(List<AdvertsCodeDao> list) {
+        NewAdvertsUtil.getInstance().showByDbBanner(list, banner);
+    }
+
+    @Override
+    public void getDialogAd(AdvertsCodeDao dao) {
+//        NewAdvertsUtil.getInstance().showByDialog(), dialog);
     }
 
 
@@ -564,13 +586,14 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 break;
             case R.id.lly_finance: // 金融财富
                 start(new FinanceFragment());
+//                if(entity!=null)
+//                EventBus.getDefault().post(new GotoBedsideEvent(entity));
                 break;
             case R.id.lly_insureance: // 保险服务
                 start(new InsureanceFragment());
                 break;
             case R.id.lly_order: // 点餐服务
                 start(new OrderFoodFragment());
-//                start(new BedSideCardFragment());
                 break;
             case R.id.lly_cabinet: // 屏安柜
                 start(new CabinetFragment());

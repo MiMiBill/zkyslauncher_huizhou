@@ -616,7 +616,7 @@
                         <ImageView
                             android:layout_width="@dimen/px100"
                             android:layout_height="@dimen/px100"
-                            android:src="@mipmap/ic_home_item_msg" />
+                            android:src="@mipmap/ic_home_item_shop" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -637,7 +637,7 @@
                         <ImageView
                             android:layout_width="@dimen/px100"
                             android:layout_height="@dimen/px100"
-                            android:src="@mipmap/ic_home_item_signin" />
+                            android:src="@mipmap/ic_home_item_finance" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -659,7 +659,7 @@
                         <ImageView
                             android:layout_width="@dimen/px100"
                             android:layout_height="@dimen/px100"
-                            android:src="@mipmap/ic_home_item_drawluck" />
+                            android:src="@mipmap/ic_home_item_insureance" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -682,7 +682,7 @@
                         <ImageView
                             android:layout_width="@dimen/px100"
                             android:layout_height="@dimen/px100"
-                            android:src="@mipmap/home_guide" />
+                            android:src="@mipmap/ic_home_item_order" />
 
                         <TextView
                             android:layout_width="wrap_content"

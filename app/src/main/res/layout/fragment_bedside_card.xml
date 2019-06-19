@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/px14"
-                android:textColor="@color/black_gray" />
+                android:textColor="@color/white" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -56,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/px10"
-                android:textColor="@color/black_gray"
+                android:textColor="@color/white"
                 android:textSize="25px" />
 
             <ImageView
@@ -117,10 +117,11 @@
                         android:layout_height="wrap_content" />
                 </RelativeLayout>
                 <TextView
+                    android:id="@+id/tv_name"
                     android:layout_marginLeft="@dimen/px20"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:text="张雪冰"
+                    android:text=""
                     android:textColor="@color/white"
                     android:gravity="center"
                     android:textSize="80px"
@@ -137,7 +138,7 @@
                         android:id="@+id/tv_sex"
                         android:layout_width="match_parent"
                         android:layout_weight="1"
-                        android:text="女"
+                        android:text=""
                         android:textColor="@color/white"
                         android:gravity="center"
                         android:textSize="70px"
@@ -147,7 +148,7 @@
                         android:layout_below="@id/tv_sex"
                         android:layout_width="match_parent"
                         android:layout_weight="1"
-                        android:text="23岁"
+                        android:text=""
                         android:textColor="@color/white"
                         android:gravity="center"
                         android:textSize="70px"
@@ -377,7 +378,7 @@
                 <TextView
                     android:textSize="@dimen/px40"
                     android:gravity="center"
-                    android:text=""
+                    android:text="半流食"
                     android:textColor="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
@@ -396,7 +397,7 @@
                 <TextView
                     android:textSize="@dimen/px40"
                     android:gravity="center"
-                    android:text=""
+                    android:text="无过敏"
                     android:textColor="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
@@ -425,7 +426,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
                 <TextView
-                    android:text="李护士"
+                    android:id="@+id/tv_zb_nu"
+                    android:text=""
                     android:textColor="@color/white"
                     android:textSize="@dimen/px40"
                     android:layout_marginTop="@dimen/px22"

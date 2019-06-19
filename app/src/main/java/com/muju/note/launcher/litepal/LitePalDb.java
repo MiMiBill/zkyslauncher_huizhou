@@ -28,11 +28,10 @@ import java.io.File;
 
 public class LitePalDb {
 
-    public static final LitePalDB zkysDataDb=new LitePalDB("zkys-data",24);
-    public static final LitePalDB zkysDb=new LitePalDB("zkys",24);
+    public static final LitePalDB zkysDataDb=new LitePalDB("zkys-data",25);
+    public static final LitePalDB zkysDb=new LitePalDB("zkys",25);
 
     public static final String DBNAME_ZKYS_DATA="/sdcard/zkysdb/zkys-data.db";
-    public static final String DBNAME_ZKYS="/sdcard/zkysdb/zkys.db";
 
     /**
      *  初始化数据库

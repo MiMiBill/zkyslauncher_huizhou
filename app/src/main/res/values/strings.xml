@@ -32,4 +32,5 @@
     <string name="card_doctor">主治医生</string>
     <string name="card_nurse">责任护士</string>
     <string name="card_notice">温馨提示：请注意定时喝水！</string>
+    <string name="dialog_hint">当前视频免费时长已用完，微信扫码支付后三万部影片任您畅看</string>
 </resources>

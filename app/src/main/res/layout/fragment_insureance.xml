@@ -1,32 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/drawlayout"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:background="@color/main_bg"
+    android:orientation="vertical">
 
-    <include layout="@layout/title_bar"/>
-    <LinearLayout
-        android:id="@+id/ll_null"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        >
-        <ImageView
-            android:layout_width="@dimen/px380"
-            android:layout_height="@dimen/px268"
-            android:src="@mipmap/ic_hospital_mein_null"/>
+    <include layout="@layout/title_bar" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_margin="@dimen/px20"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px350">
+                <ImageView
+                    android:src="@mipmap/insure_title"
+                    android:layout_width="@dimen/px320"
+                    android:layout_height="match_parent" />
+                <ImageView
+                    android:src="@mipmap/insure_banana"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="@dimen/px20"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+            <ImageView
+                android:src="@mipmap/insure_company"
+                android:layout_marginTop="@dimen/px20"
+                android:layout_marginBottom="@dimen/px40"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px128" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="保险对象选择"
+                android:textSize="@dimen/px25"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:src="@mipmap/insure_obj"
+                android:layout_marginTop="@dimen/px22"
+                android:layout_marginBottom="@dimen/px40"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px128" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px430">
+                <ImageView
+                    android:src="@mipmap/insure_service"
+                    android:layout_width="296px"
+                    android:layout_height="match_parent" />
+                <ImageView
+                    android:src="@mipmap/insure_lp"
+                    android:layout_marginLeft="18px"
+                    android:layout_width="612px"
+                    android:layout_height="match_parent" />
+                <ImageView
+                    android:src="@mipmap/insure_price"
+                    android:layout_width="296px"
+                    android:layout_marginLeft="17px"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="@dimen/px17"
+                android:layout_width="match_parent"
+                android:layout_height="339px">
+                <LinearLayout
+                    android:layout_width="926px"
+                    android:orientation="vertical"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:src="@mipmap/insure_new"
+                        android:layout_width="match_parent"
+                        android:layout_height="161px" />
+                    <ImageView
+                        android:src="@mipmap/insure_hot"
+                        android:layout_marginTop="@dimen/px20"
+                        android:layout_width="match_parent"
+                        android:layout_height="161px" />
+                </LinearLayout>
+                <ImageView
+                    android:src="@mipmap/insure_yw"
+                    android:layout_marginLeft="@dimen/px18"
+                    android:layout_width="296px"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
-        <TextView
-            android:id="@+id/tv_null"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="更多精彩,敬请期待"
-            android:textSize="@dimen/px20"
-            android:textColor="@color/blue_gray"
-            android:layout_marginTop="@dimen/px17"/>
-    </LinearLayout>
-
-</RelativeLayout>
+</LinearLayout>

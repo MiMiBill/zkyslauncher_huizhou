@@ -3,6 +3,7 @@ package com.muju.note.launcher.app.home.contract;
 import android.content.Context;
 
 import com.muju.note.launcher.app.home.bean.PatientResponse;
+import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
 import com.muju.note.launcher.app.video.db.VideoHisDao;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
 import com.muju.note.launcher.base.IPresenter;
@@ -28,6 +29,12 @@ public interface HomeContract {
         void getVideoTopNull();
 
         void getVideoTopImg(VideoInfoDao dao);
+
+        void getBananaNull();
+
+        void getBananaList(List<AdvertsCodeDao> list);
+
+        void getDialogAd(AdvertsCodeDao dao);
     }
 
 
@@ -39,5 +46,9 @@ public interface HomeContract {
         void getVideoHis();
 
         void getTopVideo();
+
+        void getBananaList(String code);
+
+        void getDialogAd(String code);
     }
 }

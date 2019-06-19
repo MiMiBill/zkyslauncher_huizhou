@@ -8,16 +8,17 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.app.home.contract.HomeContract;
+import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
 import com.muju.note.launcher.app.video.db.VideoHisDao;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
 import com.muju.note.launcher.app.video.db.VideoInfoTopDao;
 import com.muju.note.launcher.base.BasePresenter;
 import com.muju.note.launcher.base.LauncherApplication;
-import com.muju.note.launcher.service.network.NetWorkService;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.Constants;
 import com.muju.note.launcher.util.DateUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
+import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.net.NetWorkUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
 import com.muju.note.launcher.util.sign.Signature;
@@ -114,6 +115,41 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
                         }
                     }
                 });
+    }
+
+
+    /**
+     * 获取轮播广告
+     */
+    @Override
+    public void getBananaList(String code) {
+        LitePal.where("code=?",code).findAsync(AdvertsCodeDao.class).listen(new FindMultiCallback<AdvertsCodeDao>() {
+            @Override
+            public void onFinish(List<AdvertsCodeDao> list) {
+                LogFactory.l().i("list"+list.size());
+                if (list == null || list.size() <= 0) {
+                    mView.getBananaNull();
+                    return;
+                }
+                mView.getBananaList(list);
+            }
+        });
+    }
+
+    /**
+     * 获取首页弹窗广告
+     */
+    @Override
+    public void getDialogAd(String code) {
+        LitePal.where("code ="+code).findAsync(AdvertsCodeDao.class).listen(new FindMultiCallback<AdvertsCodeDao>() {
+            @Override
+            public void onFinish(List<AdvertsCodeDao> list) {
+                if (list == null || list.size() <= 0) {
+                    return;
+                }
+                mView.getDialogAd(list.get(0));
+            }
+        });
     }
 
     /**

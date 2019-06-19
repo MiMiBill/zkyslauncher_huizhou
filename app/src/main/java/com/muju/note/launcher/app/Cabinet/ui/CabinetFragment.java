@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -29,6 +30,7 @@ import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 
 /**
  * 屏安柜
@@ -62,22 +64,28 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
     Button btnUnlock;
     @BindView(R.id.btn_lock)
     Button btnLock;
+    @BindView(R.id.rel_titlebar)
+    RelativeLayout relTitlebar;
+    Unbinder unbinder;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
     private boolean isOrder = false;
     private CabinetBean.DataBean dataBean;
-    private Handler handler=new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case 1:
                     handler.removeMessages(1);
-                    if(isOrder){
+                    if (isOrder) {
                         setTime();
                     }
                     break;
             }
         }
     };
+
     @Override
     public int getLayout() {
         return R.layout.fragment_cabinet;
@@ -85,6 +93,8 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
 
     @Override
     public void initData() {
+        tvTitle.setText("屏安柜");
+        relTitlebar.setBackgroundColor(getResources().getColor(R.color.white));
         EventBus.getDefault().register(this);
         mPresenter.getCabnetOrder();
     }
@@ -174,7 +184,7 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
 
     //设置归还倒计时
     private void setTime() {
-        handler.sendEmptyMessageDelayed(1,1000*60);
+        handler.sendEmptyMessageDelayed(1, 1000 * 60);
         long currentTimeMillis = System.currentTimeMillis() / 1000;
         long lastTime = DateUtil.formartTime(dataBean.getExpireTime());
         tvTime.setText(DateUtil.getTime((int) (lastTime - currentTimeMillis)));
@@ -203,14 +213,16 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
             JSONObject jsonObject = new JSONObject(data);
             if (jsonObject.optInt("code") == 200) {
                 LockBean lockBean = new Gson().fromJson(data, LockBean.class);
-                if (lockBean != null && lockBean.getData()!=null && lockBean.getData().getCode()==200
-                        && lockBean.getData().getObject()!=null && lockBean.getData().getObject().getCode()==200) {
-                    start(UnlockFragment.newInstance(1,dataBean));
+                if (lockBean != null && lockBean.getData() != null && lockBean.getData().getCode
+                        () == 200
+                        && lockBean.getData().getObject() != null && lockBean.getData().getObject
+                        ().getCode() == 200) {
+                    start(UnlockFragment.newInstance(1, dataBean));
                 } else {
-                    start(UnlockFragment.newInstance(2,dataBean));
+                    start(UnlockFragment.newInstance(2, dataBean));
                 }
             } else {
-                start(UnlockFragment.newInstance(2,dataBean));
+                start(UnlockFragment.newInstance(2, dataBean));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -224,12 +236,12 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
 
     @Override
     public void unLockFail() {
-        start(UnlockFragment.newInstance(2,dataBean));
+        start(UnlockFragment.newInstance(2, dataBean));
     }
 
     @Override
     public void returnBedFail() {
-        start(ReturnBedFragment.newInstance(2,dataBean));
+        start(ReturnBedFragment.newInstance(2, dataBean));
     }
 
     @Override
@@ -237,11 +249,11 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
         try {
             JSONObject jsonObject = new JSONObject(data);
             if (jsonObject.optInt("code") == 200) {
-                isOrder=false;
-                start(ReturnBedFragment.newInstance(1,dataBean));
+                isOrder = false;
+                start(ReturnBedFragment.newInstance(1, dataBean));
                 mPresenter.getCabnetOrder();
             } else {
-                start(ReturnBedFragment.newInstance(2,dataBean));
+                start(ReturnBedFragment.newInstance(2, dataBean));
             }
         } catch (Exception e) {
             e.printStackTrace();

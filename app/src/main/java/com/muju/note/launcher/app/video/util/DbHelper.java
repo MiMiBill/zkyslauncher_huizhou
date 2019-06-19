@@ -177,12 +177,11 @@ public class DbHelper {
             public void run() {
                 try{
                     for (AdverNewBean adverNewBean : dataList) {
-//                        LitePal.deleteAll(AdvertsCodeDao.class);
-                        AdvertsCodeDao advertsCodeDao=new AdvertsCodeDao();
-                        advertsCodeDao.setCode(adverNewBean.getCode());
                         List<AdvertsBean> adverts = adverNewBean.getAdverts();
                         for (AdvertsBean adBean: adverts) {
-                            advertsCodeDao.setId(adBean.getId());
+                            AdvertsCodeDao advertsCodeDao=new AdvertsCodeDao();
+                            advertsCodeDao.setCode(adverNewBean.getCode());
+                            advertsCodeDao.setAdid(adBean.getId());
                             String linkContent = adBean.getLinkContent();
                             String resourceUrl = adBean.getResourceUrl();
                             String name = adBean.getName();
@@ -214,39 +213,8 @@ public class DbHelper {
                             advertsCodeDao.setAdditionUrl(additionUrl);
                             advertsCodeDao.saveDb(advertsCodeDao);
                         }
-//                        insertToAdvertListData(advertsCodeDao);
                     }
                     LogUtil.i(TAG,"数据插入结束时间："+System.currentTimeMillis());
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    /**
-     *  插入广告数据
-     */
-    public static void insertToAdvertListData(final AdvertsCodeDao dao) throws Exception {
-        ExecutorService service=Executors.newSingleThreadExecutor();
-        service.execute(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    SQLiteDatabase database=getDataBase(LitePalDb.DBNAME_ZKYS);
-                    ContentValues values=new ContentValues();
-                    values.put("id",dao.getId());
-                    values.put("code",dao.getCode());
-                    values.put("closeType",dao.getCloseType());
-                    values.put("linkContent",dao.getLinkContent());
-                    values.put("second",dao.getSecond());
-                    values.put("resourceUrl",dao.getResourceUrl());
-                    values.put("name",dao.getName());
-                    values.put("linkType",dao.getLinkType());
-                    values.put("advertType",dao.getAdvertType());
-                    values.put("additionUrl",dao.getAdditionUrl());
-                    values.put("status",dao.getStatus());
-                    database.insert("AdvertsCodeDao",null,values);
                 }catch (Exception e){
                     e.printStackTrace();
                 }

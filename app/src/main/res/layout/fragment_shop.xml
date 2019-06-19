@@ -1,32 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:background="@color/main_bg"
+    android:orientation="vertical">
 
-    <include layout="@layout/title_bar"/>
+    <include layout="@layout/title_bar" />
 
-    <LinearLayout
-        android:id="@+id/ll_null"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        >
-        <ImageView
-            android:layout_width="@dimen/px380"
-            android:layout_height="@dimen/px268"
-            android:src="@mipmap/ic_hospital_mein_null"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tv_null"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="更多精彩,敬请期待"
-            android:textSize="@dimen/px20"
-            android:textColor="@color/blue_gray"
-            android:layout_marginTop="@dimen/px17"/>
-    </LinearLayout>
-
-</RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/px20"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:layout_height="361px">
+                <ImageView
+                    android:src="@mipmap/shop_title"
+                    android:layout_width="307px"
+                    android:layout_height="match_parent" />
+                <ImageView
+                    android:src="@mipmap/shop_banana"
+                    android:layout_width="926px"
+                    android:layout_marginLeft="@dimen/px20"
+                    android:layout_height="349px" />
+            </LinearLayout>
+            <ImageView
+                android:src="@mipmap/shop_cx"
+                android:layout_width="match_parent"
+                android:layout_marginTop="13px"
+                android:layout_height="124px" />
+            <TextView
+                android:textSize="25px"
+                android:text="人气推荐"
+                android:textColor="@color/color_585858"
+                android:layout_marginTop="41px"
+                android:layout_marginBottom="20px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="517px">
+                <ImageView
+                    android:src="@mipmap/shop_ad"
+                    android:layout_width="296px"
+                    android:layout_marginRight="19px"
+                    android:layout_height="match_parent" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:src="@mipmap/shop_tea"
+                        android:layout_width="match_parent"
+                        android:layout_height="248px" />
+                    <ImageView
+                        android:src="@mipmap/shop_yz"
+                        android:layout_marginTop="21px"
+                        android:layout_width="match_parent"
+                        android:layout_height="248px" />
+                </LinearLayout>
+            </LinearLayout>
+            <TextView
+                android:textSize="25px"
+                android:text="热买区"
+                android:textColor="@color/color_585858"
+                android:layout_marginTop="39px"
+                android:layout_marginBottom="20px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="517px">
+                <ImageView
+                    android:src="@mipmap/shop_jsq"
+                    android:layout_width="296px"
+                    android:layout_marginRight="19px"
+                    android:layout_height="match_parent" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:src="@mipmap/shop_shoes"
+                        android:layout_width="match_parent"
+                        android:layout_height="248px" />
+                    <ImageView
+                        android:src="@mipmap/shop_yd"
+                        android:layout_marginTop="21px"
+                        android:layout_width="match_parent"
+                        android:layout_height="248px" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -3,16 +3,12 @@ package com.muju.note.launcher.util.adverts;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -23,6 +19,7 @@ import com.lzy.okgo.model.Response;
 import com.muju.note.launcher.app.dialog.AdvertsDialog;
 import com.muju.note.launcher.app.home.bean.AdverNewBean;
 import com.muju.note.launcher.app.home.bean.AdvertsBean;
+import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
 import com.muju.note.launcher.app.home.db.AdvertsCountDao;
 import com.muju.note.launcher.app.home.db.AdvertsInfoDao;
 import com.muju.note.launcher.app.video.dialog.OnAdDialogDismissListener;
@@ -41,7 +38,6 @@ import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.view.banana.Banner;
-import com.muju.note.launcher.view.banana.BannerModel;
 import com.muju.note.launcher.view.banana.BannerPage;
 import com.muju.note.launcher.view.banana.OnBannerListener;
 
@@ -130,6 +126,7 @@ public class NewAdvertsUtil {
     //展示广告
     private void getNewAdvertsSuccess(List<AdverNewBean> dataList) {
         /*try {
+            LitePal.deleteAll(AdvertsCodeDao.class);
             DbHelper.setAdvertListData(dataList);
         } catch (Exception e) {
             e.printStackTrace();
@@ -168,7 +165,6 @@ public class NewAdvertsUtil {
                 }
             }
         }
-
         if (lisinter != null) {
             lisinter.success();
         }
@@ -264,39 +260,24 @@ public class NewAdvertsUtil {
         });
     }
 
-    //带画中画效果的banana
-    public void showByBanner(final List<AdvertsBean> list, final Banner banner, final VideoView
-            videoView) {
+
+
+
+    //数据库获取数据
+    public void showByDbBanner(final List<AdvertsCodeDao> list, final Banner banner) {
         banner.setVisibility(View.VISIBLE);
         List<BannerPage> pageList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getAdditionUrl() == null) {
                 list.get(i).setAdditionUrl("");
             }
-            BannerPage page = new BannerPage(list.get(i).getResourceUrl(), 10000);
+            BannerPage page = new BannerPage(list.get(i).getResourceUrl(), 15000);
 //            BannerPage page = new BannerPage(list.get(i).getResourceUrl(), list.get(i)
 // .getInterval()*1000); //轮播时长
             pageList.add(page);
         }
         banner.setSlide(true);
         banner.setDataPlay(pageList, 0);
-        banner.setOnBannerListener(new OnBannerListener() {
-            @Override
-            public void OnBannerClick(int position) {
-                Log.e("zkpad", "click---position===" + position);
-                AdvertsBean bean = list.get(position);
-                try {
-                    if (bean.getResourceUrl().endsWith("png") || bean.getResourceUrl().endsWith
-                            ("jpg")) {
-                        jump(bean);
-                    }
-                } catch (Exception e) {
-                    LogFactory.l().i("e==" + e.getMessage());
-                    e.printStackTrace();
-                }
-            }
-        });
-
         final int[] id = {0};
         final long[] startTime = {System.currentTimeMillis()};
         banner.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -316,42 +297,29 @@ public class NewAdvertsUtil {
                         if (position == list.size() + 1) {
                             position = 1;
                         }
-                        if (id[0] == list.get(position - 1).getId()) {
+                        if (id[0] == list.get(position - 1).getAdid()) {
                             return;
                         }
                         if (position == 1) {
-                            addData(list.get(list.size() - 1).getId(), TAG_SHOWTIME, System
-                                    .currentTimeMillis() - startTime[0]);
+                            long currentTime = System.currentTimeMillis();
+                            addData(list.get(list.size() - 1).getAdid(), TAG_SHOWTIME, currentTime
+                                    - startTime[0]);
+                            addDataInfo(list.get(list.size() - 1).getAdid(), TAG_SHOWTIME,
+                                    startTime[0], currentTime);
                         } else {
-                            addData(list.get(position - 2).getId(), TAG_SHOWTIME, System
-                                    .currentTimeMillis() - startTime[0]);
+                            long currentTime = System.currentTimeMillis();
+                            addData(list.get(position - 2).getAdid(), TAG_SHOWTIME, currentTime -
+                                    startTime[0]);
+                            addDataInfo(list.get(position - 2).getAdid(), TAG_SHOWTIME,
+                                    startTime[0], currentTime);
                         }
                         startTime[0] = System.currentTimeMillis();
                     }
-                    if (id[0] != list.get(position - 1).getId()) {
-                        addData(list.get(position - 1).getId(), TAG_SHOWCOUNT);
-//                        LogFactory.l().i("TAG_SHOWCOUNT");
+                    if (id[0] != list.get(position - 1).getAdid()) {
+                        addData(list.get(position - 1).getAdid(), TAG_SHOWCOUNT);
+                        addDataInfo(list.get(position - 1).getAdid(), TAG_SHOWCOUNT);
                     }
-                    id[0] = list.get(position - 1).getId();
-                    AdvertsBean advertsBean = list.get(position - 1);
-                    if (advertsBean.getAdditionUrl().endsWith("mp4")) {
-                        videoView.setVisibility(View.VISIBLE);
-                        videoView.setVideoURI(Uri.parse(BannerModel.getProxyUrl(advertsBean
-                                .getAdditionUrl())));
-                        //videoView.start();
-                        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                            @Override
-                            public void onPrepared(MediaPlayer mp) {
-                                mp.setVolume(0f, 0f);
-                                mp.start();
-                            }
-                        });
-                    } else {
-                        if (videoView.isPlaying()) {
-                            videoView.pause();
-                        }
-                        videoView.setVisibility(View.GONE);
-                    }
+                    id[0] = list.get(position - 1).getAdid();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -362,7 +330,43 @@ public class NewAdvertsUtil {
 //                LogFactory.l().i("status==="+status);
             }
         });
+        banner.setOnBannerListener(new OnBannerListener() {
+            @Override
+            public void OnBannerClick(int position) {
+                AdvertsCodeDao dao = list.get(position);
+                try {
+                    if (dao.getResourceUrl().endsWith("png") || dao.getResourceUrl().endsWith
+                            ("jpg")) {
+                        jumpByDb(dao);
+                    }
+                } catch (Exception e) {
+                    LogFactory.l().i("e==" + e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        });
     }
+
+
+    //根据类型跳转不同页面
+    private void jumpByDb(AdvertsCodeDao dao) throws Exception {
+        //linkType  1:url  2:游戏 3:视频  4:通道  5:图片
+        updateOnClickCount(dao.getAdid()); //图片增加点击
+        addDataInfo(dao.getAdid(), TAG_CLICKCOUNT);
+        LogFactory.l().i("跳转类型===" + dao.getLinkType());
+        if (dao.getLinkType() == 1) {
+            EventBus.getDefault().post(new AdvertWebEntity(dao.getAdid(), dao.getName(), dao.getLinkContent(),1));
+        } else if (dao.getLinkType() == 5) {
+            EventBus.getDefault().post(new AdvertWebEntity(dao.getAdid(), dao.getName(), dao.getLinkContent(),5));
+        } else if (dao.getLinkType() == 3) {
+            EventBus.getDefault().post(new AdvertWebEntity(dao.getAdid(), dao.getName(), dao.getLinkContent(),3));
+        } else if (dao.getLinkType() == 2) {
+
+        } else if (dao.getLinkType() == 4) {
+
+        }
+    }
+
 
 
     //显示默认图片
