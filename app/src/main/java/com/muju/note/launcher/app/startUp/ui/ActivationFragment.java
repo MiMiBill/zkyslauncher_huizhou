@@ -70,7 +70,7 @@ public class ActivationFragment extends BaseFragment<NewActivationPresenter> imp
             start(new StartCheckDataFragment());
         } else {
             // 手动启动，需要检查激活
-            mPresenter.bindingDevice(MobileInfoUtil.getICCID(LauncherApplication.getContext()));
+            mPresenter.bindingDevice(MobileInfoUtil.getIMEI(LauncherApplication.getContext()));
         }
 
     }
