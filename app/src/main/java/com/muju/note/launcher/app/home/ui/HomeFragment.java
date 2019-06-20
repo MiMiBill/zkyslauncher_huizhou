@@ -33,6 +33,7 @@ import com.muju.note.launcher.app.hostipal.ui.HosPitalMissionFragment;
 import com.muju.note.launcher.app.hostipal.ui.HospitalMienFragment;
 import com.muju.note.launcher.app.insurance.InsureanceFragment;
 import com.muju.note.launcher.app.orderfood.OrderFoodFragment;
+import com.muju.note.launcher.app.publicui.NullFragment;
 import com.muju.note.launcher.app.setting.ui.UserSettingFragment;
 import com.muju.note.launcher.app.shop.ShopFragment;
 import com.muju.note.launcher.app.video.bean.PayEntity;
@@ -537,7 +538,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 start(VideoFragment.getIntance());
                 break;
             case R.id.ll_hos_game:     //游戏娱乐
-                start(new GameFragment());
+//                start(new GameFragment());
+                start(new NullFragment());
                 break;
             case R.id.ll_video_line: // 直播TV
                 start(new WoTvVideoLineFragment());
