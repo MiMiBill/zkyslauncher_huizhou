@@ -1,31 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/drawlayout"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
+    android:background="@color/main_bg"
     android:layout_height="match_parent"
     >
     <include layout="@layout/title_bar"/>
-    <LinearLayout
-        android:id="@+id/ll_null"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        >
-        <ImageView
-            android:layout_width="@dimen/px380"
-            android:layout_height="@dimen/px268"
-            android:src="@mipmap/ic_hospital_mein_null"/>
 
-        <TextView
-            android:id="@+id/tv_null"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="更多精彩,敬请期待"
-            android:textSize="@dimen/px20"
-            android:textColor="@color/blue_gray"
-            android:layout_marginTop="@dimen/px17"/>
-    </LinearLayout>
-
-</RelativeLayout>
+   <ScrollView
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+       <LinearLayout
+           android:orientation="vertical"
+           android:layout_margin="@dimen/px20"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent">
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="350px">
+               <ImageView
+                   android:src="@mipmap/finace_title"
+                   android:layout_width="296px"
+                   android:layout_height="match_parent" />
+               <ImageView
+                   android:src="@mipmap/finace_banana"
+                   android:layout_marginLeft="@dimen/px20"
+                   android:layout_width="610px"
+                   android:layout_height="match_parent" />
+               <ImageView
+                   android:src="@mipmap/finace_today"
+                   android:layout_marginLeft="@dimen/px20"
+                   android:layout_width="296px"
+                   android:layout_height="match_parent" />
+           </LinearLayout>
+           <ImageView
+               android:src="@mipmap/finace_recommond"
+               android:layout_width="match_parent"
+               android:layout_marginTop="45px"
+               android:layout_marginBottom="@dimen/px20"
+               android:layout_height="261px" />
+           <ImageView
+               android:src="@mipmap/finace_market"
+               android:layout_width="match_parent"
+               android:layout_height="836px" />
+           <ImageView
+               android:src="@mipmap/finace_ts"
+               android:layout_marginTop="22px"
+               android:layout_width="match_parent"
+               android:layout_height="315px" />
+       </LinearLayout>
+   </ScrollView>
+</LinearLayout>

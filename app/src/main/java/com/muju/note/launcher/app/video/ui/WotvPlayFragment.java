@@ -1,6 +1,5 @@
 package com.muju.note.launcher.app.video.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -21,7 +20,7 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
-import com.muju.note.launcher.app.publicAdress.ui.PublicActivity;
+import com.muju.note.launcher.app.publicAdress.ui.PublicNumFragment;
 import com.muju.note.launcher.app.video.bean.PayEntity;
 import com.muju.note.launcher.app.video.bean.PayEvent;
 import com.muju.note.launcher.app.video.bean.VideoEvent;
@@ -50,7 +49,6 @@ import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
 import com.muju.note.launcher.util.sp.SPUtil;
-import com.muju.note.launcher.util.user.UserUtil;
 import com.unicom.common.VideoSdkConfig;
 import com.unicom.common.base.video.IVideoEvent;
 import com.unicom.common.base.video.expand.ExpandVideoListener;
@@ -726,11 +724,8 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                         payDialog.setQrde();
                         break;
                     case R.id.tv_login:
-                        if(UserUtil.getUserBean()!=null){
-                            goToPublicActivity();
-                        }else {
-                            showLoginDialog();
-                        }
+                        payDialog.dismiss();
+                        goToPublicFragment();
                         break;
                 }
             }
@@ -747,7 +742,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                     @Override
                     public void onSuccess() {
                         LogFactory.l().e("onSuccess");
-                        goToPublicActivity();
+                        goToPublicFragment();
                         loginDialog.dismiss();
                     }
 
@@ -765,12 +760,18 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
         super.onFragmentResult(requestCode, resultCode, data);
         if (requestCode == 1001) {
             payDialog.show();
+        }else if(requestCode==1002){
+            if(resultCode==RESULT_OK){
+                videoView.start();
+                payDialog.dismiss();
+            }else {
+                payDialog.show();
+            }
         }
     }
 
-    private void goToPublicActivity () {
-        Intent intent = new Intent(getActivity(), PublicActivity.class);
-        startActivity(intent);
+    private void goToPublicFragment() {
+        startForResult(new PublicNumFragment(),1002);
     }
 
     /**

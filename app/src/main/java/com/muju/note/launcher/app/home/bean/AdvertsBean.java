@@ -52,6 +52,24 @@ public class AdvertsBean implements Serializable {
     private int interval;
     private int incomeType;
     private String code;
+    private String taskUrl ;
+    private int  taskType;
+
+    public String getTaskUrl() {
+        return taskUrl;
+    }
+
+    public void setTaskUrl(String taskUrl) {
+        this.taskUrl = taskUrl;
+    }
+
+    public int getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(int taskType) {
+        this.taskType = taskType;
+    }
 
     public String getAdditionUrl() {
         return additionUrl;

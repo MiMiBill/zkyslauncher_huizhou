@@ -8,6 +8,7 @@ public interface PublicContract {
 
     interface View extends IView {
         void verfycode(String response);
+        void verfycodeError();
         void doTask(TaskBean taskBean);
     }
 

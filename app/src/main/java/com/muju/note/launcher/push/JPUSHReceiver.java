@@ -86,14 +86,15 @@ public class JPUSHReceiver extends BroadcastReceiver {
                         JSONObject extraMsgObj = new JSONObject(json);
                         String expire_time = extraMsgObj.getString("expire_time");
                         boolean isValid = DateUtil.isValid(expire_time);
-                        if (isValid && !PayUtils.isValid(PayEntity.ORDER_TYPE_VIDEO)) {
-                            PayEntity payEntity = new PayEntity(PayEntity.ORDER_TYPE_VIDEO, expire_time);
-                            PayUtils.setPaied(payEntity);
-                            EventBus.getDefault().post(new VideoEvent(VideoEvent.RESUME));
-                            EventBus.getDefault().post(new PayEvent(PayEntity.ORDER_TYPE_VIDEO));
+                        if (isValid) {
+                            if(!PayUtils.isValid(PayEntity.ORDER_TYPE_VIDEO)) {
+                                PayEntity payEntity = new PayEntity(PayEntity.ORDER_TYPE_VIDEO, expire_time);
+                                PayUtils.setPaied(payEntity);
+                                EventBus.getDefault().post(new VideoEvent(VideoEvent.RESUME));
+                                EventBus.getDefault().post(new PayEvent(PayEntity.ORDER_TYPE_VIDEO));
+                            }
                             EventBus.getDefault().post(new ReturnBedEvent());
                         }
-
                         break;
                     case 1: // 宣教推送
                         pushCustomMessage(bundle.getString(JPushInterface.EXTRA_MESSAGE));

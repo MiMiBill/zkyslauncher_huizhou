@@ -30,6 +30,7 @@ import butterknife.OnClick;
 public class ReturnBedFragment extends BaseFragment<CabinetOrderPresenter> implements CabinetOrderContract.View {
     private static String RETURNBED_CABINET_BEAN = "returnbed_cabinet_bean";
     private static String RETURNBED_TYPE = "returnbed_type";
+    private static String RETURNBED_FAIL = "returnbed_fail";
     @BindView(R.id.ll_back)
     LinearLayout llBack;
     @BindView(R.id.tv_status)
@@ -54,11 +55,12 @@ public class ReturnBedFragment extends BaseFragment<CabinetOrderPresenter> imple
     LinearLayout llyPrice;
     private CabinetBean.DataBean dataBean;
     private int type = 1; //表示成功  2表示失败
-
-    public static ReturnBedFragment newInstance(int type, CabinetBean.DataBean dataBean) {
+    private String reason="";
+    public static ReturnBedFragment newInstance(int type, CabinetBean.DataBean dataBean,String reason) {
         Bundle args = new Bundle();
         args.putSerializable(RETURNBED_CABINET_BEAN, dataBean);
         args.putInt(RETURNBED_TYPE, type);
+        args.putString(RETURNBED_FAIL, reason);
         ReturnBedFragment fragment = new ReturnBedFragment();
         fragment.setArguments(args);
         return fragment;
@@ -104,19 +106,20 @@ public class ReturnBedFragment extends BaseFragment<CabinetOrderPresenter> imple
     public void initData() {
         dataBean = (CabinetBean.DataBean) getArguments().getSerializable(RETURNBED_CABINET_BEAN);
         type = getArguments().getInt(RETURNBED_TYPE);
+        reason = getArguments().getString(RETURNBED_FAIL);
         if(type==1){
             setSuccessUi();
         }else {
-            setFailUi();
+            setFailUi(reason);
         }
     }
 
     //失败
-    private void setFailUi() {
+    private void setFailUi(String reason) {
         tvStatus.setText("归还失败");
         relStatus.setVisibility(View.VISIBLE);
         llyPrice.setVisibility(View.GONE);
-        tvSu.setText("归还失败了");
+        tvSu.setText("归还失败了"+reason);
         tvSu.setVisibility(View.VISIBLE);
         btnSu.setText("重试");
     }

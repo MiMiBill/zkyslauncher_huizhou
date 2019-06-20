@@ -11,36 +11,27 @@ import com.muju.note.launcher.okgo.BaseBean;
 import com.muju.note.launcher.okgo.JsonCallback;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.ActiveUtils;
-import com.muju.note.launcher.util.log.LogFactory;
 
 public class PublicPresenter extends BasePresenter<PublicContract.View> implements PublicContract.Presenter {
-    private PublicListener listener;
     @Override
     public void verfycode(String code,int adverId,String advertCode) {
         OkGo.<String>post(UrlUtil.verCode())
                 .params("code", code)
-                /*.params("userId", UserUtil.getUserBean().getId())
-                .params("advertId", adverId)
-                .params("advertCode", advertCode)*/
                 .tag(this)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        if(listener!=null)
-                            listener.verfySuccess(response.body());
+                        mView.verfycode(response.body());
                     }
 
 
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
-                        LogFactory.l().i("onError");
-                        if(listener!=null)
-                            listener.verfyFail();
+                        mView.verfycodeError();
                     }
                 });
     }
-
 
     @Override
     public void doTask(int userId,int advertId) {
@@ -63,15 +54,4 @@ public class PublicPresenter extends BasePresenter<PublicContract.View> implemen
                 });
     }
 
-
-
-
-    public void setOnPublicListener(PublicListener listener){
-        this.listener=listener;
-    }
-
-    public interface PublicListener{
-        void verfySuccess(String data);
-        void verfyFail();
-    }
 }

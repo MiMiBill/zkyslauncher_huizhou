@@ -166,7 +166,7 @@ public class CabinetOrderFragment extends BaseFragment<CabinetOrderPresenter> im
 
     @Override
     public void returnBedFail() {
-        start(ReturnBedFragment.newInstance(2,dataBean));
+        start(ReturnBedFragment.newInstance(2,dataBean,"网络错误"));
     }
 
     @Override
@@ -174,9 +174,9 @@ public class CabinetOrderFragment extends BaseFragment<CabinetOrderPresenter> im
         try {
             JSONObject jsonObject = new JSONObject(data);
             if (jsonObject.optInt("code") == 200) {
-                start(ReturnBedFragment.newInstance(1,dataBean));
+                start(ReturnBedFragment.newInstance(1,dataBean,""));
             } else {
-                start(ReturnBedFragment.newInstance(2,dataBean));
+                start(ReturnBedFragment.newInstance(2,dataBean,jsonObject.optString("msg")));
             }
         } catch (Exception e) {
             e.printStackTrace();

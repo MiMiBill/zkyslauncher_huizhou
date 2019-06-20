@@ -1,5 +1,7 @@
 package com.muju.note.launcher.app.Cabinet.ui;
 
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
@@ -17,20 +19,24 @@ import com.muju.note.launcher.app.Cabinet.contract.CabinetContract;
 import com.muju.note.launcher.app.Cabinet.event.ReturnBedEvent;
 import com.muju.note.launcher.app.Cabinet.presenter.CabinetPresenter;
 import com.muju.note.launcher.app.luckdraw.ui.LuckDrawFragment;
+import com.muju.note.launcher.app.video.event.VideoNoLockEvent;
 import com.muju.note.launcher.base.BaseFragment;
+import com.muju.note.launcher.service.db.PadConfigSubDao;
 import com.muju.note.launcher.util.DateUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.qr.QrCodeUtils;
+import com.muju.note.launcher.util.sdcard.SdcardConfig;
+import com.muju.note.launcher.view.MyVideoView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.LitePal;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 /**
  * 屏安柜
@@ -66,9 +72,10 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
     Button btnLock;
     @BindView(R.id.rel_titlebar)
     RelativeLayout relTitlebar;
-    Unbinder unbinder;
     @BindView(R.id.tv_title)
     TextView tvTitle;
+    @BindView(R.id.video_view)
+    MyVideoView videoView;
     private boolean isOrder = false;
     private CabinetBean.DataBean dataBean;
     private Handler handler = new Handler() {
@@ -110,9 +117,13 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
         handler.removeMessages(1);
+        if(videoView!=null){
+            videoView.stopPlayback();
+        }
+        EventBus.getDefault().post(new VideoNoLockEvent(true));
         EventBus.getDefault().unregister(this);
     }
 
@@ -122,7 +133,7 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
     }
 
 
-    @OnClick({R.id.lly_prise, R.id.lly_orser, R.id.btn_unlock, R.id.btn_lock})
+    @OnClick({R.id.lly_prise, R.id.lly_orser, R.id.btn_unlock, R.id.btn_lock,R.id.iv_cabinet_play})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.lly_prise:
@@ -141,6 +152,25 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
             case R.id.btn_lock:
                 if (isOrder) {
                     mPresenter.returnBed(dataBean.getId());
+                }
+                break;
+            case R.id.iv_cabinet_play:
+                PadConfigSubDao subDao = LitePal.where("type =?", "openVideo").findFirst(PadConfigSubDao.class);
+                if(subDao!=null){
+                    String path=subDao.getContent();
+                    String videoPath=SdcardConfig.RESOURCE_FOLDER+path.hashCode()+".mp4";
+                    Uri uri=Uri.parse(videoPath);
+                    videoView.setVideoURI(uri);
+                    videoView.setVisibility(View.VISIBLE);
+                    videoView.start();
+                    EventBus.getDefault().post(new VideoNoLockEvent(false));
+                    videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+                            videoView.stopPlayback();
+                            videoView.setVisibility(View.GONE);
+                        }
+                    });
                 }
                 break;
         }
@@ -241,7 +271,7 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
 
     @Override
     public void returnBedFail() {
-        start(ReturnBedFragment.newInstance(2, dataBean));
+        start(ReturnBedFragment.newInstance(2, dataBean, "网络错误"));
     }
 
     @Override
@@ -250,13 +280,14 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
             JSONObject jsonObject = new JSONObject(data);
             if (jsonObject.optInt("code") == 200) {
                 isOrder = false;
-                start(ReturnBedFragment.newInstance(1, dataBean));
+                start(ReturnBedFragment.newInstance(1, dataBean, ""));
                 mPresenter.getCabnetOrder();
             } else {
-                start(ReturnBedFragment.newInstance(2, dataBean));
+                start(ReturnBedFragment.newInstance(2, dataBean, jsonObject.optString("msg")));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 }

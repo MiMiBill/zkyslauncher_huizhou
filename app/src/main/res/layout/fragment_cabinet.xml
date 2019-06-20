@@ -44,12 +44,20 @@
                     android:layout_width="242px"
                     android:layout_height="270px" />
                 <ImageView
+                    android:id="@+id/iv_cabinet_play"
                     android:src="@mipmap/cabinet_play"
                     android:layout_marginLeft="@dimen/px15"
                     android:layout_marginBottom="@dimen/px15"
                     android:layout_alignParentBottom="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="50px"
+                    android:layout_height="50px" />
+                <com.muju.note.launcher.view.MyVideoView
+                    android:id="@+id/video_view"
+                    android:visibility="gone"
+                    android:layout_centerInParent="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                </com.muju.note.launcher.view.MyVideoView>
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -61,7 +69,7 @@
                     android:layout_marginTop="40px"
                     android:layout_height="186px" />
                 <TextView
-                    android:textSize="15sp"
+                    android:textSize="22px"
                     android:text="@string/cabinet_dec"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentBottom="true"
@@ -140,6 +148,7 @@
                             android:id="@+id/lly_prise"
                             android:layout_width="match_parent"
                             android:layout_weight="1"
+                            android:gravity="center_vertical"
                             android:orientation="horizontal"
                             android:layout_height="0dp">
                             <ImageView
@@ -150,6 +159,7 @@
                                 android:text="活动抽奖"
                                 android:textSize="14sp"
                                 android:textColor="#FF633A"
+                                android:gravity="center"
                                 android:layout_marginLeft="10px"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent" />
@@ -158,6 +168,7 @@
                             android:id="@+id/lly_orser"
                             android:layout_width="match_parent"
                             android:layout_weight="1"
+                            android:visibility="gone"
                             android:layout_marginTop="15px"
                             android:orientation="horizontal"
                             android:layout_height="0dp">
@@ -194,7 +205,7 @@
                     <TextView
                         android:text="开始时间:"
                         android:gravity="center_vertical"
-                        android:textSize="22sp"
+                        android:textSize="22px"
                         android:textColor="#505050"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent" />
@@ -204,7 +215,7 @@
                         android:background="@color/white"
                         android:text=""
                         android:gravity="center_vertical"
-                        android:textSize="16sp"
+                        android:textSize="16px"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
                 </LinearLayout>
@@ -216,7 +227,7 @@
                     <TextView
                         android:text="结束时间:"
                         android:gravity="center_vertical"
-                        android:textSize="22sp"
+                        android:textSize="22px"
                         android:textColor="#505050"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent" />
@@ -226,7 +237,7 @@
                         android:background="@color/white"
                         android:text=""
                         android:gravity="center_vertical"
-                        android:textSize="16sp"
+                        android:textSize="16px"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
                 </LinearLayout>
@@ -243,7 +254,7 @@
                         android:text="租赁天数:"
                         android:gravity="center_vertical"
                         android:textColor="#505050"
-                        android:textSize="22sp" />
+                        android:textSize="22px" />
 
                     <TextView
                         android:id="@+id/tv_rent_time"
@@ -253,7 +264,7 @@
                         android:layout_marginLeft="20px"
                         android:background="@color/white"
                         android:text=""
-                        android:textSize="16sp" />
+                        android:textSize="16px" />
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
@@ -265,7 +276,7 @@
                     android:layout_marginRight="40px"
                     android:layout_width="0dp"
                     android:text="开柜"
-                    android:textSize="13sp"
+                    android:textSize="25px"
                     android:background="@color/black_gray1"
                     android:textColor="@color/white"
                     android:layout_weight="1"
@@ -276,19 +287,19 @@
                     android:layout_weight="1"
                     android:text="归还"
                     android:background="@color/black_gray1"
-                    android:textSize="13sp"
+                    android:textSize="25px"
                     android:textColor="@color/white"
                     android:layout_height="60px" />
             </LinearLayout>
             <TextView
                 android:text="使用说明:"
                 android:paddingLeft="20px"
-                android:textSize="18sp"
+                android:textSize="22px"
                 android:textStyle="bold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <TextView
-                android:textSize="17sp"
+                android:textSize="22px"
                 android:paddingLeft="20px"
                 android:paddingRight="16px"
                 android:lineSpacingExtra="10px"

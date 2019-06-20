@@ -346,11 +346,6 @@
             android:enabled="true"
             android:process=":remote" />
 
-        <activity
-            android:name=".app.publicAdress.ui.PublicActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="landscape" />
-
         <!-- Jpush相关配置 -->
         <!-- Required SDK 核心功能 -->
         <!-- 可配置android:process参数将PushService放在其他进程中 -->

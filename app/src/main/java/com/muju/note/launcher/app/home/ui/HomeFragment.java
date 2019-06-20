@@ -281,7 +281,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                     AdvertsTopics.CODE_HOME_DIALOG, AdvertsTopics.CODE_LOCK,
                     AdvertsTopics.CODE_PUBLIC, AdvertsTopics.CODE_VERTICAL,
                     AdvertsTopics.CODE_VIDEO_CORNER, AdvertsTopics.CODE_VIDEO_DIALOG,
-                    AdvertsTopics.CODE_ROAD), banner, dialog);
+                    AdvertsTopics.CODE_RW), banner, dialog);
         } catch (Exception e) {
             e.printStackTrace();
         }

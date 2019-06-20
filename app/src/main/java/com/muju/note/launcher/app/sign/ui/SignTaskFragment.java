@@ -121,7 +121,7 @@ public class SignTaskFragment extends BaseFragment<SignPresenter> implements Sig
             case R.id.iv_pub:
                 setTask();
                 if (pubBean != null) {
-                    start(PublicNumFragment.newInstance(pubBean.getId(),pubBean.getResourceUrl()));
+//                    start(PublicNumFragment.newInstance(pubBean.getId(),pubBean.getResourceUrl()));
                 }
                 break;
         }

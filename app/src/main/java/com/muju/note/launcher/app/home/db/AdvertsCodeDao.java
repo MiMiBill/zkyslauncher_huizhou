@@ -24,6 +24,8 @@ public class AdvertsCodeDao extends LitePalSupport implements Serializable {
     private int status;
     private int interval;
     private String code;
+    private String taskUrl ;
+    private int  taskType;
 
     /**
      * 新增数据
@@ -33,6 +35,22 @@ public class AdvertsCodeDao extends LitePalSupport implements Serializable {
     public void saveDb(AdvertsCodeDao dao) {
         LitePal.use(LitePalDb.zkysDb);
         dao.save();
+    }
+
+    public String getTaskUrl() {
+        return taskUrl;
+    }
+
+    public void setTaskUrl(String taskUrl) {
+        this.taskUrl = taskUrl;
+    }
+
+    public int getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(int taskType) {
+        this.taskType = taskType;
     }
 
     public int getPageSize() {

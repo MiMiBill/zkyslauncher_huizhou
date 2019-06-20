@@ -9,27 +9,24 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.muju.note.launcher.R;
-import com.muju.note.launcher.app.adtask.event.UserInfoEvent;
+import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
 import com.muju.note.launcher.app.publicAdress.contract.PublicContract;
 import com.muju.note.launcher.app.publicAdress.presenter.PublicPresenter;
 import com.muju.note.launcher.app.sign.bean.TaskBean;
 import com.muju.note.launcher.base.BaseFragment;
-import com.muju.note.launcher.base.LauncherApplication;
-import com.muju.note.launcher.util.adverts.NewAdvertsUtil;
-import com.muju.note.launcher.util.user.UserUtil;
+import com.muju.note.launcher.util.qr.QrCodeUtils;
 import com.muju.note.launcher.view.password.OnPasswordFinish;
 import com.muju.note.launcher.view.password.PopEnterPassword;
 
-import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.LitePal;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class PublicNumFragment extends BaseFragment<PublicPresenter> implements PublicContract.View  {
+public class PublicNumFragment extends BaseFragment<PublicPresenter> implements PublicContract.View {
     @BindView(R.id.iv_img)
     ImageView ivImg;
     @BindView(R.id.tv_code)
@@ -38,15 +35,18 @@ public class PublicNumFragment extends BaseFragment<PublicPresenter> implements 
     Button btnCode;
     @BindView(R.id.iv_back)
     ImageView ivBack;
+    @BindView(R.id.iv_code)
+    ImageView ivCode;
     @BindView(R.id.layoutContent)
     RelativeLayout layoutContent;
     private int adverId = 0;
     private String advertCode = "";
     private long startTime = 0;
-    private static final String PUB_PIC_ID="large_pic_id";
-    private static final String PUB_PIC_URL="large_pic_url";
+    private static final String PUB_PIC_ID = "pub_pic_id";
+    private static final String PUB_PIC_URL = "pub_pic_url";
     private int advertId;
     private String url;
+
     public static PublicNumFragment newInstance(int id, String url) {
         Bundle args = new Bundle();
         args.putString(PUB_PIC_URL, url);
@@ -55,21 +55,26 @@ public class PublicNumFragment extends BaseFragment<PublicPresenter> implements 
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
     public int getLayout() {
-        return R.layout.activity_public;
+        return R.layout.fragment_public;
     }
 
     @Override
     public void initData() {
-        advertId=getArguments().getInt(PUB_PIC_ID);
-        url=getArguments().getString(PUB_PIC_URL);
-        Glide.with(LauncherApplication.getContext()).load(url).into(ivImg);
+        AdvertsCodeDao codeDao = LitePal.where("taskType =?", "1").findFirst(AdvertsCodeDao.class);
+        if(codeDao!=null){
+            advertId = codeDao.getAdid();
+            url = codeDao.getTaskUrl();
+//        Glide.with(LauncherApplication.getContext()).load(url).into(ivImg);
+            ivCode.setImageBitmap(QrCodeUtils.generateOriginalBitmap(url, 350, 350));
+        }
     }
 
     @Override
     public void initPresenter() {
-        mPresenter=new PublicPresenter();
+        mPresenter = new PublicPresenter();
     }
 
     @Override
@@ -85,18 +90,13 @@ public class PublicNumFragment extends BaseFragment<PublicPresenter> implements 
                 showPassDialog();
                 break;
             case R.id.iv_back:
-                doFinish();
+                pop();
                 break;
         }
     }
 
 
-    private void doFinish() {
-        long currentTime=System.currentTimeMillis();
-        NewAdvertsUtil.getInstance().addData(adverId, NewAdvertsUtil.TAG_BROWSETIME, currentTime - startTime);
-        NewAdvertsUtil.getInstance().addDataInfo(adverId, NewAdvertsUtil.TAG_SHOWTIME, startTime,currentTime);
-        pop();
-    }
+
 
     //输入验证码框
     private void showPassDialog() {
@@ -108,7 +108,6 @@ public class PublicNumFragment extends BaseFragment<PublicPresenter> implements 
             @Override
             public void passwordFinish(String password) {
                 mPresenter.verfycode(password, adverId, advertCode);
-//                mPresenter.doTask(UserUtil.getUserBean().getId(),advertId);
             }
         });
     }
@@ -120,7 +119,10 @@ public class PublicNumFragment extends BaseFragment<PublicPresenter> implements 
             JSONObject jsonObject = new JSONObject(response);
             if (jsonObject.optInt("code") == 200) {
                 showToast("验证码验证成功");
-                mPresenter.doTask(UserUtil.getUserBean().getId(),advertId);
+                Bundle bundle=new Bundle();
+                setFragmentResult(RESULT_OK,bundle);
+                pop();
+//                mPresenter.doTask(UserUtil.getUserBean().getId(), advertId);
             } else {
                 showToast("验证码验证失败");
             }
@@ -130,8 +132,14 @@ public class PublicNumFragment extends BaseFragment<PublicPresenter> implements 
     }
 
     @Override
+    public void verfycodeError() {
+        showToast("网络错误,请重试");
+    }
+
+    @Override
     public void doTask(TaskBean taskBean) {
-        EventBus.getDefault().post(new UserInfoEvent(UserUtil.getUserBean()));
-        doFinish();
+        /*Bundle bundle=new Bundle();
+        setFragmentResult(RESULT_OK,bundle);
+        EventBus.getDefault().post(new UserInfoEvent(UserUtil.getUserBean()));*/
     }
 }

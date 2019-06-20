@@ -134,6 +134,11 @@ public class AdvideoViewFragment extends BaseFragment<PublicPresenter> implement
     }
 
     @Override
+    public void verfycodeError() {
+
+    }
+
+    @Override
     public void doTask(TaskBean taskBean) {
         if(taskBean!=null) {
             if (taskBean.getAdverts() != null) {

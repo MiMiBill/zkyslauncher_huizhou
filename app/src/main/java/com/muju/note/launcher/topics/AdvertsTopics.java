@@ -57,4 +57,9 @@ public class AdvertsTopics {
      *  1.6.0版本首页轮播
      */
     public static final String CODE_HOME_LB="LB1601";
+
+    /**
+     *  1.6.8版本任务广告
+     */
+    public static final String CODE_RW="RW1001";
 }

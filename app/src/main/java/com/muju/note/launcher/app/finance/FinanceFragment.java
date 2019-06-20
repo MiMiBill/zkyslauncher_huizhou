@@ -1,5 +1,6 @@
 package com.muju.note.launcher.app.finance;
 
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.muju.note.launcher.R;
@@ -12,6 +13,8 @@ import butterknife.OnClick;
 public class FinanceFragment extends BaseFragment {
     @BindView(R.id.tv_title)
     TextView tvTitle;
+    @BindView(R.id.rel_titlebar)
+    RelativeLayout relTitlebar;
 
     @Override
     public int getLayout() {
@@ -20,6 +23,7 @@ public class FinanceFragment extends BaseFragment {
 
     @Override
     public void initData() {
+        relTitlebar.setBackgroundColor(getResources().getColor(R.color.white));
         tvTitle.setText("金融财富");
     }
 
@@ -38,4 +42,5 @@ public class FinanceFragment extends BaseFragment {
     public void onViewClicked() {
         pop();
     }
+
 }
