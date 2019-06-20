@@ -151,6 +151,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
                 llLoading.setVisibility(View.VISIBLE);
                 llError.setVisibility(View.GONE);
                 infoDao = videoInfoDaos.get(position);
+                videoView.pause();
                 playVideoAndSetUI();
                 lineAdapter.notifyDataSetChanged();
             }
@@ -326,6 +327,9 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
                     llError.setVisibility(View.VISIBLE);
                     llLoading.setVisibility(View.GONE);
                     RxUtil.closeDisposable(diVerifyPlayingStatus);
+                    if(videoOrImageDialog!=null&&videoOrImageDialog.isShowing()){
+                        videoOrImageDialog.dismiss();
+                    }
                     switch (e.getCode()) {
                         case VideoErrorInfo.CODE_ACCOUNT_CHECK_ERROR:
                         case VideoErrorInfo.CODE_VIDEO_CONTENTE_PERMISSION:
