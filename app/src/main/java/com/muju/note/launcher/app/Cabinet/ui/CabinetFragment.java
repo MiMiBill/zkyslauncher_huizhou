@@ -52,6 +52,8 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
     ImageView ivCode;
     @BindView(R.id.lly_not_login)
     LinearLayout llyNotLogin;
+    @BindView(R.id.lly_nocabnet)
+    LinearLayout llyNoCabinet;
     @BindView(R.id.tv_time)
     TextView tvTime;
     @BindView(R.id.lly_login)
@@ -104,6 +106,7 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
         relTitlebar.setBackgroundColor(getResources().getColor(R.color.white));
         EventBus.getDefault().register(this);
         mPresenter.getCabnetOrder();
+        playVideo();
     }
 
     @Override
@@ -155,24 +158,30 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
                 }
                 break;
             case R.id.iv_cabinet_play:
-                PadConfigSubDao subDao = LitePal.where("type =?", "openVideo").findFirst(PadConfigSubDao.class);
-                if(subDao!=null){
-                    String path=subDao.getContent();
-                    String videoPath=SdcardConfig.RESOURCE_FOLDER+path.hashCode()+".mp4";
-                    Uri uri=Uri.parse(videoPath);
-                    videoView.setVideoURI(uri);
-                    videoView.setVisibility(View.VISIBLE);
-                    videoView.start();
-                    EventBus.getDefault().post(new VideoNoLockEvent(false));
-                    videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                        @Override
-                        public void onCompletion(MediaPlayer mp) {
-                            videoView.stopPlayback();
-                            videoView.setVisibility(View.GONE);
-                        }
-                    });
-                }
+                playVideo();
                 break;
+        }
+    }
+
+    //播放视频
+    private void playVideo() {
+        PadConfigSubDao subDao = LitePal.where("type =?", "openVideo").findFirst(PadConfigSubDao
+        .class);
+        if(subDao!=null){
+            String path=subDao.getContent();
+            String videoPath=SdcardConfig.RESOURCE_FOLDER+path.hashCode()+".mp4";
+            Uri uri=Uri.parse(videoPath);
+            videoView.setVideoURI(uri);
+            videoView.setVisibility(View.VISIBLE);
+            videoView.start();
+            EventBus.getDefault().post(new VideoNoLockEvent(false));
+            videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    videoView.stopPlayback();
+                    videoView.setVisibility(View.GONE);
+                }
+            });
         }
     }
 
@@ -188,23 +197,31 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
     public void getOrder(String data) {
         try {
             JSONObject jsonObject = new JSONObject(data);
-            if (jsonObject.optInt("code") == 2) {
+            if (jsonObject.optInt("code") == 200) {
                 Gson gson = new Gson();
                 CabinetBean cabinetBean = gson.fromJson(data, CabinetBean.class);
                 dataBean = cabinetBean.getData();
-                isOrder = true;
-                llyNotLogin.setVisibility(View.GONE);
-                llyLogin.setVisibility(View.VISIBLE);
-                btnLock.setEnabled(true);
-                btnUnlock.setEnabled(true);
-                btnUnlock.setBackgroundColor(getResources().getColor(R.color.color_38B4E9));
-                btnLock.setBackgroundColor(getResources().getColor(R.color.color_FF6339));
-                tvEnd.setText(dataBean.getExpireTime());
-                tvStart.setText(dataBean.getLeaseTime());
-                tvRentTime.setText(dataBean.getNum() + "天");
-                setTime();
-            } else {
-                noOrder();
+                if(dataBean.getHasLock()==1){  //有柜子有订单
+                    if(dataBean.getId()>0){
+                        isOrder = true;
+                        llyNotLogin.setVisibility(View.GONE);
+                        llyLogin.setVisibility(View.VISIBLE);
+                        btnLock.setEnabled(true);
+                        btnUnlock.setEnabled(true);
+                        btnUnlock.setBackgroundColor(getResources().getColor(R.color.color_38B4E9));
+                        btnLock.setBackgroundColor(getResources().getColor(R.color.color_FF6339));
+                        tvEnd.setText(dataBean.getExpireTime());
+                        tvStart.setText(dataBean.getLeaseTime());
+                        tvRentTime.setText(dataBean.getNum() + "天");
+                        setTime();
+                    }else { //有柜子无订单
+                        noOrder(0);
+                    }
+                }else { //无柜子
+                    noOrder(1);
+                }
+            } else { //无柜子
+                noOrder(1);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -221,13 +238,18 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
     }
 
     //无订单
-    private void noOrder() {
+    private void noOrder(int type) {
         isOrder = false;
-        llyNotLogin.setVisibility(View.VISIBLE);
         llyLogin.setVisibility(View.GONE);
-        String code = String.format("https://xiao.zgzkys.com/qrcode?DevName=%s", MobileInfoUtil
-                .getIMEI(getContext()));
-        ivCode.setImageBitmap(QrCodeUtils.generateOriginalBitmap(code, 102, 102));
+        if(type==0){
+            llyNoCabinet.setVisibility(View.GONE);
+            llyNotLogin.setVisibility(View.VISIBLE);
+            String code = String.format("https://xiao.zgzkys.com/qrcode?DevName=%s", MobileInfoUtil.getIMEI(getContext()));
+            ivCode.setImageBitmap(QrCodeUtils.generateOriginalBitmap(code, 102, 102));
+        }else {
+            llyNotLogin.setVisibility(View.GONE);
+            llyNoCabinet.setVisibility(View.VISIBLE);
+        }
         tvStart.setText("暂无信息");
         tvEnd.setText("暂无信息");
         tvRentTime.setText("暂无信息");
@@ -261,7 +283,7 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
 
     @Override
     public void padNoOrder() {
-        noOrder();
+        noOrder(1);
     }
 
     @Override

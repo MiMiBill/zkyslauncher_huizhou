@@ -1,9 +1,5 @@
 package com.muju.note.launcher.app.startUp.ui;
 
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -87,7 +83,7 @@ public class NewActivationActivity extends BaseActivity<NewActivationPresenter> 
             startCheck();
         } else {
             // 手动启动，需要检查激活
-            mPresenter.bindingDevice(MobileInfoUtil.getICCID(this));
+            mPresenter.bindingDevice(MobileInfoUtil.getIMEI(this));
         }
 
     }
@@ -122,7 +118,7 @@ public class NewActivationActivity extends BaseActivity<NewActivationPresenter> 
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        mPresenter.bindingDevice(MobileInfoUtil.getICCID(NewActivationActivity.this));
+                        mPresenter.bindingDevice(MobileInfoUtil.getIMEI(NewActivationActivity.this));
                     }
                 });
     }

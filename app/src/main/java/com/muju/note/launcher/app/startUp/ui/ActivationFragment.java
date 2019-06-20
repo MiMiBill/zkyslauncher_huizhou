@@ -110,7 +110,7 @@ public class ActivationFragment extends BaseFragment<NewActivationPresenter> imp
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        mPresenter.bindingDevice(MobileInfoUtil.getICCID(LauncherApplication.getContext()));
+                        mPresenter.bindingDevice(MobileInfoUtil.getIMEI(LauncherApplication.getContext()));
                     }
                 });
     }

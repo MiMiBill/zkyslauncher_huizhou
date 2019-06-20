@@ -36,6 +36,7 @@
             <RadioButton
                 android:id="@+id/rbt_order"
                 android:text="我的订单"
+                android:visibility="gone"
                 android:background="@drawable/rbt_user_bg"
                 android:textColor="@color/rbt_user_item_tv_bg"
                 android:textSize="15sp"

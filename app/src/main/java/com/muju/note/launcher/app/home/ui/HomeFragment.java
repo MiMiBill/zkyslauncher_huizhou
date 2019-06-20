@@ -17,6 +17,7 @@ import com.muju.note.launcher.app.Cabinet.ui.CabinetFragment;
 import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
 import com.muju.note.launcher.app.dialog.AdvertsDialog;
 import com.muju.note.launcher.app.finance.FinanceFragment;
+import com.muju.note.launcher.app.game.ui.GameFragment;
 import com.muju.note.launcher.app.home.adapter.HomeHisVideoAdapter;
 import com.muju.note.launcher.app.home.adapter.HomeTopVideoAdapter;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
@@ -98,8 +99,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     LinearLayout llVideoLine;
     @BindView(R.id.banner)
     Banner banner;
-    @BindView(R.id.ll_hos_elegance)
-    LinearLayout llElegance;
+    @BindView(R.id.ll_hos_game)
+    LinearLayout llHosGame;
     @BindView(R.id.tv_name)
     TextView tvName;
     @BindView(R.id.tv_age)
@@ -202,7 +203,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         llyInsureance.setOnClickListener(this);
         llyOrder.setOnClickListener(this);
         llyCabinet.setOnClickListener(this);
-        llElegance.setOnClickListener(this);
+        llHosGame.setOnClickListener(this);
 
         // 加载首页历史记录
         videoHisDaos = new ArrayList<>();
@@ -535,8 +536,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             case R.id.ll_video:     // 视频
                 start(VideoFragment.getIntance());
                 break;
-            case R.id.ll_hos_elegance:     //医院风采
-                start(new HospitalMienFragment());
+            case R.id.ll_hos_game:     //游戏娱乐
+                start(new GameFragment());
                 break;
             case R.id.ll_video_line: // 直播TV
                 start(new WoTvVideoLineFragment());

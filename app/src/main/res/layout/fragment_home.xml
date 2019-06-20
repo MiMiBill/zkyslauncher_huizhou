@@ -445,7 +445,7 @@
                             android:textSize="@dimen/px25" />
                     </LinearLayout>
                     <LinearLayout
-                        android:id="@+id/ll_hos_elegance"
+                        android:id="@+id/ll_his_mission"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/px102"
@@ -454,17 +454,18 @@
                         <ImageView
                             android:layout_width="@dimen/px100"
                             android:layout_height="@dimen/px100"
-                            android:src="@mipmap/icon_home_item_egan" />
+                            android:src="@mipmap/ic_home_item_his_mission" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/px14"
-                            android:text="医院风采"
+                            android:text="医疗宣教"
                             android:textColor="@color/black_gray"
                             android:textSize="@dimen/px25" />
                     </LinearLayout>
+
 
                     <LinearLayout
                         android:id="@+id/ll_hostipal_ency"
@@ -487,10 +488,8 @@
                             android:textSize="@dimen/px25" />
                     </LinearLayout>
 
-
-
                     <LinearLayout
-                        android:id="@+id/ll_video_line"
+                        android:id="@+id/lly_cabinet"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/px102"
@@ -499,17 +498,19 @@
                         <ImageView
                             android:layout_width="@dimen/px100"
                             android:layout_height="@dimen/px100"
-                            android:src="@mipmap/ic_home_item_video_line" />
+                            android:src="@mipmap/ic_home_item_lock" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/px14"
-                            android:text="电视直播"
+                            android:text="屏安柜"
                             android:textColor="@color/black_gray"
                             android:textSize="@dimen/px25" />
                     </LinearLayout>
+
+
 
                     <LinearLayout
                         android:id="@+id/ll_video"
@@ -562,8 +563,9 @@
                     android:background="@color/white"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
+
                     <LinearLayout
-                        android:id="@+id/lly_cabinet"
+                        android:id="@+id/ll_hos_game"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/px61"
@@ -572,20 +574,19 @@
                         <ImageView
                             android:layout_width="@dimen/px100"
                             android:layout_height="@dimen/px100"
-                            android:src="@mipmap/ic_home_item_lock" />
+                            android:src="@mipmap/icon_home_game" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/px14"
-                            android:text="屏安柜"
+                            android:text="游戏娱乐"
                             android:textColor="@color/black_gray"
                             android:textSize="@dimen/px25" />
                     </LinearLayout>
-
                     <LinearLayout
-                        android:id="@+id/ll_his_mission"
+                        android:id="@+id/ll_video_line"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/px102"
@@ -594,14 +595,14 @@
                         <ImageView
                             android:layout_width="@dimen/px100"
                             android:layout_height="@dimen/px100"
-                            android:src="@mipmap/ic_home_item_his_mission" />
+                            android:src="@mipmap/ic_home_item_video_line" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/px14"
-                            android:text="医疗宣教"
+                            android:text="电视直播"
                             android:textColor="@color/black_gray"
                             android:textSize="@dimen/px25" />
                     </LinearLayout>
