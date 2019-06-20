@@ -130,6 +130,7 @@ public class DbHelper {
             values.put("endTime",dao.getEndTime());
             values.put("time",dao.getTime());
             database.insert("UpAdvertInfoDao",null,values);
+            database.close();
         }catch (Exception e){
             e.printStackTrace();
             UpAdvertInfoDao infoDao=new UpAdvertInfoDao();
@@ -157,6 +158,7 @@ public class DbHelper {
             values.put("endTime",dao.getEndTime());
             values.put("cid",dao.getCid());
             database.insert("UpVideoInfoDao",null,values);
+            database.close();
         }catch (Exception e){
             e.printStackTrace();
             LitePalDb.setZkysDataDb();

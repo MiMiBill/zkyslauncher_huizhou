@@ -74,13 +74,13 @@ public class StartCheckDataFragment extends BaseFragment {
     public void updateMsg(StartCheckDataEvent event){
         switch (event.getStatus()){
             case VIDEO_COLUMN_START:
-                list.add("正在初始化影视分类数据，请稍后...");
+                list.add("正在初始化影视分类数据，请稍候...");
                 break;
             case VIDEO_COLUMN_HTTP_START:
-                list.add("正在获取后台影视分类数据，请稍后...");
+                list.add("正在获取后台影视分类数据，请稍候...");
                 break;
             case VIDEO_COLUMN_DB_START:
-                list.add("正在加载影视分类数据，请稍后...");
+                list.add("正在加载影视分类数据，请稍候...");
                 break;
             case VIDEO_COLUMN_SUCCESS:
                 list.add("影视分类数据初始化成功！");
@@ -95,13 +95,13 @@ public class StartCheckDataFragment extends BaseFragment {
                 break;
 
             case VIDEO_TOP_START:
-                list.add("正在初始化影视推荐数据，请稍后...");
+                list.add("正在初始化影视推荐数据，请稍候...");
                 break;
             case VIDEO_TOP_HTTP_START:
-                list.add("正在获取后台影视推荐数据，请稍后...");
+                list.add("正在获取后台影视推荐数据，请稍候...");
                 break;
             case VIDEO_TOP_DB_START:
-                list.add("正在加载影视推荐数据，请稍后...");
+                list.add("正在加载影视推荐数据，请稍候...");
                 break;
             case VIDEO_TOP_SUCCESS:
                 list.add("影视推荐数据初始化成功！");
@@ -116,10 +116,10 @@ public class StartCheckDataFragment extends BaseFragment {
                 break;
 
             case VIDEO_INFO_START:
-                list.add("正在初始化影视详情数据，请稍后...");
+                list.add("正在初始化影视详情数据，请稍候...");
                 break;
             case VIDEO_INFO_HTTP_START:
-                list.add("正在获取后台影视详情数据，请稍后...");
+                list.add("正在获取后台影视详情数据，请稍候...");
                 break;
             case VIDEO_INFO_HTTP_DATA_NULL:
                 list.add("影视详情后台数据获取为空！请稍后重试或联系管理人员检查");
@@ -133,7 +133,7 @@ public class StartCheckDataFragment extends BaseFragment {
                 MienService.getInstance().startMien();
                 break;
             case VIDEO_INFO_DOWNLOAD_START:
-                list.add("开始下载影视详情数据，请稍后...");
+                list.add("开始下载影视详情数据，请稍候...");
                 list.add("正在下载中：0%");
                 break;
             case VIDEO_INFO_DOWNLOAD_FAIL:
@@ -147,7 +147,7 @@ public class StartCheckDataFragment extends BaseFragment {
                 list.add("遇到异常，请重启设备或联系管理人员："+event.getCarsh().getMessage());
                 break;
             case VIDEO_INFO_DB_START:
-                list.add("开始加载影视详情数据，请稍后...");
+                list.add("开始加载影视详情数据，请稍候...");
                 list.add("正在加载中：0/0");
                 break;
             case VIDEO_INFO_DB_PROGRESS:
@@ -155,13 +155,13 @@ public class StartCheckDataFragment extends BaseFragment {
                 break;
 
             case HOSPITAL_MIEN_START:
-                list.add("正在初始化医院风采数据，请稍后...");
+                list.add("正在初始化医院风采数据，请稍候...");
                 break;
             case HOSPITAL_MIEN_HTTP_START:
-                list.add("正在获取后台医院风采数据，请稍后...");
+                list.add("正在获取后台医院风采数据，请稍候...");
                 break;
             case HOSPITAL_MIEN_DB_START:
-                list.add("正在加载医院风采数据，请稍后...");
+                list.add("正在加载医院风采数据，请稍候...");
                 break;
             case HOSPITAL_MIEN_SUCCESS:
                 list.add("医院风采数据初始化成功！");
@@ -173,10 +173,10 @@ public class StartCheckDataFragment extends BaseFragment {
                 break;
 
             case HOSPITAL_ENCY_START:
-                list.add("正在初始化医疗百科数据，请稍后...");
+                list.add("正在初始化医疗百科数据，请稍候...");
                 break;
             case HOSPITAL_ENCY_HTTP_START:
-                list.add("正在获取后台医疗百科数据，请稍后...");
+                list.add("正在获取后台医疗百科数据，请稍候...");
                 break;
             case HOSPITAL_ENCY_SUCCESS:
                 list.add("医疗百科数据初始化成功！");
@@ -187,10 +187,10 @@ public class StartCheckDataFragment extends BaseFragment {
                 reStartEncy(1);
                 break;
             case HOSPITAL_ENCY_UNZIP_START:
-                list.add("正在解压缩，请稍后...");
+                list.add("正在解压缩，请稍候...");
                 break;
             case HOSPITAL_ENCY_DOWNLOAD_START:
-                list.add("后台访问成功，开始下载，请稍后...");
+                list.add("后台访问成功，开始下载，请稍候...");
                 list.add("正在下载中：0%");
                 break;
             case HOSPITAL_ENCY_DOWNLOAD_PROGRESS:
@@ -201,13 +201,13 @@ public class StartCheckDataFragment extends BaseFragment {
                 reStartEncy(1);
                 break;
             case HOSPITAL_ENCY_FIRST_DB_START:
-                list.add("解压完成，正在加载医疗百科科室数据，请稍后...");
+                list.add("解压完成，正在加载医疗百科科室数据，请稍候...");
                 break;
             case HOSPITAL_ENCY_FIRST_DB_END:
                 list.add("科室加载完成!");
                 break;
             case HOSPITAL_ENCY_TWO_DB_START:
-                list.add("正在加载详情数据，请稍后...");
+                list.add("正在加载详情数据，请稍候...");
                 list.add("正在加载中：0/0");
                 break;
             case HOSPITAL_ENCY_TWO_DB_PROGRESS:
@@ -215,13 +215,13 @@ public class StartCheckDataFragment extends BaseFragment {
                 break;
 
             case HOSPITAL_MISS_START:
-                list.add("正在初始化医院宣教数据，请稍后...");
+                list.add("正在初始化医院宣教数据，请稍候...");
                 break;
             case HOSPITAL_MISS_HTTP_START:
-                list.add("正在获取后台医院宣教数据，请稍后...");
+                list.add("正在获取后台医院宣教数据，请稍候...");
                 break;
             case HOSPITAL_MISS_DB_START:
-                list.add("正在加载医院宣教数据，请稍后...");
+                list.add("正在加载医院宣教数据，请稍候...");
                 break;
             case HOSPITAL_MISS_SUCCESS:
                 list.add("医院风采数据初始化成功！数据正在后台下载，下载成功后可正常使用!");
