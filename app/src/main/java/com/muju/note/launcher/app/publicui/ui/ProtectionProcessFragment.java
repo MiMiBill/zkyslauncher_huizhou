@@ -174,8 +174,8 @@ public class ProtectionProcessFragment extends BaseFragment<ProtectionPresenter>
     @Override
     public void getLockBananaList(List<AdvertsCodeDao> list) {
         AdvertsUtil.getInstance().showByDbBanner(list,bannerLc);
-        RxUtil.closeDisposable(disposableAdjust);
-        addBrightness();
+//        RxUtil.closeDisposable(disposableAdjust);
+//        addBrightness();
         ivLauncher.setVisibility(View.GONE);
     }
 
