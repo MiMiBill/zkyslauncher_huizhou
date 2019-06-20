@@ -7,7 +7,7 @@
     <string name="order_bed">床号：%1$s</string>
     <string name="order_name">姓名：%1$s</string>
 
-    <string name="active_pad_tip">请用中科云上运维工具扫描以上二维码进行激活!</string>
+    <string name="active_pad_tip">请用中科云上运维工具扫描二维码进行激活!</string>
     <string name="this_pad_has_not_actived">PAD未激活</string>
     <string name="please_choose_payment">请选择支付方式</string>
     <string name="alipay_payment_default">支付宝支付(默认)</string>

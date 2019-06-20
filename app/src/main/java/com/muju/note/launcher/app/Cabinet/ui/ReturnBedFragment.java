@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.Cabinet.bean.CabinetBean;
 import com.muju.note.launcher.app.Cabinet.contract.CabinetOrderContract;
-import com.muju.note.launcher.app.Cabinet.event.OrderCloseEvent;
+import com.muju.note.launcher.app.Cabinet.event.ReturnBedEvent;
 import com.muju.note.launcher.app.Cabinet.presenter.CabinetOrderPresenter;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.util.ArithUtil;
@@ -153,13 +153,15 @@ public class ReturnBedFragment extends BaseFragment<CabinetOrderPresenter> imple
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_back:
+                if(type==1){
+                    EventBus.getDefault().post(new ReturnBedEvent());
+                }
                 pop();
-                EventBus.getDefault().post(new OrderCloseEvent()); //关闭订单页
                 break;
             case R.id.btn_su:
                 if(type==1){
                     pop();
-                    EventBus.getDefault().post(new OrderCloseEvent()); //关闭订单页
+                    EventBus.getDefault().post(new ReturnBedEvent());
                 }else {
                     mPresenter.returnBed(dataBean.getId());
                 }

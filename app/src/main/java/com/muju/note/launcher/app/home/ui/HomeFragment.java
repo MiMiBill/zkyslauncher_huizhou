@@ -28,7 +28,7 @@ import com.muju.note.launcher.app.home.event.OutHospitalEvent;
 import com.muju.note.launcher.app.home.event.PatientEvent;
 import com.muju.note.launcher.app.home.event.PatientInfoEvent;
 import com.muju.note.launcher.app.home.presenter.HomePresenter;
-import com.muju.note.launcher.app.hostipal.ui.EncyFragment;
+import com.muju.note.launcher.app.hostipal.ui.HospitalEncyFragment;
 import com.muju.note.launcher.app.hostipal.ui.HosPitalMissionFragment;
 import com.muju.note.launcher.app.hostipal.ui.HospitalMienFragment;
 import com.muju.note.launcher.app.insurance.InsureanceFragment;
@@ -531,7 +531,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 start(new HospitalMienFragment());
                 break;
             case R.id.ll_hostipal_ency:  // 医疗百科
-                start(new EncyFragment());
+                start(new HospitalEncyFragment());
                 break;
             case R.id.ll_video:     // 视频
                 start(VideoFragment.getIntance());

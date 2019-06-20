@@ -61,6 +61,22 @@
             android:layout_width="@dimen/px208"
             android:layout_height="@dimen/px208"
             android:layout_marginTop="@dimen/px30" />
+
+        <TextView
+            android:id="@+id/tv_version"
+            style="@style/txt_333_16"
+            android:layout_marginTop="@dimen/px20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn_active"
+            android:text="已激活,进入"
+            android:visibility="gone"
+            android:background="@drawable/btn_solid_2994f1_corners_4dp"
+            android:layout_marginTop="@dimen/px20"
+            android:layout_width="150px"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </RelativeLayout>

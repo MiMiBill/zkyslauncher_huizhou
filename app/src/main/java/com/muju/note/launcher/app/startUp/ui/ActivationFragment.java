@@ -1,12 +1,16 @@
 package com.muju.note.launcher.app.startUp.ui;
 
 import android.graphics.Color;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.model.HttpHeaders;
+import com.muju.note.launcher.BuildConfig;
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
 import com.muju.note.launcher.app.startUp.contract.NewActivationContract;
@@ -21,19 +25,17 @@ import com.muju.note.launcher.util.qr.QrCodeUtils;
 import com.muju.note.launcher.util.rx.RxUtil;
 import com.muju.note.launcher.util.sp.SPUtil;
 
-import java.util.concurrent.TimeUnit;
-
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
-import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import me.yokeyword.fragmentation.ISupportFragment;
 
 /**
- *  激活页面
+ * 激活页面
  */
-public class ActivationFragment extends BaseFragment<NewActivationPresenter> implements NewActivationContract.View {
+public class ActivationFragment extends BaseFragment<NewActivationPresenter> implements
+        NewActivationContract.View {
     @BindView(R.id.iv_hide)
     ImageView ivHide;
     @BindView(R.id.tv_active_result)
@@ -48,6 +50,10 @@ public class ActivationFragment extends BaseFragment<NewActivationPresenter> imp
     ImageView ivActivePadQrcode;
     @BindView(R.id.lly_active)
     LinearLayout llyActive;
+    @BindView(R.id.tv_version)
+    TextView tvVersion;
+    @BindView(R.id.btn_active)
+    Button btnActive;
 
     private Disposable disposableCheckActive;
 
@@ -61,7 +67,8 @@ public class ActivationFragment extends BaseFragment<NewActivationPresenter> imp
 
         tvIccid.setText("iccId:" + MobileInfoUtil.getICCID(LauncherApplication.getContext()));
         tvImei.setText("imei:" + MobileInfoUtil.getIMEI(LauncherApplication.getContext()));
-        ivActivePadQrcode.setImageBitmap(QrCodeUtils.generateBitmap(MobileInfoUtil.getICCID(LauncherApplication.getContext())
+        ivActivePadQrcode.setImageBitmap(QrCodeUtils.generateBitmap(MobileInfoUtil.getICCID
+                (LauncherApplication.getContext())
                 + "," + MobileInfoUtil.getIMEI(LauncherApplication.getContext()), 232, 232));
 
         boolean isReboot = SPUtil.getBoolean(SpTopics.SP_REBOOT);
@@ -104,14 +111,25 @@ public class ActivationFragment extends BaseFragment<NewActivationPresenter> imp
 
     @Override
     public void bindFail() {
-        RxUtil.closeDisposable(disposableCheckActive);
+        btnActive.setVisibility(View.VISIBLE);
+        tvVersion.setText(String.format("版本:宝屏V%s", TextUtils.equals(UrlUtil.getHost(), "http://test" +
+                ".pad.zgzkys.com") ? BuildConfig.VERSION_NAME + "beta" : BuildConfig.VERSION_NAME));
+        /*RxUtil.closeDisposable(disposableCheckActive);
         disposableCheckActive = Observable.interval(30, TimeUnit.SECONDS)
                 .take(1)
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        mPresenter.bindingDevice(MobileInfoUtil.getIMEI(LauncherApplication.getContext()));
+                        mPresenter.bindingDevice(MobileInfoUtil.getIMEI(LauncherApplication
+                                .getContext()));
                     }
-                });
+                });*/
+    }
+
+
+
+    @OnClick(R.id.btn_active)
+    public void onViewClicked() {
+        mPresenter.bindingDevice(MobileInfoUtil.getIMEI(LauncherApplication.getContext()));
     }
 }

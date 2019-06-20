@@ -377,22 +377,15 @@
                                     android:gravity="center"
                                     android:textColor="@color/white"
                                     android:layout_height="30px" />
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="亲爱的患者:"
-                                    android:paddingLeft="@dimen/px20"
-                                    android:textColor="@color/white"
-                                    android:textSize="12sp" />
 
                                 <TextView
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="match_parent"
+                                    android:gravity="center"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/px10"
-                                    android:paddingLeft="@dimen/px20"
-                                    android:text="当前您未办理入院信息"
+                                    android:text="请护士推送入院"
                                     android:textColor="@color/white"
-                                    android:textSize="12sp" />
+                                    android:textSize="14sp" />
                             </LinearLayout>
 
                             <ImageView
