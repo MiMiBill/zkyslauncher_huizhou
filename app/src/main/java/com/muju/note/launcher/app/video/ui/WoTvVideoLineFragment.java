@@ -266,6 +266,8 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
      * 播放器回调监听
      */
     private void setVideoView() {
+
+
         //播放器的播放过程，状态回调
         videoView.setVideoEvent(new IVideoEvent() {
             @Override
@@ -354,6 +356,11 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
                 } catch (Exception es) {
                     es.printStackTrace();
                 }
+
+            }
+
+            @Override
+            public void playHalfHour() {
 
             }
         });

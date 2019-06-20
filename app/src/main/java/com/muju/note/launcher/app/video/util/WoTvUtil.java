@@ -22,9 +22,9 @@ import com.unicom.common.base.VideoSDKOpenAPI;
 import com.unicom.common.base.video.VideoUIConfig;
 import com.unicom.common.base.video.expand.ExpandVideoListener;
 import com.unicom.common.base.video.expand.ExpandVideoView;
+import com.unicom.common.callback.OnNetworkConfigCallback;
 import com.unicom.common.helper.InitConfig;
 import com.unicom.common.network.HttpUtils;
-import com.unicom.common.network.OnNetworkConfigCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
