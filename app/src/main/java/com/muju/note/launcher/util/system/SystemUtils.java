@@ -53,16 +53,8 @@ public class SystemUtils {
      */
     public static void setVolume(Context context, int volumeRate){
         AudioManager manager = (AudioManager) context.getSystemService(AUDIO_SERVICE);
-        int maxVoice = (int) SPUtil.getLong(SpTopics.PAD_CONFIG_VOLUME_RATE);
-        int volume;
-       if (maxVoice >= 0) {
-//            volume =(int) (maxVoice /100D * volumeRate); //系统最大音量为15,根据比例设置音量
-            volume =(int) ((maxVoice/100D)/100D* volumeRate*getMaxVolume(context));
-            manager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
-        } else {
-            volume = (int) (getMaxVolume(context) / 100D * volumeRate);
-            manager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
-        }
+        int volume = (int) (getMaxVolume(context) / 100D * volumeRate);
+        manager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
         int currentVolume = SystemUtils.getCurrentVolume(LauncherApplication.getContext());
         LogUtil.d("比率:%s 设置的音量:%s  当前系统音量:%s 设置音量有没有超过系统音量:%s", volumeRate, volume, currentVolume, currentVolume > volume);
     }

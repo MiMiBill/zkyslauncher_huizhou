@@ -1,12 +1,12 @@
 package com.muju.note.launcher.app.game.ui;
 
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.muju.note.launcher.R;
+import com.muju.note.launcher.app.publicui.NullFragment;
 import com.muju.note.launcher.base.BaseFragment;
 
 import butterknife.BindView;
@@ -21,8 +21,9 @@ public class GameFragment extends BaseFragment {
     TextView tvTitle;
     @BindView(R.id.rel_titlebar)
     RelativeLayout relTitlebar;
-    @BindView(R.id.iv_game_back)
-    ImageView ivGameBack;
+    @BindView(R.id.lly_game)
+    LinearLayout llyGame;
+
 
     @Override
     public int getLayout() {
@@ -46,15 +47,19 @@ public class GameFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.ll_back, R.id.iv_game_back})
+    @OnClick({R.id.ll_back,R.id.lly_game})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_back:
                 pop();
                 break;
-            case R.id.iv_game_back:
-                pop();
+            case R.id.lly_game:
+                start(new NullFragment());
                 break;
         }
     }
+
+
+
+
 }

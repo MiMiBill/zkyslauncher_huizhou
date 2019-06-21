@@ -26,26 +26,23 @@ import org.litepal.LitePal;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class PublicNumFragment extends BaseFragment<PublicPresenter> implements PublicContract.View {
-    @BindView(R.id.iv_img)
-    ImageView ivImg;
-    @BindView(R.id.tv_code)
-    TextView tvCode;
+public class PublicNumFragment extends BaseFragment<PublicPresenter> implements PublicContract
+        .View {
     @BindView(R.id.btn_code)
     Button btnCode;
-    @BindView(R.id.iv_back)
-    ImageView ivBack;
     @BindView(R.id.iv_code)
     ImageView ivCode;
     @BindView(R.id.layoutContent)
     RelativeLayout layoutContent;
-    private int adverId = 0;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
+
     private String advertCode = "";
-    private long startTime = 0;
     private static final String PUB_PIC_ID = "pub_pic_id";
     private static final String PUB_PIC_URL = "pub_pic_url";
-    private int advertId;
+    private int advertId = 0;
     private String url;
+    private PopEnterPassword popEnterPassword;
 
     public static PublicNumFragment newInstance(int id, String url) {
         Bundle args = new Bundle();
@@ -63,8 +60,9 @@ public class PublicNumFragment extends BaseFragment<PublicPresenter> implements 
 
     @Override
     public void initData() {
+        tvTitle.setText("做任务");
         AdvertsCodeDao codeDao = LitePal.where("taskType =?", "1").findFirst(AdvertsCodeDao.class);
-        if(codeDao!=null){
+        if (codeDao != null) {
             advertId = codeDao.getAdid();
             url = codeDao.getTaskUrl();
 //        Glide.with(LauncherApplication.getContext()).load(url).into(ivImg);
@@ -83,35 +81,27 @@ public class PublicNumFragment extends BaseFragment<PublicPresenter> implements 
     }
 
 
-    @OnClick({R.id.btn_code, R.id.iv_back})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.btn_code:
-                showPassDialog();
-                break;
-            case R.id.iv_back:
-                pop();
-                break;
-        }
-    }
-
-
-
-
     //输入验证码框
     private void showPassDialog() {
-        PopEnterPassword popEnterPassword = new PopEnterPassword(getActivity());
+        popEnterPassword = new PopEnterPassword(getActivity());
         // 显示窗口
         popEnterPassword.showAtLocation(getActivity().findViewById(R.id.layoutContent),
                 Gravity.CENTER, 0, 0); // 设置layout在PopupWindow中显示的位置
         popEnterPassword.setOnPassFinish(new OnPasswordFinish() {
             @Override
             public void passwordFinish(String password) {
-                mPresenter.verfycode(password, adverId, advertCode);
+                mPresenter.verfycode(password, advertId, advertCode);
             }
         });
     }
 
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
+        if(popEnterPassword!=null && popEnterPassword.isShowing())
+            popEnterPassword.dismiss();
+    }
 
     @Override
     public void verfycode(String response) {
@@ -119,8 +109,8 @@ public class PublicNumFragment extends BaseFragment<PublicPresenter> implements 
             JSONObject jsonObject = new JSONObject(response);
             if (jsonObject.optInt("code") == 200) {
                 showToast("验证码验证成功");
-                Bundle bundle=new Bundle();
-                setFragmentResult(RESULT_OK,bundle);
+                Bundle bundle = new Bundle();
+                setFragmentResult(RESULT_OK, bundle);
                 pop();
 //                mPresenter.doTask(UserUtil.getUserBean().getId(), advertId);
             } else {
@@ -141,5 +131,19 @@ public class PublicNumFragment extends BaseFragment<PublicPresenter> implements 
         /*Bundle bundle=new Bundle();
         setFragmentResult(RESULT_OK,bundle);
         EventBus.getDefault().post(new UserInfoEvent(UserUtil.getUserBean()));*/
+    }
+
+
+
+    @OnClick({R.id.ll_back, R.id.btn_code})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.ll_back:
+                pop();
+                break;
+            case R.id.btn_code:
+                showPassDialog();
+                break;
+        }
     }
 }

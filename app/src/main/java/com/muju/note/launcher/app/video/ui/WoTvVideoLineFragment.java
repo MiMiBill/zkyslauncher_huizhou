@@ -1,10 +1,8 @@
 package com.muju.note.launcher.app.video.ui;
 
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,9 +13,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.devbrackets.android.api.video.impl.VideoErrorInfo;
 import com.devbrackets.android.component.utils.ViewScaleUtil;
-import com.devbrackets.android.media.BaseEMVideoView;
 import com.devbrackets.android.media.listener.OnVideoPreparedListener;
-import com.devbrackets.android.media.ui.widget.TouchEventHandler;
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
 import com.muju.note.launcher.app.video.adapter.VideoLineAdapter;
@@ -32,13 +28,10 @@ import com.muju.note.launcher.app.video.util.wotv.ExpandVideoView2;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.topics.AdvertsTopics;
-import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.util.adverts.AdvertsUtil;
 import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
-import com.muju.note.launcher.util.sp.SPUtil;
-import com.muju.note.launcher.util.system.SystemUtils;
 import com.unicom.common.VideoSdkConfig;
 import com.unicom.common.base.video.IVideoEvent;
 import com.unicom.common.base.video.expand.ExpandVideoListener;
@@ -53,8 +46,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -95,15 +86,11 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
     RelativeLayout relTitlebar;
     @BindView(R.id.iv_line_back)
     ImageView ivLineBack;
-
-
-    private long maxVoice = -1;
     private boolean isShowDialog = true;
     private List<VideoInfoDao> videoInfoDaos;
     private VideoLineAdapter lineAdapter;
     private VideoOrImageDialog videoOrImageDialog;
     private VideoInfoDao infoDao;
-    private boolean isChangeVolumn = true;
 
     @Override
     public int getLayout() {
@@ -139,25 +126,6 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
         // 设置播放器回调
         setVideoView();
 
-        //设置播放器音量
-        maxVoice = SPUtil.getLong(SpTopics.PAD_CONFIG_VOLUME_RATE);
-        if (maxVoice >= 0) {
-            videoView.setOnVolumeChangeListener(new BaseEMVideoView.OnVolumeChangeListener() {
-                @Override
-                public void onVolumeChanged(int volumn) {
-                    LogFactory.l().i("volumn===" + volumn);
-                    if (isChangeVolumn) {
-                        int currentVolumn = (int) (volumn * maxVoice / 100d);
-                        LogFactory.l().i("currentVolumn===" + currentVolumn);
-                        videoView.setSystemVolume(currentVolumn);
-                        isChangeVolumn = false;
-                    }
-                    LogFactory.l().i("当前音量===" + SystemUtils.getCurrentVolume(LauncherApplication.getContext()));
-                }
-            });
-            videoView.registerVideoTouchEventObserver(observer);
-        }
-
         lineAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -181,27 +149,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
 
     }
 
-    TouchEventHandler.TouchEventObserver observer = new TouchEventHandler.TouchEventObserver() {
-        @Override
-        public void onShortUpTouched(int i, int i1) {
 
-        }
-
-        @Override
-        public void onHorizontalTouched(int i, int i1) {
-
-        }
-
-        @Override
-        public void onVerticalLeftTouched(int i, int i1) {
-
-        }
-
-        @Override
-        public void onVerticalRightTouched(int i, int i1) {
-            isChangeVolumn = true;
-        }
-    };
 
     @Override
     public void initPresenter() {
@@ -280,7 +228,6 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
-        videoView.unregisterVideoTouchEventObserver(observer);
         EventBus.getDefault().post(new VideoNoLockEvent(true));
     }
 

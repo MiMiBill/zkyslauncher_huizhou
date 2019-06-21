@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#bdbdbd"
+        android:background="#FFFFFF"
         android:horizontalSpacing="1px"
         android:numColumns="3"
         android:verticalSpacing="1px" />
@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_above="@id/gv_keybord"
-        android:background="#bdbdbd" />
+        android:background="#BDBDBD" />
 
     <RelativeLayout
         android:id="@+id/layoutBack"

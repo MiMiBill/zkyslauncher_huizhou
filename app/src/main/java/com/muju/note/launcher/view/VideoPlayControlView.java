@@ -18,10 +18,8 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.muju.note.launcher.R;
-import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
-import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.util.system.SystemUtils;
 
 import java.lang.annotation.Retention;
@@ -70,7 +68,7 @@ public class VideoPlayControlView extends FrameLayout {
 //    private float brightness;
 
     private float oldVolume;
-    private int maxVolume;
+
 
     private int newProgress;
 //    private float oldProgress;
@@ -80,6 +78,7 @@ public class VideoPlayControlView extends FrameLayout {
 
     private Disposable diUpdate;
     private Disposable diAutoHide;
+    private int maxVolume;
 
     public void setBrightnessChangeListener(BrightnessChangeListener brightnessChangeListener) {
         this.brightnessChangeListener = brightnessChangeListener;
@@ -229,13 +228,8 @@ public class VideoPlayControlView extends FrameLayout {
 
         //初始化获取音量属性
         mAudioManager = (AudioManager)getContext().getSystemService(Service.AUDIO_SERVICE);
-//        if(SPUtil.getLong())
-        long maxSystemVolume=SPUtil.getLong(SpTopics.PAD_CONFIG_VOLUME_RATE);
-        if(maxSystemVolume>=0){
-            maxVolume=(int)(maxSystemVolume/100D*15);
-        }else {
-            maxVolume = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        }
+
+        maxVolume = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 
         setVideoGestureListener(new VideoGestureListener() {
             @Override
@@ -261,7 +255,7 @@ public class VideoPlayControlView extends FrameLayout {
             @Override
             public void onVolumeGesture(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
                 LogUtil.d( "onVolumeGesture: oldVolume " + oldVolume);
-                int value = getHeight()/maxVolume ;
+                int value = getHeight()/ maxVolume;
                 int newVolume = (int) ((e1.getY() - e2.getY())/value + oldVolume);
                 int volumeProgress = (int) (newVolume / Float.valueOf(maxVolume) * 100);
                 volumeProgress = volumeProgress > 0 ? volumeProgress : 0;
