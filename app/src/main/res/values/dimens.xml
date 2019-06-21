@@ -42,6 +42,7 @@
     <dimen name="px50">50px</dimen>
     <dimen name="px52">52px</dimen>
     <dimen name="px56">56px</dimen>
+    <dimen name="px58">58px</dimen>
     <dimen name="px59">59px</dimen>
     <dimen name="px60">60px</dimen>
     <dimen name="px61">61px</dimen>
@@ -78,6 +79,7 @@
     <dimen name="px180">180px</dimen>
     <dimen name="px182">182px</dimen>
     <dimen name="px184">184px</dimen>
+    <dimen name="px188">188px</dimen>
     <dimen name="px190">190px</dimen>
     <dimen name="px200">200px</dimen>
     <dimen name="px208">208px</dimen>

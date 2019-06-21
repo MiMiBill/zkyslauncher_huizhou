@@ -177,7 +177,6 @@
                                     android:layout_below="@id/tv_name"
                                     android:layout_marginLeft="@dimen/px20"
                                     android:layout_marginTop="@dimen/px16"
-                                    android:layout_toRightOf="@id/tv_bed"
                                     android:text="40岁"
                                     android:textColor="@color/white"
                                     android:textSize="15sp" />

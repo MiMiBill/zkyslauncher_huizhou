@@ -1,6 +1,7 @@
 package com.muju.note.launcher;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.DrawerLayout;
 import android.view.KeyEvent;
@@ -8,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
@@ -15,18 +17,19 @@ import com.muju.note.launcher.app.adtask.TaskListBean;
 import com.muju.note.launcher.app.adtask.contract.MainContract;
 import com.muju.note.launcher.app.adtask.event.UserInfoEvent;
 import com.muju.note.launcher.app.adtask.presenter.MainPresenter;
-import com.muju.note.launcher.app.bedsidecard.ui.BedSideCardFragment;
 import com.muju.note.launcher.app.bedsidecard.event.GotoBedsideEvent;
+import com.muju.note.launcher.app.bedsidecard.ui.BedSideCardFragment;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.app.home.event.OutHospitalEvent;
 import com.muju.note.launcher.app.home.event.PatientInfoEvent;
 import com.muju.note.launcher.app.home.ui.HomeFragment;
+import com.muju.note.launcher.app.home.util.PatientUtil;
 import com.muju.note.launcher.app.luckdraw.ui.LuckDrawFragment;
 import com.muju.note.launcher.app.msg.dialog.CustomMsgDialog;
 import com.muju.note.launcher.app.publicui.AdvideoViewFragment;
 import com.muju.note.launcher.app.publicui.LargePicFragment;
-import com.muju.note.launcher.app.publicui.ui.ProtectionProcessFragment;
 import com.muju.note.launcher.app.publicui.WebViewFragment;
+import com.muju.note.launcher.app.publicui.ui.ProtectionProcessFragment;
 import com.muju.note.launcher.app.satisfaction.event.GotoSatisfationEvent;
 import com.muju.note.launcher.app.satisfaction.ui.SatisfactionSurveyFragment;
 import com.muju.note.launcher.app.setting.event.GotoLuckEvent;
@@ -44,9 +47,12 @@ import com.muju.note.launcher.entity.PushCustomMessageEntity;
 import com.muju.note.launcher.service.MainService;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.Constants;
-import com.muju.note.launcher.util.FormatUtils;
+import com.muju.note.launcher.util.DateUtil;
+import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.log.LogFactory;
+import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.net.NetWorkUtil;
+import com.muju.note.launcher.util.qr.QrCodeUtils;
 import com.muju.note.launcher.util.rx.RxUtil;
 import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.view.EBDrawerLayout;
@@ -61,6 +67,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -68,26 +76,6 @@ import me.yokeyword.fragmentation.SupportFragment;
 
 public class MainActivity extends BaseActivity<MainPresenter> implements MainPresenter.TaskListener, MainContract.View {
 
-    @BindView(R.id.drawlayout)
-    EBDrawerLayout drawlayout;
-    @BindView(R.id.iv_ad)
-    ImageView ivAd;
-    @BindView(R.id.tv_bed)
-    TextView tvBed;
-    @BindView(R.id.tv_room)
-    TextView tvRoom;
-    @BindView(R.id.tv_name)
-    TextView tvName;
-    @BindView(R.id.tv_age)
-    TextView tvAge;
-    @BindView(R.id.tv_paitent)
-    TextView tvPaitent;
-    @BindView(R.id.tv_card_num)
-    TextView tvCardNum;
-    @BindView(R.id.tv_hos_time)
-    TextView tvHosTime;
-    @BindView(R.id.tv_hos_doctor)
-    TextView tvHosDoctor;
     @BindView(R.id.fl_container)
     FrameLayout flContainer;
     @BindView(R.id.tv_time)
@@ -100,6 +88,38 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
     ImageView ivNet;
     @BindView(R.id.iv_wifi)
     ImageView ivWifi;
+    @BindView(R.id.tv_bed_num)
+    TextView tvBedNum;
+    @BindView(R.id.tv_user_name)
+    TextView tvUserName;
+    @BindView(R.id.tv_sex)
+    TextView tvSex;
+    @BindView(R.id.tv_age)
+    TextView tvAge;
+    @BindView(R.id.tv_hos_name)
+    TextView tvHosName;
+    @BindView(R.id.tv_dept_name)
+    TextView tvDeptName;
+    @BindView(R.id.tv_doctor_name)
+    TextView tvDoctorName;
+    @BindView(R.id.tv_nurse_name)
+    TextView tvNurseName;
+    @BindView(R.id.tv_date)
+    TextView tvDate;
+    @BindView(R.id.tv_nurse_leven)
+    TextView tvNurseLeven;
+    @BindView(R.id.tv_dietCategory)
+    TextView tvDietCategory;
+    @BindView(R.id.drawlayout)
+    EBDrawerLayout drawlayout;
+    @BindView(R.id.ll_have_paitent)
+    LinearLayout llHavePaitent;
+    @BindView(R.id.tv_hos_dept_name)
+    TextView tvHosDeptName;
+    @BindView(R.id.iv_qr_code)
+    ImageView ivQrCode;
+    @BindView(R.id.ll_no_patient)
+    LinearLayout llNoPatient;
     private ActivePadInfo.DataBean activeInfo;
 
     private Disposable disposableProtection;
@@ -156,6 +176,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
 
             }
         });
+
+        tvHosDeptName.setText(activeInfo.getHospitalName()+"【"+activeInfo.getDeptName()+"】");
+
+        ivQrCode.setImageBitmap(QrCodeUtils.generateBitmap(MobileInfoUtil.getICCID
+                (getContext()) + "," + JPushInterface.getRegistrationID(getContext()), 200, 200));
     }
 
     @Override
@@ -177,22 +202,31 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
 
 
     private void setPatientInfo(PatientResponse.DataBean entity) {
-        tvName.setText(entity.getUserName());
-        tvAge.setText(entity.getAge() + "岁");
-        tvHosDoctor.setText(entity.getChargeDoctor());
-        tvHosTime.setText(FormatUtils.FormatDateUtil.parseLong(Long.parseLong(entity.getCreateTime())));
-        tvBed.setText(activeInfo.getHospitalName() + "-" + activeInfo.getDeptName() + "-" + activeInfo.getBedNumber() + "床");
-        tvPaitent.setText(entity.getSex() == 1 ? "男" : "女");
+        PatientResponse.DataBean bean = PatientUtil.getInstance().getPatientData();
+        if (bean == null) {
+            LogUtil.i(TAG, "病人信息为空！");
+            return;
+        }
+        tvBedNum.setText(activeInfo.getBedNumber());
+        tvUserName.setText(bean.getUserName());
+        tvAge.setText(bean.getAge() + "岁");
+        tvHosName.setText("医院：" + activeInfo.getHospitalName());
+        tvDeptName.setText("科室：" + activeInfo.getDeptName());
+        tvDoctorName.setText("主治医师：" + bean.getChargeDoctor());
+        tvNurseName.setText("责任护士：" + bean.getChargeNurse());
+        tvDate.setText("日期：" + DateUtil.getDate("yyyy年MM月dd日  HH:mm:ss"));
+        tvNurseLeven.setText("护理等级：" + bean.getNursingLevel());
+        tvDietCategory.setText("饮食种类：" + bean.getDietCategory());
+        tvSex.setText(bean.getSex() == 1 ? "男" : "女");
+
+        llHavePaitent.setVisibility(View.VISIBLE);
+        llNoPatient.setVisibility(View.GONE);
     }
 
 
     private void outHospital() {
-        tvName.setText("");
-        tvAge.setText("");
-        tvHosDoctor.setText("");
-        tvHosTime.setText("");
-        tvBed.setText(activeInfo.getHospitalName() + "-" + activeInfo.getDeptName() + "-" + activeInfo.getBedNumber() + "床");
-        tvPaitent.setText("");
+        llNoPatient.setVisibility(View.VISIBLE);
+        llHavePaitent.setVisibility(View.GONE);
     }
 
     /**
@@ -370,24 +404,26 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
 
 
     /**
-     *  问卷调查
+     * 问卷调查
+     *
      * @param entity
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void goToBedSide(GotoBedsideEvent entity){
+    public void goToBedSide(GotoBedsideEvent entity) {
         PatientResponse.DataBean info = entity.info;
         start(BedSideCardFragment.newInstance(info));
     }
 
     /**
-     *  床头卡模式
+     * 床头卡模式
+     *
      * @param event
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void bedSide(BedSideEvent event){
-        if(event.getCode()==13){
+    public void bedSide(BedSideEvent event) {
+        if (event.getCode() == 13) {
             start(BedSideCardFragment.newInstance(HomeFragment.entity));
-        }else {
+        } else {
             pop();
         }
     }
@@ -406,12 +442,12 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
     public void getDate(String time, String net, String netType) {
         tvTime.setText(time);
         tvNet.setText(net);
-        if(netType.equals("WIFI")){
+        if (netType.equals("WIFI")) {
             tvNetType.setVisibility(View.VISIBLE);
             tvNetType.setText(netType);
             ivNet.setVisibility(View.GONE);
             ivWifi.setVisibility(View.VISIBLE);
-            int wifi= NetWorkUtil.getWifiLevel(LauncherApplication.getContext());
+            int wifi = NetWorkUtil.getWifiLevel(LauncherApplication.getContext());
             if (wifi > -50 && wifi < 0) {//最强
                 ivWifi.setImageResource(R.mipmap.wifi_level_good);
             } else if (wifi > -70 && wifi < -50) {//较强
@@ -420,10 +456,10 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
                 ivWifi.setImageResource(R.mipmap.wifi_level_normal);
             } else if (wifi > -100 && wifi < -80) {//微弱
                 ivWifi.setImageResource(R.mipmap.wifi_level_bad);
-            }else {
+            } else {
                 ivWifi.setImageResource(R.mipmap.wifi_level_none);
             }
-        }else if(netType.equals("无网络连接") || netType.equals("未知")){
+        } else if (netType.equals("无网络连接") || netType.equals("未知")) {
             ivWifi.setVisibility(View.VISIBLE);
             ivNet.setVisibility(View.VISIBLE);
             tvNetType.setVisibility(View.VISIBLE);
@@ -431,12 +467,12 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
             ivWifi.setImageResource(R.mipmap.wifi_level_none);
             ivNet.setImageResource(R.mipmap.net_level_none);
 
-        }else {
+        } else {
             ivWifi.setVisibility(View.GONE);
             ivNet.setVisibility(View.VISIBLE);
             tvNetType.setVisibility(View.VISIBLE);
             tvNetType.setText(netType);
-            int netDbm=NetWorkUtil.getCurrentNetDBM(LauncherApplication.getContext());
+            int netDbm = NetWorkUtil.getCurrentNetDBM(LauncherApplication.getContext());
             if (netDbm > -75) {
                 ivNet.setImageResource(R.mipmap.net_level_good);
             } else if (netDbm > -85) {
@@ -449,5 +485,12 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
                 ivNet.setImageResource(R.mipmap.net_level_none);
             }
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 }

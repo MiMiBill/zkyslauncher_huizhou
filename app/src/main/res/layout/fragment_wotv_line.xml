@@ -156,4 +156,14 @@
             android:textSize="@dimen/px20" />
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/iv_line_back"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:src="@mipmap/ic_video_close"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:visibility="gone"
+        android:layout_alignParentRight="true"/>
+
 </RelativeLayout>
