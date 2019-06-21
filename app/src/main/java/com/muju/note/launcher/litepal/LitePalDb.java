@@ -43,9 +43,15 @@ public class LitePalDb {
         zkysDataDb.addClassName(UpVideoInfoDao.class.getName());
         LitePal.use(zkysDataDb);
 
-        File file=new File("/sdcard/zkysdb/zkys-data.db");
-        if(!file.exists()){
+       if(LitePal.count(UpVideoInfoDao.class)<=0){
+           UpVideoInfoDao dao=new UpVideoInfoDao();
+           dao.setVideoName("异常数据");
+           dao.save();
+       }
+
+        if(LitePal.count(UpAdvertInfoDao.class)<=0){
             UpAdvertInfoDao dao=new UpAdvertInfoDao();
+            dao.setImei("异常数据");
             dao.save();
         }
 

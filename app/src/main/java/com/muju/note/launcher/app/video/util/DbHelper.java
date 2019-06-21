@@ -133,6 +133,7 @@ public class DbHelper {
             database.close();
         }catch (Exception e){
             e.printStackTrace();
+            LitePalDb.setZkysDataDb();
             UpAdvertInfoDao infoDao=new UpAdvertInfoDao();
             infoDao.setImei("异常数据");
             infoDao.save();
