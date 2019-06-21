@@ -7,7 +7,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -83,14 +85,26 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
     TextView tvNull;
     @BindView(R.id.ll_null)
     LinearLayout llNull;
-    Unbinder unbinder;
-    private long maxVoice=-1;
+    @BindView(R.id.iv_back)
+    ImageView ivBack;
+    @BindView(R.id.tv_back)
+    TextView tvBack;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
+    @BindView(R.id.rel_titlebar)
+    RelativeLayout relTitlebar;
+    @BindView(R.id.iv_line_back)
+    ImageView ivLineBack;
+
+
+    private long maxVoice = -1;
     private boolean isShowDialog = true;
     private List<VideoInfoDao> videoInfoDaos;
     private VideoLineAdapter lineAdapter;
     private VideoOrImageDialog videoOrImageDialog;
     private VideoInfoDao infoDao;
-    private boolean isChangeVolumn=true;
+    private boolean isChangeVolumn = true;
+
     @Override
     public int getLayout() {
         return R.layout.fragment_wotv_line;
@@ -131,14 +145,14 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
             videoView.setOnVolumeChangeListener(new BaseEMVideoView.OnVolumeChangeListener() {
                 @Override
                 public void onVolumeChanged(int volumn) {
-                    LogFactory.l().i("volumn==="+volumn);
-                    if(isChangeVolumn){
+                    LogFactory.l().i("volumn===" + volumn);
+                    if (isChangeVolumn) {
                         int currentVolumn = (int) (volumn * maxVoice / 100d);
-                        LogFactory.l().i("currentVolumn==="+currentVolumn);
+                        LogFactory.l().i("currentVolumn===" + currentVolumn);
                         videoView.setSystemVolume(currentVolumn);
-                        isChangeVolumn=false;
+                        isChangeVolumn = false;
                     }
-                    LogFactory.l().i("当前音量==="+SystemUtils.getCurrentVolume(LauncherApplication.getContext()));
+                    LogFactory.l().i("当前音量===" + SystemUtils.getCurrentVolume(LauncherApplication.getContext()));
                 }
             });
             videoView.registerVideoTouchEventObserver(observer);
@@ -157,9 +171,17 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
             }
         });
 
+        ivLineBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ViewScaleUtil.widthFixed(videoView, 1080, 737);
+                ivLineBack.setVisibility(View.GONE);
+            }
+        });
+
     }
 
-    TouchEventHandler.TouchEventObserver observer=new TouchEventHandler.TouchEventObserver() {
+    TouchEventHandler.TouchEventObserver observer = new TouchEventHandler.TouchEventObserver() {
         @Override
         public void onShortUpTouched(int i, int i1) {
 
@@ -177,7 +199,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
 
         @Override
         public void onVerticalRightTouched(int i, int i1) {
-            isChangeVolumn=true;
+            isChangeVolumn = true;
         }
     };
 
@@ -228,11 +250,11 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
             try {
                 if (videoOrImageDialog == null) {
                     videoOrImageDialog = new VideoOrImageDialog(getActivity(), R.style.dialog);
-                    if (codeDao != null ){
+                    if (codeDao != null) {
                         AdvertsUtil.getInstance().showVideoDialog(codeDao, videoOrImageDialog);
                     }
                 } else {
-                    if(codeDao != null && codeDao.getCloseType()==2){
+                    if (codeDao != null && codeDao.getCloseType() == 2) {
                         videoOrImageDialog.closeBySelf(codeDao.getSecond());
                     }
                     videoOrImageDialog.show();
@@ -244,7 +266,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
     }
 
     /**
-     *  界面可见时
+     * 界面可见时
      */
     @Override
     public void onSupportVisible() {
@@ -253,7 +275,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
     }
 
     /**
-     *  界面不可见时
+     * 界面不可见时
      */
     @Override
     public void onSupportInvisible() {
@@ -295,8 +317,10 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
                 if (isFullScreen) {
                     ViewScaleUtil.widthFixed(videoView, ViewGroup.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.MATCH_PARENT);
+                    ivLineBack.setVisibility(View.VISIBLE);
                 } else {
                     ViewScaleUtil.widthFixed(videoView, 1080, 737);
+                    ivLineBack.setVisibility(View.GONE);
                 }
             }
 
@@ -329,7 +353,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
                     llError.setVisibility(View.VISIBLE);
                     llLoading.setVisibility(View.GONE);
                     RxUtil.closeDisposable(diVerifyPlayingStatus);
-                    if(videoOrImageDialog!=null&&videoOrImageDialog.isShowing()){
+                    if (videoOrImageDialog != null && videoOrImageDialog.isShowing()) {
                         videoOrImageDialog.dismiss();
                     }
                     switch (e.getCode()) {
@@ -482,17 +506,4 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
         super.onDestroy();
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
-        return rootView;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
 }
