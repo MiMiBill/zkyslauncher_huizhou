@@ -9,6 +9,7 @@ import com.lzy.okgo.model.Response;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.app.home.contract.HomeContract;
 import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
+import com.muju.note.launcher.app.home.util.PatientUtil;
 import com.muju.note.launcher.app.video.db.VideoHisDao;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
 import com.muju.note.launcher.app.video.db.VideoInfoTopDao;
@@ -94,7 +95,8 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
                                 > 0) {
                             PatientResponse.DataBean patient = patientResponse.getData().get(0);
                             if (patient.getDisabled()) {
-                                SPUtil.saveDataList(Constants.PATIENT, patientResponse.getData());
+//                                SPUtil.saveDataList(Constants.PATIENT, patientResponse.getData());
+                                PatientUtil.getInstance().setPatientData(patient);
                                 mView.patientInfo(patient);
                             } else {
                                 mView.notPatientInfo();
