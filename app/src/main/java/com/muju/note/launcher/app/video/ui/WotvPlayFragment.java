@@ -12,9 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.devbrackets.android.api.video.impl.VideoErrorInfo;
-import com.devbrackets.android.media.BaseEMVideoView;
 import com.devbrackets.android.media.listener.OnVideoPreparedListener;
-import com.devbrackets.android.media.ui.widget.TouchEventHandler;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
@@ -40,7 +38,6 @@ import com.muju.note.launcher.app.video.util.WoTvUtil;
 import com.muju.note.launcher.app.video.util.wotv.ExpandVideoView2;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.topics.AdvertsTopics;
-import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.DateUtil;
 import com.muju.note.launcher.util.adverts.AdvertsUtil;
@@ -48,7 +45,6 @@ import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
-import com.muju.note.launcher.util.sp.SPUtil;
 import com.unicom.common.VideoSdkConfig;
 import com.unicom.common.base.video.IVideoEvent;
 import com.unicom.common.base.video.expand.ExpandVideoListener;
@@ -95,7 +91,6 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
     ImageView ivColse;
     @BindView(R.id.rel_cornor)
     RelativeLayout relCornor;
-    private boolean isChangeVolumn=true;
     private boolean isCodeFail = false;
     private static final String TAG = "WotvPlayFragment";
     private boolean isShowDialog=true;
@@ -115,17 +110,11 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
     private VideoOrImageDialog videoOrImageDialog;
     // 当前播放的集数
     private static int EPISODE_POSITION;
-
-
     private VideoHisDao videoHisDao;
-
     private Disposable diPayDialog;
-
     private long startTime;
     private LoginDialog loginDialog;
     private WotvPlayErrorDialog errorDialog;
-    private long maxVoice=-1;
-
     public void setHisDao(VideoHisDao videoHisDao) {
         this.videoHisDao = videoHisDao;
     }
@@ -196,57 +185,13 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                 }
             });
 
-            //设置播放器音量
-            maxVoice = SPUtil.getLong(SpTopics.PAD_CONFIG_VOLUME_RATE);
-            if (maxVoice >= 0) {
-                videoView.setOnVolumeChangeListener(new BaseEMVideoView.OnVolumeChangeListener() {
-                    @Override
-                    public void onVolumeChanged(int volumn) {
-//                        LogFactory.l().i("volumn==="+volumn);
-                        if(isChangeVolumn){
-                            int currentVolumn = (int) (volumn * maxVoice / 100d);
-                            LogFactory.l().i("currentVolumn==="+currentVolumn);
-                            videoView.setSystemVolume(currentVolumn);
-                            isChangeVolumn=false;
-                        }
-//                        LogFactory.l().i("当前音量==="+SystemUtils.getCurrentVolume(LauncherApplication.getContext()));
-                    }
-                });
-                videoView.registerVideoTouchEventObserver(observer);
-            }
-
             // 添加历史记录
             videoHisDao.setCreateTime(System.currentTimeMillis() + "");
             VideoService.getInstance().addVideoHisInfo(videoHisDao);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
-
-
-    TouchEventHandler.TouchEventObserver observer=new TouchEventHandler.TouchEventObserver() {
-        @Override
-        public void onShortUpTouched(int i, int i1) {
-
-        }
-
-        @Override
-        public void onHorizontalTouched(int i, int i1) {
-
-        }
-
-        @Override
-        public void onVerticalLeftTouched(int i, int i1) {
-
-        }
-
-        @Override
-        public void onVerticalRightTouched(int i, int i1) {
-            isChangeVolumn=true;
-        }
-    };
-
 
     @Override
     public void initPresenter() {

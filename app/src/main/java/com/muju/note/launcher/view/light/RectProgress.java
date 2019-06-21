@@ -261,6 +261,8 @@ public class RectProgress extends View {
             progress = max;
         } else if (progress < 0)
             progress = 0;
+        computeProgressRect();
+        invalidate();
         //动画
 //        startProgressAnim(oldProgress);
     }

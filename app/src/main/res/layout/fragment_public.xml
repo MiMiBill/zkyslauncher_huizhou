@@ -1,71 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutContent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_bg"
-    android:id="@+id/layoutContent"
-    >
+    android:background="@color/main_bg">
 
-    <ImageView
-        android:id="@+id/iv_img"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
     <LinearLayout
-        android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_weight="4"
-            android:layout_height="match_parent">
-            <ImageView
-                android:id="@+id/iv_code"
-                android:layout_centerInParent="true"
-                android:layout_width="@dimen/px350"
-                android:layout_height="@dimen/px350" />
-        </RelativeLayout>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/title_bar" />
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:background="@color/yellow_gray"
-            android:layout_height="wrap_content">
-            <TextView
-                android:text="1:扫描左侧二维码"
-                android:paddingLeft="10px"
-                android:textSize="17sp"
-                android:gravity="center_vertical"
+            android:layout_margin="@dimen/px20"
+            android:layout_width="match_parent"
+            android:background="@color/white"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/iv_code"
+                android:background="@mipmap/code_bg"
+                android:layout_marginLeft="105px"
+                android:layout_marginRight="97px"
+                android:layout_width="@dimen/px378"
+                android:layout_height="@dimen/px378"
+                android:layout_centerInParent="true" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="100px" />
-            <TextView
-                android:id="@+id/tv_code"
-                android:paddingLeft="10px"
-                android:textSize="17sp"
-                android:text="2:关注后回复验证码"
-                android:gravity="center_vertical"
-                android:layout_width="match_parent"
-                android:layout_height="100px" />
-            <TextView
-                android:paddingLeft="10px"
-                android:text="3:输入收到的验证码"
-                android:textSize="17sp"
-                android:gravity="center_vertical"
-                android:layout_width="match_parent"
-                android:layout_height="100px" />
-            <Button
-                android:id="@+id/btn_code"
-                android:text="我已收到验证码,点此输入"
-                android:textSize="15sp"
-                android:background="@drawable/selector_gird_item"
-                android:layout_width="match_parent"
-                android:layout_height="100px" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:text="操作步骤:"
+                    android:textColor="@color/color_38B4E9"
+                    android:textSize="@dimen/px30"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <LinearLayout
+                    android:background="@color/white_gray2"
+                    android:layout_marginTop="@dimen/px20"
+                    android:layout_marginBottom="@dimen/px20"
+                    android:padding="@dimen/px40"
+                    android:layout_width="488px"
+                    android:orientation="vertical"
+                    android:layout_height="318px">
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="45px">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10px"
+                            android:text="01"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_FF633A"
+                            android:textSize="35px" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10px"
+                            android:textColor="@color/color_585858"
+                            android:layout_marginLeft="@dimen/px18"
+                            android:text="请扫左侧二维码"
+                            android:textSize="25px" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/px16"
+                        android:layout_width="match_parent"
+                        android:layout_height="45px">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10px"
+                            android:text="02"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_FF633A"
+                            android:textSize="35px" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10px"
+                            android:textColor="@color/color_585858"
+                            android:layout_marginLeft="@dimen/px18"
+                            android:text="关注后回复验证码"
+                            android:textSize="25px" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/px16"
+                        android:layout_width="match_parent"
+                        android:layout_height="45px">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10px"
+                            android:text="03"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_FF633A"
+                            android:textSize="35px" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10px"
+                            android:textColor="@color/color_585858"
+                            android:layout_marginLeft="@dimen/px18"
+                            android:text="输入验证码"
+                            android:textSize="25px" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/px16"
+                        android:layout_width="match_parent"
+                        android:layout_height="45px">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10px"
+                            android:text="04"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_FF633A"
+                            android:textSize="35px" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10px"
+                            android:textColor="@color/color_585858"
+                            android:layout_marginLeft="@dimen/px18"
+                            android:text="收到验证码,请输入"
+                            android:textSize="25px" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_code"
+                    android:layout_marginTop="@dimen/px20"
+                    android:layout_width="360px"
+                    android:layout_height="80px"
+                    android:background="@drawable/btn_shape_code"
+                    android:text="点此输入验证码"
+                    android:textColor="@color/white"
+                    android:textSize="25px" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-    <ImageView
-        android:id="@+id/iv_back"
-        android:src="@drawable/icon_return"
-        android:layout_width="60px"
-        android:layout_height="60px" />
+
 </RelativeLayout>

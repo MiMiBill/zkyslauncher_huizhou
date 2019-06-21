@@ -287,6 +287,16 @@
             </intent-filter>
         </receiver>
 
+        <receiver
+            android:name=".broadcast.VolumeBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.media.VOLUME_CHANGED_ACTION" />
+                <action android:name="android.media.EXTRA_VOLUME_STREAM_TYPE" />
+            </intent-filter>
+        </receiver>
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${JPUSH_PKGNAME}.fileProvider"
