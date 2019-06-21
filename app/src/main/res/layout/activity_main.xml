@@ -13,6 +13,7 @@
         android:layout_height="match_parent"></FrameLayout>
 
     <LinearLayout
+        android:id="@+id/lly_draw"
         android:clickable="true"
         android:layout_width="@dimen/px400"
         android:layout_height="match_parent"

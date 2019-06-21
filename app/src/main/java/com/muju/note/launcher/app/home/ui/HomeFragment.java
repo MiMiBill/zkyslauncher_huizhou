@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -23,6 +24,7 @@ import com.muju.note.launcher.app.home.adapter.HomeTopVideoAdapter;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.app.home.contract.HomeContract;
 import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
+import com.muju.note.launcher.app.home.event.DrawOutEvent;
 import com.muju.note.launcher.app.home.event.GetAdvertEvent;
 import com.muju.note.launcher.app.home.event.OutHospitalEvent;
 import com.muju.note.launcher.app.home.event.PatientEvent;
@@ -105,12 +107,20 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     TextView tvName;
     @BindView(R.id.tv_age)
     TextView tvAge;
-    @BindView(R.id.tv_ency)
-    TextView tvEncy;
+    @BindView(R.id.tv_bed_num)
+    TextView tvBedNum;
     @BindView(R.id.tv_sex)
     TextView tvSex;
-    @BindView(R.id.tv_hos_card)
-    TextView tvHosCard;
+    @BindView(R.id.tv_hos)
+    TextView tvHos;
+    @BindView(R.id.tv_food)
+    TextView tvFood;
+    @BindView(R.id.tv_hl)
+    TextView tvHl;
+    @BindView(R.id.tv_dep)
+    TextView tvDep;
+    @BindView(R.id.tv_hos_nurse)
+    TextView tvHosNurse;
     @BindView(R.id.tv_hos_time)
     TextView tvHosTime;
     @BindView(R.id.tv_hos_doctor)
@@ -147,8 +157,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     LinearLayout llyOrder;
     @BindView(R.id.lly_cabinet)
     LinearLayout llyCabinet;
-    @BindView(R.id.tv_hos_info)
-    TextView tvHosInfo;
+    @BindView(R.id.rel_card)
+    RelativeLayout relCard;
     @BindView(R.id.tv_no_hos_info)
     TextView tvNoHosInfo;
     @BindView(R.id.tv_net)
@@ -204,6 +214,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         llyOrder.setOnClickListener(this);
         llyCabinet.setOnClickListener(this);
         llHosGame.setOnClickListener(this);
+        relCard.setOnClickListener(this);
 
         // 加载首页历史记录
         videoHisDaos = new ArrayList<>();
@@ -407,11 +418,13 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         tvAge.setText(entity.getAge() + "岁");
         tvSex.setText(entity.getSex() == 1 ? "男" : "女");
         tvHosDoctor.setText(entity.getChargeDoctor());
-        tvHosTime.setText(FormatUtils.FormatDateUtil.parseLong(Long.parseLong(entity
-                .getCreateTime())));
-        tvEncy.setText(activeInfo.getDeptName());
-        tvHosInfo.setText(activeInfo.getHospitalName() + "-" + activeInfo.getDeptName() + "-" +
-                activeInfo.getBedNumber() + "床");
+        tvHosTime.setText(FormatUtils.FormatDateUtil.parseLong(Long.parseLong(entity.getCreateTime())));
+        tvBedNum.setText(activeInfo.getBedNumber());
+        tvHos.setText(activeInfo.getHospitalName());
+        tvFood.setText(entity.getDietCategory());
+        tvHl.setText(entity.getNursingLevel());
+        tvDep.setText(activeInfo.getDeptName());
+        tvHosNurse.setText(entity.getChargeNurse());
     }
 
     //没有入院信息
@@ -554,8 +567,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 break;
             case R.id.lly_finance: // 金融财富
                 start(new FinanceFragment());
-//                if(entity!=null)
-//                EventBus.getDefault().post(new GotoBedsideEvent(entity));
                 break;
             case R.id.lly_insureance: // 保险服务
                 start(new InsureanceFragment());
@@ -565,6 +576,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 break;
             case R.id.lly_cabinet: // 屏安柜
                 start(new CabinetFragment());
+                break;
+            case R.id.rel_card: // 侧边栏
+                EventBus.getDefault().post(new DrawOutEvent());
                 break;
         }
     }

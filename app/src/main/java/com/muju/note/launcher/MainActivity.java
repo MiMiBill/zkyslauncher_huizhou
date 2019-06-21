@@ -3,6 +3,7 @@ package com.muju.note.launcher;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -20,6 +21,7 @@ import com.muju.note.launcher.app.adtask.presenter.MainPresenter;
 import com.muju.note.launcher.app.bedsidecard.event.GotoBedsideEvent;
 import com.muju.note.launcher.app.bedsidecard.ui.BedSideCardFragment;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
+import com.muju.note.launcher.app.home.event.DrawOutEvent;
 import com.muju.note.launcher.app.home.event.OutHospitalEvent;
 import com.muju.note.launcher.app.home.event.PatientInfoEvent;
 import com.muju.note.launcher.app.home.ui.HomeFragment;
@@ -47,7 +49,7 @@ import com.muju.note.launcher.entity.PushCustomMessageEntity;
 import com.muju.note.launcher.service.MainService;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.Constants;
-import com.muju.note.launcher.util.DateUtil;
+import com.muju.note.launcher.util.FormatUtils;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.log.LogUtil;
@@ -120,6 +122,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
     ImageView ivQrCode;
     @BindView(R.id.ll_no_patient)
     LinearLayout llNoPatient;
+    @BindView(R.id.lly_draw)
+    LinearLayout llDraw;
     private ActivePadInfo.DataBean activeInfo;
 
     private Disposable disposableProtection;
@@ -177,7 +181,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
             }
         });
 
-        tvHosDeptName.setText(activeInfo.getHospitalName()+"【"+activeInfo.getDeptName()+"】");
+        tvHosDeptName.setText(activeInfo.getHospitalName()+"-"+activeInfo.getDeptName()+"-"+activeInfo.getBedNumber() + "床");
 
         ivQrCode.setImageBitmap(QrCodeUtils.generateBitmap(MobileInfoUtil.getICCID
                 (getContext()) + "," + JPushInterface.getRegistrationID(getContext()), 200, 200));
@@ -214,7 +218,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
         tvDeptName.setText("科室：" + activeInfo.getDeptName());
         tvDoctorName.setText("主治医师：" + bean.getChargeDoctor());
         tvNurseName.setText("责任护士：" + bean.getChargeNurse());
-        tvDate.setText("日期：" + DateUtil.getDate("yyyy年MM月dd日  HH:mm:ss"));
+        tvDate.setText("日期：" + FormatUtils.FormatDateUtil.parseLong(Long.parseLong(entity.getCreateTime())));
         tvNurseLeven.setText("护理等级：" + bean.getNursingLevel());
         tvDietCategory.setText("饮食种类：" + bean.getDietCategory());
         tvSex.setText(bean.getSex() == 1 ? "男" : "女");
@@ -402,6 +406,17 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
         start(SatisfactionSurveyFragment.newInstance(entity.padsurvey));
     }
 
+    /**
+     * 侧边栏滑出
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void drawOut(DrawOutEvent event) {
+       if(!drawlayout.isDrawerOpen(GravityCompat.END)){
+            drawlayout.openDrawer(GravityCompat.END);
+       }
+    }
 
     /**
      * 问卷调查
