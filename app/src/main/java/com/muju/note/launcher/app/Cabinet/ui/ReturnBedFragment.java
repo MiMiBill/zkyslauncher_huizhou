@@ -98,6 +98,11 @@ public class ReturnBedFragment extends BaseFragment<CabinetOrderPresenter> imple
     }
 
     @Override
+    public void findByDid(String data) {
+
+    }
+
+    @Override
     public int getLayout() {
         return R.layout.fragment_return_bed;
     }

@@ -10,11 +10,13 @@ public interface CabinetOrderContract {
         void unLockFail();
         void returnBedFail();
         void reTurnBed(String data);
+        void findByDid(String data);
     }
 
 
     interface Presenter extends IPresenter<View> {
         void unLock(String id);
         void returnBed(int id);
+        void findByDid(String did);
     }
 }

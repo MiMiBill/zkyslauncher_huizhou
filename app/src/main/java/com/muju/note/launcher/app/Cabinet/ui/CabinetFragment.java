@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.Cabinet.bean.CabinetBean;
-import com.muju.note.launcher.app.Cabinet.bean.LockBean;
 import com.muju.note.launcher.app.Cabinet.contract.CabinetContract;
 import com.muju.note.launcher.app.Cabinet.event.ReturnBedEvent;
 import com.muju.note.launcher.app.Cabinet.presenter.CabinetPresenter;
@@ -264,17 +263,31 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
         try {
             JSONObject jsonObject = new JSONObject(data);
             if (jsonObject.optInt("code") == 200) {
-                LockBean lockBean = new Gson().fromJson(data, LockBean.class);
-                if (lockBean != null && lockBean.getData() != null && lockBean.getData().getCode
-                        () == 200
-                        && lockBean.getData().getObject() != null && lockBean.getData().getObject
-                        ().getCode() == 200) {
-                    start(UnlockFragment.newInstance(1, dataBean));
-                } else {
-                    start(UnlockFragment.newInstance(2, dataBean));
+                if(jsonObject.optString("data")!=null){
+                    String objData=jsonObject.optString("data");
+                    JSONObject obj=new JSONObject(objData);
+                    if(obj.optInt("code")==200){
+                        if (obj.optString("object").equals("ok")){
+                            start(UnlockFragment.newInstance(1, dataBean,""));
+                        }else {
+                            String object = obj.optString("object");
+                            JSONObject lockObj=new JSONObject(object);
+                            if(lockObj!=null){
+                                if(lockObj.optInt("code")==200){
+                                    start(UnlockFragment.newInstance(1, dataBean,""));
+                                }else {
+                                    start(UnlockFragment.newInstance(2, dataBean,lockObj.optString("msg")));
+                                }
+                            }else {
+                                start(UnlockFragment.newInstance(2, dataBean,"连接第三方服务器异常"));
+                            }
+                        }
+                    }else {
+                        start(UnlockFragment.newInstance(2, dataBean,"连接第三方服务器异常"));
+                    }
                 }
-            } else {
-                start(UnlockFragment.newInstance(2, dataBean));
+            }else {
+                start(UnlockFragment.newInstance(2, dataBean,"服务器异常"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -288,7 +301,7 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
 
     @Override
     public void unLockFail() {
-        start(UnlockFragment.newInstance(2, dataBean));
+        start(UnlockFragment.newInstance(2, dataBean,"网络错误"));
     }
 
     @Override
@@ -310,6 +323,12 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    @Override
+    public void findByDid(String data) {
+
     }
 
 }

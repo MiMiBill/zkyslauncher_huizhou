@@ -68,5 +68,24 @@ public class CabinetPresenter extends BasePresenter<CabinetContract.View> implem
                 });
     }
 
+    @Override
+    public void findByDid(String did) {
+        OkGo.<String>post(UrlUtil.findByDId())
+                .tag(UrlUtil.findByDId())
+                .params("did",did)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        mView.findByDid(response.body());
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        mView.unLockFail();
+                    }
+                });
+    }
+
 
 }

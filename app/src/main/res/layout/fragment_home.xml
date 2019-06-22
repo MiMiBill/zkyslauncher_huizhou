@@ -462,6 +462,7 @@
 
                                     <TextView
                                         android:id="@+id/tv_no_hos_info"
+                                        android:singleLine="true"
                                         android:layout_width="match_parent"
                                         android:textSize="22px"
                                         android:gravity="center"
@@ -490,6 +491,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/px10"
                                     android:gravity="center"
+                                    android:visibility="gone"
                                     android:text="请联系护士办理入院信息登记"
                                     android:textColor="@color/color_585858"
                                     android:textSize="12sp" />
