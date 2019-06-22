@@ -1,8 +1,8 @@
 package com.muju.note.launcher.url;
 
 public class UrlUtil {
-        public static final String HOST_DEFAULT = "http://pad.zgzkys.com";
-//    public static final String HOST_DEFAULT = "http://test.pad.zgzkys.com";
+//        public static final String HOST_DEFAULT = "http://pad.zgzkys.com";
+    public static final String HOST_DEFAULT = "http://test.pad.zgzkys.com";
 //    public static final String HOST_DEFAULT = "http://192.168.1.200:8086";
 
     public static String getHost() {
@@ -271,5 +271,10 @@ public class UrlUtil {
     //屏还床
     public static String returnBed() {
         return getHost() + "/cabinet/returnBed";
+    }
+
+    //查询锁状态
+    public static String findByDId() {
+        return getHost() + "/cabinet/findByDid";
     }
 }

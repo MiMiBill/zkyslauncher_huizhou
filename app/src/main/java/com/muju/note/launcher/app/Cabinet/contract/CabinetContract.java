@@ -12,6 +12,7 @@ public interface CabinetContract {
         void unLockFail();
         void returnBedFail();
         void reTurnBed(String data);
+        void findByDid(String data);
     }
 
 
@@ -19,5 +20,6 @@ public interface CabinetContract {
         void getCabnetOrder();
         void unLock(String did);
         void returnBed(int id);
+        void findByDid(String did);
     }
 }

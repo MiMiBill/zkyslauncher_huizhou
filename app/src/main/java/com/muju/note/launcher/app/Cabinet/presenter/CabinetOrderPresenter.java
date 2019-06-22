@@ -10,8 +10,6 @@ import com.muju.note.launcher.url.UrlUtil;
 
 public class CabinetOrderPresenter extends BasePresenter<CabinetOrderContract.View> implements CabinetOrderContract.Presenter {
 
-
-
     @Override
     public void unLock(String did) {
         OkGo.<String>post(UrlUtil.unLock())
@@ -46,6 +44,25 @@ public class CabinetOrderPresenter extends BasePresenter<CabinetOrderContract.Vi
                     public void onError(Response<String> response) {
                         super.onError(response);
                         mView.returnBedFail();
+                    }
+                });
+    }
+
+    @Override
+    public void findByDid(String did) {
+        OkGo.<String>post(UrlUtil.findByDId())
+                .tag(UrlUtil.findByDId())
+                .params("did",did)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        mView.findByDid(response.body());
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        mView.unLockFail();
                     }
                 });
     }

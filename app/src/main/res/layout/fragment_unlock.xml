@@ -61,6 +61,7 @@
         <Button
             android:id="@+id/btn_su"
             android:text="完成"
+            android:visibility="gone"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:layout_below="@id/tv_su"
