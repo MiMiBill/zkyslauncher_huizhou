@@ -358,11 +358,6 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                     }
                 }
             }
-
-            @Override
-            public void playHalfHour() {
-
-            }
         });
     }
 
