@@ -2,12 +2,16 @@ package com.muju.note.launcher.app.msg.ui;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.muju.note.launcher.R;
+import com.muju.note.launcher.app.hostipal.service.MissionService;
+import com.muju.note.launcher.app.hostipal.ui.HospitalMissionPdfFragment;
+import com.muju.note.launcher.app.hostipal.ui.HospitalMissionVideoFragment;
 import com.muju.note.launcher.app.msg.adapter.MsgAdapter;
 import com.muju.note.launcher.app.msg.contract.MsgContract;
 import com.muju.note.launcher.app.msg.db.CustomMessageDao;
@@ -16,7 +20,9 @@ import com.muju.note.launcher.app.publicui.WebViewFragment;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.util.log.LogUtil;
+import com.muju.note.launcher.util.sdcard.SdcardConfig;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,9 +66,26 @@ public class MsgFragment extends BaseFragment<MsgPresenter> implements View.OnCl
         msgAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                LogUtil.d(TAG,"title:"+customMessageDaos.get(position).getTitle());
-                LogUtil.d(TAG,"url:"+customMessageDaos.get(position).getUrl());
-                start(WebViewFragment.newInstance(customMessageDaos.get(position).getTitle(),customMessageDaos.get(position).getUrl()));
+                CustomMessageDao dao=customMessageDaos.get(position);
+                if (dao.getType().equals("pdf")) {
+                    File file = new File(SdcardConfig.RESOURCE_FOLDER, dao.getUrl().hashCode() + ".pdf");
+                    if (!file.exists()) {
+                        showToast("正在下载中，请稍后重试");
+                        MissionService.getInstance().downMission();
+                        return;
+                    }
+                    start(HospitalMissionPdfFragment.newInstance(dao.getUrl()));
+                } else if(dao.getType().equals("video")) {
+                    File file = new File(SdcardConfig.RESOURCE_FOLDER, dao.getUrl().hashCode() + ".mp4");
+                    if (!file.exists()) {
+                        showToast("正在下载中，请稍后重试");
+                        MissionService.getInstance().downMission();
+                        return;
+                    }
+                    start(HospitalMissionVideoFragment.newInstance(dao.getUrl()));
+                }else {
+                    start(WebViewFragment.newInstance(dao.getTitle(),dao.getUrl()));
+                }
             }
         });
 

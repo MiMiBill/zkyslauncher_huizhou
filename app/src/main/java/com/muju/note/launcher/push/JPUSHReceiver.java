@@ -199,17 +199,11 @@ public class JPUSHReceiver extends BroadcastReceiver {
 
     /**
      *  处理医院宣教推送
-     * @param data
      */
-    private void pushCustomMessage(String data){
+    private void pushCustomMessage(String id){
         try {
             FileUtils.playReplay(LauncherApplication.getInstance().getApplicationContext(), R.raw.messagetips);
-            CustomMessageDao dao=new Gson().fromJson(data,CustomMessageDao.class);
-            dao.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(System.currentTimeMillis()));
-            dao.setCreateTime(System.currentTimeMillis());
-            LitePalDb.setZkysDb();
-            dao.save();
-            EventBus.getDefault().post(new PushCustomMessageEntity(dao.getTitle(),dao.getUrl(),dao.getId()));
+            EventBus.getDefault().post(new PushCustomMessageEntity(id));
         }catch (Exception e){
             e.printStackTrace();
         }

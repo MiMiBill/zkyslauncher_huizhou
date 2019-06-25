@@ -28,8 +28,8 @@ import java.io.File;
 
 public class LitePalDb {
 
-    public static final LitePalDB zkysDataDb=new LitePalDB("zkys-data",26);
-    public static final LitePalDB zkysDb=new LitePalDB("zkys",26);
+    public static final LitePalDB zkysDataDb=new LitePalDB("zkys-data",27);
+    public static final LitePalDB zkysDb=new LitePalDB("zkys",27);
 
     public static final String DBNAME_ZKYS_DATA="/sdcard/zkysdb/zkys-data.db";
 

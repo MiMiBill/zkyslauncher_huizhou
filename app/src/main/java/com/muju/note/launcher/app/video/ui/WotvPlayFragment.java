@@ -208,6 +208,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
         switch (v.getId()) {
             case R.id.iv_back:
                 isShowDialog=false;
+                videoView.pause();
                 pop();
                 break;
         }
@@ -859,16 +860,22 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
+    public void onDestroyView() {
+        if (videoView != null) {
+            videoView.onDestroy();
+        }
+        RxUtil.closeDisposable(disposableSlPay);
+        RxUtil.closeDisposable(diPayDialog);
+        RxUtil.closeDisposable(disposableIsValid);
+        RxUtil.closeDisposable(diVerifyPlayingStatus);
+        super.onDestroyView();
+    }
+
+    @Override
     public void onDestroy() {
         try {
             VideoService.getInstance().addVideoCount(videoHisDao.getVideoId() + "",videoHisDao.getCid(), videoHisDao.getName(), startTime, System.currentTimeMillis());
             VideoService.getInstance().addVideoInfoDb(videoHisDao.getVideoId() + "",videoHisDao.getCid(), videoHisDao.getName(), startTime, System.currentTimeMillis());
-            if (videoView != null) {
-                videoView.onDestroy();
-            }
-            RxUtil.closeDisposable(disposableSlPay);
-            RxUtil.closeDisposable(diPayDialog);
-            RxUtil.closeDisposable(disposableIsValid);
             if (handler != null) {
                 handler.removeMessages(SHOW_PAY_DIALOG);
                 handler.removeMessages(0x01);

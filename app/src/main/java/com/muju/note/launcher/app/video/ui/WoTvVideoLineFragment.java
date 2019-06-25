@@ -434,11 +434,17 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
     }
 
     @Override
+    public void onDestroyView() {
+        if (videoView != null) {
+            videoView.onDestroy();
+        }
+        RxUtil.closeDisposable(diVerifyPlayingStatus);
+        super.onDestroyView();
+    }
+
+    @Override
     public void onDestroy() {
         try {
-            if (videoView != null) {
-                videoView.onDestroy();
-            }
             if (videoOrImageDialog != null && videoOrImageDialog.isShowing()) {
                 videoOrImageDialog.dismiss();
             }
