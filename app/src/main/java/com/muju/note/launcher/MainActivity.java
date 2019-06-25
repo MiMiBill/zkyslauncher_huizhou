@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,7 +27,12 @@ import com.muju.note.launcher.app.home.event.OutHospitalEvent;
 import com.muju.note.launcher.app.home.event.PatientInfoEvent;
 import com.muju.note.launcher.app.home.ui.HomeFragment;
 import com.muju.note.launcher.app.home.util.PatientUtil;
+import com.muju.note.launcher.app.hostipal.db.MissionInfoDao;
+import com.muju.note.launcher.app.hostipal.service.MissionService;
+import com.muju.note.launcher.app.hostipal.ui.HospitalMissionPdfFragment;
+import com.muju.note.launcher.app.hostipal.ui.HospitalMissionVideoFragment;
 import com.muju.note.launcher.app.luckdraw.ui.LuckDrawFragment;
+import com.muju.note.launcher.app.msg.db.CustomMessageDao;
 import com.muju.note.launcher.app.msg.dialog.CustomMsgDialog;
 import com.muju.note.launcher.app.publicui.AdvideoViewFragment;
 import com.muju.note.launcher.app.publicui.LargePicFragment;
@@ -46,6 +52,7 @@ import com.muju.note.launcher.entity.AdvertWebEntity;
 import com.muju.note.launcher.entity.BedSideEvent;
 import com.muju.note.launcher.entity.PushAutoMsgEntity;
 import com.muju.note.launcher.entity.PushCustomMessageEntity;
+import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.service.MainService;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.Constants;
@@ -56,13 +63,19 @@ import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.net.NetWorkUtil;
 import com.muju.note.launcher.util.qr.QrCodeUtils;
 import com.muju.note.launcher.util.rx.RxUtil;
+import com.muju.note.launcher.util.sdcard.SdcardConfig;
 import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.view.EBDrawerLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.litepal.LitePal;
+import org.litepal.crud.callback.FindCallback;
+import org.litepal.crud.callback.FindMultiCallback;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -181,7 +194,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
             }
         });
 
-        tvHosDeptName.setText(activeInfo.getHospitalName()+"-"+activeInfo.getDeptName()+"-"+activeInfo.getBedNumber() + "床");
+        tvHosDeptName.setText(activeInfo.getHospitalName() + "-" + activeInfo.getDeptName() + "-" + activeInfo.getBedNumber() + "床");
 
         ivQrCode.setImageBitmap(QrCodeUtils.generateBitmap(MobileInfoUtil.getICCID
                 (getContext()) + "," + JPushInterface.getRegistrationID(getContext()), 200, 200));
@@ -322,7 +335,44 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void pushCustomMsg(PushCustomMessageEntity entity) {
-        start(WebViewFragment.newInstance(entity.getTitle(), entity.getUrl(), entity.getCustomId(), true, 0));
+        LogUtil.d(TAG, "宣教推送ID：" + entity.getId());
+        LitePal.where("missionid=?", entity.getId()).findFirstAsync(MissionInfoDao.class).listen(new FindCallback<MissionInfoDao>() {
+            @Override
+            public void onFinish(MissionInfoDao missionInfoDao) {
+                if (missionInfoDao == null) {
+                    return;
+                }
+                String type;
+                if (TextUtils.isEmpty(missionInfoDao.getVideo())) {
+                    File file = new File(SdcardConfig.RESOURCE_FOLDER, missionInfoDao.getFrontCover().hashCode() + ".pdf");
+                    if (!file.exists()) {
+                        showToast("正在下载中，请稍后重试");
+                        MissionService.getInstance().downMission();
+                        return;
+                    }
+                    start(HospitalMissionPdfFragment.newInstance(missionInfoDao.getFrontCover()));
+                    type="pdf";
+                } else {
+                    File file = new File(SdcardConfig.RESOURCE_FOLDER, missionInfoDao.getVideo().hashCode() + ".mp4");
+                    if (!file.exists()) {
+                        showToast("正在下载中，请稍后重试");
+                        MissionService.getInstance().downMission();
+                        return;
+                    }
+                    start(HospitalMissionVideoFragment.newInstance(missionInfoDao.getVideo()));
+                    type="video";
+                }
+
+                CustomMessageDao dao = new CustomMessageDao();
+                dao.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(System.currentTimeMillis()));
+                dao.setCreateTime(System.currentTimeMillis());
+                dao.setType(type);
+                dao.setTitle(missionInfoDao.getTitle());
+                dao.setMsgId(missionInfoDao.getMissionId());
+                LitePalDb.setZkysDb();
+                dao.save();
+            }
+        });
     }
 
     /**
@@ -413,9 +463,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void drawOut(DrawOutEvent event) {
-       if(!drawlayout.isDrawerOpen(GravityCompat.END)){
+        if (!drawlayout.isDrawerOpen(GravityCompat.END)) {
             drawlayout.openDrawer(GravityCompat.END);
-       }
+        }
     }
 
     /**
@@ -436,11 +486,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void bedSide(BedSideEvent event) {
-        LogUtil.d(TAG,"bedCode:"+event.getCode());
+        LogUtil.d(TAG, "bedCode:" + event.getCode());
         if (event.getCode() == 13) {
             start(BedSideCardFragment.newInstance(HomeFragment.entity));
         } else {
-            popTo(HomeFragment.class,false);
+            popTo(HomeFragment.class, false);
         }
     }
 

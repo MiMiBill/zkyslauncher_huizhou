@@ -4,6 +4,7 @@ import org.litepal.crud.LitePalSupport;
 
 public class CustomMessageDao extends LitePalSupport {
     private int id;
+    private int msgId;
     private int xjId;
     private String title;
     private String type;
@@ -11,6 +12,14 @@ public class CustomMessageDao extends LitePalSupport {
     private String url;
     private String time;
     private long createTime;
+
+    public int getMsgId() {
+        return msgId;
+    }
+
+    public void setMsgId(int msgId) {
+        this.msgId = msgId;
+    }
 
     public long getCreateTime() {
         return createTime;
