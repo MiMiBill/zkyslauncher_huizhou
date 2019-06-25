@@ -436,10 +436,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void bedSide(BedSideEvent event) {
+        LogUtil.d(TAG,"bedCode:"+event.getCode());
         if (event.getCode() == 13) {
             start(BedSideCardFragment.newInstance(HomeFragment.entity));
         } else {
-            pop();
+            popTo(HomeFragment.class,false);
         }
     }
 
