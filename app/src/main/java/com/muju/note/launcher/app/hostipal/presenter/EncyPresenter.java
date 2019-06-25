@@ -63,7 +63,7 @@ public class EncyPresenter extends BasePresenter<EncyHosContract.View> implement
     @Override
     public void queryEncyClopediapage(int columnId,int pageNum,int type) {
         LitePalDb.setZkysDb();
-        LitePal.where("columnId ="+columnId).limit(12).offset(pageNum).findAsync(InfomationDao.class).listen(new FindMultiCallback<InfomationDao>() {
+        LitePal.where("columnId ="+columnId).limit(12).offset(pageNum*10).findAsync(InfomationDao.class).listen(new FindMultiCallback<InfomationDao>() {
             @Override
             public void onFinish(List<InfomationDao> list) {
                 if(list==null||list.size()<=0){
