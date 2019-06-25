@@ -44,12 +44,13 @@ public class VideoPayDialog extends Dialog {
     TextView tvPayTime1;
     @BindView(R.id.llPayCode)
     LinearLayout llPayCode;
-
+    private int type=0;
     private View.OnClickListener listener;
 
-    public VideoPayDialog(Context context, int themeResId, View.OnClickListener listener) {
+    public VideoPayDialog(Context context, int themeResId,int type, View.OnClickListener listener) {
         super(context, themeResId);
         this.listener = listener;
+        this.type = type;
     }
 
     @Override
@@ -57,6 +58,9 @@ public class VideoPayDialog extends Dialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_pay_alert);
         ButterKnife.bind(this);
+        if(type==0){
+            tvLogin.setVisibility(View.VISIBLE);
+        }
         ivClose.setOnClickListener(listener);
         ivClose2.setOnClickListener(listener);
         tvHelp.setOnClickListener(listener);

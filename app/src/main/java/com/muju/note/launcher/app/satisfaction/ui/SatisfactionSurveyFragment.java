@@ -145,6 +145,12 @@ public class SatisfactionSurveyFragment extends BaseFragment<SatisfationPresente
 
 
     @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
+        hideSoftInput();
+    }
+
+    @Override
     public void showError(String msg) {
 
     }

@@ -118,7 +118,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
     public void setHisDao(VideoHisDao videoHisDao) {
         this.videoHisDao = videoHisDao;
     }
-
+    private int dialogType=0;  //0表示有公众号任务
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -467,7 +467,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
             }
             AdvertsCodeDao codeDao = LitePal.where("code =?", AdvertsTopics.CODE_VIDEO_CORNER).
                     findFirst(AdvertsCodeDao.class);
-            if (codeDao != null ) {
+            if (codeDao != null && (!codeDao.getResourceUrl().equals(""))) {
                 AdvertsUtil.getInstance().showByImageView(getActivity(), codeDao, ivCorner, ivColse, relCornor);
             }
         }
@@ -648,7 +648,15 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
         }
         //开启轮询
         selectPayInterval();
-        payDialog = new VideoPayDialog(getActivity(), R.style.DialogFullscreen, new View.OnClickListener() {
+
+        AdvertsCodeDao codeDao = LitePal.where("taskType =?", "1").findFirst(AdvertsCodeDao.class);
+        if (codeDao != null && (!codeDao.getTaskUrl().equals(""))) {
+            dialogType=0;
+        }else {
+            dialogType=1;
+        }
+
+        payDialog = new VideoPayDialog(getActivity(), R.style.DialogFullscreen,dialogType, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {

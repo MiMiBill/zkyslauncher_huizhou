@@ -89,6 +89,7 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
     public void initData() {
         activeInfo = ActiveUtils.getPadActiveInfo();
         info = (PatientResponse.DataBean) getArguments().getSerializable(BEDSIDE_INFO);
+        if(info!=null)
         setPatientInfo(info);
     }
 
