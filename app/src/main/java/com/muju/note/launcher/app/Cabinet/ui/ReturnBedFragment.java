@@ -29,8 +29,6 @@ import butterknife.OnClick;
  */
 public class ReturnBedFragment extends BaseFragment<CabinetOrderPresenter> implements CabinetOrderContract.View {
     private static String RETURNBED_CABINET_BEAN = "returnbed_cabinet_bean";
-    private static String RETURNBED_TYPE = "returnbed_type";
-    private static String RETURNBED_FAIL = "returnbed_fail";
     @BindView(R.id.ll_back)
     LinearLayout llBack;
     @BindView(R.id.tv_status)
@@ -54,13 +52,11 @@ public class ReturnBedFragment extends BaseFragment<CabinetOrderPresenter> imple
     @BindView(R.id.lly_price)
     LinearLayout llyPrice;
     private CabinetBean.DataBean dataBean;
-    private int type = 1; //表示成功  2表示失败
-    private String reason="";
-    public static ReturnBedFragment newInstance(int type, CabinetBean.DataBean dataBean,String reason) {
+    private boolean isSuccess=false;
+
+    public static ReturnBedFragment newInstance(CabinetBean.DataBean dataBean) {
         Bundle args = new Bundle();
         args.putSerializable(RETURNBED_CABINET_BEAN, dataBean);
-        args.putInt(RETURNBED_TYPE, type);
-        args.putString(RETURNBED_FAIL, reason);
         ReturnBedFragment fragment = new ReturnBedFragment();
         fragment.setArguments(args);
         return fragment;
@@ -79,18 +75,19 @@ public class ReturnBedFragment extends BaseFragment<CabinetOrderPresenter> imple
 
     @Override
     public void returnBedFail() {
-        showToast("归还失败,请稍后再试");
+        setFailUi("归还失败,请稍后再试");
     }
 
     @Override
     public void reTurnBed(String data) {
         try {
-            JSONObject jsonObject = new JSONObject(data);
+            JSONObject jsonObject = new JSONObject(data); //101812
             if (jsonObject.optInt("code") == 200) {
-                type=1;
+                isSuccess=true;
                 setSuccessUi();
             } else {
-               showToast("归还失败,请稍后再试");
+                isSuccess=false;
+                setFailUi(jsonObject.optString("msg"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -110,13 +107,7 @@ public class ReturnBedFragment extends BaseFragment<CabinetOrderPresenter> imple
     @Override
     public void initData() {
         dataBean = (CabinetBean.DataBean) getArguments().getSerializable(RETURNBED_CABINET_BEAN);
-        type = getArguments().getInt(RETURNBED_TYPE);
-        reason = getArguments().getString(RETURNBED_FAIL);
-        if(type==1){
-            setSuccessUi();
-        }else {
-            setFailUi(reason);
-        }
+        mPresenter.returnBed(dataBean.getId());
     }
 
     //失败
@@ -140,7 +131,8 @@ public class ReturnBedFragment extends BaseFragment<CabinetOrderPresenter> imple
         long formartTime = DateUtil.formartTime(dataBean.getLeaseTime());
         tvTime.setText("租用时间:"+DateUtil.getTime((int)(currentTime-formartTime)));
         tvRent.setText("归还成功,押金"+dataBean.getDeposit()+"元已退还到支付的账户中,请注意查收");
-        tvRentPrice.setText("¥"+ArithUtil.add(dataBean.getDeposit(),dataBean.getPayPrice()));
+//        tvRentPrice.setText("¥"+ArithUtil.add(dataBean.getDeposit(),dataBean.getPayPrice()));
+        tvRentPrice.setText("¥"+ArithUtil.add(0.0,dataBean.getPayPrice()));
     }
 
     @Override
@@ -158,13 +150,13 @@ public class ReturnBedFragment extends BaseFragment<CabinetOrderPresenter> imple
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_back:
-                if(type==1){
+                if(isSuccess){
                     EventBus.getDefault().post(new ReturnBedEvent());
                 }
                 pop();
                 break;
             case R.id.btn_su:
-                if(type==1){
+                if(isSuccess){
                     pop();
                     EventBus.getDefault().post(new ReturnBedEvent());
                 }else {

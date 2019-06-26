@@ -148,12 +148,12 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
                 break;
             case R.id.btn_unlock:
                 if (isOrder) {
-                    mPresenter.unLock(dataBean.getCabinetCode());
+                    start(UnlockFragment.newInstance(dataBean));
                 }
                 break;
             case R.id.btn_lock:
                 if (isOrder) {
-                    mPresenter.returnBed(dataBean.getId());
+                    start(ReturnBedFragment.newInstance(dataBean));
                 }
                 break;
             case R.id.iv_cabinet_play:
@@ -260,38 +260,7 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
 
     @Override
     public void unLock(String data) {
-        try {
-            JSONObject jsonObject = new JSONObject(data);
-            if (jsonObject.optInt("code") == 200) {
-                if(jsonObject.optString("data")!=null){
-                    String objData=jsonObject.optString("data");
-                    JSONObject obj=new JSONObject(objData);
-                    if(obj.optInt("code")==200){
-                        if (obj.optString("object").equals("ok")){
-                            start(UnlockFragment.newInstance(1, dataBean,""));
-                        }else {
-                            String object = obj.optString("object");
-                            JSONObject lockObj=new JSONObject(object);
-                            if(lockObj!=null){
-                                if(lockObj.optInt("code")==200){
-                                    start(UnlockFragment.newInstance(1, dataBean,""));
-                                }else {
-                                    start(UnlockFragment.newInstance(2, dataBean,lockObj.optString("msg")));
-                                }
-                            }else {
-                                start(UnlockFragment.newInstance(2, dataBean,"连接第三方服务器异常"));
-                            }
-                        }
-                    }else {
-                        start(UnlockFragment.newInstance(2, dataBean,"连接第三方服务器异常"));
-                    }
-                }
-            }else {
-                start(UnlockFragment.newInstance(2, dataBean,"服务器异常"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
     }
 
     @Override
@@ -301,28 +270,17 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
 
     @Override
     public void unLockFail() {
-        start(UnlockFragment.newInstance(2, dataBean,"网络错误"));
+
     }
 
     @Override
     public void returnBedFail() {
-        start(ReturnBedFragment.newInstance(2, dataBean, "网络错误"));
+
     }
 
     @Override
     public void reTurnBed(String data) {
-        try {
-            JSONObject jsonObject = new JSONObject(data);
-            if (jsonObject.optInt("code") == 200) {
-                isOrder = false;
-                start(ReturnBedFragment.newInstance(1, dataBean, ""));
-                mPresenter.getCabnetOrder();
-            } else {
-                start(ReturnBedFragment.newInstance(2, dataBean, jsonObject.optString("msg")));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
     }
 
 

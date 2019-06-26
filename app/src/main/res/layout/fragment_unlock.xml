@@ -35,24 +35,33 @@
                 android:textColor="@color/color_333333"
                 android:textSize="24sp" />
         </LinearLayout>
-        <RelativeLayout
-            android:id="@+id/rel_status"
-            android:layout_centerHorizontal="true"
+
+        <FrameLayout
+            android:id="@+id/fl_status"
             android:layout_marginTop="80px"
+            android:layout_centerHorizontal="true"
             android:layout_width="280px"
             android:layout_height="280px">
+            <RelativeLayout
+                android:id="@+id/rel_status"
+                android:background="@mipmap/unlock_su_circle"
+                android:layout_width="280px"
+                android:layout_height="280px">
+            </RelativeLayout>
             <ImageView
                 android:id="@+id/iv_status"
-                android:layout_centerInParent="true"
+                android:src="@mipmap/unlock_success"
+                android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-        </RelativeLayout>
+        </FrameLayout>
+
         <TextView
             android:id="@+id/tv_su"
             android:textStyle="bold"
             android:textColor="@color/color_333333"
             android:textSize="30sp"
-            android:layout_below="@id/rel_status"
+            android:layout_below="@id/fl_status"
             android:layout_marginTop="25px"
             android:text=""
             android:layout_centerHorizontal="true"

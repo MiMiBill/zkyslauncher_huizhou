@@ -147,26 +147,26 @@ public class CabinetOrderFragment extends BaseFragment<CabinetOrderPresenter> im
                     JSONObject obj=new JSONObject(objData);
                     if(obj.optInt("code")==200){
                         if (obj.optString("object").equals("ok")){
-                            start(UnlockFragment.newInstance(1, dataBean,""));
+                            start(UnlockFragment.newInstance(dataBean));
                         }else {
                             String object = obj.optString("object");
                             JSONObject lockObj=new JSONObject(object);
                             if(lockObj!=null){
                                 if(lockObj.optInt("code")==200){
-                                    start(UnlockFragment.newInstance(1, dataBean,""));
+                                    start(UnlockFragment.newInstance(dataBean));
                                 }else {
-                                    start(UnlockFragment.newInstance(2, dataBean,lockObj.optString("msg")));
+                                    start(UnlockFragment.newInstance(dataBean));
                                 }
                             }else {
-                                start(UnlockFragment.newInstance(2, dataBean,"连接第三方服务器异常"));
+                                start(UnlockFragment.newInstance(dataBean));
                             }
                         }
                     }else {
-                        start(UnlockFragment.newInstance(2, dataBean,"连接第三方服务器异常"));
+                        start(UnlockFragment.newInstance(dataBean));
                     }
                 }
             }else {
-                start(UnlockFragment.newInstance(2, dataBean,"服务器异常"));
+                start(UnlockFragment.newInstance(dataBean));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -175,12 +175,12 @@ public class CabinetOrderFragment extends BaseFragment<CabinetOrderPresenter> im
 
     @Override
     public void unLockFail() {
-        start(UnlockFragment.newInstance(2,dataBean,"网络错误"));
+        start(UnlockFragment.newInstance(dataBean));
     }
 
     @Override
     public void returnBedFail() {
-        start(ReturnBedFragment.newInstance(2,dataBean,"网络错误"));
+        start(ReturnBedFragment.newInstance(dataBean));
     }
 
     @Override
@@ -188,9 +188,9 @@ public class CabinetOrderFragment extends BaseFragment<CabinetOrderPresenter> im
         try {
             JSONObject jsonObject = new JSONObject(data);
             if (jsonObject.optInt("code") == 200) {
-                start(ReturnBedFragment.newInstance(1,dataBean,""));
+                start(ReturnBedFragment.newInstance(dataBean));
             } else {
-                start(ReturnBedFragment.newInstance(2,dataBean,jsonObject.optString("msg")));
+                start(ReturnBedFragment.newInstance(dataBean));
             }
         } catch (Exception e) {
             e.printStackTrace();

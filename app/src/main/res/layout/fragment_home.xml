@@ -920,7 +920,7 @@
             android:text="信息卡"
             android:gravity="center"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="14px"
+            android:layout_marginBottom="34px"
             android:textSize="@dimen/px20"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

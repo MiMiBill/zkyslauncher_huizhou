@@ -383,16 +383,24 @@ public class Banner extends LinearLayout {
 //                    LogFactory.l().e("index==="+index);
                         if (index == -100) {
                             if (bannerPage.url.equals("00")) {
-                                Glide.with(getContext()).load(R.mipmap.ic_protection_bg).apply
+                                Glide.with(getContext()).load(R.mipmap.lock_live).apply
                                         (options).into(imageView);
                             } else if (bannerPage.url.equals("11")) {
-                                Glide.with(getContext()).load(R.mipmap.iv_lock).apply(options)
+                                Glide.with(getContext()).load(R.mipmap.lock_video).apply(options)
                                         .into(imageView);
                             } else if (bannerPage.url.equals("22")) {
-                                Glide.with(getContext()).load(R.mipmap.home_default_1).apply
+                                Glide.with(getContext()).load(R.mipmap.banana_live).apply
                                         (options).into(imageView);
                             } else if (bannerPage.url.equals("33")) {
-                                Glide.with(getContext()).load(R.mipmap.home_default_2).apply
+                                Glide.with(getContext()).load(R.mipmap.banana_default).apply
+                                        (options).into(imageView);
+                            }
+                            else if (bannerPage.url.equals("44")) {
+                                Glide.with(getContext()).load(R.mipmap.banana_video).apply
+                                        (options).into(imageView);
+                            }
+                            else if (bannerPage.url.equals("55")) {
+                                Glide.with(getContext()).load(R.mipmap.lock_movie).apply
                                         (options).into(imageView);
                             }
                         } else {

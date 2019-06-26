@@ -1,7 +1,11 @@
 package com.muju.note.launcher.app.Cabinet.ui;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,6 +19,7 @@ import com.muju.note.launcher.app.Cabinet.bean.LockInfo;
 import com.muju.note.launcher.app.Cabinet.contract.CabinetOrderContract;
 import com.muju.note.launcher.app.Cabinet.presenter.CabinetOrderPresenter;
 import com.muju.note.launcher.base.BaseFragment;
+import com.muju.note.launcher.base.LauncherApplication;
 
 import org.json.JSONObject;
 
@@ -24,7 +29,8 @@ import butterknife.OnClick;
 /**
  * 屏安柜开锁状态
  */
-public class UnlockFragment extends BaseFragment<CabinetOrderPresenter> implements CabinetOrderContract.View {
+public class UnlockFragment extends BaseFragment<CabinetOrderPresenter> implements
+        CabinetOrderContract.View {
     @BindView(R.id.ll_back)
     LinearLayout llBack;
     @BindView(R.id.tv_status)
@@ -37,18 +43,32 @@ public class UnlockFragment extends BaseFragment<CabinetOrderPresenter> implemen
     TextView tvSu;
     @BindView(R.id.btn_su)
     Button btnSu;
-    private static String LOCK_CABINET_BEAN="lock_cabinet_bean";
-    private static String LOCK_TYPE="lock_type";
-    private static String LOCK_REASON="lock_reason";
+    private static String LOCK_CABINET_BEAN = "lock_cabinet_bean";
     private CabinetBean.DataBean dataBean;
-    private int type=1; //查询锁状态  2:网络失败
-    private String reason="";
-    private boolean isLock=false;
-    public static UnlockFragment newInstance(int type,CabinetBean.DataBean dataBean,String reason) {
+    private boolean isLock = false;
+    private int requestCount = 0;
+    private Animation animation;
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+                    if(requestCount<6){
+                        requestCount++;
+                        handler.removeMessages(1);
+                        mPresenter.findByDid(dataBean.getCabinetCode());
+                        handler.sendEmptyMessageDelayed(1, 2000);
+                    }
+                    break;
+            }
+        }
+    };
+
+    public static UnlockFragment newInstance(CabinetBean.DataBean dataBean) {
         Bundle args = new Bundle();
         args.putSerializable(LOCK_CABINET_BEAN, dataBean);
-        args.putInt(LOCK_TYPE, type);
-        args.putString(LOCK_REASON, reason);
         UnlockFragment fragment = new UnlockFragment();
         fragment.setArguments(args);
         return fragment;
@@ -59,30 +79,32 @@ public class UnlockFragment extends BaseFragment<CabinetOrderPresenter> implemen
         try {
             JSONObject jsonObject = new JSONObject(data);
             if (jsonObject.optInt("code") == 200) {
-                if(jsonObject.optString("data")!=null){
-                    String objData=jsonObject.optString("data");
-                    JSONObject obj=new JSONObject(objData);
-                    if(obj.optInt("code")==200){
-                        if (obj.optString("object").equals("ok")){
-                            mPresenter.findByDid(dataBean.getCabinetCode());
-                        }else {
+                if (jsonObject.optString("data") != null) {
+                    String objData = jsonObject.optString("data");
+                    JSONObject obj = new JSONObject(objData);
+                    if (obj.optInt("code") == 200) {
+                        if (obj.optString("object").equals("ok")) {
+//                            mPresenter.findByDid(dataBean.getCabinetCode());
+                            handler.sendEmptyMessage(1);
+                        } else {
                             String object = obj.optString("object");
-                            JSONObject lockObj=new JSONObject(object);
-                            if(lockObj!=null){
-                                if(lockObj.optInt("code")==200){
-                                    mPresenter.findByDid(dataBean.getCabinetCode());
-                                }else {
+                            JSONObject lockObj = new JSONObject(object);
+                            if (lockObj != null) {
+                                if (lockObj.optInt("code") == 200) {
+//                                    mPresenter.findByDid(dataBean.getCabinetCode());
+                                    handler.sendEmptyMessage(1);
+                                } else {
                                     setFailUi(lockObj.optString("msg"));
                                 }
-                            }else {
+                            } else {
                                 setFailUi("连接第三方服务器异常");
                             }
                         }
-                    }else {
+                    } else {
                         setFailUi("连接第三方服务器异常");
                     }
                 }
-            }else {
+            } else {
                 setFailUi("服务器异常");
             }
         } catch (Exception e) {
@@ -92,8 +114,14 @@ public class UnlockFragment extends BaseFragment<CabinetOrderPresenter> implemen
 
     @Override
     public void unLockFail() {
-        isLock=false;
+        isLock = false;
         setFailUi("网络错误");
+    }
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
+        handler.removeMessages(1);
     }
 
     @Override
@@ -109,21 +137,28 @@ public class UnlockFragment extends BaseFragment<CabinetOrderPresenter> implemen
     @Override
     public void findByDid(String data) {
         try {
-            JSONObject jsonObject=new JSONObject(data);
-            if(jsonObject.optString("data")!=null){
+            JSONObject jsonObject = new JSONObject(data);
+            if (jsonObject.optString("data") != null) {
                 String optString = jsonObject.optString("data");
-                Gson gson=new Gson();
+                Gson gson = new Gson();
                 LockInfo lockInfo = gson.fromJson(optString, LockInfo.class);
-                if(lockInfo.getLockStatus()==2){  //开锁成功
-                    setSuccessUi();
-                    isLock=true;
-                }else {
-                    isLock=false;
-                    setFailUi("第三方开锁失败");
+//                LogFactory.l().i("requestCount==="+requestCount);
+                if (lockInfo.getLockStatus() == 2) {  //开锁成功
+                    if(requestCount>=6){
+                        setSuccessUi();
+                        isLock = true;
+                    }
+                } else {
+                    if(requestCount>=6){
+                        isLock = false;
+                        setFailUi("第三方开锁失败");
+                    }
                 }
-            }else {
-                isLock=false;
-                setFailUi("第三方服务器异常");
+            } else {
+                if(requestCount>=6) {
+                    isLock = false;
+                    setFailUi("第三方服务器异常");
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -138,17 +173,18 @@ public class UnlockFragment extends BaseFragment<CabinetOrderPresenter> implemen
     @Override
     public void initData() {
         dataBean = (CabinetBean.DataBean) getArguments().getSerializable(LOCK_CABINET_BEAN);
-        type = getArguments().getInt(LOCK_TYPE);
-        reason = getArguments().getString(LOCK_REASON);
 
-        if(type==1){
-            mPresenter.findByDid(dataBean.getCabinetCode());
-        }else {
-            setFailUi(reason);
-        }
+        animation = AnimationUtils.loadAnimation(LauncherApplication.getInstance(), R.anim
+                .cabinet_roal);
+        relStatus.startAnimation(animation);
+        tvSu.setText("正在为您开锁");
+
+
+        mPresenter.unLock(dataBean.getCabinetCode());
     }
 
     private void setSuccessUi() {
+        relStatus.clearAnimation();
         relStatus.setBackground(getResources().getDrawable(R.mipmap.unlock_su_circle));
         ivStatus.setImageResource(R.mipmap.unlock_success);
         tvStatus.setText("开锁成功");
@@ -158,10 +194,11 @@ public class UnlockFragment extends BaseFragment<CabinetOrderPresenter> implemen
     }
 
     private void setFailUi(String reason) {
+        relStatus.clearAnimation();
         relStatus.setBackground(getResources().getDrawable(R.mipmap.unlock_fail_circle));
         ivStatus.setImageResource(R.mipmap.unlock_fail);
         tvStatus.setText("开锁失败");
-        tvSu.setText("开锁失败了-"+reason);
+        tvSu.setText("开锁失败了-" + reason);
         btnSu.setText("重试");
         btnSu.setVisibility(View.VISIBLE);
     }
@@ -184,9 +221,12 @@ public class UnlockFragment extends BaseFragment<CabinetOrderPresenter> implemen
                 pop();
                 break;
             case R.id.btn_su:
-                if(isLock){
+                if (isLock) {
                     pop();
-                }else {
+                } else {
+                    requestCount = 0;
+                    relStatus.startAnimation(animation);
+                    tvSu.setText("正在为您开锁");
                     mPresenter.unLock(dataBean.getCabinetCode());
                 }
                 break;

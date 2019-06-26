@@ -256,22 +256,26 @@ public class AdvertsUtil {
         if (type == 0) {
             BannerPage page = new BannerPage("00", 10000);
             BannerPage page1 = new BannerPage("11", 10000);
+            BannerPage page2 = new BannerPage("55", 10000);
             pageList.add(page);
             pageList.add(page1);
+            pageList.add(page2);
         } else {
             //首页轮播
             BannerPage page = new BannerPage("22", 10000);
             BannerPage page1 = new BannerPage("33", 10000);
+            BannerPage page2 = new BannerPage("44", 10000);
             pageList.add(page);
             pageList.add(page1);
+            pageList.add(page2);
 
             banner.setOnBannerListener(new OnBannerListener() {
                 @Override
                 public void OnBannerClick(int position) {
                     if(position==0){
-                        EventBus.getDefault().post(new DefaultVideoEvent());
-                    }else {
                         EventBus.getDefault().post(new DefaultVideoLiveEvent());
+                    }else {
+                        EventBus.getDefault().post(new DefaultVideoEvent());
                     }
                 }
             });
