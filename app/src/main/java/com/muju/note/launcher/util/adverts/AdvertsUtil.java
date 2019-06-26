@@ -21,6 +21,8 @@ import com.muju.note.launcher.app.home.bean.AdverNewBean;
 import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
 import com.muju.note.launcher.app.home.db.AdvertsCountDao;
 import com.muju.note.launcher.app.home.db.AdvertsInfoDao;
+import com.muju.note.launcher.app.home.event.DefaultVideoEvent;
+import com.muju.note.launcher.app.home.event.DefaultVideoLiveEvent;
 import com.muju.note.launcher.app.video.dialog.OnAdDialogDismissListener;
 import com.muju.note.launcher.app.video.dialog.VideoOrImageDialog;
 import com.muju.note.launcher.app.video.util.DbHelper;
@@ -238,9 +240,9 @@ public class AdvertsUtil {
         } else if (dao.getLinkType() == 3) {
             EventBus.getDefault().post(new AdvertWebEntity(dao.getAdid(), dao.getName(), dao.getLinkContent(),3));
         } else if (dao.getLinkType() == 2) {
-
+            EventBus.getDefault().post(new AdvertWebEntity(dao.getAdid(), dao.getName(), dao.getLinkContent(),2));
         } else if (dao.getLinkType() == 4) {
-
+            EventBus.getDefault().post(new AdvertWebEntity(dao.getAdid(), dao.getName(), dao.getLinkContent(),4));
         }
     }
 
@@ -257,10 +259,22 @@ public class AdvertsUtil {
             pageList.add(page);
             pageList.add(page1);
         } else {
+            //首页轮播
             BannerPage page = new BannerPage("22", 10000);
             BannerPage page1 = new BannerPage("33", 10000);
             pageList.add(page);
             pageList.add(page1);
+
+            banner.setOnBannerListener(new OnBannerListener() {
+                @Override
+                public void OnBannerClick(int position) {
+                    if(position==0){
+                        EventBus.getDefault().post(new DefaultVideoEvent());
+                    }else {
+                        EventBus.getDefault().post(new DefaultVideoLiveEvent());
+                    }
+                }
+            });
         }
         banner.setSlide(true);
         banner.setDataPlay(pageList, -100);
