@@ -10,6 +10,7 @@ import com.muju.note.launcher.app.video.service.VideoService;
 import com.muju.note.launcher.service.config.ConfigService;
 import com.muju.note.launcher.service.encyclope.EncyclopeService;
 import com.muju.note.launcher.service.heartbeat.HeartBeatService;
+import com.muju.note.launcher.service.homemenu.HomeMenuService;
 import com.muju.note.launcher.service.location.LocationService;
 import com.muju.note.launcher.service.network.NetWorkService;
 import com.muju.note.launcher.service.operation.OneMinuteDisposable;

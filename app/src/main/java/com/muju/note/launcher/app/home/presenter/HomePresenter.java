@@ -9,6 +9,7 @@ import com.lzy.okgo.model.Response;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.app.home.contract.HomeContract;
 import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
+import com.muju.note.launcher.app.home.db.HomeMenuDao;
 import com.muju.note.launcher.app.home.util.PatientUtil;
 import com.muju.note.launcher.app.video.db.VideoHisDao;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
@@ -150,6 +151,23 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
                     return;
                 }
                 mView.getDialogAd(list);
+            }
+        });
+    }
+
+    /**
+     *  获取首页菜单模块
+     */
+    @Override
+    public void getMenu() {
+        LitePal.findAllAsync(HomeMenuDao.class).listen(new FindMultiCallback<HomeMenuDao>() {
+            @Override
+            public void onFinish(List<HomeMenuDao> list) {
+                if(list==null||list.size()<=0){
+                    mView.getMenuNull();
+                    return;
+                }
+                mView.getMenuSuccess(list);
             }
         });
     }

@@ -1,11 +1,14 @@
 package com.muju.note.launcher.app.home.ui;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -20,10 +23,12 @@ import com.muju.note.launcher.app.dialog.AdvertsDialog;
 import com.muju.note.launcher.app.finance.FinanceFragment;
 import com.muju.note.launcher.app.game.ui.GameFragment;
 import com.muju.note.launcher.app.home.adapter.HomeHisVideoAdapter;
+import com.muju.note.launcher.app.home.adapter.HomeMenuAdapter;
 import com.muju.note.launcher.app.home.adapter.HomeTopVideoAdapter;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.app.home.contract.HomeContract;
 import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
+import com.muju.note.launcher.app.home.db.HomeMenuDao;
 import com.muju.note.launcher.app.home.event.DrawOutEvent;
 import com.muju.note.launcher.app.home.event.GetAdvertEvent;
 import com.muju.note.launcher.app.home.event.OutHospitalEvent;
@@ -34,6 +39,7 @@ import com.muju.note.launcher.app.hostipal.ui.HosPitalMissionFragment;
 import com.muju.note.launcher.app.hostipal.ui.HospitalEncyFragment;
 import com.muju.note.launcher.app.hostipal.ui.HospitalMienFragment;
 import com.muju.note.launcher.app.insurance.InsureanceFragment;
+import com.muju.note.launcher.app.msg.ui.MsgFragment;
 import com.muju.note.launcher.app.orderfood.OrderFoodFragment;
 import com.muju.note.launcher.app.setting.ui.UserSettingFragment;
 import com.muju.note.launcher.app.shop.ShopFragment;
@@ -76,6 +82,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -85,91 +93,75 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         .OnClickListener {
     private static final String TAG = "HomeFragment";
     public static HomeFragment homeFragment = null;
-    @BindView(R.id.tv_time)
-    TextView tvTime;
     @BindView(R.id.tv_date)
     TextView tvDate;
     @BindView(R.id.tv_week)
     TextView tvWeek;
-    @BindView(R.id.ll_hostipal)
-    LinearLayout llHostipal;
-    @BindView(R.id.ll_hostipal_ency)
-    LinearLayout llHostipalEncy;
-    @BindView(R.id.ll_video)
-    LinearLayout llVideo;
-    @BindView(R.id.ll_video_line)
-    LinearLayout llVideoLine;
-    @BindView(R.id.banner)
-    Banner banner;
-    @BindView(R.id.ll_hos_game)
-    LinearLayout llHosGame;
-    @BindView(R.id.tv_name)
-    TextView tvName;
-    @BindView(R.id.tv_age)
-    TextView tvAge;
-    @BindView(R.id.tv_bed_num)
-    TextView tvBedNum;
-    @BindView(R.id.tv_sex)
-    TextView tvSex;
-    @BindView(R.id.tv_hos)
-    TextView tvHos;
-    @BindView(R.id.tv_food)
-    TextView tvFood;
-    @BindView(R.id.tv_hl)
-    TextView tvHl;
-    @BindView(R.id.tv_dep)
-    TextView tvDep;
-    @BindView(R.id.tv_hos_nurse)
-    TextView tvHosNurse;
-    @BindView(R.id.tv_hos_time)
-    TextView tvHosTime;
-    @BindView(R.id.tv_hos_doctor)
-    TextView tvHosDoctor;
-    @BindView(R.id.lly_have_paitent)
-    LinearLayout llyHavePaitent;
-    @BindView(R.id.ivPersonQrCode)
-    ImageView ivPersonQrCode;
-    @BindView(R.id.lly_no_patient)
-    LinearLayout llyNoPatient;
-    @BindView(R.id.ll_his_mission)
-    LinearLayout llHisMission;
-    @BindView(R.id.ll_setting)
-    LinearLayout llSetting;
-    @BindView(R.id.rv_his_video)
-    RecyclerView rvHisVideo;
-    @BindView(R.id.ll_his_video_null)
-    LinearLayout llHisVideoNull;
-    @BindView(R.id.rv_video_top)
-    RecyclerView rvVideoTop;
-    @BindView(R.id.ll_top_video_null)
-    LinearLayout llTopVideoNull;
-    @BindView(R.id.iv_img)
-    ImageView ivImg;
-    @BindView(R.id.ll_shop)
-    LinearLayout llShop;
-    @BindView(R.id.videoview)
-    VideoView videoview;
-    @BindView(R.id.lly_finance)
-    LinearLayout llyFinance;
-    @BindView(R.id.lly_insureance)
-    LinearLayout llyInsureance;
-    @BindView(R.id.lly_order)
-    LinearLayout llyOrder;
-    @BindView(R.id.lly_cabinet)
-    LinearLayout llyCabinet;
-    @BindView(R.id.rel_card)
-    RelativeLayout relCard;
-    @BindView(R.id.tv_no_hos_info)
-    TextView tvNoHosInfo;
+    @BindView(R.id.tv_time)
+    TextView tvTime;
     @BindView(R.id.tv_net)
     TextView tvNet;
     @BindView(R.id.tv_net_type)
     TextView tvNetType;
-    @BindView(R.id.iv_wifi)
-    ImageView ivWifi;
     @BindView(R.id.iv_net)
     ImageView ivNet;
+    @BindView(R.id.iv_wifi)
+    ImageView ivWifi;
+    @BindView(R.id.banner)
+    Banner banner;
+    @BindView(R.id.videoview)
+    VideoView videoview;
+    @BindView(R.id.tv_bed_num)
+    TextView tvBedNum;
+    @BindView(R.id.tv_name)
+    TextView tvName;
+    @BindView(R.id.tv_sex)
+    TextView tvSex;
+    @BindView(R.id.tv_age)
+    TextView tvAge;
+    @BindView(R.id.tv_hos)
+    TextView tvHos;
+    @BindView(R.id.tv_dep)
+    TextView tvDep;
+    @BindView(R.id.tv_hos_doctor)
+    TextView tvHosDoctor;
+    @BindView(R.id.tv_hos_nurse)
+    TextView tvHosNurse;
+    @BindView(R.id.tv_hos_time)
+    TextView tvHosTime;
+    @BindView(R.id.tv_hl)
+    TextView tvHl;
+    @BindView(R.id.tv_food)
+    TextView tvFood;
+    @BindView(R.id.lly_have_paitent)
+    LinearLayout llyHavePaitent;
+    @BindView(R.id.tv_no_hos_info)
+    TextView tvNoHosInfo;
+    @BindView(R.id.ivPersonQrCode)
+    ImageView ivPersonQrCode;
+    @BindView(R.id.lly_no_patient)
+    LinearLayout llyNoPatient;
+    @BindView(R.id.rv_menu)
+    RecyclerView rvMenu;
+    @BindView(R.id.rv_his_video)
+    RecyclerView rvHisVideo;
+    @BindView(R.id.ll_his_video_null)
+    LinearLayout llHisVideoNull;
+    @BindView(R.id.iv_img)
+    ImageView ivImg;
+    @BindView(R.id.rv_video_top)
+    RecyclerView rvVideoTop;
+    @BindView(R.id.ll_top_video_null)
+    LinearLayout llTopVideoNull;
+    @BindView(R.id.tv_card)
+    TextView tvCard;
+    @BindView(R.id.rel_card)
+    RelativeLayout relCard;
+    Unbinder unbinder;
 
+
+    private List<HomeMenuDao> homeMenuDaos;
+    private HomeMenuAdapter menuAdapter;
     private ActivePadInfo.DataBean activeInfo;
     public static PatientResponse.DataBean entity;
     private List<VideoHisDao> videoHisDaos;
@@ -202,19 +194,14 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         if (activeInfo != null) {
             mPresenter.getPatientData(String.valueOf(activeInfo.getBedId()), getActivity());
         }
-        llHostipal.setOnClickListener(this);
-        llVideo.setOnClickListener(this);
-        llHostipalEncy.setOnClickListener(this);
-        llVideoLine.setOnClickListener(this);
-        llHisMission.setOnClickListener(this);
-        llSetting.setOnClickListener(this);
-        llShop.setOnClickListener(this);
-        llyFinance.setOnClickListener(this);
-        llyInsureance.setOnClickListener(this);
-        llyOrder.setOnClickListener(this);
-        llyCabinet.setOnClickListener(this);
-        llHosGame.setOnClickListener(this);
         relCard.setOnClickListener(this);
+
+        // 加载首页菜单模块
+        homeMenuDaos=new ArrayList<>();
+        menuAdapter=new HomeMenuAdapter(R.layout.rv_item_home_menu,homeMenuDaos);
+        rvMenu.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(),6));
+        rvMenu.setAdapter(menuAdapter);
+        mPresenter.getMenu();
 
         // 加载首页历史记录
         videoHisDaos = new ArrayList<>();
@@ -257,6 +244,13 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 toPlay(imgVideoInfo);
             }
         });
+
+        menuAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
+                menuClick(homeMenuDaos.get(i));
+            }
+        });
     }
 
     /**
@@ -282,7 +276,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         WotvPlayFragment wotvPlayFragment = new WotvPlayFragment();
         wotvPlayFragment.setHisDao(hisDao);
         start(wotvPlayFragment);
-        llSetting.setOnClickListener(this);
     }
 
     //加载广告
@@ -362,12 +355,12 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         tvTime.setText(time);
         tvWeek.setText(week);
         tvNet.setText(net);
-        if(netType.equals("WIFI")){
+        if (netType.equals("WIFI")) {
             tvNetType.setVisibility(View.VISIBLE);
             tvNetType.setText(netType);
             ivNet.setVisibility(View.GONE);
             ivWifi.setVisibility(View.VISIBLE);
-            int wifi=NetWorkUtil.getWifiLevel(LauncherApplication.getContext());
+            int wifi = NetWorkUtil.getWifiLevel(LauncherApplication.getContext());
             if (wifi > -50 && wifi < 0) {//最强
                 ivWifi.setImageResource(R.mipmap.wifi_level_good);
             } else if (wifi > -70 && wifi < -50) {//较强
@@ -376,10 +369,10 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 ivWifi.setImageResource(R.mipmap.wifi_level_normal);
             } else if (wifi > -100 && wifi < -80) {//微弱
                 ivWifi.setImageResource(R.mipmap.wifi_level_bad);
-            }else {
+            } else {
                 ivWifi.setImageResource(R.mipmap.wifi_level_none);
             }
-        }else if(netType.equals("无网络连接") || netType.equals("未知")){
+        } else if (netType.equals("无网络连接") || netType.equals("未知")) {
             ivWifi.setVisibility(View.VISIBLE);
             ivNet.setVisibility(View.VISIBLE);
             tvNetType.setVisibility(View.VISIBLE);
@@ -387,12 +380,12 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             ivWifi.setImageResource(R.mipmap.wifi_level_none);
             ivNet.setImageResource(R.mipmap.net_level_none);
 
-        }else {
+        } else {
             ivWifi.setVisibility(View.GONE);
             ivNet.setVisibility(View.VISIBLE);
             tvNetType.setVisibility(View.VISIBLE);
             tvNetType.setText(netType);
-            int netDbm=NetWorkUtil.getCurrentNetDBM(LauncherApplication.getContext());
+            int netDbm = NetWorkUtil.getCurrentNetDBM(LauncherApplication.getContext());
             if (netDbm > -75) {
                 ivNet.setImageResource(R.mipmap.net_level_good);
             } else if (netDbm > -85) {
@@ -410,7 +403,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     //设置病人信息
     @Override
     public void patientInfo(PatientResponse.DataBean entity) {
-        this.entity= entity;
+        this.entity = entity;
         EventBus.getDefault().post(new PatientInfoEvent(entity));
         llyNoPatient.setVisibility(View.GONE);
         llyHavePaitent.setVisibility(View.VISIBLE);
@@ -485,6 +478,18 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         AdvertsUtil.getInstance().showByDialog(list, dialog);
     }
 
+    @Override
+    public void getMenuSuccess(List<HomeMenuDao> list) {
+        homeMenuDaos.clear();
+        homeMenuDaos.addAll(list);
+        menuAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void getMenuNull() {
+        showToast("首页模块配置为空，请联系管理人员检查");
+    }
+
 
     /**
      * 保存RegisterId到后台
@@ -540,45 +545,52 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             return;
         }
         switch (v.getId()) {
-            case R.id.ll_hostipal:  // 医院风采
-                start(new HospitalMienFragment());
-                break;
-            case R.id.ll_hostipal_ency:  // 医疗百科
-                start(new HospitalEncyFragment());
-                break;
-            case R.id.ll_video:     // 视频
-                start(VideoFragment.getIntance());
-                break;
-            case R.id.ll_hos_game:     //游戏娱乐
-                start(new GameFragment());
-//                start(new NullFragment());
-                break;
-            case R.id.ll_video_line: // 直播TV
-                start(new WoTvVideoLineFragment());
-                break;
-            case R.id.ll_his_mission: // 医院宣教
-                start(new HosPitalMissionFragment());
-                break;
-            case R.id.ll_setting: // 个人中心
-                start(new UserSettingFragment());
-                break;
-            case R.id.ll_shop: // 严选好物
-                start(new ShopFragment());
-                break;
-            case R.id.lly_finance: // 金融财富
-                start(new FinanceFragment());
-                break;
-            case R.id.lly_insureance: // 保险服务
-                start(new InsureanceFragment());
-                break;
-            case R.id.lly_order: // 点餐服务
-                start(new OrderFoodFragment());
-                break;
-            case R.id.lly_cabinet: // 屏安柜
-                start(new CabinetFragment());
-                break;
             case R.id.rel_card: // 侧边栏
                 EventBus.getDefault().post(new DrawOutEvent());
+                break;
+        }
+    }
+
+    private void menuClick(HomeMenuDao dao){
+        switch (dao.getTab()){
+            case "风采":
+                start(new HospitalMienFragment());
+                break;
+            case "宣教":
+                start(new HosPitalMissionFragment());
+                break;
+            case "百科":
+                start(new HospitalEncyFragment());
+                break;
+            case "柜子":
+                start(new CabinetFragment());
+                break;
+            case "影视":
+                start(new WoTvVideoLineFragment());
+                break;
+            case "用户":
+                start(new UserSettingFragment());
+                break;
+            case "游戏":
+                start(new GameFragment());
+                break;
+            case "直播":
+                start(new WoTvVideoLineFragment());
+                break;
+            case "购物":
+                start(new ShopFragment());
+                break;
+            case "金融":
+                start(new FinanceFragment());
+                break;
+            case "保险":
+                start(new InsureanceFragment());
+                break;
+            case "点餐":
+                start(new OrderFoodFragment());
+                break;
+            case "通知":
+                start(new MsgFragment());
                 break;
         }
     }

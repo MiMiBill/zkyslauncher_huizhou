@@ -277,4 +277,12 @@ public class UrlUtil {
     public static String findByDId() {
         return getHost() + "/cabinet/findByDid";
     }
+
+    /**
+     *  获取首页模块
+     * @return
+     */
+    public static String getHomeMenu(){
+        return getHost()+"/menu/config";
+    }
 }
