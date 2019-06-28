@@ -49,11 +49,7 @@ public class GuideFragment extends BaseFragment {
     @Override
     public void initData() {
 //        setData();
-        if(getArguments().getInt(STATUS)==1){
-            imgClose.setVisibility(View.VISIBLE);
-        }else {
-            imgClose.setVisibility(View.GONE);
-        }
+
     }
 
     private void setData() {
@@ -81,6 +77,12 @@ public class GuideFragment extends BaseFragment {
         mFragments.add(fragmentInner7);
 
         yvpGuide.setAdapter(new FragmentAdapter(getChildFragmentManager()));
+
+        if(getArguments().getInt(STATUS)==1){
+            imgClose.setVisibility(View.VISIBLE);
+        }else {
+            imgClose.setVisibility(View.GONE);
+        }
     }
 
     @Override

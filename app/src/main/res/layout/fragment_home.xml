@@ -650,6 +650,7 @@
         android:background="@mipmap/bed_card"
         android:layout_width="105px"
         android:layout_marginLeft="@dimen/px60"
+        android:visibility="gone"
         android:layout_height="166px">
         <TextView
             android:id="@+id/tv_card"

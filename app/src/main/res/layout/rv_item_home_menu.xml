@@ -24,6 +24,7 @@
             android:layout_marginTop="@dimen/px14"
             android:text="医院介绍"
             android:textColor="@color/black_gray"
+            android:layout_gravity="center_horizontal"
             android:textSize="@dimen/px25" />
     </LinearLayout>
 
