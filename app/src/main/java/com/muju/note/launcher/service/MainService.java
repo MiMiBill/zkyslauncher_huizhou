@@ -61,7 +61,6 @@ public class MainService extends Service {
         SixHourDisposable.getInstance().start();
 
         NetWorkService.getInstance().start();
-//        NetWorkService.getInstance().getNet();
 
         // 某些操作需要10分钟内执行
         Observable.timer((long) (Math.random() * 600), TimeUnit.SECONDS)

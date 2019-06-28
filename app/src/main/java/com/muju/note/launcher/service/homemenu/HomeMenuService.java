@@ -37,6 +37,8 @@ public class HomeMenuService {
         return homeMenuService;
     }
 
+    public boolean isUpdate=false;
+
     public void startMenu(){
         EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOME_MENU_START));
         LitePal.findAllAsync(HomeMenuDao.class).listen(new FindMultiCallback<HomeMenuDao>() {
@@ -107,6 +109,7 @@ public class HomeMenuService {
                                 }else {
                                     EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOME_MENU_REBOOT_SUCCESS));
                                 }
+                                isUpdate=true;
                             }
                         });
                     }

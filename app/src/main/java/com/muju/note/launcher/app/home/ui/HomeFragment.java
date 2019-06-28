@@ -54,6 +54,7 @@ import com.muju.note.launcher.app.video.ui.WotvPlayFragment;
 import com.muju.note.launcher.app.video.util.WoTvUtil;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
+import com.muju.note.launcher.service.homemenu.HomeMenuService;
 import com.muju.note.launcher.topics.AdvertsTopics;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.ClickTimeUtils;
@@ -334,6 +335,10 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         mPresenter.updateDate();
         mPresenter.getTopVideo();
         mPresenter.getVideoHis();
+        if(HomeMenuService.getInstance().isUpdate){
+            mPresenter.getMenu();
+            HomeMenuService.getInstance().isUpdate=false;
+        }
     }
 
     @Override
@@ -566,7 +571,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 start(new CabinetFragment());
                 break;
             case "影视":
-                start(new WoTvVideoLineFragment());
+                start(new VideoFragment());
                 break;
             case "用户":
                 start(new UserSettingFragment());
