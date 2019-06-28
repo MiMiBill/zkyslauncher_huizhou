@@ -207,7 +207,7 @@ public class HomeMenuAdapter extends BaseQuickAdapter<HomeMenuDao, BaseViewHolde
 
             case "设置":
                 if(TextUtils.isEmpty(dao.getIcon())){
-                    img.setImageResource(R.mipmap.ic_home_item_setting);
+                    img.setImageResource(R.mipmap.hos_setting);
                 }else {
                     GlideUtil.loadImg(dao.getIcon(),img,R.mipmap.ic_video_load_default);
                 }

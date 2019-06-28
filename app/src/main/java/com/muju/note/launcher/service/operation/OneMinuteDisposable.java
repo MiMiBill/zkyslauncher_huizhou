@@ -99,7 +99,6 @@ public class OneMinuteDisposable {
             // 检查是否需要上传统计数据
             UpLoadDataService.getInstance().start();
 
-            HomeMenuService.getInstance().updateMenu(2);
         } catch (Exception e) {
             e.printStackTrace();
         }

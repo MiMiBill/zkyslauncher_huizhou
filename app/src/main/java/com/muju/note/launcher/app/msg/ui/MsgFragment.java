@@ -30,7 +30,7 @@ import butterknife.BindView;
 
 public class MsgFragment extends BaseFragment<MsgPresenter> implements View.OnClickListener, MsgContract.View {
 
-    private static final String TAG=MsgFragment.class.getSimpleName();
+    private static final String TAG = MsgFragment.class.getSimpleName();
 
     @BindView(R.id.ll_back)
     LinearLayout llBack;
@@ -56,9 +56,9 @@ public class MsgFragment extends BaseFragment<MsgPresenter> implements View.OnCl
         llBack.setOnClickListener(this);
         tvNull.setOnClickListener(this);
 
-        customMessageDaos=new ArrayList<>();
-        msgAdapter=new MsgAdapter(R.layout.rv_item_msg,customMessageDaos);
-        rvMsg.setLayoutManager(new LinearLayoutManager(LauncherApplication.getContext(),LinearLayoutManager.VERTICAL,false));
+        customMessageDaos = new ArrayList<>();
+        msgAdapter = new MsgAdapter(R.layout.rv_item_msg, customMessageDaos);
+        rvMsg.setLayoutManager(new LinearLayoutManager(LauncherApplication.getContext(), LinearLayoutManager.VERTICAL, false));
         rvMsg.setAdapter(msgAdapter);
 
         mPresenter.querymsg();
@@ -66,26 +66,32 @@ public class MsgFragment extends BaseFragment<MsgPresenter> implements View.OnCl
         msgAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                CustomMessageDao dao=customMessageDaos.get(position);
-                if (dao.getType().equals("pdf")) {
-                    File file = new File(SdcardConfig.RESOURCE_FOLDER, dao.getUrl().hashCode() + ".pdf");
-                    if (!file.exists()) {
-                        showToast("正在下载中，请稍后重试");
-                        MissionService.getInstance().downMission();
-                        return;
+                try {
+                    CustomMessageDao dao = customMessageDaos.get(position);
+                    if (dao.getType().equals("pdf")) {
+                        File file = new File(SdcardConfig.RESOURCE_FOLDER, dao.getUrl().hashCode() + ".pdf");
+                        if (!file.exists()) {
+                            showToast("正在下载中，请稍后重试");
+                            MissionService.getInstance().downMission();
+                            return;
+                        }
+                        start(HospitalMissionPdfFragment.newInstance(dao.getUrl()));
+                    } else if (dao.getType().equals("video")) {
+                        File file = new File(SdcardConfig.RESOURCE_FOLDER, dao.getUrl().hashCode() + ".mp4");
+                        if (!file.exists()) {
+                            showToast("正在下载中，请稍后重试");
+                            MissionService.getInstance().downMission();
+                            return;
+                        }
+                        start(HospitalMissionVideoFragment.newInstance(dao.getUrl()));
+                    } else {
+                        start(WebViewFragment.newInstance(dao.getTitle(), dao.getUrl()));
                     }
-                    start(HospitalMissionPdfFragment.newInstance(dao.getUrl()));
-                } else if(dao.getType().equals("video")) {
-                    File file = new File(SdcardConfig.RESOURCE_FOLDER, dao.getUrl().hashCode() + ".mp4");
-                    if (!file.exists()) {
-                        showToast("正在下载中，请稍后重试");
-                        MissionService.getInstance().downMission();
-                        return;
-                    }
-                    start(HospitalMissionVideoFragment.newInstance(dao.getUrl()));
-                }else {
-                    start(WebViewFragment.newInstance(dao.getTitle(),dao.getUrl()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showToast("数据异常，请稍后重试");
                 }
+
             }
         });
 
@@ -93,7 +99,7 @@ public class MsgFragment extends BaseFragment<MsgPresenter> implements View.OnCl
 
     @Override
     public void initPresenter() {
-        mPresenter=new MsgPresenter();
+        mPresenter = new MsgPresenter();
     }
 
     @Override
@@ -103,7 +109,7 @@ public class MsgFragment extends BaseFragment<MsgPresenter> implements View.OnCl
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.ll_back:
             case R.id.tv_null:
                 pop();
