@@ -1,76 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
+    android:orientation="vertical"
     >
 
-    <com.muju.note.launcher.view.light.RectProgress
-        android:id="@+id/rectProgress_light"
-        android:layout_width="@dimen/px156"
-        android:layout_height="@dimen/px300"
-        app:bgColor="#e0e0e0"
-        app:iconPadding="30dp"
-        app:iconSrc="@mipmap/light_change"
-        app:progressColor="@color/color_38B4E9"
-        app:progressMax="100"
-        app:progressOrientation="vertical"
-         />
-    <TextView
-        android:layout_marginTop="@dimen/px24"
-        android:text="屏幕亮度"
-        android:gravity="center"
-        android:layout_below="@id/rectProgress_light"
-        android:layout_width="@dimen/px156"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:layout_toRightOf="@id/rectProgress_light"
-        android:text="100%"
-        android:layout_marginLeft="@dimen/px10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:layout_toRightOf="@id/rectProgress_light"
-        android:layout_alignBottom="@id/rectProgress_light"
-        android:text="0%"
-        android:layout_marginLeft="@dimen/px10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <RelativeLayout
+        android:id="@+id/rl_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px63">
 
-    <com.muju.note.launcher.view.light.RectProgress
-        android:id="@+id/rectProgress_voice"
-        android:layout_width="@dimen/px156"
-        android:layout_height="@dimen/px300"
-        app:bgColor="#e0e0e0"
-        app:iconPadding="40dp"
-        android:layout_toRightOf="@id/rectProgress_light"
-        android:layout_marginLeft="@dimen/px174"
-        app:iconSrc="@mipmap/voice_change"
-        app:progressColor="@color/color_38B4E9"
-        app:progressMax="100"
-        app:progressOrientation="vertical"
-         />
-    <TextView
-        android:layout_marginTop="@dimen/px24"
-        android:text="声音大小"
-        android:gravity="center"
-        android:layout_marginLeft="@dimen/px174"
-        android:layout_below="@id/rectProgress_voice"
-        android:layout_toRightOf="@id/rectProgress_light"
-        android:layout_width="@dimen/px156"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:layout_toRightOf="@id/rectProgress_voice"
-        android:text="100%"
-        android:layout_marginLeft="@dimen/px10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:layout_toRightOf="@id/rectProgress_voice"
-        android:layout_alignBottom="@id/rectProgress_voice"
-        android:text="0%"
-        android:layout_marginLeft="@dimen/px10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-</RelativeLayout>
+        <LinearLayout
+            android:id="@+id/ll_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/px20"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical">
+            <ImageView
+                android:layout_width="@dimen/px34"
+                android:layout_height="@dimen/px34"
+                android:src="@mipmap/ic_back_black"/>
+            <TextView
+                android:layout_width="@dimen/px60"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="返回"
+                android:textSize="@dimen/px20"
+                android:textColor="@color/black"
+                android:layout_marginLeft="@dimen/px10"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+        <com.muju.note.launcher.view.light.RectProgress
+            android:id="@+id/rectProgress_light"
+            android:layout_width="@dimen/px156"
+            android:layout_height="@dimen/px300"
+            app:bgColor="#e0e0e0"
+            app:iconPadding="30dp"
+            app:iconSrc="@mipmap/light_change"
+            app:progressColor="@color/color_38B4E9"
+            app:progressMax="100"
+            app:progressOrientation="vertical"
+            />
+        <TextView
+            android:layout_marginTop="@dimen/px24"
+            android:text="屏幕亮度"
+            android:gravity="center"
+            android:layout_below="@id/rectProgress_light"
+            android:layout_width="@dimen/px156"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_toRightOf="@id/rectProgress_light"
+            android:text="100%"
+            android:layout_marginLeft="@dimen/px10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_toRightOf="@id/rectProgress_light"
+            android:layout_alignBottom="@id/rectProgress_light"
+            android:text="0%"
+            android:layout_marginLeft="@dimen/px10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.muju.note.launcher.view.light.RectProgress
+            android:id="@+id/rectProgress_voice"
+            android:layout_width="@dimen/px156"
+            android:layout_height="@dimen/px300"
+            app:bgColor="#e0e0e0"
+            app:iconPadding="40dp"
+            android:layout_toRightOf="@id/rectProgress_light"
+            android:layout_marginLeft="@dimen/px174"
+            app:iconSrc="@mipmap/voice_change"
+            app:progressColor="@color/color_38B4E9"
+            app:progressMax="100"
+            app:progressOrientation="vertical"
+            />
+        <TextView
+            android:layout_marginTop="@dimen/px24"
+            android:text="声音大小"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/px174"
+            android:layout_below="@id/rectProgress_voice"
+            android:layout_toRightOf="@id/rectProgress_light"
+            android:layout_width="@dimen/px156"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_toRightOf="@id/rectProgress_voice"
+            android:text="100%"
+            android:layout_marginLeft="@dimen/px10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_toRightOf="@id/rectProgress_voice"
+            android:layout_alignBottom="@id/rectProgress_voice"
+            android:text="0%"
+            android:layout_marginLeft="@dimen/px10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+</LinearLayout>

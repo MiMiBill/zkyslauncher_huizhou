@@ -136,7 +136,7 @@ public class UserSettingFragment extends BaseFragment {
                 fragment = GuideFragment.newInstance(2);
                 break;
             case 5:
-                fragment = new VoiceFragment();
+                fragment = VoiceFragment.newInstance(2);
                 break;
         }
         FragmentManager fm = getChildFragmentManager();

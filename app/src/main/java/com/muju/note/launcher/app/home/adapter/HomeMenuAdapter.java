@@ -204,6 +204,19 @@ public class HomeMenuAdapter extends BaseQuickAdapter<HomeMenuDao, BaseViewHolde
                     baseViewHolder.setText(R.id.tv_menu,dao.getName());
                 }
                 break;
+
+            case "设置":
+                if(TextUtils.isEmpty(dao.getIcon())){
+                    img.setImageResource(R.mipmap.ic_home_item_setting);
+                }else {
+                    GlideUtil.loadImg(dao.getIcon(),img,R.mipmap.ic_video_load_default);
+                }
+                if(TextUtils.isEmpty(dao.getName())){
+                    baseViewHolder.setText(R.id.tv_menu,"系统设置");
+                }else {
+                    baseViewHolder.setText(R.id.tv_menu,dao.getName());
+                }
+                break;
         }
     }
 }
