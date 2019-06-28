@@ -133,7 +133,7 @@ public class UserSettingFragment extends BaseFragment {
                 fragment = new FeedBackFragment();
                 break;
             case 4:
-                fragment = new GuideFragment();
+                fragment = GuideFragment.newInstance(2);
                 break;
             case 5:
                 fragment = new VoiceFragment();

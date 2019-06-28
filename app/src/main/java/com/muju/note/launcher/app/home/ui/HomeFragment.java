@@ -41,6 +41,7 @@ import com.muju.note.launcher.app.hostipal.ui.HospitalMienFragment;
 import com.muju.note.launcher.app.insurance.InsureanceFragment;
 import com.muju.note.launcher.app.msg.ui.MsgFragment;
 import com.muju.note.launcher.app.orderfood.OrderFoodFragment;
+import com.muju.note.launcher.app.setting.ui.GuideFragment;
 import com.muju.note.launcher.app.setting.ui.UserSettingFragment;
 import com.muju.note.launcher.app.shop.ShopFragment;
 import com.muju.note.launcher.app.video.bean.PayEntity;
@@ -596,6 +597,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 break;
             case "通知":
                 start(new MsgFragment());
+                break;
+            case "新手":
+                start(GuideFragment.newInstance(1));
                 break;
         }
     }
