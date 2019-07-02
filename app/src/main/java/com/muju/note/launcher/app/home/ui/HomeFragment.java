@@ -611,6 +611,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             case "健康":
                 start(new HealthyFragment());
                 break;
+            case "医疗":
+
+                break;
         }
     }
 }

@@ -243,6 +243,19 @@ public class HomeMenuAdapter extends BaseQuickAdapter<HomeMenuDao, BaseViewHolde
                     baseViewHolder.setText(R.id.tv_menu,dao.getName());
                 }
                 break;
+
+            case "医疗":
+                if(TextUtils.isEmpty(dao.getIcon())){
+                    img.setImageResource(R.mipmap.icon_home_hos_service);
+                }else {
+                    GlideUtil.loadImg(dao.getIcon(),img,R.mipmap.ic_video_load_default);
+                }
+                if(TextUtils.isEmpty(dao.getName())){
+                    baseViewHolder.setText(R.id.tv_menu,"医疗服务");
+                }else {
+                    baseViewHolder.setText(R.id.tv_menu,dao.getName());
+                }
+                break;
         }
     }
 }
