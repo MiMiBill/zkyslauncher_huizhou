@@ -11,11 +11,14 @@ import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
 import com.muju.note.launcher.app.bedsidecard.contract.BedsideContract;
 import com.muju.note.launcher.app.bedsidecard.presenter.BedsidePresenter;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
+import com.muju.note.launcher.app.video.event.VideoNoLockEvent;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.FormatUtils;
 import com.muju.note.launcher.util.net.NetWorkUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 
@@ -56,6 +59,10 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
     TextView tvZbNurse;
     @BindView(R.id.tv_name)
     TextView tvName;
+    @BindView(R.id.tv_hoipital)
+    TextView tvHospital;
+    @BindView(R.id.tv_food)
+    TextView tvFood;
     private ActivePadInfo.DataBean activeInfo;
     private static final String BEDSIDE_INFO="bedside_info";
     private PatientResponse.DataBean info;
@@ -77,12 +84,14 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
     public void onSupportVisible() {
         super.onSupportVisible();
         mPresenter.updateDate();
+        EventBus.getDefault().post(new VideoNoLockEvent(false));
     }
 
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
         mPresenter.onDestroy();
+        EventBus.getDefault().post(new VideoNoLockEvent(true));
     }
 
     @Override
@@ -103,6 +112,9 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
         tvSex.setText(entity.getSex() == 1 ? "男" : "女");
         tvHl.setText(entity.getNursingLevel());
         tvZbNurse.setText(entity.getChargeNurse());
+        tvCardNum.setText(activeInfo.getDeptName());
+        tvHospital.setText(activeInfo.getHospitalName());
+        tvFood.setText(entity.getDietCategory());
     }
 
     @Override
@@ -126,23 +138,23 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
             ivWifi.setVisibility(View.VISIBLE);
             int wifi=NetWorkUtil.getWifiLevel(LauncherApplication.getContext());
             if (wifi > -50 && wifi < 0) {//最强
-                ivWifi.setImageResource(R.mipmap.wifi_level_good);
+                ivWifi.setImageResource(R.mipmap.white_wifi_level_good);
             } else if (wifi > -70 && wifi < -50) {//较强
-                ivWifi.setImageResource(R.mipmap.wifi_level_better);
+                ivWifi.setImageResource(R.mipmap.white_wifi_level_better);
             } else if (wifi > -80 && wifi < -70) {//较弱
-                ivWifi.setImageResource(R.mipmap.wifi_level_normal);
+                ivWifi.setImageResource(R.mipmap.white_wifi_level_normal);
             } else if (wifi > -100 && wifi < -80) {//微弱
-                ivWifi.setImageResource(R.mipmap.wifi_level_bad);
+                ivWifi.setImageResource(R.mipmap.white_wifi_level_bad);
             }else {
-                ivWifi.setImageResource(R.mipmap.wifi_level_none);
+                ivWifi.setImageResource(R.mipmap.white_wifi_level_none);
             }
         }else if(netType.equals("无网络连接") || netType.equals("未知")){
             ivWifi.setVisibility(View.VISIBLE);
             ivNet.setVisibility(View.VISIBLE);
             tvNetType.setVisibility(View.VISIBLE);
             tvNetType.setText(netType);
-            ivWifi.setImageResource(R.mipmap.wifi_level_none);
-            ivNet.setImageResource(R.mipmap.net_level_none);
+            ivWifi.setImageResource(R.mipmap.white_wifi_level_none);
+            ivNet.setImageResource(R.mipmap.white_net_level_none);
         }else {
             ivWifi.setVisibility(View.GONE);
             ivNet.setVisibility(View.VISIBLE);
@@ -150,15 +162,15 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
             tvNetType.setText(netType);
             int netDbm=NetWorkUtil.getCurrentNetDBM(LauncherApplication.getContext());
             if (netDbm > -75) {
-                ivNet.setImageResource(R.mipmap.net_level_good);
+                ivNet.setImageResource(R.mipmap.white_net_level_good);
             } else if (netDbm > -85) {
-                ivNet.setImageResource(R.mipmap.net_level_better);
+                ivNet.setImageResource(R.mipmap.white_net_level_better);
             } else if (netDbm > -95) {
-                ivNet.setImageResource(R.mipmap.net_level_normal);
+                ivNet.setImageResource(R.mipmap.white_net_level_normal);
             } else if (netDbm > -100) {
-                ivNet.setImageResource(R.mipmap.net_level_bad);
+                ivNet.setImageResource(R.mipmap.white_net_level_bad);
             } else {
-                ivNet.setImageResource(R.mipmap.net_level_none);
+                ivNet.setImageResource(R.mipmap.white_net_level_none);
             }
         }
     }

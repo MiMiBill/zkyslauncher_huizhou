@@ -113,6 +113,12 @@ public class UserFragment extends BaseFragment<UserPresenter> implements UserPre
 
     }
 
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
+        handler.removeMessages(0x01);
+        handler.removeMessages(0x03);
+    }
 
     @Override
     public void initPresenter() {

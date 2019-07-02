@@ -14,10 +14,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
+            android:id="@+id/tv_hoipital"
             android:text="东莞人民医院"
             android:textColor="@color/white"
             android:textSize="30px"
-            android:layout_marginLeft="@dimen/px10"
+            android:layout_marginLeft="@dimen/px30"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content" />
@@ -173,7 +174,7 @@
                         android:layout_width="@dimen/px30"
                         android:layout_height="@dimen/px34" />
                     <TextView
-                        android:text="@string/card_card"
+                        android:text="科室"
                         android:gravity="center"
                         android:layout_marginLeft="@dimen/px3"
                         android:textSize="@dimen/px35"
@@ -376,6 +377,7 @@
                     android:layout_width="@dimen/px48"
                     android:layout_height="@dimen/px47" />
                 <TextView
+                    android:id="@+id/tv_food"
                     android:textSize="@dimen/px40"
                     android:gravity="center"
                     android:text="半流食"
