@@ -6,6 +6,7 @@ import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.service.config.ConfigService;
 import com.muju.note.launcher.service.db.PadConfigDao;
 import com.muju.note.launcher.service.db.PadConfigSubDao;
+import com.muju.note.launcher.service.homemenu.HomeMenuService;
 import com.muju.note.launcher.service.updatedata.UpdateDataService;
 import com.muju.note.launcher.service.uploaddata.UpLoadDataService;
 import com.muju.note.launcher.util.DateUtil;
@@ -97,6 +98,7 @@ public class OneMinuteDisposable {
 
             // 检查是否需要上传统计数据
             UpLoadDataService.getInstance().start();
+
         } catch (Exception e) {
             e.printStackTrace();
         }

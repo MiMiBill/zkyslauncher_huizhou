@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
+import com.muju.note.launcher.app.home.db.HomeMenuDao;
 import com.muju.note.launcher.app.video.db.VideoHisDao;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
 import com.muju.note.launcher.base.IPresenter;
@@ -35,6 +36,10 @@ public interface HomeContract {
         void getBananaList(List<AdvertsCodeDao> list);
 
         void getDialogAd(List<AdvertsCodeDao> list);
+
+        void getMenuSuccess(List<HomeMenuDao> list);
+
+        void getMenuNull();
     }
 
 
@@ -50,5 +55,7 @@ public interface HomeContract {
         void getBananaList(String code);
 
         void getDialogAd(String code);
+
+        void getMenu();
     }
 }

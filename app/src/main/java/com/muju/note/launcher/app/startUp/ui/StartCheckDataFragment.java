@@ -14,6 +14,7 @@ import com.muju.note.launcher.app.video.service.VideoService;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.service.encyclope.EncyclopeService;
+import com.muju.note.launcher.service.homemenu.HomeMenuService;
 import com.muju.note.launcher.util.rx.RxUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -225,12 +226,54 @@ public class StartCheckDataFragment extends BaseFragment {
                 break;
             case HOSPITAL_MISS_SUCCESS:
                 list.add("医院风采数据初始化成功！数据正在后台下载，下载成功后可正常使用!");
-                getActivity().startActivity(new Intent(getActivity(),MainActivity.class));
-                getActivity().finish();
+                HomeMenuService.getInstance().startMenu();
                 break;
             case HOSPITAL_MISS_HTTP_FAIL:
                 list.add("医院宣教后台数据获取失败！1分钟后重新初始化");
                 reStartMiss(1);
+                break;
+
+            case HOME_MENU_START:
+                list.add("正在初始化首页模块数据，请稍候...");
+                break;
+            case HOME_MENU_HTTP_START:
+                list.add("正在获取后台首页模块数据，请稍候...");
+                break;
+            case HOME_MENU_DB_START:
+                list.add("正在加载首页模块数据，请稍候...");
+                break;
+            case HOME_MENU_SUCCESS:
+                list.add("首页模块数据初始化成功！");
+                HomeMenuService.getInstance().startRebootMenu();
+                break;
+            case HOME_MENU_HTTP_FAIL:
+                list.add("首页模块后台数据获取失败！1分钟后重新初始化");
+                reHomeMenu(1);
+                break;
+            case HOME_MENU_HTTP_DATA_NULL:
+                list.add("首页模块后台数据获取为空！请稍后重试或联系管理人员检查");
+                break;
+
+            case HOME_MENU_REBOOT_START:
+                list.add("正在更新首页模块数据，请稍候...");
+                break;
+            case HOME_MENU_REBOOT_HTTP_START:
+                list.add("正在获取后台首页模块数据，请稍候...");
+                break;
+            case HOME_MENU_REBOOT_DB_START:
+                list.add("正在加载首页模块数据，请稍候...");
+                break;
+            case HOME_MENU_REBOOT_SUCCESS:
+                list.add("首页模块数据更新成功！");
+                getActivity().startActivity(new Intent(getActivity(),MainActivity.class));
+                getActivity().finish();
+                break;
+            case HOME_MENU_REBOOT_HTTP_FAIL:
+                list.add("首页模块后台数据获取失败！1分钟后重新更新");
+                reRebootHomeMenu(1);
+                break;
+            case HOME_MENU_REBOOT_HTTP_DATA_NULL:
+                list.add("首页模块后台数据获取为空！请稍后重试或联系管理人员检查");
                 break;
         }
         adapter.notifyDataSetChanged();
@@ -323,6 +366,28 @@ public class StartCheckDataFragment extends BaseFragment {
                     @Override
                     public void accept(Long aLong) throws Exception {
                         MissionService.getInstance().startMiss();
+                    }
+                });
+    }
+
+    private void reHomeMenu(int min){
+        RxUtil.closeDisposable(disposable);
+        disposable = Observable.interval(min, TimeUnit.MINUTES)
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        HomeMenuService.getInstance().startMenu();
+                    }
+                });
+    }
+
+    private void reRebootHomeMenu(int min){
+        RxUtil.closeDisposable(disposable);
+        disposable = Observable.interval(min, TimeUnit.MINUTES)
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        HomeMenuService.getInstance().startRebootMenu();
                     }
                 });
     }

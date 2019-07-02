@@ -74,6 +74,26 @@ public class StartCheckDataEvent {
         HOSPITAL_MISS_HTTP_START,
         HOSPITAL_MISS_HTTP_FAIL,
         HOSPITAL_MISS_DB_START,
+
+        /**
+         * 首页菜单相关
+         */
+        HOME_MENU_START,
+        HOME_MENU_SUCCESS,
+        HOME_MENU_HTTP_START,
+        HOME_MENU_HTTP_FAIL,
+        HOME_MENU_HTTP_DATA_NULL,
+        HOME_MENU_DB_START,
+
+        /**
+         * 首页菜单相关
+         */
+        HOME_MENU_REBOOT_START,
+        HOME_MENU_REBOOT_SUCCESS,
+        HOME_MENU_REBOOT_HTTP_START,
+        HOME_MENU_REBOOT_HTTP_FAIL,
+        HOME_MENU_REBOOT_HTTP_DATA_NULL,
+        HOME_MENU_REBOOT_DB_START,
     }
 
     private Status status;

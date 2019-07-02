@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.muju.note.launcher.R;
+import com.muju.note.launcher.app.video.ui.VideoContentFragment;
 import com.muju.note.launcher.base.BaseFragment;
 
 import java.util.ArrayList;
@@ -23,12 +24,22 @@ import cn.youngkaaa.yviewpager.YViewPager;
 
 public class GuideFragment extends BaseFragment {
 
+    public static final String STATUS="status";
+
     @BindView(R.id.yvp_guide)
     YViewPager yvpGuide;
     Unbinder unbinder;
     @BindView(R.id.img_close)
     ImageView imgClose;
     private List<FragmentInner> mFragments = new ArrayList<>();
+
+    public static GuideFragment newInstance(int status) {
+        Bundle args = new Bundle();
+        args.putInt(STATUS, status);
+        GuideFragment fragment = new GuideFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public int getLayout() {
@@ -38,6 +49,7 @@ public class GuideFragment extends BaseFragment {
     @Override
     public void initData() {
 //        setData();
+
     }
 
     private void setData() {
@@ -65,6 +77,12 @@ public class GuideFragment extends BaseFragment {
         mFragments.add(fragmentInner7);
 
         yvpGuide.setAdapter(new FragmentAdapter(getChildFragmentManager()));
+
+        if(getArguments().getInt(STATUS)==1){
+            imgClose.setVisibility(View.VISIBLE);
+        }else {
+            imgClose.setVisibility(View.GONE);
+        }
     }
 
     @Override

@@ -6,6 +6,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.setting.event.VolumeEvent;
@@ -21,18 +26,33 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class VoiceFragment extends BaseFragment {
+
+    public static final String STATUS="status";
+
     @BindView(R.id.rectProgress_light)
     RectProgress rectProgressLight;
     @BindView(R.id.rectProgress_voice)
     RectProgress rectProgressVoice;
-    Unbinder unbinder;
+    @BindView(R.id.ll_back)
+    LinearLayout llBack;
+    @BindView(R.id.rl_title)
+    RelativeLayout rlTitle;
     private boolean isRelease = true; //判断MediaPlayer是否释放的标志
     private MediaPlayer mediaPlayer = null;
     private long maxVoice;
     private int voicePercent = -1;
+
+    public static VoiceFragment newInstance(int status) {
+        Bundle args = new Bundle();
+        args.putInt(STATUS, status);
+        VoiceFragment fragment = new VoiceFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public int getLayout() {
@@ -84,10 +104,23 @@ public class VoiceFragment extends BaseFragment {
                 });
             }
         });
+
+        llBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pop();
+            }
+        });
+
+        if(getArguments().getInt(STATUS)==1){
+            rlTitle.setVisibility(View.VISIBLE);
+        }else {
+            rlTitle.setVisibility(View.GONE);
+        }
     }
 
 
-    RectProgress.OnProgressChangedListener onVoiceChangeListener=new RectProgress.OnProgressChangedListener() {
+    RectProgress.OnProgressChangedListener onVoiceChangeListener = new RectProgress.OnProgressChangedListener() {
         @Override
         public void onProgressChanged(int currentValue, int percent) {
             if (percent > maxVoice) {
@@ -119,8 +152,8 @@ public class VoiceFragment extends BaseFragment {
         Settings.System.putInt(resolver, Settings.System.SCREEN_BRIGHTNESS_MODE,
                 Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
         //保存到系统中
-        Uri uri = android.provider.Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS);
-        android.provider.Settings.System.putInt(resolver, Settings.System.SCREEN_BRIGHTNESS,
+        Uri uri = Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS);
+        Settings.System.putInt(resolver, Settings.System.SCREEN_BRIGHTNESS,
                 brightness);
         resolver.notifyChange(uri, null);
     }

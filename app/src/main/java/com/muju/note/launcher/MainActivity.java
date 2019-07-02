@@ -382,6 +382,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
                 dao.setType(type);
                 dao.setTitle(missionInfoDao.getTitle());
                 dao.setMsgId(missionInfoDao.getMissionId());
+                if("pdf".equals(type)) {
+                    dao.setUrl(missionInfoDao.getFrontCover());
+                }else if("video".equals(type)){
+                    dao.setUrl(missionInfoDao.getVideo());
+                }
                 LitePalDb.setZkysDb();
                 dao.save();
             }

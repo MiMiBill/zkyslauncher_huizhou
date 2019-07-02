@@ -4,6 +4,8 @@ import com.muju.note.launcher.app.home.db.AdvertsCacheDao;
 import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
 import com.muju.note.launcher.app.home.db.AdvertsCountDao;
 import com.muju.note.launcher.app.home.db.AdvertsInfoDao;
+import com.muju.note.launcher.app.home.db.HomeMenuDao;
+import com.muju.note.launcher.app.home.db.HomeMenuSubDao;
 import com.muju.note.launcher.app.hostipal.db.InfoDao;
 import com.muju.note.launcher.app.hostipal.db.InfomationDao;
 import com.muju.note.launcher.app.hostipal.db.MienInfoDao;
@@ -28,8 +30,8 @@ import java.io.File;
 
 public class LitePalDb {
 
-    public static final LitePalDB zkysDataDb=new LitePalDB("zkys-data",27);
-    public static final LitePalDB zkysDb=new LitePalDB("zkys",27);
+    public static final LitePalDB zkysDataDb=new LitePalDB("zkys-data",28);
+    public static final LitePalDB zkysDb=new LitePalDB("zkys",28);
 
     public static final String DBNAME_ZKYS_DATA="/sdcard/zkysdb/zkys-data.db";
 
@@ -77,6 +79,8 @@ public class LitePalDb {
         zkysDb.addClassName(CustomMessageDao.class.getName());
         zkysDb.addClassName(ActivitionDao.class.getName());
         zkysDb.addClassName(AdvertsCodeDao.class.getName());
+        zkysDb.addClassName(HomeMenuDao.class.getName());
+        zkysDb.addClassName(HomeMenuSubDao.class.getName());
         LitePal.use(zkysDb);
     }
 

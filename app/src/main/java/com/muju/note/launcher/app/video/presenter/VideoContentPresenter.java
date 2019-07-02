@@ -16,7 +16,7 @@ import org.litepal.crud.callback.FindMultiCallback;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VideoContentPresenter extends BasePresenter<VideoContentContract.View> implements VideoContentContract.Presenter {
+public class  VideoContentPresenter extends BasePresenter<VideoContentContract.View> implements VideoContentContract.Presenter {
 
     /**
      *  查询影视列表
@@ -71,11 +71,11 @@ public class VideoContentPresenter extends BasePresenter<VideoContentContract.Vi
             String sql;
             int limit=(pageNum*30)-30;
             if(TextUtils.isEmpty(mapFilter)||"".equals(mapFilter)){
-                sql="columnName like '%"+name+"%' and status = 1";
+                sql="columnName like '%"+name+"%' and status = 1 order by number desc,onwayTime desc,editTime desc,updateTime desc";
             }else {
-                sql="columnName like '%"+name+"%' and status = 1 and customtag like '%"+mapFilter+"%'";
+                sql="columnName like '%"+name+"%' and status = 1 and customtag like '%"+mapFilter+"%' order by number desc,onwayTime desc,editTime desc,updateTime desc";
             }
-            LitePal.where(sql).limit(30).offset(limit).order("number desc").findAsync(VideoInfoDao.class).listen(new FindMultiCallback<VideoInfoDao>() {
+            LitePal.where(sql).limit(30).offset(limit).findAsync(VideoInfoDao.class).listen(new FindMultiCallback<VideoInfoDao>() {
                 @Override
                 public void onFinish(List<VideoInfoDao> list) {
                     if(list==null||list.size()<=0){

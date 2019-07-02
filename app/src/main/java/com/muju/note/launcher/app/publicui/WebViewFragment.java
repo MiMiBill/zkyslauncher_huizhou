@@ -5,7 +5,9 @@ import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
@@ -13,6 +15,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.muju.note.launcher.R;
@@ -20,10 +23,12 @@ import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.util.adverts.AdvertsUtil;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public class WebViewFragment extends BaseFragment implements View.OnClickListener {
 
-    private static final String TAG=WebViewFragment.class.getSimpleName();
+    private static final String TAG = WebViewFragment.class.getSimpleName();
 
     public static final String WEB_URL = "web_url";
     public static final String WEB_TITLE = "web_title";
@@ -40,29 +45,31 @@ public class WebViewFragment extends BaseFragment implements View.OnClickListene
 
     View loadingView;
     View emptyView;
+    @BindView(R.id.rl_back)
+    RelativeLayout rlBack;
 
     private int advertId = 0; //广告ID
     private long startTime; // 广告浏览开始时间
     private String title;
     private String url;
-    private boolean isCustomMsg=false; // 是否是宣教推送
+    private boolean isCustomMsg = false; // 是否是宣教推送
     private int customId; //宣教ID
 
     public static WebViewFragment newInstance(String title, String url) {
-        return  newInstance(title,url,0,false,0);
+        return newInstance(title, url, 0, false, 0);
     }
 
-    public static WebViewFragment newInstance(String title, String url,int advertId) {
-        return  newInstance(title,url,0,false,advertId);
+    public static WebViewFragment newInstance(String title, String url, int advertId) {
+        return newInstance(title, url, 0, false, advertId);
     }
 
-    public static WebViewFragment newInstance(String title, String url,int customId,boolean isCustomMsg,int advertId) {
+    public static WebViewFragment newInstance(String title, String url, int customId, boolean isCustomMsg, int advertId) {
         Bundle args = new Bundle();
         args.putString(WEB_TITLE, title);
         args.putString(WEB_URL, url);
-        args.putBoolean(WEB_IS_CUSTOM_MSG,isCustomMsg);
-        args.putInt(WEB_CUSTOM_ID,customId);
-        args.putInt(WEB_ADVERT_ID,advertId);
+        args.putBoolean(WEB_IS_CUSTOM_MSG, isCustomMsg);
+        args.putInt(WEB_CUSTOM_ID, customId);
+        args.putInt(WEB_ADVERT_ID, advertId);
         WebViewFragment fragment = new WebViewFragment();
         fragment.setArguments(args);
         return fragment;
@@ -81,14 +88,15 @@ public class WebViewFragment extends BaseFragment implements View.OnClickListene
         emptyView = getView().findViewById(R.id.emptyView);
         emptyView.setVisibility(View.GONE);
 
-        title=getArguments().getString(WEB_TITLE);
-        url=getArguments().getString(WEB_URL);
-        isCustomMsg=getArguments().getBoolean(WEB_IS_CUSTOM_MSG,false);
-        customId=getArguments().getInt(WEB_CUSTOM_ID);
+        title = getArguments().getString(WEB_TITLE);
+        url = getArguments().getString(WEB_URL);
+        isCustomMsg = getArguments().getBoolean(WEB_IS_CUSTOM_MSG, false);
+        customId = getArguments().getInt(WEB_CUSTOM_ID);
         tvTitle.setText(title);
         llBack.setOnClickListener(this);
+        rlBack.setOnClickListener(this);
 
-        startTime=System.currentTimeMillis();
+        startTime = System.currentTimeMillis();
 
         setWeb();
 
@@ -108,9 +116,10 @@ public class WebViewFragment extends BaseFragment implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.ll_back:
-                if(web.canGoBack()){
+            case R.id.rl_back:
+                if (web.canGoBack()) {
                     web.goBack();
                     return;
                 }
@@ -120,7 +129,7 @@ public class WebViewFragment extends BaseFragment implements View.OnClickListene
     }
 
     /**
-     *  设置webView参数
+     * 设置webView参数
      */
     private void setWeb() {
         WebSettings webSettings = web.getSettings();
@@ -157,7 +166,7 @@ public class WebViewFragment extends BaseFragment implements View.OnClickListene
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
                 String title = view.getTitle();
-                if (!TextUtils.isEmpty(title) && TextUtils.isEmpty(getArguments().getString(WEB_TITLE) )) {
+                if (!TextUtils.isEmpty(title) && TextUtils.isEmpty(getArguments().getString(WEB_TITLE))) {
                     tvTitle.setText(title);
                 }
             }
@@ -193,7 +202,7 @@ public class WebViewFragment extends BaseFragment implements View.OnClickListene
         web.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onReceivedTitle(WebView view, String title) {
-                if (!TextUtils.isEmpty(title) && TextUtils.isEmpty(getArguments().getString(WEB_TITLE) )) {
+                if (!TextUtils.isEmpty(title) && TextUtils.isEmpty(getArguments().getString(WEB_TITLE))) {
                     tvTitle.setText(title);
                 }
                 super.onReceivedTitle(view, title);
@@ -204,12 +213,12 @@ public class WebViewFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onDestroy() {
         super.onDestroy();
-        long currentTime=System.currentTimeMillis();
+        long currentTime = System.currentTimeMillis();
         if (advertId != 0) {
             AdvertsUtil.getInstance().addData(advertId, AdvertsUtil.TAG_BROWSETIME, currentTime - startTime);
-            AdvertsUtil.getInstance().addDataInfo(advertId, AdvertsUtil.TAG_BROWSETIME, startTime,currentTime);
+            AdvertsUtil.getInstance().addDataInfo(advertId, AdvertsUtil.TAG_BROWSETIME, startTime, currentTime);
         }
-        if(web!=null){
+        if (web != null) {
             web.removeAllViews();
             web.destroy();
         }
