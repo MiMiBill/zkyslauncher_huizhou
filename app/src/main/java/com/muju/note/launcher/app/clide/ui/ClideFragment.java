@@ -86,7 +86,6 @@ public class ClideFragment extends BaseFragment<ClidePresenter> implements View.
         refreshVideo();
         loadMore();
 
-        mPresenter.getCilde("少儿",pageNum);
         mPresenter.getHeader("少儿");
     }
 
@@ -136,6 +135,7 @@ public class ClideFragment extends BaseFragment<ClidePresenter> implements View.
         headerList.clear();
         headerList.addAll(list);
         clideHeaderAdapter.notifyDataSetChanged();
+        mPresenter.getCilde("少儿",pageNum);
     }
 
     /**
@@ -146,7 +146,6 @@ public class ClideFragment extends BaseFragment<ClidePresenter> implements View.
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 pageNum=1;
-                mPresenter.getCilde("少儿",pageNum);
                 mPresenter.getHeader("少儿");
             }
         });

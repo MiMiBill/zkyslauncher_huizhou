@@ -28,7 +28,7 @@
     <string name="staisfaction_tip">温馨提示,问卷调查完毕才能关闭此页面</string>
     <string name="card_card">住院卡号</string>
     <string name="card_time">入院时间</string>
-    <string name="card_info">病&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;情</string>
+    <string name="card_info">病情</string>
     <string name="card_doctor">主治医生</string>
     <string name="card_nurse">责任护士</string>
     <string name="card_notice">温馨提示：请注意定时喝水！</string>
