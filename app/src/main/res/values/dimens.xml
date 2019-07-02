@@ -114,6 +114,7 @@
     <dimen name="px504">504px</dimen>
     <dimen name="px514">514px</dimen>
     <dimen name="px550">550px</dimen>
+    <dimen name="px600">600px</dimen>
     <dimen name="px786">786px</dimen>
     <dimen name="px444">444px</dimen>
     <dimen name="px909">909px</dimen>

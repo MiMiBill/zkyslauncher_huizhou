@@ -11,7 +11,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 73
-        versionName "1.7.3"
+        versionName "1.7.3_alpha"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true
@@ -152,6 +152,8 @@ dependencies {
 //        exclude group: 'com.android.support', module: 'appcompat'
     }
 
+    // 文字转拼音
+    implementation 'com.belerweb:pinyin4j:2.5.1'
 
 
     implementation 'com.tencent.bugly:crashreport:latest.release'  //腾讯bugly
