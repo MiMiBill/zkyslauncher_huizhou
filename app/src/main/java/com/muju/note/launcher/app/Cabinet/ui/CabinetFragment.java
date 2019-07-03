@@ -40,8 +40,7 @@ import butterknife.OnClick;
 /**
  * 屏安柜
  */
-public class CabinetFragment extends BaseFragment<CabinetPresenter> implements CabinetContract
-        .View {
+public class CabinetFragment extends BaseFragment<CabinetPresenter> implements CabinetContract.View {
     private static final String TAG = "CabinetFragment";
     @BindView(R.id.ll_back)
     LinearLayout llBack;
@@ -126,7 +125,7 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
             videoView.stopPlayback();
         }
         EventBus.getDefault().post(new VideoNoLockEvent(true));
-        EventBus.getDefault().unregister(this);
+//        EventBus.getDefault().unregister(this);
     }
 
     @OnClick(R.id.ll_back)

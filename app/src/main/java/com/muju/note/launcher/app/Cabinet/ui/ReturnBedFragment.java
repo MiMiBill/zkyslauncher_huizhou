@@ -76,6 +76,7 @@ public class ReturnBedFragment extends BaseFragment<CabinetOrderPresenter> imple
     @Override
     public void returnBedFail() {
         setFailUi("归还失败,请稍后再试");
+        isSuccess=false;
     }
 
     @Override
@@ -122,6 +123,7 @@ public class ReturnBedFragment extends BaseFragment<CabinetOrderPresenter> imple
 
     //成功
     private void setSuccessUi() {
+        EventBus.getDefault().post(new ReturnBedEvent());
         tvStatus.setText("归还成功");
         relStatus.setVisibility(View.GONE);
         llyPrice.setVisibility(View.VISIBLE);
@@ -150,15 +152,11 @@ public class ReturnBedFragment extends BaseFragment<CabinetOrderPresenter> imple
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_back:
-                if(isSuccess){
-                    EventBus.getDefault().post(new ReturnBedEvent());
-                }
                 pop();
                 break;
             case R.id.btn_su:
                 if(isSuccess){
                     pop();
-                    EventBus.getDefault().post(new ReturnBedEvent());
                 }else {
                     mPresenter.returnBed(dataBean.getId());
                 }
