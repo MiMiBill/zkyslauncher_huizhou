@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/main_bg">
+    <include layout="@layout/title_bar"/>
+    <RelativeLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:id="@+id/rl_advance_record"
+            android:layout_width="match_parent"
+            android:layout_height="68px"
+            android:background="#f6f9f9">
+            <TextView
+                android:id="@+id/tv_cost"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="21px"
+                android:text="已花费金额: "
+                android:textSize="@dimen/cost_txt_size_middle"/>
+            <TextView
+                android:id="@+id/tv_cost_money"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/tv_cost"
+                android:gravity="center_vertical"
+                android:text="5563.00元"
+                android:textSize="@dimen/cost_txt_size_middle"/>
+
+            <TextView
+                android:id="@+id/tv_advance_gold"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/tv_cost_money"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="30px"
+                android:text="最近一次预交金: "
+                android:textSize="@dimen/cost_txt_size_middle"/>
+            <TextView
+                android:id="@+id/tv_advance_golds"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/tv_advance_gold"
+                android:gravity="center_vertical"
+                android:text="3000.00元"
+                android:textSize="@dimen/cost_txt_size_middle"/>
+            <TextView
+                android:id="@+id/tv_balance"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/tv_advance_golds"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="30px"
+                android:text="余额: "
+                android:textSize="@dimen/cost_txt_size_middle"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/tv_balance"
+                android:gravity="center_vertical"
+                android:text="2506.00元"
+                android:textSize="@dimen/cost_txt_size_middle"/>
+
+            <Button
+                android:id="@+id/bt_advance_record"
+                android:layout_width="128px"
+                android:layout_height="match_parent"
+                android:text="预交金记录"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10px"
+                android:gravity="center"
+                android:layout_margin="12px"
+                android:textSize="@dimen/cost_txt_size_middle"
+                android:textColor="#ffffff"
+                android:background="@drawable/cost_advance_blue_bg"/>
+        </RelativeLayout>
+
+        <!-- 左侧列表 -->
+        <LinearLayout
+            android:id="@+id/ll_advances"
+            android:layout_width="368px"
+            android:layout_height="match_parent"
+            android:layout_below="@id/rl_advance_record"
+            android:background="#f6f9f9"
+            android:orientation="vertical">
+
+            <!-- 时间选择 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="68px"
+                android:background="#e8f0f6"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_date_pick1"
+                    android:layout_width="110px"
+                    android:layout_height="34px"
+                    android:text="2018.06.12"
+                    android:textSize="@dimen/cost_txt_size_middle"
+                    android:layout_marginLeft="24px"
+                    android:gravity="center"
+                    android:background="@drawable/cost_advance_white_bg"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="-"
+                    android:layout_marginLeft="8px"
+                    android:gravity="center"/>
+                <TextView
+                    android:id="@+id/tv_date_pick2"
+                    android:layout_width="110px"
+                    android:layout_height="34px"
+                    android:text="2018.06.19"
+                    android:textSize="@dimen/cost_txt_size_middle"
+                    android:layout_marginLeft="8px"
+                    android:gravity="center"
+                    android:background="@drawable/cost_advance_white_bg"/>
+                <Button
+                    android:layout_width="70px"
+                    android:layout_height="34px"
+                    android:text="查询"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/cost_txt_size_middle"
+                    android:layout_marginLeft="20px"
+                    android:gravity="center"
+                    android:background="@drawable/cost_advance_blue_bg"/>
+            </LinearLayout>
+
+            <!-- 费用分类 -->
+            <include layout="@layout/cost_detai_layout"
+                android:layout_width="match_parent"
+                android:layout_height="0px"
+                android:layout_weight="1"
+                android:layout_marginLeft="22px"/>
+
+            <!-- 合计 -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20px"
+                android:background="#7faae9">
+                <TextView
+                    android:id="@+id/tv_totle_money"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20px"
+                    android:layout_marginTop="19px"
+                    android:text="合计:"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/cost_txt_size_middle"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="13px"
+                    android:layout_marginTop="15px"
+                    android:layout_toRightOf="@id/tv_totle_money"
+                    android:text="1002.00元"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/cost_txt_size_big"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_totle_money"
+                    android:layout_marginLeft="13px"
+                    android:layout_marginTop="12px"
+                    android:layout_marginBottom="10px"
+                    android:text="(提示: 点击消费金额可以查看消费明细)"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/cost_txt_size_small"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <!-- 表格标题栏 -->
+        <LinearLayout
+            android:id="@+id/ll_cost_title"
+            android:layout_width="wrap_content"
+            android:layout_height="38px"
+            android:orientation="horizontal"
+            android:layout_toRightOf="@id/ll_advances"
+            android:layout_below="@id/rl_advance_record"
+            android:background="#7faae9"
+            android:layout_marginLeft="10px"
+            android:layout_marginTop="10px">
+
+            <TextView
+                android:layout_width="337px"
+                android:layout_height="match_parent"
+                android:text="项目"
+                android:textSize="@dimen/cost_txt_size_middle"
+                android:textColor="#ffffff"
+                android:gravity="center"
+                />
+            <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="@color/table_line"/>
+            <TextView
+                android:layout_width="82px"
+                android:layout_height="match_parent"
+                android:text="数量"
+                android:textSize="@dimen/cost_txt_size_middle"
+                android:textColor="#ffffff"
+                android:gravity="center"
+                />
+            <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="@color/table_line"/>
+            <TextView
+                android:layout_width="82px"
+                android:layout_height="match_parent"
+                android:text="单位"
+                android:textSize="@dimen/cost_txt_size_middle"
+                android:textColor="#ffffff"
+                android:gravity="center"
+                />
+            <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="@color/table_line"/>
+            <TextView
+                android:layout_width="82px"
+                android:layout_height="match_parent"
+                android:text="价格"
+                android:textSize="@dimen/cost_txt_size_middle"
+                android:textColor="#ffffff"
+                android:gravity="center"
+                />
+            <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="@color/table_line"/>
+            <TextView
+                android:layout_width="152px"
+                android:layout_height="match_parent"
+                android:text="总额"
+                android:textSize="@dimen/cost_txt_size_middle"
+                android:textColor="#ffffff"
+                android:gravity="center"
+                />
+            <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="@color/table_line"/>
+            <TextView
+                android:layout_width="157px"
+                android:layout_height="match_parent"
+                android:text="时间"
+                android:textSize="@dimen/cost_txt_size_middle"
+                android:textColor="#ffffff"
+                android:gravity="center"
+                />
+
+        </LinearLayout>
+
+        <!-- 表格 -->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/zkrecycleview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/ll_advances"
+            android:layout_below="@id/ll_cost_title"
+            android:layout_marginLeft="10px"
+            android:layout_marginBottom="10px"/>
+    </RelativeLayout>
+    <!-- 费用信息 -->
+
+
+</LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+

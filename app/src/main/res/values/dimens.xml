@@ -118,4 +118,7 @@
     <dimen name="px786">786px</dimen>
     <dimen name="px444">444px</dimen>
     <dimen name="px909">909px</dimen>
+    <dimen name="cost_txt_size_big">24px</dimen>
+    <dimen name="cost_txt_size_middle">20px</dimen>
+    <dimen name="cost_txt_size_small">16px</dimen>
 </resources>

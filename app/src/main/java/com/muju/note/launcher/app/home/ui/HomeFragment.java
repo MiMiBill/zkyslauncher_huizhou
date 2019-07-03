@@ -28,6 +28,7 @@ import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.app.home.contract.HomeContract;
 import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
 import com.muju.note.launcher.app.home.db.HomeMenuDao;
+import com.muju.note.launcher.app.home.dialog.HospitalServiceDialog;
 import com.muju.note.launcher.app.home.event.DrawOutEvent;
 import com.muju.note.launcher.app.home.event.GetAdvertEvent;
 import com.muju.note.launcher.app.home.event.OutHospitalEvent;
@@ -37,6 +38,7 @@ import com.muju.note.launcher.app.home.presenter.HomePresenter;
 import com.muju.note.launcher.app.hostipal.ui.HosPitalMissionFragment;
 import com.muju.note.launcher.app.hostipal.ui.HospitalEncyFragment;
 import com.muju.note.launcher.app.hostipal.ui.HospitalMienFragment;
+import com.muju.note.launcher.app.hostipal.ui.HospitalelServiceFragment;
 import com.muju.note.launcher.app.insurance.InsureanceFragment;
 import com.muju.note.launcher.app.msg.ui.MsgFragment;
 import com.muju.note.launcher.app.orderfood.OrderFoodFragment;
@@ -171,6 +173,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     private HomeTopVideoAdapter homeTopVideoAdapter;
     private VideoInfoDao imgVideoInfo;
     private AdvertsDialog dialog;
+    private HospitalServiceDialog serviceDialog;
 
     public static HomeFragment newInstance() {
         if (homeFragment == null) {
@@ -347,6 +350,10 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     public void onSupportInvisible() {
         super.onSupportInvisible();
         mPresenter.onDestroy();
+        hideSoftInput();
+        if(serviceDialog!=null && serviceDialog.isShowing()){
+            serviceDialog.dismiss();
+        }
     }
 
     /**
@@ -612,9 +619,31 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 start(new HealthyFragment());
                 break;
             case "医疗":
-
+                showServiceDialog();
                 break;
         }
+    }
+
+
+    //显示医疗服务弹窗
+    private void showServiceDialog() {
+        serviceDialog = new HospitalServiceDialog(getActivity());
+        serviceDialog.setOnClickListener(new HospitalServiceDialog.OnClickListener() {
+            @Override
+            public void onClick(String pass) {
+                if (TextUtils.isEmpty(pass)) {
+                    showToast("请输入住院号");
+                    return;
+                }
+                if (pass.equals("456789123")) {
+                    serviceDialog.dismiss();
+                    start(new HospitalelServiceFragment());
+                } else {
+                    showToast("住院号不正确，请重新输入");
+                }
+            }
+        });
+        serviceDialog.show();
     }
 }
 

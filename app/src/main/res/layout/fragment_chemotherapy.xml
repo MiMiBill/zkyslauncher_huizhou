@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <include layout="@layout/title_bar"/>
+
+    <!-- 患者信息 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60px"
+        android:background="#e8f0f6"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="287px"
+            android:gravity="center_vertical"
+            android:text="姓名: "
+            android:textColor="#7faae9"
+            android:textSize="@dimen/cost_txt_size_middle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="张三"
+            android:textColor="#7faae9"
+            android:textSize="@dimen/cost_txt_size_middle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="53px"
+            android:gravity="center_vertical"
+            android:text="性别: "
+            android:textColor="#7faae9"
+            android:textSize="@dimen/cost_txt_size_middle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="男"
+            android:textColor="#7faae9"
+            android:textSize="@dimen/cost_txt_size_middle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="43px"
+            android:gravity="center_vertical"
+            android:text="年龄: "
+            android:textColor="#7faae9"
+            android:textSize="@dimen/cost_txt_size_middle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="20岁"
+            android:textColor="#7faae9"
+            android:textSize="@dimen/cost_txt_size_middle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="43px"
+            android:gravity="center_vertical"
+            android:text="病床号: "
+            android:textColor="#7faae9"
+            android:textSize="@dimen/cost_txt_size_middle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="003"
+            android:textColor="#7faae9"
+            android:textSize="@dimen/cost_txt_size_middle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="48px"
+            android:gravity="center_vertical"
+            android:text="住院号: "
+            android:textColor="#7faae9"
+            android:textSize="@dimen/cost_txt_size_middle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="18px"
+            android:gravity="center_vertical"
+            android:text="0000125"
+            android:textColor="#7faae9"
+            android:textSize="@dimen/cost_txt_size_middle" />
+        <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="A-"-->
+        <!--android:textSize="@dimen/cost_txt_size_middle"-->
+        <!--android:textColor="#7faae9"/>-->
+        <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="100%"-->
+        <!--android:textSize="@dimen/cost_txt_size_middle"-->
+        <!--android:textColor="#7faae9"/>-->
+        <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="A+"-->
+        <!--android:textSize="@dimen/cost_txt_size_middle"-->
+        <!--android:textColor="#7faae9"/>-->
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <!-- 左侧title -->
+        <LinearLayout
+            android:layout_width="368px"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="68px"
+                android:background="#7faae9"
+                android:gravity="center"
+                android:text="检查项目"
+                android:textColor="@color/table_line"
+                android:textSize="@dimen/cost_txt_size_big"
+                android:textStyle="bold" />
+
+            <q.rorbin.verticaltablayout.VerticalTabLayout
+                android:id="@+id/vertical_tab"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#f0f0f0"
+                app:indicator_color="@null"
+                app:indicator_width="0dp"
+                app:tab_height="48px"
+                app:tab_mode="scrollable" />
+        </LinearLayout>
+
+        <!-- 显示报告结果 -->
+        <!--<WebView
+            android:id="@+id/webview_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20px"
+            android:background="@android:color/white"
+            android:paddingLeft="20px"
+            android:paddingRight="20px"
+            android:paddingTop="20px" />-->
+
+        <!-- 显示报告结果 -->
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20px"
+            android:background="@android:color/white"
+            android:paddingLeft="20px"
+            android:paddingRight="20px"
+            android:paddingTop="20px" />
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="#f9f9f9">
+    
+    <TextView
+        android:id="@+id/tv_project_name"
+        android:layout_width="257px"
+        android:layout_height="35px"
+        android:gravity="center_vertical"
+        android:text="维生素C"
+        android:textSize="@dimen/cost_txt_size_small" />
+    <TextView
+        android:id="@+id/tv_result"
+        android:layout_width="156px"
+        android:layout_height="35px"
+        android:gravity="center_vertical"
+        android:text="结果"
+        android:textSize="@dimen/cost_txt_size_small" />
+    <TextView
+        android:id="@+id/tv_unit"
+        android:layout_width="153px"
+        android:layout_height="35px"
+        android:gravity="center_vertical"
+        android:text="单位"
+        android:textSize="@dimen/cost_txt_size_small" />
+    <TextView
+        android:id="@+id/tv_tip"
+        android:layout_width="133px"
+        android:layout_height="35px"
+        android:gravity="center_vertical"
+        android:text="提示"
+        android:textSize="@dimen/cost_txt_size_small" />
+    <TextView
+        android:id="@+id/tv_reference_range"
+        android:layout_width="match_parent"
+        android:layout_height="35px"
+        android:gravity="center_vertical"
+        android:text="参考范围"
+        android:textSize="@dimen/cost_txt_size_small" />
+
+</LinearLayout>

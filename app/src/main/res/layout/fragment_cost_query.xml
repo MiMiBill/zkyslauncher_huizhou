@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#efefef"
+    android:orientation="vertical">
+
+    <include layout="@layout/title_bar"/>
+
+    <!-- 患者信息栏 -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60px"
+        android:background="#e8f0f6"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="姓名: "
+            android:textSize="@dimen/cost_txt_size_middle" />
+
+        <TextView
+            android:id="@+id/tv_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tv_name"
+            android:text="张三"
+            android:textSize="@dimen/cost_txt_size_middle" />
+
+        <TextView
+            android:id="@+id/tv_sex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25px"
+            android:layout_toRightOf="@id/tv_username"
+            android:text="性别: "
+            android:textSize="@dimen/cost_txt_size_middle" />
+
+        <TextView
+            android:id="@+id/tv_usersex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tv_sex"
+            android:text="男"
+            android:textSize="@dimen/cost_txt_size_middle" />
+
+        <TextView
+            android:id="@+id/tv_age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25px"
+            android:layout_toRightOf="@id/tv_usersex"
+            android:text="年龄: "
+            android:textSize="@dimen/cost_txt_size_middle" />
+
+        <TextView
+            android:id="@+id/tv_userage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tv_age"
+            android:text="20岁"
+            android:textSize="@dimen/cost_txt_size_middle" />
+
+        <TextView
+            android:id="@+id/tv_sickbed_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/tv_userage"
+            android:text="病床号: "
+            android:textSize="@dimen/cost_txt_size_middle" />
+
+        <TextView
+            android:id="@+id/tv_user_sickbed_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tv_sickbed_number"
+            android:text="003"
+            android:textSize="@dimen/cost_txt_size_middle" />
+
+        <TextView
+            android:id="@+id/tv_inpatient_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25px"
+            android:layout_toRightOf="@id/tv_user_sickbed_number"
+            android:text="住院号: "
+            android:textSize="@dimen/cost_txt_size_middle" />
+
+        <TextView
+            android:id="@+id/tv_user_inpatient_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tv_inpatient_number"
+            android:text="000125"
+            android:textSize="@dimen/cost_txt_size_middle" />
+    </RelativeLayout>
+
+
+    <FrameLayout
+        android:id="@+id/fl_cost_query"
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="1"></FrameLayout>
+
+</LinearLayout>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#ffffff">
+
+    <include layout="@layout/title_bar"/>
+    <!-- 表格标题 -->
+    <LinearLayout
+        android:layout_width="1260px"
+        android:layout_height="48px"
+        android:background="#7faae9"
+        android:orientation="horizontal"
+        android:layout_marginLeft="10px"
+        android:layout_marginRight="10px"
+        android:layout_marginTop="10px">
+
+        <TextView
+            android:layout_width="225px"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="时间"
+            android:textSize="@dimen/cost_txt_size_middle"
+            android:textColor="@color/table_line"/>
+
+        <TextView
+            android:layout_width="290px"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="金额(小写)"
+            android:textSize="@dimen/cost_txt_size_middle"
+            android:textColor="@color/table_line"/>
+
+        <TextView
+            android:layout_width="293px"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="金额(大写)"
+            android:textSize="@dimen/cost_txt_size_middle"
+            android:textColor="@color/table_line"/>
+
+        <TextView
+            android:layout_width="294px"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="支付方式"
+            android:textSize="@dimen/cost_txt_size_middle"
+            android:textColor="@color/table_line"/>
+
+        <TextView
+            android:layout_width="130px"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="收款员"
+            android:textSize="@dimen/cost_txt_size_middle"
+            android:textColor="@color/table_line"/>
+
+    </LinearLayout>
+
+    <!-- 表格列表 -->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rcl_advance_record"
+        android:layout_width="1260px"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="10px"
+        android:layout_marginRight="10px"/>
+
+    <!-- 总价、余额 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="77px"
+        android:orientation="horizontal"
+        android:background="#7faae9">
+        <TextView
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical|end"
+            android:text="总计: "
+            android:textColor="@color/table_line"
+            android:textSize="@dimen/cost_txt_size_big"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginRight="24px"
+            android:text="15563.00元"
+            android:textColor="@color/table_line"
+            android:textSize="@dimen/cost_txt_size_big"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="余额: "
+            android:textColor="@color/table_line"
+            android:textSize="@dimen/cost_txt_size_big"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginRight="28px"
+            android:text="2506.00元"
+            android:textColor="@color/table_line"
+            android:textSize="@dimen/cost_txt_size_big"/>
+    </LinearLayout>
+</LinearLayout>
