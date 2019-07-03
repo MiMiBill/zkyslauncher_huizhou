@@ -10,6 +10,7 @@ import com.muju.note.launcher.okgo.BaseBean;
 import com.muju.note.launcher.okgo.JsonCallback;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.log.LogFactory;
+import com.muju.note.launcher.util.log.LogUtil;
 
 public class LuckPresenter extends BasePresenter<LuckContract.View> implements LuckContract.Presenter {
 
@@ -20,6 +21,10 @@ public class LuckPresenter extends BasePresenter<LuckContract.View> implements L
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
                         mView.startSuccess(response.body());
                         LogFactory.l().i(response);
                     }
@@ -27,6 +32,10 @@ public class LuckPresenter extends BasePresenter<LuckContract.View> implements L
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
                         mView.startFail();
                     }
                 });
@@ -41,6 +50,10 @@ public class LuckPresenter extends BasePresenter<LuckContract.View> implements L
                 .execute(new JsonCallback<BaseBean<PriseBean>>() {
                     @Override
                     public void onSuccess(Response<BaseBean<PriseBean>> response) {
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
                         mView.setPrise(response.body().getData());
                     }
 

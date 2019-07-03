@@ -3,6 +3,7 @@ package com.muju.note.launcher.app.clide.presenter;
 import com.muju.note.launcher.app.clide.contract.ClideContract;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
 import com.muju.note.launcher.base.BasePresenter;
+import com.muju.note.launcher.util.log.LogUtil;
 
 import org.litepal.LitePal;
 import org.litepal.crud.callback.CountCallback;
@@ -24,6 +25,10 @@ public class ClidePresenter extends BasePresenter<ClideContract.View> implements
         LitePal.where(sql).limit(30).offset(limit).findAsync(VideoInfoDao.class).listen(new FindMultiCallback<VideoInfoDao>() {
             @Override
             public void onFinish(List<VideoInfoDao> list) {
+                if(mView==null){
+                    LogUtil.e("mView为空");
+                    return;
+                }
                 if(list==null||list.size()<=0){
                     mView.getClideNull();
                     return;
@@ -43,6 +48,10 @@ public class ClidePresenter extends BasePresenter<ClideContract.View> implements
         LitePal.where(sql).findAsync(VideoInfoDao.class).listen(new FindMultiCallback<VideoInfoDao>() {
             @Override
             public void onFinish(List<VideoInfoDao> list) {
+                if(mView==null){
+                    LogUtil.e("mView为空");
+                    return;
+                }
                 if(list==null||list.size()<=0){
                     mView.getClideNull();
                     return;
@@ -57,6 +66,10 @@ public class ClidePresenter extends BasePresenter<ClideContract.View> implements
         for (int i=0;i<6;i++){
             int num=new Random().nextInt(count+1);
             numList.add(list.get(num));
+        }
+        if(mView==null){
+            LogUtil.e("mView为空");
+            return;
         }
         mView.getHeaderSuccess(numList);
     }

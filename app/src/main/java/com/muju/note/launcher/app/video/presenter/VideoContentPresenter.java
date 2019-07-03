@@ -9,6 +9,7 @@ import com.muju.note.launcher.app.video.db.VideoTagSubDao;
 import com.muju.note.launcher.app.video.db.VideoTagsDao;
 import com.muju.note.launcher.base.BasePresenter;
 import com.muju.note.launcher.litepal.LitePalDb;
+import com.muju.note.launcher.util.log.LogUtil;
 
 import org.litepal.LitePal;
 import org.litepal.crud.callback.FindMultiCallback;
@@ -43,6 +44,10 @@ public class  VideoContentPresenter extends BasePresenter<VideoContentContract.V
             LitePal.findAllAsync(VideoInfoTopDao.class).listen(new FindMultiCallback<VideoInfoTopDao>() {
                 @Override
                 public void onFinish(List<VideoInfoTopDao> list) {
+                    if(mView==null){
+                        LogUtil.e("mView为空");
+                        return;
+                    }
                     if(list==null||list.size()<=0){
                         mView.getVideoNull();
                         return;
@@ -78,6 +83,10 @@ public class  VideoContentPresenter extends BasePresenter<VideoContentContract.V
             LitePal.where(sql).limit(30).offset(limit).findAsync(VideoInfoDao.class).listen(new FindMultiCallback<VideoInfoDao>() {
                 @Override
                 public void onFinish(List<VideoInfoDao> list) {
+                    if(mView==null){
+                        LogUtil.e("mView为空");
+                        return;
+                    }
                     if(list==null||list.size()<=0){
                         mView.getVideoNull();
                         return;
@@ -97,6 +106,10 @@ public class  VideoContentPresenter extends BasePresenter<VideoContentContract.V
         LitePal.where("coulmnsId = ?", columnId + "").findAsync(VideoTagsDao.class, true).listen(new FindMultiCallback<VideoTagsDao>() {
             @Override
             public void onFinish(List<VideoTagsDao> list) {
+                if(mView==null){
+                    LogUtil.e("mView为空");
+                    return;
+                }
                 for (VideoTagsDao tagsDao : list) {
                     if (tagsDao.getList() != null) {
                         tagsDao.getList().add(0, new VideoTagSubDao("全部", true));

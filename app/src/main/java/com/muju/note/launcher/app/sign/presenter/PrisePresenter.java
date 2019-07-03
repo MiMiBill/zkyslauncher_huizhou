@@ -8,6 +8,7 @@ import com.muju.note.launcher.base.BasePresenter;
 import com.muju.note.launcher.okgo.BaseBean;
 import com.muju.note.launcher.okgo.JsonCallback;
 import com.muju.note.launcher.url.UrlUtil;
+import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.user.UserUtil;
 
 public class PrisePresenter extends BasePresenter<PriseContract.View> implements PriseContract.Presenter {
@@ -22,6 +23,10 @@ public class PrisePresenter extends BasePresenter<PriseContract.View> implements
                 .execute(new JsonCallback<BaseBean<PriseBean>>() {
                     @Override
                     public void onSuccess(Response<BaseBean<PriseBean>> response) {
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
                         mView.useReward(response.body().getData());
                     }
 

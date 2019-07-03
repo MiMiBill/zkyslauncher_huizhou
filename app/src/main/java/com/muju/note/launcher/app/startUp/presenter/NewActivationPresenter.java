@@ -32,6 +32,10 @@ public class NewActivationPresenter extends BasePresenter<NewActivationContract.
                     @Override
                     public void onSuccess(Response<String> response) {
                         try {
+                            if(mView==null){
+                                LogUtil.e("mView为空");
+                                return;
+                            }
                             ActivePadInfo info=new Gson().fromJson(response.body(),ActivePadInfo.class);
                             if(info.getCode()!=200){
                                 mView.bindFail();
@@ -52,6 +56,10 @@ public class NewActivationPresenter extends BasePresenter<NewActivationContract.
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
                         mView.bindFail();
                     }
                 });

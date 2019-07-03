@@ -7,6 +7,7 @@ import com.lzy.okgo.model.Response;
 import com.muju.note.launcher.app.Cabinet.contract.CabinetOrderContract;
 import com.muju.note.launcher.base.BasePresenter;
 import com.muju.note.launcher.url.UrlUtil;
+import com.muju.note.launcher.util.log.LogUtil;
 
 public class CabinetOrderPresenter extends BasePresenter<CabinetOrderContract.View> implements CabinetOrderContract.Presenter {
 
@@ -18,12 +19,20 @@ public class CabinetOrderPresenter extends BasePresenter<CabinetOrderContract.Vi
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
                         mView.unLock(response.body());
                     }
 
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
                         mView.unLockFail();
                     }
                 });
@@ -37,12 +46,20 @@ public class CabinetOrderPresenter extends BasePresenter<CabinetOrderContract.Vi
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
                         mView.reTurnBed(response.body());
                     }
 
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
                         mView.returnBedFail();
                     }
                 });
@@ -56,12 +73,20 @@ public class CabinetOrderPresenter extends BasePresenter<CabinetOrderContract.Vi
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
                         mView.findByDid(response.body());
                     }
 
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
                         mView.unLockFail();
                     }
                 });

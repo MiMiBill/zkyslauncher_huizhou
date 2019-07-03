@@ -20,6 +20,7 @@ import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.Constants;
 import com.muju.note.launcher.util.DateUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
+import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.net.NetWorkUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
 import com.muju.note.launcher.util.sign.Signature;
@@ -58,6 +59,10 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
 
                     @Override
                     public void onNext(Long aLong) {
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
                         mView.getDate(DateUtil.getDate("yyyy年MM月dd日"), DateUtil.getDate
                                 ("HH:mm:ss"), DateUtil.getWeek(), NetWorkUtil.getNetWorkLine(),
                                 NetWorkUtil.getNetworkState(LauncherApplication.getContext()));
@@ -88,6 +93,10 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
 //                        LogFactory.l().i("response==="+response.body());
                         Gson gson = new Gson();
                         PatientResponse patientResponse = gson.fromJson(response.body(),
@@ -129,6 +138,10 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
             @Override
             public void onFinish(List<AdvertsCodeDao> list) {
 //                LogFactory.l().i("list"+list.size());
+                if(mView==null){
+                    LogUtil.e("mView为空");
+                    return;
+                }
                 if (list == null || list.size() <= 0) {
                     mView.getBananaNull();
                     return;
@@ -147,6 +160,10 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
             @Override
             public void onFinish(List<AdvertsCodeDao> list) {
 //                LogFactory.l().i("list"+list.size());
+                if(mView==null){
+                    LogUtil.e("mView为空");
+                    return;
+                }
                 if (list == null || list.size() <= 0) {
                     return;
                 }
@@ -163,6 +180,10 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
         LitePal.findAllAsync(HomeMenuDao.class).listen(new FindMultiCallback<HomeMenuDao>() {
             @Override
             public void onFinish(List<HomeMenuDao> list) {
+                if(mView==null){
+                    LogUtil.e("mView为空");
+                    return;
+                }
                 if(list==null||list.size()<=0){
                     mView.getMenuNull();
                     return;
@@ -180,6 +201,10 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
         LitePal.limit(20).order("createTime desc").findAsync(VideoHisDao.class).listen(new FindMultiCallback<VideoHisDao>() {
             @Override
             public void onFinish(List<VideoHisDao> list) {
+                if(mView==null){
+                    LogUtil.e("mView为空");
+                    return;
+                }
                 if (list == null || list.size() <= 0) {
                     mView.getVideoHisNull();
                     return;
@@ -198,6 +223,10 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
                 () {
             @Override
             public void onFinish(List<VideoInfoTopDao> list) {
+                if(mView==null){
+                    LogUtil.e("mView为空");
+                    return;
+                }
                 if (list == null || list.size() <= 0) {
                     mView.getVideoTopNull();
                     return;

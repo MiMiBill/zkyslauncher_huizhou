@@ -9,6 +9,7 @@ import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.Constants;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
+import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.sign.Signature;
 
 import java.util.HashMap;
@@ -33,12 +34,20 @@ public class FeedBackPresenter extends BasePresenter<FeedBackContract.View> impl
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
                        mView.post(response.body());
                     }
 
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
                         mView.postFail();
                     }
                 });

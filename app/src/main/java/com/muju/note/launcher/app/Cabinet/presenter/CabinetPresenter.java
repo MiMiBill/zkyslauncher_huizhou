@@ -9,6 +9,7 @@ import com.muju.note.launcher.base.BasePresenter;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
+import com.muju.note.launcher.util.log.LogUtil;
 
 public class CabinetPresenter extends BasePresenter<CabinetContract.View> implements CabinetContract.Presenter {
 
@@ -19,12 +20,20 @@ public class CabinetPresenter extends BasePresenter<CabinetContract.View> implem
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
                         mView.getOrder(response.body());
                     }
 
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
                         mView.padNoOrder();
                     }
                 });
@@ -38,12 +47,20 @@ public class CabinetPresenter extends BasePresenter<CabinetContract.View> implem
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
                         mView.unLock(response.body());
                     }
 
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
                         mView.unLockFail();
                     }
                 });
@@ -57,12 +74,20 @@ public class CabinetPresenter extends BasePresenter<CabinetContract.View> implem
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
                         mView.reTurnBed(response.body());
                     }
 
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
                         mView.returnBedFail();
                     }
                 });
@@ -76,12 +101,20 @@ public class CabinetPresenter extends BasePresenter<CabinetContract.View> implem
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
                         mView.findByDid(response.body());
                     }
 
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
                         mView.unLockFail();
                     }
                 });

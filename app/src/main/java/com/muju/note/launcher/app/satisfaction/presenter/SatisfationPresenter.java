@@ -8,6 +8,7 @@ import com.muju.note.launcher.app.satisfaction.contract.SatisfationContract;
 import com.muju.note.launcher.base.BasePresenter;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.Constants;
+import com.muju.note.launcher.util.log.LogUtil;
 
 import org.json.JSONObject;
 
@@ -25,12 +26,20 @@ public class SatisfationPresenter extends BasePresenter<SatisfationContract.View
 
             @Override
             public void onSuccess(Response<String> response) {
+                if(mView==null){
+                    LogUtil.e("mView为空");
+                    return;
+                }
                 mView.getCommitSurveyData(response.body());
             }
 
             @Override
             public void onError(Response<String> response) {
                 super.onError(response);
+                if(mView==null){
+                    LogUtil.e("mView为空");
+                    return;
+                }
                 mView.commitErrow();
             }
 
@@ -44,6 +53,10 @@ public class SatisfationPresenter extends BasePresenter<SatisfationContract.View
                 .tag(this).execute(new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
+                if(mView==null){
+                    LogUtil.e("mView为空");
+                    return;
+                }
                 mView.getSurveyData(response.body());
             }
 

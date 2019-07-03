@@ -4,6 +4,7 @@ import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
 import com.muju.note.launcher.app.publicui.contract.ProtectionContract;
 import com.muju.note.launcher.base.BasePresenter;
 import com.muju.note.launcher.util.log.LogFactory;
+import com.muju.note.launcher.util.log.LogUtil;
 
 import org.litepal.LitePal;
 import org.litepal.crud.callback.FindMultiCallback;
@@ -21,6 +22,10 @@ public class ProtectionPresenter extends BasePresenter<ProtectionContract.View> 
         LitePal.where("code =?",code).findAsync(AdvertsCodeDao.class).listen(new FindMultiCallback<AdvertsCodeDao>() {
             @Override
             public void onFinish(List<AdvertsCodeDao> list) {
+                if(mView==null){
+                    LogUtil.e("mView为空");
+                    return;
+                }
                 LogFactory.l().i("list"+list.size());
                 if (list == null || list.size() <= 0) {
                     mView.getLockBananaNull();
