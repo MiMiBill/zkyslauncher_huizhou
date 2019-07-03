@@ -39,9 +39,15 @@ public class WotvPlayErrorDialog extends Dialog {
 
         if(!TextUtils.isEmpty(msg)) {
             tvMsg.setText("错误信息:"+msg);
+        }else {
+            tvMsg.setText("网络错误，请稍后重试");
         }
 
         ivDissmiss.setOnClickListener(listener);
         btnDissmiss.setOnClickListener(listener);
+    }
+
+    public void setErrorMsg(String msg){
+        tvMsg.setText(msg);
     }
 }

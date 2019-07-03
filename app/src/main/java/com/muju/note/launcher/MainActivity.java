@@ -540,17 +540,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
     }
 
     /**
-     * 问卷调查
-     *
-     * @param entity
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void goToBedSide(GotoBedsideEvent entity) {
-        PatientResponse.DataBean info = entity.info;
-        start(BedSideCardFragment.newInstance(info));
-    }
-
-    /**
      * 床头卡模式
      *
      * @param event
@@ -559,7 +548,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
     public void bedSide(BedSideEvent event) {
         LogUtil.d(TAG, "bedCode:" + event.getCode());
         if (event.getCode() == 13) {
-            start(BedSideCardFragment.newInstance(HomeFragment.entity));
+            start(BedSideCardFragment.newInstance(HomeFragment.entity,true));
         } else {
             popTo(HomeFragment.class, false);
         }

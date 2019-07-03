@@ -103,8 +103,8 @@
         android:layout_centerHorizontal="true"
         android:background="@android:color/black"
         android:gravity="center_horizontal"
-        android:orientation="vertical"
         android:visibility="gone"
+        android:orientation="vertical"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true">
 
@@ -121,6 +121,15 @@
             android:text="直播加载失败，请稍后重试... ..."
             android:textColor="@color/white_drak"
             android:textSize="24px" />
+
+        <TextView
+            android:id="@+id/tv_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="网络错误，请稍后重试"
+            android:textColor="@color/white_drak"
+            android:layout_marginTop="@dimen/px10"
+            android:textSize="@dimen/px20"/>
     </LinearLayout>
 
 

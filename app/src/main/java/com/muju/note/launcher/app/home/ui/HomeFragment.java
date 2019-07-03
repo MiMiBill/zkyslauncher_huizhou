@@ -1,11 +1,14 @@
 package com.muju.note.launcher.app.home.ui;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -16,6 +19,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.Cabinet.ui.CabinetFragment;
 import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
+import com.muju.note.launcher.app.bedsidecard.ui.BedSideCardFragment;
 import com.muju.note.launcher.app.clide.ui.ClideFragment;
 import com.muju.note.launcher.app.dialog.AdvertsDialog;
 import com.muju.note.launcher.app.finance.FinanceFragment;
@@ -86,6 +90,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observable;
@@ -160,7 +165,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     TextView tvCard;
     @BindView(R.id.rel_card)
     RelativeLayout relCard;
-    Unbinder unbinder;
+    @BindView(R.id.iv_bed_card)
+    ImageView ivBedCard;
 
 
     private List<HomeMenuDao> homeMenuDaos;
@@ -199,11 +205,12 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             mPresenter.getPatientData(String.valueOf(activeInfo.getBedId()), getActivity());
         }
         relCard.setOnClickListener(this);
+        ivBedCard.setOnClickListener(this);
 
         // 加载首页菜单模块
-        homeMenuDaos=new ArrayList<>();
-        menuAdapter=new HomeMenuAdapter(R.layout.rv_item_home_menu,homeMenuDaos);
-        rvMenu.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(),6));
+        homeMenuDaos = new ArrayList<>();
+        menuAdapter = new HomeMenuAdapter(R.layout.rv_item_home_menu, homeMenuDaos);
+        rvMenu.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(), 6));
         rvMenu.setAdapter(menuAdapter);
         rvMenu.setHasFixedSize(true);
         rvMenu.setNestedScrollingEnabled(false);
@@ -340,9 +347,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         mPresenter.updateDate();
         mPresenter.getTopVideo();
         mPresenter.getVideoHis();
-        if(HomeMenuService.getInstance().isUpdate){
+        if (HomeMenuService.getInstance().isUpdate) {
             mPresenter.getMenu();
-            HomeMenuService.getInstance().isUpdate=false;
+            HomeMenuService.getInstance().isUpdate = false;
         }
     }
 
@@ -351,7 +358,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         super.onSupportInvisible();
         mPresenter.onDestroy();
         hideSoftInput();
-        if(serviceDialog!=null && serviceDialog.isShowing()){
+        if (serviceDialog != null && serviceDialog.isShowing()) {
             serviceDialog.dismiss();
         }
     }
@@ -448,6 +455,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void getVideoHisSuccess(List<VideoHisDao> list) {
+        llHisVideoNull.setVisibility(View.GONE);
         videoHisDaos.clear();
         videoHisDaos.addAll(list);
         homeHisVideoAdapter.notifyDataSetChanged();
@@ -461,6 +469,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void getVideoTopSuccess(List<VideoInfoDao> list) {
+        llTopVideoNull.setVisibility(View.GONE);
         videoInfoDaos.clear();
         videoInfoDaos.addAll(list);
         homeTopVideoAdapter.notifyDataSetChanged();
@@ -562,11 +571,14 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             case R.id.rel_card: // 侧边栏
                 EventBus.getDefault().post(new DrawOutEvent());
                 break;
+            case R.id.iv_bed_card:
+                start(BedSideCardFragment.newInstance(HomeFragment.entity,false));
+                break;
         }
     }
 
-    private void menuClick(HomeMenuDao dao){
-        switch (dao.getTab()){
+    private void menuClick(HomeMenuDao dao) {
+        switch (dao.getTab()) {
             case "风采":
                 start(new HospitalMienFragment());
                 break;

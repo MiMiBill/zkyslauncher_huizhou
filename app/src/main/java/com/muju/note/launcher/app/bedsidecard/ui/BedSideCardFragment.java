@@ -1,9 +1,12 @@
 package com.muju.note.launcher.app.bedsidecard.ui;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.muju.note.launcher.R;
@@ -21,6 +24,8 @@ import com.muju.note.launcher.util.net.NetWorkUtil;
 import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implements BedsideContract.View {
     @BindView(R.id.tv_date)
@@ -33,8 +38,6 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
     ImageView ivNet;
     @BindView(R.id.iv_wifi)
     ImageView ivWifi;
-    @BindView(R.id.lly_title)
-    LinearLayout llyTitle;
     @BindView(R.id.tv_bed_num)
     TextView tvBedNum;
     @BindView(R.id.tv_sex)
@@ -63,18 +66,29 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
     TextView tvHospital;
     @BindView(R.id.tv_food)
     TextView tvFood;
+    @BindView(R.id.iv_back)
+    ImageView ivBack;
+    @BindView(R.id.tv_back)
+    TextView tvBack;
+    @BindView(R.id.ll_back)
+    LinearLayout llBack;
+    @BindView(R.id.lly_title)
+    RelativeLayout llyTitle;
     private ActivePadInfo.DataBean activeInfo;
-    private static final String BEDSIDE_INFO="bedside_info";
+    private static final String BEDSIDE_INFO = "bedside_info";
+    private static final String BEDSIDE_ISPUSH = "bedside_ispush";
     private PatientResponse.DataBean info;
+    private boolean isPush = true;
 
     @Override
     public int getLayout() {
         return R.layout.fragment_bedside_card;
     }
 
-    public static BedSideCardFragment newInstance(PatientResponse.DataBean info) {
+    public static BedSideCardFragment newInstance(PatientResponse.DataBean info, boolean isPush) {
         Bundle args = new Bundle();
         args.putSerializable(BEDSIDE_INFO, info);
+        args.putBoolean(BEDSIDE_ISPUSH, isPush);
         BedSideCardFragment fragment = new BedSideCardFragment();
         fragment.setArguments(args);
         return fragment;
@@ -98,11 +112,27 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
     public void initData() {
         activeInfo = ActiveUtils.getPadActiveInfo();
         info = (PatientResponse.DataBean) getArguments().getSerializable(BEDSIDE_INFO);
-        if(info!=null)
-        setPatientInfo(info);
+        isPush = getArguments().getBoolean(BEDSIDE_ISPUSH);
+
+        if (info != null)
+            setPatientInfo(info);
+
+
+        llBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pop();
+            }
+        });
+
+        if(isPush){
+            llBack.setVisibility(View.GONE);
+        }else {
+            llBack.setVisibility(View.VISIBLE);
+        }
     }
 
-    private void setPatientInfo(PatientResponse.DataBean entity){
+    private void setPatientInfo(PatientResponse.DataBean entity) {
         tvName.setText(entity.getUserName());
         tvAge.setText(entity.getAge() + "岁");
         tvDoctor.setText(entity.getChargeDoctor());
@@ -119,7 +149,7 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
 
     @Override
     public void initPresenter() {
-        mPresenter=new BedsidePresenter();
+        mPresenter = new BedsidePresenter();
     }
 
     @Override
@@ -131,12 +161,12 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
     @Override
     public void getDate(String date, String time, String week, String net, String netType) {
         tvDate.setText(date);
-        if(netType.equals("WIFI")){
+        if (netType.equals("WIFI")) {
             tvNetType.setVisibility(View.VISIBLE);
             tvNetType.setText(netType);
             ivNet.setVisibility(View.GONE);
             ivWifi.setVisibility(View.VISIBLE);
-            int wifi=NetWorkUtil.getWifiLevel(LauncherApplication.getContext());
+            int wifi = NetWorkUtil.getWifiLevel(LauncherApplication.getContext());
             if (wifi > -50 && wifi < 0) {//最强
                 ivWifi.setImageResource(R.mipmap.white_wifi_level_good);
             } else if (wifi > -70 && wifi < -50) {//较强
@@ -145,22 +175,22 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
                 ivWifi.setImageResource(R.mipmap.white_wifi_level_normal);
             } else if (wifi > -100 && wifi < -80) {//微弱
                 ivWifi.setImageResource(R.mipmap.white_wifi_level_bad);
-            }else {
+            } else {
                 ivWifi.setImageResource(R.mipmap.white_wifi_level_none);
             }
-        }else if(netType.equals("无网络连接") || netType.equals("未知")){
+        } else if (netType.equals("无网络连接") || netType.equals("未知")) {
             ivWifi.setVisibility(View.VISIBLE);
             ivNet.setVisibility(View.VISIBLE);
             tvNetType.setVisibility(View.VISIBLE);
             tvNetType.setText(netType);
             ivWifi.setImageResource(R.mipmap.white_wifi_level_none);
             ivNet.setImageResource(R.mipmap.white_net_level_none);
-        }else {
+        } else {
             ivWifi.setVisibility(View.GONE);
             ivNet.setVisibility(View.VISIBLE);
             tvNetType.setVisibility(View.VISIBLE);
             tvNetType.setText(netType);
-            int netDbm=NetWorkUtil.getCurrentNetDBM(LauncherApplication.getContext());
+            int netDbm = NetWorkUtil.getCurrentNetDBM(LauncherApplication.getContext());
             if (netDbm > -75) {
                 ivNet.setImageResource(R.mipmap.white_net_level_good);
             } else if (netDbm > -85) {
@@ -174,4 +204,5 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
             }
         }
     }
+
 }

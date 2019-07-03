@@ -1,8 +1,11 @@
 package com.muju.note.launcher.app.video.ui;
 
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -46,6 +49,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -86,6 +91,8 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
     RelativeLayout relTitlebar;
     @BindView(R.id.iv_line_back)
     ImageView ivLineBack;
+    @BindView(R.id.tv_error)
+    TextView tvError;
     private boolean isShowDialog = true;
     private List<VideoInfoDao> videoInfoDaos;
     private VideoLineAdapter lineAdapter;
@@ -148,7 +155,6 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
         });
 
     }
-
 
 
     @Override
@@ -303,12 +309,18 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
                     if (videoOrImageDialog != null && videoOrImageDialog.isShowing()) {
                         videoOrImageDialog.dismiss();
                     }
+                    if (!TextUtils.isEmpty(e.getMessage())) {
+                        tvError.setText("错误信息："+e.getMessage());
+                    }else {
+                        tvError.setText("网络错误，请稍后重试");
+                    }
                     switch (e.getCode()) {
                         case VideoErrorInfo.CODE_ACCOUNT_CHECK_ERROR:
                         case VideoErrorInfo.CODE_VIDEO_CONTENTE_PERMISSION:
                             if (VideoSdkConfig.getInstance().getUser().isLogined()) {
                                 //这里发生错误就先重新登录
                                 showToast("没有权限播放此视频");
+                                tvError.setText("错误信息：没有权限播放此视频");
                             } else {
                                 WoTvUtil.getInstance().login();
                                 showToast("网络环境异常，请检查！");
