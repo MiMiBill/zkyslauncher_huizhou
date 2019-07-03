@@ -195,6 +195,15 @@ public class HospitalEncyFragment extends BaseFragment<EncyPresenter> implements
     }
 
 
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
+        hideSoftInput();
+        if(popupWindow!=null && popupWindow.isShowing()){
+            popupWindow.dismiss();
+        }
+    }
+    
 
     @Override
     public void setTopInfomation(InfomationDao infomation) {
