@@ -339,6 +339,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                         case VideoErrorInfo.CODE_VIDEO_CONTENTE_PERMISSION:
                             if (VideoSdkConfig.getInstance().getUser().isLogined()) {
                                 //这里发生错误就先重新登录
+                                errorDialog.setErrorMsg("错误信息：没有权限播放此视频");
                             } else {
                                 WoTvUtil.getInstance().login();
                             }
