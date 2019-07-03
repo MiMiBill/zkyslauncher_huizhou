@@ -71,6 +71,10 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
 
                     @Override
                     public void onNext(Long aLong) {
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
                         mView.getDate(DateUtil.getDate("HH:mm:ss"), NetWorkUtil.getNetWorkLine(),
                                 NetWorkUtil.getNetworkState(LauncherApplication.getContext()));
                     }

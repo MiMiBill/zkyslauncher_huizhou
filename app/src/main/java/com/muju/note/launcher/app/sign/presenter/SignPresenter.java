@@ -12,6 +12,7 @@ import com.muju.note.launcher.okgo.BaseBean;
 import com.muju.note.launcher.okgo.JsonCallback;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.ActiveUtils;
+import com.muju.note.launcher.util.log.LogUtil;
 
 public class SignPresenter extends BasePresenter<SignContract.View> implements SignContract.Presenter {
 
@@ -23,6 +24,10 @@ public class SignPresenter extends BasePresenter<SignContract.View> implements S
                 .cacheMode(CacheMode.NO_CACHE).execute(new JsonCallback<BaseBean<SignBean>>() {
             @Override
             public void onSuccess(Response<BaseBean<SignBean>> response) {
+                if(mView==null){
+                    LogUtil.e("mView为空");
+                    return;
+                }
                 mView.checkSign(response.body().getData());
             }
 
@@ -40,6 +45,10 @@ public class SignPresenter extends BasePresenter<SignContract.View> implements S
                 .execute(new JsonCallback<BaseBean<SignStatusBean>>() {
                     @Override
                     public void onSuccess(Response<BaseBean<SignStatusBean>> response) {
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
                         mView.chesignStatus(response.body().getData());
                     }
 

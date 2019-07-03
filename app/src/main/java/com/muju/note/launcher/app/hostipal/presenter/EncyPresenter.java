@@ -6,6 +6,7 @@ import com.muju.note.launcher.app.hostipal.db.InfoDao;
 import com.muju.note.launcher.app.hostipal.db.InfomationDao;
 import com.muju.note.launcher.base.BasePresenter;
 import com.muju.note.launcher.litepal.LitePalDb;
+import com.muju.note.launcher.util.log.LogUtil;
 
 import org.litepal.LitePal;
 import org.litepal.crud.callback.FindMultiCallback;
@@ -22,6 +23,10 @@ public class EncyPresenter extends BasePresenter<EncyHosContract.View> implement
         LitePal.findAllAsync(InfoDao.class).listen(new FindMultiCallback<InfoDao>() {
             @Override
             public void onFinish(List<InfoDao> list) {
+                if(mView==null){
+                    LogUtil.e("mView为空");
+                    return;
+                }
                 if(list==null||list.size()<=0){
                     mView.getInfoNull();
                     return;
@@ -38,6 +43,10 @@ public class EncyPresenter extends BasePresenter<EncyHosContract.View> implement
      */
     @Override
     public void queryTopEncyClopedia() {
+        if(mView==null){
+            LogUtil.e("mView为空");
+            return;
+        }
         LitePalDb.setZkysDb();
         InfomationDao infomationDao = LitePal.findFirst(InfomationDao.class);
         if(infomationDao!=null)

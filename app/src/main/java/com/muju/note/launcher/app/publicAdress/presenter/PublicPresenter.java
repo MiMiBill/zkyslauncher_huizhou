@@ -11,6 +11,7 @@ import com.muju.note.launcher.okgo.BaseBean;
 import com.muju.note.launcher.okgo.JsonCallback;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.ActiveUtils;
+import com.muju.note.launcher.util.log.LogUtil;
 
 public class PublicPresenter extends BasePresenter<PublicContract.View> implements PublicContract.Presenter {
     @Override
@@ -21,6 +22,10 @@ public class PublicPresenter extends BasePresenter<PublicContract.View> implemen
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
                         mView.verfycode(response.body());
                     }
 
@@ -28,6 +33,10 @@ public class PublicPresenter extends BasePresenter<PublicContract.View> implemen
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
                         mView.verfycodeError();
                     }
                 });
@@ -44,6 +53,10 @@ public class PublicPresenter extends BasePresenter<PublicContract.View> implemen
                 .execute(new JsonCallback<BaseBean<TaskBean>>() {
                     @Override
                     public void onSuccess(Response<BaseBean<TaskBean>> response) {
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
                         mView.doTask(response.body().getData());
                     }
 

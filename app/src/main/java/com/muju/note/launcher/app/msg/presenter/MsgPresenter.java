@@ -3,6 +3,7 @@ package com.muju.note.launcher.app.msg.presenter;
 import com.muju.note.launcher.app.msg.contract.MsgContract;
 import com.muju.note.launcher.app.msg.db.CustomMessageDao;
 import com.muju.note.launcher.base.BasePresenter;
+import com.muju.note.launcher.util.log.LogUtil;
 
 import org.litepal.LitePal;
 import org.litepal.crud.callback.FindMultiCallback;
@@ -19,6 +20,10 @@ public class MsgPresenter extends BasePresenter<MsgContract.View> implements Msg
         LitePal.order("createTime desc").findAsync(CustomMessageDao.class).listen(new FindMultiCallback<CustomMessageDao>() {
             @Override
             public void onFinish(List<CustomMessageDao> list) {
+                if(mView==null){
+                    LogUtil.e("mView为空");
+                    return;
+                }
                 if(list==null||list.size()<=0){
                     mView.getMsgNull();
                     return;
