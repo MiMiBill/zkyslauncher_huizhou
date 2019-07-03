@@ -10,8 +10,8 @@ android {
         applicationId "com.muju.note.launcher"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 75
-        versionName "1.7.5_alpha"
+        versionCode 76
+        versionName "1.7.6_alpha"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true
