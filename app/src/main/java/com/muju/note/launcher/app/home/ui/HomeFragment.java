@@ -455,6 +455,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void getVideoHisSuccess(List<VideoHisDao> list) {
+        llHisVideoNull.setVisibility(View.GONE);
         videoHisDaos.clear();
         videoHisDaos.addAll(list);
         homeHisVideoAdapter.notifyDataSetChanged();
@@ -468,6 +469,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void getVideoTopSuccess(List<VideoInfoDao> list) {
+        llTopVideoNull.setVisibility(View.GONE);
         videoInfoDaos.clear();
         videoInfoDaos.addAll(list);
         homeTopVideoAdapter.notifyDataSetChanged();
