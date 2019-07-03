@@ -203,7 +203,6 @@ public class HospitalEncyFragment extends BaseFragment<EncyPresenter> implements
             popupWindow.dismiss();
         }
     }
-    
 
     @Override
     public void setTopInfomation(InfomationDao infomation) {

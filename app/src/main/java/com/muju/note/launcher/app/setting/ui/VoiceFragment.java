@@ -6,9 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -26,8 +24,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 public class VoiceFragment extends BaseFragment {
 
@@ -43,7 +39,7 @@ public class VoiceFragment extends BaseFragment {
     RelativeLayout rlTitle;
     private boolean isRelease = true; //判断MediaPlayer是否释放的标志
     private MediaPlayer mediaPlayer = null;
-    private long maxVoice;
+    private long maxVoice=0;
     private int voicePercent = -1;
 
     public static VoiceFragment newInstance(int status) {
@@ -123,7 +119,7 @@ public class VoiceFragment extends BaseFragment {
     RectProgress.OnProgressChangedListener onVoiceChangeListener = new RectProgress.OnProgressChangedListener() {
         @Override
         public void onProgressChanged(int currentValue, int percent) {
-            if (percent > maxVoice) {
+            if (percent > maxVoice && maxVoice>0) {
                 percent = (int) maxVoice;
             }
             voicePercent = percent;
