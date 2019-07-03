@@ -21,6 +21,7 @@ import com.muju.note.launcher.app.home.bean.AdverNewBean;
 import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
 import com.muju.note.launcher.app.home.db.AdvertsCountDao;
 import com.muju.note.launcher.app.home.db.AdvertsInfoDao;
+import com.muju.note.launcher.app.home.event.DefaultCabinetEvent;
 import com.muju.note.launcher.app.home.event.DefaultVideoEvent;
 import com.muju.note.launcher.app.home.event.DefaultVideoLiveEvent;
 import com.muju.note.launcher.app.video.dialog.OnAdDialogDismissListener;
@@ -75,8 +76,8 @@ public class AdvertsUtil {
         OkGo.<BaseBean<List<AdverNewBean>>>post(UrlUtil.getAdvertsByCodes())
                 .params("codes", code)
                 .params("hospitalId", ActiveUtils.getPadActiveInfo().getHospitalId())
-                .params("deptId", ActiveUtils.getPadActiveInfo().getDeptId())
-//                .params("deptId", 10000)
+//                .params("deptId", ActiveUtils.getPadActiveInfo().getDeptId())
+                .params("deptId", 10000)
 //                .cacheMode(CacheMode.FIRST_CACHE_THEN_REQUEST)
                 .cacheMode(CacheMode.NO_CACHE)
                 .cacheTime(-1)
@@ -274,8 +275,10 @@ public class AdvertsUtil {
                 public void OnBannerClick(int position) {
                     if(position==0){
                         EventBus.getDefault().post(new DefaultVideoLiveEvent());
-                    }else {
+                    }else if(position==1){
                         EventBus.getDefault().post(new DefaultVideoEvent());
+                    }else {
+                        EventBus.getDefault().post(new DefaultCabinetEvent());
                     }
                 }
             });

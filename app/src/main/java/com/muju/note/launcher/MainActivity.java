@@ -20,11 +20,11 @@ import com.muju.note.launcher.app.adtask.TaskListBean;
 import com.muju.note.launcher.app.adtask.contract.MainContract;
 import com.muju.note.launcher.app.adtask.event.UserInfoEvent;
 import com.muju.note.launcher.app.adtask.presenter.MainPresenter;
-import com.muju.note.launcher.app.bedsidecard.event.GotoBedsideEvent;
 import com.muju.note.launcher.app.bedsidecard.ui.BedSideCardFragment;
 import com.muju.note.launcher.app.finance.FinanceFragment;
 import com.muju.note.launcher.app.game.ui.GameFragment;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
+import com.muju.note.launcher.app.home.event.DefaultCabinetEvent;
 import com.muju.note.launcher.app.home.event.DefaultVideoEvent;
 import com.muju.note.launcher.app.home.event.DefaultVideoLiveEvent;
 import com.muju.note.launcher.app.home.event.DrawOutEvent;
@@ -516,6 +516,14 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void goToVideo(DefaultVideoEvent event) {
         start(new VideoFragment());
+    }
+
+    /**
+     * 屏安柜
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void goToCabinet(DefaultCabinetEvent event) {
+        start(new CabinetFragment());
     }
 
 

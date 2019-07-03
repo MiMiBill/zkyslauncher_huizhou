@@ -69,6 +69,7 @@ public class UserFragment extends BaseFragment<UserPresenter> implements UserPre
                     mPresenter.startQueryUser();
                     break;
                 case 0x03:
+                    if(ivMa!=null)
                     ivMa.setImageBitmap((Bitmap) msg.obj);
                     break;
             }

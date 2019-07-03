@@ -64,6 +64,7 @@ public class ToolFragment extends BaseFragment {
                 .subscribe(new Consumer<Bitmap>() {
                     @Override
                     public void accept(Bitmap bitmap) throws Exception {
+                        if(ivMa!=null)
                         ivMa.setImageBitmap(bitmap);
                     }
                 });
