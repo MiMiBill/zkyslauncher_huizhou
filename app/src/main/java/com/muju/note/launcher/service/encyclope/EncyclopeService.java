@@ -228,13 +228,13 @@ public class EncyclopeService {
                                             if (encyUpdateBean.getColumns() != null && encyUpdateBean.getColumns().size() > 0) {
                                                 LitePalDb.setZkysDb();
                                                 for (InfoDao infoBean : encyUpdateBean.getColumns()) {
-                                                    InfoDao dao = LitePal.where("id = ?", infoBean.getColumnId() + "").findFirst(InfoDao.class);
+                                                    InfoDao dao = LitePal.where("columnId = ?", infoBean.getColumnId() + "").findFirst(InfoDao.class);
                                                     if (dao == null) {
-                                                        dao.setId(infoBean.getColumnId());
+                                                        dao.setColumnId(infoBean.getId());
                                                         dao.save();
                                                     } else {
                                                         LitePal.delete(InfoDao.class, dao.getColumnId());
-                                                        dao.setId(dao.getColumnId());
+                                                        dao.setColumnId(dao.getId());
                                                         dao.save();
                                                     }
                                                 }
@@ -245,11 +245,11 @@ public class EncyclopeService {
                                                 for (InfomationDao infoBean : encyUpdateBean.getMes()) {
                                                     InfomationDao dao = LitePal.where("id = ?", infoBean.getColumnid() + "").findFirst(InfomationDao.class);
                                                     if (dao == null) {
-                                                        dao.setColumnid(infoBean.getId());
+                                                        dao.setId(infoBean.getId());
                                                         dao.save();
                                                     } else {
-                                                        LitePal.delete(InfomationDao.class, dao.getColumnid());
-                                                        dao.setId(dao.getColumnid());
+                                                        LitePal.delete(InfomationDao.class, dao.getId());
+                                                        dao.setId(dao.getId());
                                                         dao.save();
                                                     }
                                                 }
@@ -260,48 +260,6 @@ public class EncyclopeService {
                                         }
                                     }
                                 });
-
-//                                //更新科室
-//                            if (encyUpdateBean.getColumns() != null && encyUpdateBean.getColumns().size() > 0) {
-//                                service.execute(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        LitePalDb.setZkysDb();
-//                                        for (InfoDao infoBean : encyUpdateBean.getColumns()) {
-//                                            InfoDao dao = LitePal.where("id = ?", infoBean.getColumnId() + "").findFirst(InfoDao.class);
-//                                            if (dao == null) {
-//                                                dao.setId(infoBean.getColumnId());
-//                                                dao.save();
-//                                            } else {
-//                                                LitePal.delete(InfoDao.class, dao.getColumnId());
-//                                                dao.setId(dao.getColumnId());
-//                                                dao.save();
-//                                            }
-//                                        }
-//                                    }
-//                                });
-//                            }
-//                            //更新第二张表
-//                            if (encyUpdateBean.getMes() != null && encyUpdateBean.getMes().size() > 0) {
-//                                service.execute(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        LitePalDb.setZkysDb();
-//                                        for (InfomationDao infoBean : encyUpdateBean.getMes()) {
-//                                            InfomationDao dao = LitePal.where("id = ?", infoBean.getColumnid() + "").findFirst(InfomationDao.class);
-//                                            if (dao == null) {
-//                                                dao.setColumnid(infoBean.getId());
-//                                                dao.save();
-//                                            } else {
-//                                                LitePal.delete(InfomationDao.class, dao.getColumnid());
-//                                                dao.setId(dao.getColumnid());
-//                                                dao.save();
-//                                            }
-//                                        }
-//                                    }
-//                                });
-//                            }
-//                            SPUtil.putLong(Constants.SP_ENCY_UPDATE_TIME, System.currentTimeMillis() / 1000);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

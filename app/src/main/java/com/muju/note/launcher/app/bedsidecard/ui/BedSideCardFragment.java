@@ -1,9 +1,9 @@
 package com.muju.note.launcher.app.bedsidecard.ui;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -24,8 +24,6 @@ import com.muju.note.launcher.util.net.NetWorkUtil;
 import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implements BedsideContract.View {
     @BindView(R.id.tv_date)
@@ -79,7 +77,20 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
     private static final String BEDSIDE_ISPUSH = "bedside_ispush";
     private PatientResponse.DataBean info;
     private boolean isPush = true;
-
+    private String netType="";
+    private Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 1:
+                    handler.removeMessages(1);
+                    int netDbm = (int) msg.obj;
+                    setNetIcon(netType, netDbm);
+                    break;
+            }
+        }
+    };
     @Override
     public int getLayout() {
         return R.layout.fragment_bedside_card;
@@ -105,6 +116,7 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
     public void onSupportInvisible() {
         super.onSupportInvisible();
         mPresenter.onDestroy();
+        handler.removeMessages(1);
         EventBus.getDefault().post(new VideoNoLockEvent(true));
     }
 
@@ -113,6 +125,8 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
         activeInfo = ActiveUtils.getPadActiveInfo();
         info = (PatientResponse.DataBean) getArguments().getSerializable(BEDSIDE_INFO);
         isPush = getArguments().getBoolean(BEDSIDE_ISPUSH);
+
+        setHosiptal();
 
         if (info != null)
             setPatientInfo(info);
@@ -132,18 +146,21 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
         }
     }
 
+    private void setHosiptal() {
+        tvBedNum.setText(activeInfo.getBedNumber());
+        tvCardNum.setText(activeInfo.getDeptName());
+        tvHospital.setText(activeInfo.getHospitalName());
+    }
+
     private void setPatientInfo(PatientResponse.DataBean entity) {
         tvName.setText(entity.getUserName());
         tvAge.setText(entity.getAge() + "岁");
         tvDoctor.setText(entity.getChargeDoctor());
         tvNurse.setText(entity.getChargeNurse());
         tvCardTime.setText(FormatUtils.FormatDateUtil.parseLong(Long.parseLong(entity.getCreateTime())));
-        tvBedNum.setText(activeInfo.getBedNumber());
         tvSex.setText(entity.getSex() == 1 ? "男" : "女");
         tvHl.setText(entity.getNursingLevel());
         tvZbNurse.setText(entity.getChargeNurse());
-        tvCardNum.setText(activeInfo.getDeptName());
-        tvHospital.setText(activeInfo.getHospitalName());
         tvFood.setText(entity.getDietCategory());
     }
 
@@ -186,11 +203,40 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
             ivWifi.setImageResource(R.mipmap.white_wifi_level_none);
             ivNet.setImageResource(R.mipmap.white_net_level_none);
         } else {
+            this.netType=netType;
             ivWifi.setVisibility(View.GONE);
             ivNet.setVisibility(View.VISIBLE);
             tvNetType.setVisibility(View.VISIBLE);
             tvNetType.setText(netType);
-            int netDbm = NetWorkUtil.getCurrentNetDBM(LauncherApplication.getContext());
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    int netDbm = NetWorkUtil.getCurrentNetDBM(LauncherApplication.getContext());
+                    Message message=new Message();
+                    message.what=1;
+                    message.obj= netDbm;
+                    handler.sendMessage(message);
+                }
+            }).run();
+        }
+    }
+
+
+    private void setNetIcon(String netType,int netDbm) {
+        if(netType.equals("4G")){
+            if (netDbm > -95) {
+                ivNet.setImageResource(R.mipmap.white_net_level_good);
+            } else if (netDbm > -105) {
+                ivNet.setImageResource(R.mipmap.white_net_level_better);
+            } else if (netDbm > -115) {
+                ivNet.setImageResource(R.mipmap.white_net_level_normal);
+            } else if (netDbm > -125) {
+                ivNet.setImageResource(R.mipmap.white_net_level_bad);
+            } else {
+                ivNet.setImageResource(R.mipmap.white_net_level_none);
+            }
+        }else {
             if (netDbm > -75) {
                 ivNet.setImageResource(R.mipmap.white_net_level_good);
             } else if (netDbm > -85) {

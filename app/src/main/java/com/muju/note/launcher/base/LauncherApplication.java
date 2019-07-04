@@ -35,9 +35,6 @@ public class LauncherApplication extends Application {
 
         // 日志初始化
         LogUtil.init();
-
-        CrashReport.initCrashReport(this, "dcea390c6e", false);
-
         // litepal 初始化
         LitePal.initialize(instance);
         LitePalDb.addDb();
@@ -48,6 +45,8 @@ public class LauncherApplication extends Application {
 
         // 异常信息捕获
         CrashHandler.getInstance().init(this);
+
+        CrashReport.initCrashReport(this, "dcea390c6e", false);
 
         // 初始化极光推送
         JPushInterface.init(this);

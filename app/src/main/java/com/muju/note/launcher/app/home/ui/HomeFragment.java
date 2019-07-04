@@ -1,14 +1,13 @@
 package com.muju.note.launcher.app.home.ui;
 
 import android.annotation.SuppressLint;
-import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -90,8 +89,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -167,8 +164,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     RelativeLayout relCard;
     @BindView(R.id.iv_bed_card)
     ImageView ivBedCard;
-
-
     private List<HomeMenuDao> homeMenuDaos;
     private HomeMenuAdapter menuAdapter;
     private ActivePadInfo.DataBean activeInfo;
@@ -180,6 +175,20 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     private VideoInfoDao imgVideoInfo;
     private AdvertsDialog dialog;
     private HospitalServiceDialog serviceDialog;
+    private String netType="";
+    private Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 1:
+                    handler.removeMessages(1);
+                    int netDbm = (int) msg.obj;
+                    setNetIcon(netType, netDbm);
+                    break;
+            }
+        }
+    };
 
     public static HomeFragment newInstance() {
         if (homeFragment == null) {
@@ -357,6 +366,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     public void onSupportInvisible() {
         super.onSupportInvisible();
         mPresenter.onDestroy();
+        handler.removeMessages(1);
         hideSoftInput();
         if (serviceDialog != null && serviceDialog.isShowing()) {
             serviceDialog.dismiss();
@@ -400,13 +410,40 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             tvNetType.setText(netType);
             ivWifi.setImageResource(R.mipmap.wifi_level_none);
             ivNet.setImageResource(R.mipmap.net_level_none);
-
         } else {
+            this.netType=netType;
             ivWifi.setVisibility(View.GONE);
             ivNet.setVisibility(View.VISIBLE);
             tvNetType.setVisibility(View.VISIBLE);
             tvNetType.setText(netType);
-            int netDbm = NetWorkUtil.getCurrentNetDBM(LauncherApplication.getContext());
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    int netDbm = NetWorkUtil.getCurrentNetDBM(LauncherApplication.getContext());
+                    Message message=new Message();
+                    message.what=1;
+                    message.obj= netDbm;
+                    handler.sendMessage(message);
+                }
+            }).run();
+        }
+    }
+
+    private void setNetIcon(String netType,int netDbm) {
+        if(netType.equals("4G")){
+            if (netDbm > -95) {
+                ivNet.setImageResource(R.mipmap.net_level_good);
+            } else if (netDbm > -105) {
+                ivNet.setImageResource(R.mipmap.net_level_better);
+            } else if (netDbm > -115) {
+                ivNet.setImageResource(R.mipmap.net_level_normal);
+            } else if (netDbm > -125) {
+                ivNet.setImageResource(R.mipmap.net_level_bad);
+            } else {
+                ivNet.setImageResource(R.mipmap.net_level_none);
+            }
+        }else {
             if (netDbm > -75) {
                 ivNet.setImageResource(R.mipmap.net_level_good);
             } else if (netDbm > -85) {

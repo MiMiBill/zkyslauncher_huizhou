@@ -1,7 +1,8 @@
 package com.muju.note.launcher;
 
 import android.content.Intent;
-import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -95,7 +96,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -151,11 +151,23 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
     @BindView(R.id.lly_draw)
     LinearLayout llDraw;
     private ActivePadInfo.DataBean activeInfo;
-
+    private String netType="";
     private Disposable disposableProtection;
     private boolean isStartProtection = true;
     private static String TAG = "MainActivity";
-
+    private Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 1:
+                    handler.removeMessages(1);
+                    int netDbm = (int) msg.obj;
+                    setNetIcon(netType, netDbm);
+                    break;
+            }
+        }
+    };
     @Override
     public int getLayout() {
         return R.layout.activity_main;
@@ -338,6 +350,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        handler.removeMessages(1);
         EventBus.getDefault().unregister(this);
     }
 
@@ -602,11 +615,39 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
             ivNet.setImageResource(R.mipmap.net_level_none);
 
         } else {
+            this.netType=netType;
             ivWifi.setVisibility(View.GONE);
             ivNet.setVisibility(View.VISIBLE);
             tvNetType.setVisibility(View.VISIBLE);
             tvNetType.setText(netType);
-            int netDbm = NetWorkUtil.getCurrentNetDBM(LauncherApplication.getContext());
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    int netDbm = NetWorkUtil.getCurrentNetDBM(LauncherApplication.getContext());
+                    Message message=new Message();
+                    message.what=1;
+                    message.obj= netDbm;
+                    handler.sendMessage(message);
+                }
+            }).run();
+        }
+    }
+
+    private void setNetIcon(String netType,int netDbm) {
+        if (netType.equals("4G")) {
+            if (netDbm > -95) {
+                ivNet.setImageResource(R.mipmap.net_level_good);
+            } else if (netDbm > -105) {
+                ivNet.setImageResource(R.mipmap.net_level_better);
+            } else if (netDbm > -115) {
+                ivNet.setImageResource(R.mipmap.net_level_normal);
+            } else if (netDbm > -125) {
+                ivNet.setImageResource(R.mipmap.net_level_bad);
+            } else {
+                ivNet.setImageResource(R.mipmap.net_level_none);
+            }
+        } else {
             if (netDbm > -75) {
                 ivNet.setImageResource(R.mipmap.net_level_good);
             } else if (netDbm > -85) {
@@ -619,12 +660,5 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
                 ivNet.setImageResource(R.mipmap.net_level_none);
             }
         }
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
     }
 }

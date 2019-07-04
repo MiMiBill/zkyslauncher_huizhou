@@ -17,14 +17,12 @@ import com.muju.note.launcher.app.video.db.VideoInfoTopDao;
 import com.muju.note.launcher.base.BasePresenter;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.url.UrlUtil;
-import com.muju.note.launcher.util.Constants;
 import com.muju.note.launcher.util.DateUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.net.NetWorkUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
 import com.muju.note.launcher.util.sign.Signature;
-import com.muju.note.launcher.util.sp.SPUtil;
 
 import org.litepal.LitePal;
 import org.litepal.crud.callback.FindMultiCallback;

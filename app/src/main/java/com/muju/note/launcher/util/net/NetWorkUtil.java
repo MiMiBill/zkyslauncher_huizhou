@@ -17,6 +17,8 @@ import android.telephony.TelephonyManager;
 import android.telephony.cdma.CdmaCellLocation;
 import android.telephony.gsm.GsmCellLocation;
 
+import com.muju.note.launcher.util.log.LogFactory;
+
 import java.text.DecimalFormat;
 
 import io.reactivex.Observable;
@@ -35,7 +37,8 @@ public class NetWorkUtil {
     public static final String NETWORK_MOBILE = "未知"; // 手机流量
     public static int NETWORK_TYPE = 0; // 0.4G  1.WIFI 2.无网络连接
     public static String NETWORK_LEVEN = "";
-    public static int Itedbm=0;
+    public static int Itedbm = 0;
+
     /**
      * 获取当前网络连接的类型
      *
@@ -183,7 +186,13 @@ public class NetWorkUtil {
                                                 .NETWORK_TYPE_HSUPA ||
                                         telephonyManager.getNetworkType() == TelephonyManager
                                                 .NETWORK_TYPE_UMTS) {
-                                    ltedbm = signalStrength.getCdmaDbm();
+//                                    ltedbm = signalStrength.getCdmaDbm();
+                                    try {
+                                        ltedbm =(int) signalStrength.getClass().getMethod("getDbm")
+                                                    .invoke(signalStrength);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
                                     String bin;
                                     if (ltedbm > -75) {
                                         bin = "网络很好";
@@ -208,7 +217,7 @@ public class NetWorkUtil {
                                             "level" + level + "\nasu:" + asu;
                                 }
 //                                LogFactory.l().i("NETWORK==="+NETWORK_LEVEN);
-                                onSignalStrengthsChanged(signalStrength);
+//                                onSignalStrengthsChanged(signalStrength);
                             }
                         };
                         telephonyManager.listen(MyPhoneListener, PhoneStateListener
@@ -282,32 +291,38 @@ public class NetWorkUtil {
 
     //移动网络下信号
     public static int getCurrentNetDBM(Context context) {
-        final TelephonyManager tm = (TelephonyManager) context
-                .getSystemService(Context.TELEPHONY_SERVICE);
-        PhoneStateListener mylistener = new PhoneStateListener(){
+        final TelephonyManager tm = (TelephonyManager) context.getSystemService(Context
+                .TELEPHONY_SERVICE);
+        PhoneStateListener mylistener = new PhoneStateListener() {
             public void onSignalStrengthsChanged(SignalStrength signalStrength) {
-                super.onSignalStrengthsChanged(signalStrength);
+//                super.onSignalStrengthsChanged(signalStrength);
                 String signalInfo = signalStrength.toString();
                 String[] params = signalInfo.split(" ");
-                if(tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_LTE){
+                if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_LTE) {
                     //4G网络 最佳范围   >-90dBm 越大越好
                     Itedbm = Integer.parseInt(params[9]);
-                }else if(tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSDPA ||
+                } else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSDPA ||
                         tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSPA ||
                         tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSUPA ||
-                        tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_UMTS){
+                        tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_UMTS) {
                     //在这个范围的已经确定是3G，但不同运营商的3G有不同的获取方法，故在此需做判断 判断运营商与网络类型的工具类在最下方
-                    Itedbm = signalStrength.getCdmaDbm();
-                }else{
+//                    Itedbm = signalStrength.getCdmaDbm();
+                    try {
+                        Itedbm= (int) signalStrength.getClass().getMethod("getDbm").invoke(signalStrength);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
                     //2G网络最佳范围>-90dBm 越大越好
                     int asu = signalStrength.getGsmSignalStrength();
-                    Itedbm = -113 + 2*asu;
+                    Itedbm = -113 + 2 * asu;
                 }
+                LogFactory.l().i("信号强度==="+Itedbm);
             }
         };
         //开始监听
         tm.listen(mylistener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+        tm.listen(mylistener,PhoneStateListener.LISTEN_NONE);
         return Itedbm;
     }
-
 }
