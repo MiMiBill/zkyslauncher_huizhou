@@ -3,7 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginTop="@dimen/px20">
+    android:background="@color/white"
+    android:padding="@dimen/px10"
+    android:layout_margin="@dimen/px10">
 
     <ImageView
         android:id="@+id/iv_img"
@@ -21,8 +23,5 @@
         android:layout_marginTop="@dimen/px18"
         android:textSize="@dimen/px25"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/px20"></View>
 
 </LinearLayout>

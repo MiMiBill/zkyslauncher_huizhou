@@ -1,11 +1,9 @@
 package com.muju.note.launcher.service.operation;
 
-import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.service.config.ConfigService;
 import com.muju.note.launcher.service.updatedata.UpdateDataService;
 import com.muju.note.launcher.service.uploaddata.UpLoadDataService;
 import com.muju.note.launcher.util.log.LogUtil;
-import com.muju.note.launcher.util.net.NetWorkUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
 
 import java.util.Calendar;
@@ -78,7 +76,7 @@ public class OneMinuteDisposable {
             ConfigService.getInstance().playConfig();
 
             // 获取信号强度
-            NetWorkUtil.getCurrentNetDBM(LauncherApplication.getContext());
+//            NetWorkUtil.getCurrentNetDBM(LauncherApplication.getContext());
 //            NetWorkUtil.getSignalStrength(LauncherApplication.getContext());
 
             // 检查是否需要更新本地数据

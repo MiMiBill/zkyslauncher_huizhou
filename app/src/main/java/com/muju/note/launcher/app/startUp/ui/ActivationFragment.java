@@ -114,7 +114,6 @@ public class ActivationFragment extends BaseFragment<NewActivationPresenter> imp
 
     @Override
     public void bindFail() {
-//        btnActive.setVisibility(View.VISIBLE);
         tvVersion.setText(String.format("版本:宝屏V%s", TextUtils.equals(UrlUtil.getHost(), "http://test" +
                 ".pad.zgzkys.com") ? BuildConfig.VERSION_NAME + "beta" : BuildConfig.VERSION_NAME));
         RxUtil.closeDisposable(disposableCheckActive);

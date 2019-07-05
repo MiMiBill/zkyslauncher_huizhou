@@ -38,6 +38,8 @@ public class VoiceFragment extends BaseFragment {
 
     @BindView(R.id.tv_title)
     TextView tvTitle;
+    @BindView(R.id.view_bg)
+    View view_bg;
     @BindView(R.id.rel_titlebar)
     RelativeLayout relTitlebar;
 
@@ -116,6 +118,7 @@ public class VoiceFragment extends BaseFragment {
         if (getArguments().getInt(STATUS) == 1) {
             relTitlebar.setVisibility(View.VISIBLE);
             tvTitle.setText("系统设置");
+            view_bg.setVisibility(View.VISIBLE);
         } else {
             relTitlebar.setVisibility(View.GONE);
         }

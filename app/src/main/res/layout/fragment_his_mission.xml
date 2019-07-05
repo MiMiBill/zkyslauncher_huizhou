@@ -16,9 +16,8 @@
             android:id="@+id/rv_his_mission"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
-            android:layout_marginLeft="20px"
-            android:layout_marginRight="20px">
+            android:layout_margin="20px"
+            >
         </android.support.v7.widget.RecyclerView>
 
     </LinearLayout>

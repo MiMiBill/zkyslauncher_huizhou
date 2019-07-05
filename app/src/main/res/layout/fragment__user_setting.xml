@@ -18,9 +18,10 @@
 
         <RadioGroup
             android:id="@+id/radio_group"
+            android:layout_marginTop="@dimen/px20"
             android:orientation="vertical"
             android:layout_width="@dimen/px240"
-            android:background="@color/color_F2F2F2"
+            android:background="@drawable/rbt_user_bg"
             android:layout_height="match_parent">
             <RadioButton
                 android:id="@+id/rbt_user"
@@ -89,6 +90,7 @@
         <FrameLayout
             android:id="@+id/fl_container"
             android:background="@color/white"
+            android:layout_marginTop="@dimen/px20"
             android:layout_marginLeft="@dimen/px34"
             android:layout_width="match_parent"
             android:layout_height="match_parent"></FrameLayout>

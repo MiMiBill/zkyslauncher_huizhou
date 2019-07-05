@@ -71,9 +71,9 @@ public class NetWorkUtil {
             }
         }
         // 若不是WIFI，则去判断是2G、3G、4G网
-        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context
-                .TELEPHONY_SERVICE);
-        int networkType = telephonyManager.getNetworkType();
+//        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+//        int networkType = telephonyManager.getNetworkType();
+        int networkType = activeNetInfo.getSubtype();
         switch (networkType) {
     /*
        GPRS : 2G(2.5) General Packet Radia Service 114kbps
@@ -188,7 +188,7 @@ public class NetWorkUtil {
 
 
     //移动网络下信号
-    public static int getCurrentNetDBM(Context context) {
+    public static int getCurrentNetDBM(final Context context) {
         final TelephonyManager tm = (TelephonyManager) context.getSystemService(Context
                 .TELEPHONY_SERVICE);
         PhoneStateListener mylistener = new PhoneStateListener() {

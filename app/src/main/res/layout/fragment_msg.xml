@@ -75,10 +75,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="这里一片荒土啥都没有"
+            android:text="内容正在更新"
             android:textSize="@dimen/px30"
             android:layout_marginTop="@dimen/px19"
-            android:textColor="@color/yellow_gray"/>
+            android:textColor="@color/black"/>
         <TextView
             android:id="@+id/tv_null"
             android:layout_width="wrap_content"

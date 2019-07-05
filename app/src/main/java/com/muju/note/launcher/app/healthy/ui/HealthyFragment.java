@@ -1,12 +1,9 @@
 package com.muju.note.launcher.app.healthy.ui;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -14,7 +11,6 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.muju.note.launcher.R;
-import com.muju.note.launcher.app.clide.adapter.ClideAdapter;
 import com.muju.note.launcher.app.healthy.adapter.HealthyAdapter;
 import com.muju.note.launcher.app.healthy.contract.HealthyContract;
 import com.muju.note.launcher.app.healthy.presenter.HealthyPresenter;
@@ -33,8 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 public class HealthyFragment extends BaseFragment<HealthyPresenter> implements View.OnClickListener, HealthyContract.View {
 
@@ -70,7 +64,9 @@ public class HealthyFragment extends BaseFragment<HealthyPresenter> implements V
 
         videoInfoDaos=new ArrayList<>();
         healthyAdapter=new HealthyAdapter(R.layout.rv_item_healthy,videoInfoDaos);
-        rvHealthy.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(), 3));
+        GridLayoutManager gridLayoutManager=new GridLayoutManager(LauncherApplication.getContext(), 3);
+        gridLayoutManager.offsetChildrenHorizontal(20);
+        rvHealthy.setLayoutManager(gridLayoutManager);
         rvHealthy.setAdapter(healthyAdapter);
 
         healthyAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {

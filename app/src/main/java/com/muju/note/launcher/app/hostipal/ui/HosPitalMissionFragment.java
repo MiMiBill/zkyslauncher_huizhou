@@ -58,7 +58,10 @@ public class HosPitalMissionFragment extends BaseFragment<HospitalMissionPresent
 
         missionInfoDaos = new ArrayList<>();
         missionAdapter = new MissionAdapter(R.layout.rv_item_his_mission, missionInfoDaos);
-        rvHisMission.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(), 3));
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(LauncherApplication
+                .getContext(), 3);
+        gridLayoutManager.offsetChildrenHorizontal(20);
+        rvHisMission.setLayoutManager(gridLayoutManager);
         rvHisMission.setAdapter(missionAdapter);
 
         mPresenter.queryMiss();

@@ -230,8 +230,8 @@ public class EncyclopeService {
                                                 for (InfoDao infoBean : encyUpdateBean.getColumns()) {
                                                     InfoDao dao = LitePal.where("columnId = ?", infoBean.getColumnId() + "").findFirst(InfoDao.class);
                                                     if (dao == null) {
-                                                        dao.setColumnId(infoBean.getId());
-                                                        dao.save();
+                                                        infoBean.setColumnId(infoBean.getId());
+                                                        infoBean.save();
                                                     } else {
                                                         LitePal.delete(InfoDao.class, dao.getColumnId());
                                                         dao.setColumnId(dao.getId());
@@ -245,8 +245,8 @@ public class EncyclopeService {
                                                 for (InfomationDao infoBean : encyUpdateBean.getMes()) {
                                                     InfomationDao dao = LitePal.where("id = ?", infoBean.getColumnid() + "").findFirst(InfomationDao.class);
                                                     if (dao == null) {
-                                                        dao.setId(infoBean.getId());
-                                                        dao.save();
+                                                        infoBean.setId(infoBean.getId());
+                                                        infoBean.save();
                                                     } else {
                                                         LitePal.delete(InfomationDao.class, dao.getId());
                                                         dao.setId(dao.getId());

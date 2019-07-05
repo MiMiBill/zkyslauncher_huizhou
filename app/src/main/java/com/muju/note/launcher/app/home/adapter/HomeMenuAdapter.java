@@ -3,7 +3,6 @@ package com.muju.note.launcher.app.home.adapter;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -238,9 +237,9 @@ public class HomeMenuAdapter extends BaseQuickAdapter<HomeMenuDao, BaseViewHolde
                     GlideUtil.loadImg(dao.getIcon(),img,R.mipmap.ic_video_load_default);
                 }
                 if(TextUtils.isEmpty(dao.getName())){
-                    baseViewHolder.setText(R.id.tv_menu,"健康咨询");
+                    baseViewHolder.setText(R.id.tv_menu,"健康资讯");
                 }else {
-                    baseViewHolder.setText(R.id.tv_menu,dao.getName());
+                   baseViewHolder.setText(R.id.tv_menu,dao.getName());
                 }
                 break;
 

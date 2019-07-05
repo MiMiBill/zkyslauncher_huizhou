@@ -6,14 +6,9 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
 import com.muju.note.launcher.app.startUp.contract.NewActivationContract;
-import com.muju.note.launcher.app.startUp.db.ActivitionDao;
 import com.muju.note.launcher.base.BasePresenter;
-import com.muju.note.launcher.okgo.BaseBean;
-import com.muju.note.launcher.okgo.JsonCallback;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.log.LogUtil;
-
-import java.util.List;
 
 public class NewActivationPresenter extends BasePresenter<NewActivationContract.View> implements NewActivationContract.Presenter {
 

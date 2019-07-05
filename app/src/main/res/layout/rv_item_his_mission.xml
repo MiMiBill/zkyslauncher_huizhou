@@ -3,8 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingLeft="@dimen/px40"
-    android:paddingRight="@dimen/px40">
+    android:background="@color/white"
+    android:gravity="center_horizontal"
+    android:layout_margin="@dimen/px20"
+    android:padding="@dimen/px20"
+    >
 
     <ImageView
         android:id="@+id/iv_img"

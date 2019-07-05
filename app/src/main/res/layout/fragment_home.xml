@@ -532,7 +532,7 @@
                         android:textSize="@dimen/px25"
                         android:text="播放记录"
                         android:textColor="@color/black_gray"
-                        android:layout_marginTop="@dimen/px40"
+                        android:layout_marginTop="@dimen/px30"
                         android:layout_marginLeft="@dimen/px19"
                         android:textStyle="bold"/>
 
@@ -585,7 +585,7 @@
                     android:layout_marginTop="@dimen/px20"
                     android:background="@color/white"
                     android:textColor="@color/black_gray"
-                    android:paddingTop="@dimen/px40"
+                    android:paddingTop="@dimen/px30"
                     android:layout_marginLeft="@dimen/px16"
                     android:textStyle="bold"/>
 
@@ -675,7 +675,7 @@
         android:id="@+id/iv_bed_card"
         android:layout_width="@dimen/px105"
         android:layout_height="@dimen/px56"
-        android:layout_marginTop="@dimen/px100"
+        android:layout_marginTop="@dimen/px39"
         android:src="@mipmap/ic_home_item_bedsign_card"/>
 
 </RelativeLayout>

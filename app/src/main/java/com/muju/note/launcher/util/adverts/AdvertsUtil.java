@@ -334,26 +334,27 @@ public class AdvertsUtil {
         final long time = System.currentTimeMillis();
         addData(dao.getAdid(), TAG_SHOWCOUNT);
         addDataInfo(dao.getAdid(), TAG_SHOWCOUNT);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    jumpByDb(dao);
-                } catch (Exception e) {
-                    e.printStackTrace();
+        if(imageView!=null){
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        jumpByDb(dao);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        });
-
-        img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                long currentTime = System.currentTimeMillis();
-                addData(dao.getAdid(), TAG_SHOWTIME, currentTime - time);
-                addDataInfo(dao.getAdid(), TAG_SHOWTIME, time, currentTime);
-                relCorner.setVisibility(View.GONE);
-            }
-        });
+            });
+            img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    long currentTime = System.currentTimeMillis();
+                    addData(dao.getAdid(), TAG_SHOWTIME, currentTime - time);
+                    addDataInfo(dao.getAdid(), TAG_SHOWTIME, time, currentTime);
+                    relCorner.setVisibility(View.GONE);
+                }
+            });
+        }
     }
 
 

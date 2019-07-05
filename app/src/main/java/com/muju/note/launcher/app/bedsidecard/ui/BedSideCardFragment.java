@@ -21,6 +21,7 @@ import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.FormatUtils;
+import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.net.NetWorkUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -111,8 +112,10 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
 
     @Override
     public void onSupportVisible() {
-        EventBus.getDefault().register(this);
         super.onSupportVisible();
+        if(!EventBus.getDefault().isRegistered(this)){//加上判断
+            EventBus.getDefault().register(this);
+        }
         mPresenter.updateDate();
         EventBus.getDefault().post(new VideoNoLockEvent(false));
     }
@@ -167,15 +170,20 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
 
     //出院信息
     private void outHospital() {
-        tvName.setText("");
-        tvAge.setText("");
-        tvDoctor.setText("");
-        tvNurse.setText("");
-        tvCardTime.setText("");
-        tvSex.setText("");
-        tvHl.setText("");
-        tvZbNurse.setText("");
-        tvFood.setText("");
+        if(tvName!=null){
+            tvName.setText("");
+            tvAge.setText("");
+            tvDoctor.setText("");
+            tvNurse.setText("");
+            tvCardTime.setText("");
+            tvSex.setText("");
+            tvHl.setText("");
+            tvZbNurse.setText("");
+            tvFood.setText("");
+        }else {
+            LogFactory.l().i("tvName==null");
+        }
+
     }
 
     private void setHosiptal() {
@@ -185,15 +193,17 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
     }
 
     private void setPatientInfo(PatientResponse.DataBean entity) {
-        tvName.setText(entity.getUserName());
-        tvAge.setText(entity.getAge() + "岁");
-        tvDoctor.setText(entity.getChargeDoctor());
-        tvNurse.setText(entity.getChargeNurse());
-        tvCardTime.setText(FormatUtils.FormatDateUtil.parseLong(Long.parseLong(entity.getCreateTime())));
-        tvSex.setText(entity.getSex() == 1 ? "男" : "女");
-        tvHl.setText(entity.getNursingLevel());
-        tvZbNurse.setText(entity.getChargeNurse());
-        tvFood.setText(entity.getDietCategory());
+        if(tvName!=null){
+            tvName.setText(entity.getUserName());
+            tvAge.setText(entity.getAge() + "岁");
+            tvDoctor.setText(entity.getChargeDoctor());
+            tvNurse.setText(entity.getChargeNurse());
+            tvCardTime.setText(FormatUtils.FormatDateUtil.parseLong(Long.parseLong(entity.getCreateTime())));
+            tvSex.setText(entity.getSex() == 1 ? "男" : "女");
+            tvHl.setText(entity.getNursingLevel());
+            tvZbNurse.setText(entity.getChargeNurse());
+            tvFood.setText(entity.getDietCategory());
+        }
     }
 
     @Override
