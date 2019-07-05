@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import me.yokeyword.fragmentation.ISupportFragment;
 
 /**
  * 视频列表
@@ -299,7 +300,7 @@ public class VideoContentFragment extends BaseFragment<VideoContentPresenter> im
         hisDao.setScreenUrl(infoDao.getScreenUrl());
         WotvPlayFragment wotvPlayFragment=new WotvPlayFragment();
         wotvPlayFragment.setHisDao(hisDao);
-        ((VideoFragment) getParentFragment()).start(wotvPlayFragment);
+        ((VideoFragment) getParentFragment()).start(wotvPlayFragment, ISupportFragment.SINGLETASK);
     }
 
     @Override

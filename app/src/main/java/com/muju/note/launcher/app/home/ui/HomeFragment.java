@@ -93,6 +93,7 @@ import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
+import me.yokeyword.fragmentation.ISupportFragment;
 
 public class HomeFragment extends BaseFragment<HomePresenter> implements HomeContract.View, View.OnClickListener {
     private static final String TAG = "HomeFragment";
@@ -296,7 +297,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         hisDao.setScreenUrl(infoDao.getScreenUrl());
         WotvPlayFragment wotvPlayFragment = new WotvPlayFragment();
         wotvPlayFragment.setHisDao(hisDao);
-        start(wotvPlayFragment);
+        start(wotvPlayFragment,ISupportFragment.SINGLETASK);
     }
 
     //加载广告
@@ -638,7 +639,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 start(new GameFragment());
                 break;
             case "直播":
-                start(new WoTvVideoLineFragment());
+                start(new WoTvVideoLineFragment(), ISupportFragment.SINGLETASK);
                 break;
             case "购物":
                 start(new ShopFragment());

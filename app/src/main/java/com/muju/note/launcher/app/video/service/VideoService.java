@@ -385,23 +385,28 @@ public class VideoService {
         LitePal.where("cid = ? and date = ?",cid+"",date).findFirstAsync(VideoPlayerCountDao.class).listen(new FindCallback<VideoPlayerCountDao>() {
             @Override
             public void onFinish(VideoPlayerCountDao videoPlayerCountDao) {
-                if(videoPlayerCountDao==null){
-                    VideoPlayerCountDao countDao=new VideoPlayerCountDao();
-                    countDao.setDate(date);
-                    countDao.setDepId(ActiveUtils.getPadActiveInfo().getDeptId());
-                    countDao.setHosId(ActiveUtils.getPadActiveInfo().getHospitalId());
-                    countDao.setImei(MobileInfoUtil.getIMEI(LauncherApplication.getContext()));
-                    countDao.setPlayCount(1);
-                    countDao.setPlayTime((endTime-startTime));
-                    countDao.setVideoId(vid);
-                    countDao.setVideoName(vName);
-                    countDao.setCid(cid);
-                    countDao.save();
-                }else {
-                    long time=videoPlayerCountDao.getPlayTime()+(endTime-startTime);
-                    videoPlayerCountDao.setPlayTime(time);
-                    videoPlayerCountDao.setPlayCount(videoPlayerCountDao.getPlayCount()+1);
-                    videoPlayerCountDao.update(videoPlayerCountDao.getId());
+                try {
+                    LitePalDb.setZkysDb();
+                    if(videoPlayerCountDao==null){
+                        VideoPlayerCountDao countDao=new VideoPlayerCountDao();
+                        countDao.setDate(date);
+                        countDao.setDepId(ActiveUtils.getPadActiveInfo().getDeptId());
+                        countDao.setHosId(ActiveUtils.getPadActiveInfo().getHospitalId());
+                        countDao.setImei(MobileInfoUtil.getIMEI(LauncherApplication.getContext()));
+                        countDao.setPlayCount(1);
+                        countDao.setPlayTime((endTime-startTime));
+                        countDao.setVideoId(vid);
+                        countDao.setVideoName(vName);
+                        countDao.setCid(cid);
+                        countDao.save();
+                    }else {
+                        long time=videoPlayerCountDao.getPlayTime()+(endTime-startTime);
+                        videoPlayerCountDao.setPlayTime(time);
+                        videoPlayerCountDao.setPlayCount(videoPlayerCountDao.getPlayCount()+1);
+                        videoPlayerCountDao.update(videoPlayerCountDao.getId());
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
             }
         });
@@ -446,13 +451,18 @@ public class VideoService {
         LitePal.where("cid=?",dao.getCid()+"").findFirstAsync(VideoHisDao.class).listen(new FindCallback<VideoHisDao>() {
             @Override
             public void onFinish(VideoHisDao videoHisDao) {
-                if(videoHisDao==null){
-                    dao.save();
-                    return;
+                try {
+                    if(videoHisDao==null){
+                        dao.save();
+                        return;
+                    }
+                    LitePalDb.setZkysDb();
+                    videoHisDao.setCreateTime(dao.getCreateTime());
+                    videoHisDao.setDuration(dao.getDuration());
+                    videoHisDao.update(videoHisDao.getId());
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
-                videoHisDao.setCreateTime(dao.getCreateTime());
-                videoHisDao.setDuration(dao.getDuration());
-                videoHisDao.update(videoHisDao.getId());
             }
         });
     }

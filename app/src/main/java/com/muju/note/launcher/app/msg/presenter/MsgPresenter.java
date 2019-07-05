@@ -3,6 +3,7 @@ package com.muju.note.launcher.app.msg.presenter;
 import com.muju.note.launcher.app.msg.contract.MsgContract;
 import com.muju.note.launcher.app.msg.db.CustomMessageDao;
 import com.muju.note.launcher.base.BasePresenter;
+import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.util.log.LogUtil;
 
 import org.litepal.LitePal;
@@ -17,6 +18,7 @@ public class MsgPresenter extends BasePresenter<MsgContract.View> implements Msg
      */
     @Override
     public void querymsg() {
+        LitePalDb.setZkysDb();
         LitePal.order("createTime desc").findAsync(CustomMessageDao.class).listen(new FindMultiCallback<CustomMessageDao>() {
             @Override
             public void onFinish(List<CustomMessageDao> list) {

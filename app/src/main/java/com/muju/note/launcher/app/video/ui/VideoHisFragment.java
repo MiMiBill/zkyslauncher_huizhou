@@ -24,6 +24,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import me.yokeyword.fragmentation.ISupportFragment;
 
 /**
  *  历史记录
@@ -61,7 +62,7 @@ public class VideoHisFragment extends BaseFragment<VideoHisPresenter> implements
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 WotvPlayFragment wotvPlayFragment=new WotvPlayFragment();
                 wotvPlayFragment.setHisDao(hisDaos.get(position));
-                start(wotvPlayFragment);
+                start(wotvPlayFragment, ISupportFragment.SINGLETASK);
             }
         });
 
