@@ -3,10 +3,10 @@ package com.muju.note.launcher.app.clide.presenter;
 import com.muju.note.launcher.app.clide.contract.ClideContract;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
 import com.muju.note.launcher.base.BasePresenter;
+import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.util.log.LogUtil;
 
 import org.litepal.LitePal;
-import org.litepal.crud.callback.CountCallback;
 import org.litepal.crud.callback.FindMultiCallback;
 
 import java.util.ArrayList;
@@ -20,6 +20,7 @@ public class ClidePresenter extends BasePresenter<ClideContract.View> implements
      */
     @Override
     public void getCilde(String name , int pageNum) {
+        LitePalDb.setZkysDb();
         String sql="columnName like '%"+name+"%' and status = 1 order by number desc,onwayTime desc,editTime desc,updateTime desc";
         int limit=(pageNum*30)-30;
         LitePal.where(sql).limit(30).offset(limit).findAsync(VideoInfoDao.class).listen(new FindMultiCallback<VideoInfoDao>() {
@@ -44,6 +45,7 @@ public class ClidePresenter extends BasePresenter<ClideContract.View> implements
 
     @Override
     public void getHeader(String name) {
+        LitePalDb.setZkysDb();
         String sql="columnName like '%"+name+"%'";
         LitePal.where(sql).findAsync(VideoInfoDao.class).listen(new FindMultiCallback<VideoInfoDao>() {
             @Override

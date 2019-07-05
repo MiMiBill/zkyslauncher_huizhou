@@ -3,7 +3,6 @@ package com.muju.note.launcher.app.home.bean;
 import android.text.TextUtils;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class PatientResponse implements Serializable {
 
@@ -17,8 +16,8 @@ public class PatientResponse implements Serializable {
 
     private int code;
     private String msg;
-    private int total;
-    private List<DataBean> data;
+
+    private DataBean data;
 
     public int getCode() {
         return code;
@@ -36,19 +35,11 @@ public class PatientResponse implements Serializable {
         this.msg = msg;
     }
 
-    public int getTotal() {
-        return total;
-    }
-
-    public void setTotal(int total) {
-        this.total = total;
-    }
-
-    public List<DataBean> getData() {
+    public DataBean getData() {
         return data;
     }
 
-    public void setData(List<DataBean> data) {
+    public void setData(DataBean data) {
         this.data = data;
     }
 
@@ -78,7 +69,10 @@ public class PatientResponse implements Serializable {
          * age : 25
          * tabbId : 108
          */
-        private String workerId;
+        private int workerId;
+        private int bedId;
+        private String bedNumber;
+        private String hospitalizationNumber;
         private String deptName;
         private int sex;
         private int deptId;
@@ -104,12 +98,36 @@ public class PatientResponse implements Serializable {
         private String createTime;
 
 
-        public String getWorkerId() {
-            return workerId == null ? "" : workerId;
+        public int getWorkerId() {
+            return workerId;
         }
 
-        public void setWorkerId(String workerId) {
+        public void setWorkerId(int workerId) {
             this.workerId = workerId;
+        }
+
+        public int getBedId() {
+            return bedId;
+        }
+
+        public void setBedId(int bedId) {
+            this.bedId = bedId;
+        }
+
+        public String getBedNumber() {
+            return bedNumber;
+        }
+
+        public void setBedNumber(String bedNumber) {
+            this.bedNumber = bedNumber;
+        }
+
+        public String getHospitalizationNumber() {
+            return hospitalizationNumber;
+        }
+
+        public void setHospitalizationNumber(String hospitalizationNumber) {
+            this.hospitalizationNumber = hospitalizationNumber;
         }
 
         public String getCreateTime() {

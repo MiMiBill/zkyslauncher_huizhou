@@ -3,6 +3,7 @@ package com.muju.note.launcher.app.publicui.presenter;
 import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
 import com.muju.note.launcher.app.publicui.contract.ProtectionContract;
 import com.muju.note.launcher.base.BasePresenter;
+import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.log.LogUtil;
 
@@ -19,6 +20,7 @@ public class ProtectionPresenter extends BasePresenter<ProtectionContract.View> 
      */
     @Override
     public void getLockBananaList(String code) {
+        LitePalDb.setZkysDb();
         LitePal.where("code =?",code).findAsync(AdvertsCodeDao.class).listen(new FindMultiCallback<AdvertsCodeDao>() {
             @Override
             public void onFinish(List<AdvertsCodeDao> list) {

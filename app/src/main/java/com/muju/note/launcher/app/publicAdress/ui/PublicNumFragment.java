@@ -15,6 +15,7 @@ import com.muju.note.launcher.app.publicAdress.contract.PublicContract;
 import com.muju.note.launcher.app.publicAdress.presenter.PublicPresenter;
 import com.muju.note.launcher.app.sign.bean.TaskBean;
 import com.muju.note.launcher.base.BaseFragment;
+import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.util.qr.QrCodeUtils;
 import com.muju.note.launcher.view.password.OnPasswordFinish;
 import com.muju.note.launcher.view.password.PopEnterPassword;
@@ -61,6 +62,7 @@ public class PublicNumFragment extends BaseFragment<PublicPresenter> implements 
     @Override
     public void initData() {
         tvTitle.setText("做任务");
+        LitePalDb.setZkysDb();
         AdvertsCodeDao codeDao = LitePal.where("taskType =?", "1").findFirst(AdvertsCodeDao.class);
         if (codeDao != null) {
             advertId = codeDao.getAdid();

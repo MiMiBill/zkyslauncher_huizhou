@@ -16,6 +16,7 @@ import com.muju.note.launcher.app.video.db.VideoInfoDao;
 import com.muju.note.launcher.app.video.db.VideoInfoTopDao;
 import com.muju.note.launcher.base.BasePresenter;
 import com.muju.note.launcher.base.LauncherApplication;
+import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.DateUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
@@ -99,9 +100,8 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
                         Gson gson = new Gson();
                         PatientResponse patientResponse = gson.fromJson(response.body(),
                                 PatientResponse.class);
-                        if (patientResponse.getCode() == 200 && patientResponse.getData().size()
-                                > 0) {
-                            PatientResponse.DataBean patient = patientResponse.getData().get(0);
+                        if (patientResponse.getCode() == 200 && patientResponse.getData()!=null) {
+                            PatientResponse.DataBean patient = patientResponse.getData();
                             if (patient.getDisabled()) {
 //                                SPUtil.saveDataList(Constants.PATIENT, patientResponse.getData());
                                 PatientUtil.getInstance().setPatientData(patient);
@@ -132,6 +132,7 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
      */
     @Override
     public void getBananaList(String code) {
+        LitePalDb.setZkysDb();
         LitePal.where("code =?",code).findAsync(AdvertsCodeDao.class).listen(new FindMultiCallback<AdvertsCodeDao>() {
             @Override
             public void onFinish(List<AdvertsCodeDao> list) {
@@ -154,6 +155,7 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
      */
     @Override
     public void getDialogAd(String code) {
+        LitePalDb.setZkysDb();
         LitePal.where("code =?",code).findAsync(AdvertsCodeDao.class).listen(new FindMultiCallback<AdvertsCodeDao>() {
             @Override
             public void onFinish(List<AdvertsCodeDao> list) {
@@ -175,6 +177,7 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
      */
     @Override
     public void getMenu() {
+        LitePalDb.setZkysDb();
         LitePal.findAllAsync(HomeMenuDao.class).listen(new FindMultiCallback<HomeMenuDao>() {
             @Override
             public void onFinish(List<HomeMenuDao> list) {
@@ -196,6 +199,7 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
      */
     @Override
     public void getVideoHis() {
+        LitePalDb.setZkysDb();
         LitePal.limit(20).order("createTime desc").findAsync(VideoHisDao.class).listen(new FindMultiCallback<VideoHisDao>() {
             @Override
             public void onFinish(List<VideoHisDao> list) {
@@ -217,6 +221,7 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
      */
     @Override
     public void getTopVideo() {
+        LitePalDb.setZkysDb();
         LitePal.findAllAsync(VideoInfoTopDao.class).listen(new FindMultiCallback<VideoInfoTopDao>
                 () {
             @Override

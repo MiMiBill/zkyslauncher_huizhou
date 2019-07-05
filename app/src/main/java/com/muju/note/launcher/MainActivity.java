@@ -362,6 +362,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void pushCustomMsg(PushCustomMessageEntity entity) {
         LogUtil.d(TAG, "宣教推送ID：" + entity.getId());
+        LitePalDb.setZkysDb();
         LitePal.where("missionid=?", entity.getId()).findFirstAsync(MissionInfoDao.class).listen(new FindCallback<MissionInfoDao>() {
             @Override
             public void onFinish(MissionInfoDao missionInfoDao) {

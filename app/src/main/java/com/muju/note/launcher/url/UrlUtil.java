@@ -167,7 +167,8 @@ public class UrlUtil {
 
     //获取病人信息
     public static String getGetPaitentInfo() {
-        return getHost() + "/hospitalBedTabb/list";
+//        return getHost() + "/hospitalBedTabb/list";
+        return getHost() + "/hospitalBedTabb/findByBedId";
     }
 
     /**

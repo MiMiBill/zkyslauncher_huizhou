@@ -480,6 +480,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     //没有入院信息
     @Override
     public void notPatientInfo() {
+        this.entity=null;
         EventBus.getDefault().post(new OutHospitalEvent());
         tvNoHosInfo.setText(activeInfo.getHospitalName() + "-" + activeInfo.getDeptName() + "-" +
                 activeInfo.getBedNumber() + "床");

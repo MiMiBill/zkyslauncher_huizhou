@@ -80,6 +80,7 @@ public class  VideoContentPresenter extends BasePresenter<VideoContentContract.V
             }else {
                 sql="columnName like '%"+name+"%' and status = 1 and customtag like '%"+mapFilter+"%' order by number desc,onwayTime desc,editTime desc,updateTime desc";
             }
+            LitePalDb.setZkysDb();
             LitePal.where(sql).limit(30).offset(limit).findAsync(VideoInfoDao.class).listen(new FindMultiCallback<VideoInfoDao>() {
                 @Override
                 public void onFinish(List<VideoInfoDao> list) {

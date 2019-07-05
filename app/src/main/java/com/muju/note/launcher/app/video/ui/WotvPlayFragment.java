@@ -37,6 +37,7 @@ import com.muju.note.launcher.app.video.util.PayUtils;
 import com.muju.note.launcher.app.video.util.WoTvUtil;
 import com.muju.note.launcher.app.video.util.wotv.ExpandVideoView2;
 import com.muju.note.launcher.base.BaseFragment;
+import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.topics.AdvertsTopics;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.DateUtil;
@@ -467,6 +468,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
             if (videoOrImageDialog != null && videoOrImageDialog.isShowing()) {
                 videoOrImageDialog.dismiss();
             }
+            LitePalDb.setZkysDb();
             AdvertsCodeDao codeDao = LitePal.where("code =?", AdvertsTopics.CODE_VIDEO_CORNER).
                     findFirst(AdvertsCodeDao.class);
             if (codeDao != null && (!codeDao.getResourceUrl().equals(""))) {
@@ -535,7 +537,7 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
     public void onEvent(VideoPauseEvent event) {
 //        LogFactory.l().i("VideoPauseEvent==" + event.isPause);
         if (event.isPause && isShowDialog) {
-
+            LitePalDb.setZkysDb();
             AdvertsCodeDao codeDao = LitePal.where("code =?", AdvertsTopics.CODE_VIDEO_DIALOG).findFirst(AdvertsCodeDao.class);
             try {
                 if (videoOrImageDialog == null) {
@@ -644,13 +646,16 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
 
     private void showPayDialog(int isConvention) {
         //暂停播放
-        videoView.pause();
+        if (videoView != null) {
+            videoView.pause();
+        }
+
         if (videoOrImageDialog != null && videoOrImageDialog.isShowing()) {
             videoOrImageDialog.dismiss();
         }
         //开启轮询
         selectPayInterval();
-
+        LitePalDb.setZkysDb();
         AdvertsCodeDao codeDao = LitePal.where("taskType =?", "1").findFirst(AdvertsCodeDao.class);
         if (codeDao != null && (!codeDao.getTaskUrl().equals(""))) {
             dialogType=0;

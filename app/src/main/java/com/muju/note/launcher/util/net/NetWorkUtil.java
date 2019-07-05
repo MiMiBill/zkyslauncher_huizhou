@@ -54,6 +54,7 @@ public class NetWorkUtil {
         }
         // 获取网络类型，如果为空，返回无网络
         NetworkInfo activeNetInfo = connManager.getActiveNetworkInfo();
+
         if (activeNetInfo == null || !activeNetInfo.isAvailable()) {
             NETWORK_TYPE = 2;
             return NETWORK_NONE;
@@ -122,109 +123,6 @@ public class NetWorkUtil {
         }
     }
 
-    /**
-     * 获取手机信号强度
-     */
-    @SuppressLint("CheckResult")
-    public static void getSignalStrength(final Context context) {
-        Observable.just(1)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Integer>() {
-                    @Override
-                    public void accept(Integer integer) throws Exception {
-                        final TelephonyManager telephonyManager = (TelephonyManager) context
-                                .getSystemService(Context.TELEPHONY_SERVICE);
-                        PhoneStateListener MyPhoneListener = new PhoneStateListener() {
-                            @Override
-                            //获取对应网络的ID，这个方法在这个程序中没什么用处
-                            public void onCellLocationChanged(CellLocation location) {
-                                if (location instanceof GsmCellLocation) {
-                                    int CID = ((GsmCellLocation) location).getCid();
-                                } else if (location instanceof CdmaCellLocation) {
-                                    int ID = ((CdmaCellLocation) location).getBaseStationId();
-                                }
-                            }
-
-                            //系统自带的服务监听器，实时监听网络状态
-                            @Override
-                            public void onServiceStateChanged(ServiceState serviceState) {
-                                super.onServiceStateChanged(serviceState);
-                            }
-
-                            //这个是我们的主角，就是获取对应网络信号强度
-                            @RequiresApi(api = Build.VERSION_CODES.M)
-                            @Override
-                            public void onSignalStrengthsChanged(SignalStrength signalStrength) {
-                                //这个ltedbm 是4G信号的值
-                                String signalinfo = signalStrength.toString();
-                                String[] parts = signalinfo.split(" ");
-                                int ltedbm = Integer.parseInt(parts[9]);
-                                int level = signalStrength.getLevel();
-                                if (telephonyManager.getNetworkType() == TelephonyManager
-                                        .NETWORK_TYPE_LTE) {
-                                    String bin;
-                                    if (ltedbm > -75) {
-                                        bin = "网络很好";
-                                    } else if (ltedbm > -85) {
-                                        bin = "网络不错";
-                                    } else if (ltedbm > -95) {
-                                        bin = "网络还行";
-                                    } else if (ltedbm > -100) {
-                                        bin = "网络很差";
-                                    } else {
-                                        bin = "网络错误";
-                                    }
-
-                                    NETWORK_LEVEN = "dbm:" + ltedbm + "\n" + bin + "\n level" +
-                                            level;
-                                    return;
-                                } else if (telephonyManager.getNetworkType() == TelephonyManager
-                                        .NETWORK_TYPE_HSDPA ||
-                                        telephonyManager.getNetworkType() == TelephonyManager
-                                                .NETWORK_TYPE_HSPA ||
-                                        telephonyManager.getNetworkType() == TelephonyManager
-                                                .NETWORK_TYPE_HSUPA ||
-                                        telephonyManager.getNetworkType() == TelephonyManager
-                                                .NETWORK_TYPE_UMTS) {
-//                                    ltedbm = signalStrength.getCdmaDbm();
-                                    try {
-                                        ltedbm =(int) signalStrength.getClass().getMethod("getDbm")
-                                                    .invoke(signalStrength);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                    String bin;
-                                    if (ltedbm > -75) {
-                                        bin = "网络很好";
-                                    } else if (ltedbm > -85) {
-                                        bin = "网络不错";
-                                    } else if (ltedbm > -95) {
-                                        bin = "网络还行";
-                                    } else if (ltedbm > -100) {
-                                        bin = "网络很差";
-                                    } else {
-                                        bin = "网络错误";
-                                    }
-                                    NETWORK_LEVEN = "dbm:" + ltedbm + "\n" + bin + "\n level" +
-                                            level;
-                                    return;
-                                } else {
-                                    //这个dbm 是2G和3G信号的值
-                                    int asu = signalStrength.getGsmSignalStrength();
-                                    int dbm = -113 + 2 * asu;
-
-                                    NETWORK_LEVEN = "dbm:" + dbm + "\n" + "没有4G信号,网络很差" + "\n " +
-                                            "level" + level + "\nasu:" + asu;
-                                }
-//                                LogFactory.l().i("NETWORK==="+NETWORK_LEVEN);
-//                                onSignalStrengthsChanged(signalStrength);
-                            }
-                        };
-                        telephonyManager.listen(MyPhoneListener, PhoneStateListener
-                                .LISTEN_SIGNAL_STRENGTHS);
-                    }
-                });
-    }
 
     /**
      * 判断网络是否连接
@@ -298,9 +196,24 @@ public class NetWorkUtil {
 //                super.onSignalStrengthsChanged(signalStrength);
                 String signalInfo = signalStrength.toString();
                 String[] params = signalInfo.split(" ");
+                int level = signalStrength.getLevel();
                 if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_LTE) {
                     //4G网络 最佳范围   >-90dBm 越大越好
                     Itedbm = Integer.parseInt(params[9]);
+                    String bin;
+                    if (Itedbm > -95) {
+                        bin = "网络很好";
+                    } else if (Itedbm > -105) {
+                        bin = "网络不错";
+                    } else if (Itedbm > -115) {
+                        bin = "网络还行";
+                    } else if (Itedbm > -120) {
+                        bin = "网络很差";
+                    } else {
+                        bin = "网络错误";
+                    }
+
+                    NETWORK_LEVEN = "dbm:" + Itedbm + "\n" + bin + "\n level" + level;
                 } else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSDPA ||
                         tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSPA ||
                         tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSUPA ||
@@ -312,12 +225,28 @@ public class NetWorkUtil {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    String bin;
+                    if (Itedbm > -75) {
+                        bin = "网络很好";
+                    } else if (Itedbm > -85) {
+                        bin = "网络不错";
+                    } else if (Itedbm > -95) {
+                        bin = "网络还行";
+                    } else if (Itedbm > -100) {
+                        bin = "网络很差";
+                    } else {
+                        bin = "网络错误";
+                    }
+                    NETWORK_LEVEN = "dbm:" + Itedbm + "\n" + bin + "\n level" +
+                            level;
                 } else {
                     //2G网络最佳范围>-90dBm 越大越好
                     int asu = signalStrength.getGsmSignalStrength();
                     Itedbm = -113 + 2 * asu;
+                    NETWORK_LEVEN = "dbm:" + Itedbm + "\n" + "没有4G信号,网络很差" + "\n " +
+                            "level" + level + "\nasu:" + asu;
                 }
-                LogFactory.l().i("信号强度==="+Itedbm);
+//                LogFactory.l().i("信号强度==="+Itedbm);
             }
         };
         //开始监听

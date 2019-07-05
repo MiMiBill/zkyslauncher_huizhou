@@ -1,30 +1,17 @@
 package com.muju.note.launcher.service.operation;
 
-import android.text.TextUtils;
-
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.service.config.ConfigService;
-import com.muju.note.launcher.service.db.PadConfigDao;
-import com.muju.note.launcher.service.db.PadConfigSubDao;
-import com.muju.note.launcher.service.homemenu.HomeMenuService;
 import com.muju.note.launcher.service.updatedata.UpdateDataService;
 import com.muju.note.launcher.service.uploaddata.UpLoadDataService;
-import com.muju.note.launcher.util.DateUtil;
-import com.muju.note.launcher.util.app.AppUtils;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.net.NetWorkUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
-import com.muju.note.launcher.util.system.SystemUtils;
-
-import org.litepal.LitePal;
-import org.litepal.crud.callback.FindMultiCallback;
 
 import java.util.Calendar;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
@@ -91,7 +78,7 @@ public class OneMinuteDisposable {
             ConfigService.getInstance().playConfig();
 
             // 获取信号强度
-            NetWorkUtil.getSignalStrength(LauncherApplication.getContext());
+            NetWorkUtil.getCurrentNetDBM(LauncherApplication.getContext());
 
             // 检查是否需要更新本地数据
             UpdateDataService.getInstance().start();

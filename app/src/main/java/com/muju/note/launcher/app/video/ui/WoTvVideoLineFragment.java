@@ -28,6 +28,7 @@ import com.muju.note.launcher.app.video.util.WoTvUtil;
 import com.muju.note.launcher.app.video.util.wotv.ExpandVideoView2;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
+import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.topics.AdvertsTopics;
 import com.muju.note.launcher.util.adverts.AdvertsUtil;
 import com.muju.note.launcher.util.log.LogFactory;
@@ -197,6 +198,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
     public void onEvent(VideoPauseEvent event) {
         LogFactory.l().i("VideoPauseEvent==" + event.isPause);
         if (event.isPause && isShowDialog) {
+            LitePalDb.setZkysDb();
             AdvertsCodeDao codeDao = LitePal.where("code =?", AdvertsTopics.CODE_VIDEO_DIALOG).findFirst(AdvertsCodeDao.class);
             try {
                 if (videoOrImageDialog == null) {

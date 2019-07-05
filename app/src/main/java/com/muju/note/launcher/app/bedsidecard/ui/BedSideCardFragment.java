@@ -14,6 +14,8 @@ import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
 import com.muju.note.launcher.app.bedsidecard.contract.BedsideContract;
 import com.muju.note.launcher.app.bedsidecard.presenter.BedsidePresenter;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
+import com.muju.note.launcher.app.home.event.OutHospitalEvent;
+import com.muju.note.launcher.app.home.event.PatientInfoEvent;
 import com.muju.note.launcher.app.video.event.VideoNoLockEvent;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
@@ -22,6 +24,8 @@ import com.muju.note.launcher.util.FormatUtils;
 import com.muju.note.launcher.util.net.NetWorkUtil;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 
@@ -107,6 +111,7 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
 
     @Override
     public void onSupportVisible() {
+        EventBus.getDefault().register(this);
         super.onSupportVisible();
         mPresenter.updateDate();
         EventBus.getDefault().post(new VideoNoLockEvent(false));
@@ -144,6 +149,33 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
         }else {
             llBack.setVisibility(View.VISIBLE);
         }
+    }
+
+
+    //出院
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(OutHospitalEvent event) {
+        outHospital();
+    }
+
+    //入院
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(PatientInfoEvent event) {
+        PatientResponse.DataBean info = event.info;
+        setPatientInfo(info);
+    }
+
+    //出院信息
+    private void outHospital() {
+        tvName.setText("");
+        tvAge.setText("");
+        tvDoctor.setText("");
+        tvNurse.setText("");
+        tvCardTime.setText("");
+        tvSex.setText("");
+        tvHl.setText("");
+        tvZbNurse.setText("");
+        tvFood.setText("");
     }
 
     private void setHosiptal() {
