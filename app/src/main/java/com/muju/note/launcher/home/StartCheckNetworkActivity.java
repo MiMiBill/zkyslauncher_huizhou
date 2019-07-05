@@ -7,6 +7,7 @@ import com.muju.note.launcher.app.startUp.ui.StartCheckNetWorkFragment;
 import com.muju.note.launcher.base.BaseActivity;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.util.log.LogUtil;
+import com.muju.note.launcher.util.net.NetWorkUtil;
 
 import butterknife.BindView;
 

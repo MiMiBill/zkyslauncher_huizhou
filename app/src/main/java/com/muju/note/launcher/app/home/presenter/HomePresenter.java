@@ -16,6 +16,7 @@ import com.muju.note.launcher.app.video.db.VideoInfoDao;
 import com.muju.note.launcher.app.video.db.VideoInfoTopDao;
 import com.muju.note.launcher.base.BasePresenter;
 import com.muju.note.launcher.base.LauncherApplication;
+import com.muju.note.launcher.service.network.NetWorkService;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.DateUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;

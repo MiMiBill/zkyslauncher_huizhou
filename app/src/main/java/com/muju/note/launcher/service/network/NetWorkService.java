@@ -1,11 +1,16 @@
 package com.muju.note.launcher.service.network;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.telephony.CellLocation;
 import android.telephony.PhoneStateListener;
+import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
+import android.telephony.cdma.CdmaCellLocation;
+import android.telephony.gsm.GsmCellLocation;
 
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.util.DateUtil;
@@ -35,9 +40,24 @@ public class NetWorkService {
 
     public static String NETWORK_STR;
 
-    public void start(){
-        final TelephonyManager telephonyManager = (TelephonyManager) LauncherApplication.getContext().getSystemService(Context.TELEPHONY_SERVICE);
+    public void start(Activity activity){
+        final TelephonyManager telephonyManager = (TelephonyManager) activity.getSystemService(Context.TELEPHONY_SERVICE);
         PhoneStateListener phoneStateListener=new PhoneStateListener(){
+            @Override
+            //获取对应网络的ID，这个方法在这个程序中没什么用处
+            public void onCellLocationChanged(CellLocation location) {
+                if (location instanceof GsmCellLocation) {
+                    int CID = ((GsmCellLocation) location).getCid();
+                } else if (location instanceof CdmaCellLocation) {
+                    int ID = ((CdmaCellLocation) location).getBaseStationId();
+                }
+            }
+
+            //系统自带的服务监听器，实时监听网络状态
+            @Override
+            public void onServiceStateChanged(ServiceState serviceState) {
+                super.onServiceStateChanged(serviceState);
+            }
             //这个是我们的主角，就是获取对应网络信号强度
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
@@ -61,6 +81,7 @@ public class NetWorkService {
                         bin = "网络错误";
                     }
                     NETWORK_STR = "dbm:" + ltedbm + "\n" + bin + "\n level" + level;
+                    LogUtil.d(TAG,"网络情况:"+NETWORK_STR);
                     return;
                 } else if (telephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSDPA ||
                         telephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSPA ||
@@ -80,43 +101,18 @@ public class NetWorkService {
                         bin = "网络错误";
                     }
                     NETWORK_STR = "dbm:" + ltedbm + "\n" + bin + "\n level" + level;
+                    LogUtil.d(TAG,"网络情况:"+NETWORK_STR);
                     return;
                 } else {
                     //这个dbm 是2G和3G信号的值
                     int asu = signalStrength.getGsmSignalStrength();
                     int dbm = -113 + 2 * asu;
                     NETWORK_STR = "dbm:" + dbm + "\n" + "没有4G信号,网络很差" + "\n level" + level + "\nasu:" + asu;
+                    LogUtil.d(TAG,"网络情况:"+NETWORK_STR);
                 }
                 onSignalStrengthsChanged(signalStrength);
-                LogUtil.d(TAG,"网络情况:"+NETWORK_STR);
             }
         };
         telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
     }
-
-    public void getNet(){
-        Observable.interval(1, TimeUnit.SECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Long>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                    }
-
-                    @Override
-                    public void onNext(Long aLong) {
-                        LogUtil.i(TAG,"信号："+NETWORK_STR);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-    }
-
 }

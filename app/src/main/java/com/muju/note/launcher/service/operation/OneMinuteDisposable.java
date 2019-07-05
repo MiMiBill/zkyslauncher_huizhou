@@ -91,7 +91,7 @@ public class OneMinuteDisposable {
             ConfigService.getInstance().playConfig();
 
             // 获取信号强度
-            NetWorkUtil.getSignalStrength(LauncherApplication.getContext());
+//            NetWorkUtil.getSignalStrength(LauncherApplication.getContext());
 
             // 检查是否需要更新本地数据
             UpdateDataService.getInstance().start();
