@@ -58,8 +58,6 @@ public class MainService extends Service {
         // 6小时心跳开始执行
         SixHourDisposable.getInstance().start();
 
-//        NetWorkService.getInstance().start();
-
         // 某些操作需要10分钟内执行
         Observable.timer((long) (Math.random() * 600), TimeUnit.SECONDS)
                 .subscribe(new Consumer<Long>() {
