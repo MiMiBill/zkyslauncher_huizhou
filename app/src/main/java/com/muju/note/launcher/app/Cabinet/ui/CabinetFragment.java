@@ -20,6 +20,7 @@ import com.muju.note.launcher.app.Cabinet.presenter.CabinetPresenter;
 import com.muju.note.launcher.app.luckdraw.ui.LuckDrawFragment;
 import com.muju.note.launcher.app.video.event.VideoNoLockEvent;
 import com.muju.note.launcher.base.BaseFragment;
+import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.service.db.PadConfigSubDao;
 import com.muju.note.launcher.util.DateUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
@@ -163,6 +164,7 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
 
     //播放视频
     private void playVideo() {
+        LitePalDb.setZkysDb();
         PadConfigSubDao subDao = LitePal.where("type =?", "openVideo").findFirst(PadConfigSubDao
         .class);
         if(subDao!=null){

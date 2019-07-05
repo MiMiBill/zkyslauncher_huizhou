@@ -3,6 +3,7 @@ package com.muju.note.launcher.app.video.presenter;
 import com.muju.note.launcher.app.video.contract.VideoLineContract;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
 import com.muju.note.launcher.base.BasePresenter;
+import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.util.log.LogUtil;
 
 import org.litepal.LitePal;
@@ -18,6 +19,7 @@ public class VideoLinePresenter extends BasePresenter<VideoLineContract.View> im
      */
     @Override
     public void queryVideo() {
+        LitePalDb.setZkysDb();
         String sql;
         sql="columnName like '%"+"电视"+"%' and status = 1 order by number desc,onwayTime desc,editTime desc,updateTime desc";
         LitePal.where(sql).findAsync(VideoInfoDao.class).listen(new FindMultiCallback<VideoInfoDao>() {

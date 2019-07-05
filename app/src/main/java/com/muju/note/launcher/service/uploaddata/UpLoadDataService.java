@@ -44,29 +44,30 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- *  数据上传相关
+ * 数据上传相关
  */
 public class UpLoadDataService {
 
-    private static final String TAG="UpLoadDataService";
+    private static final String TAG = "UpLoadDataService";
 
-    public static UpLoadDataService upLoadService=null;
-    public static UpLoadDataService getInstance(){
-        if(upLoadService==null){
-            upLoadService=new UpLoadDataService();
+    public static UpLoadDataService upLoadService = null;
+
+    public static UpLoadDataService getInstance() {
+        if (upLoadService == null) {
+            upLoadService = new UpLoadDataService();
         }
         return upLoadService;
     }
 
-    private boolean isUpLoad=false;
+    private boolean isUpLoad = false;
 
-    public void start(){
+    public void start() {
         int videoDay = SPUtil.getInt(SpTopics.SP_UPLOAD_DATA_DAY);
         Calendar c = Calendar.getInstance();
         final int day = c.get(Calendar.DAY_OF_MONTH);
         if (day != videoDay) {
             int hour = c.get(Calendar.HOUR_OF_DAY);
-            if (hour >=23 || hour < 7) {
+            if (hour >= 23 || hour < 7) {
                 if (isUpLoad) {
                     return;
                 }
@@ -78,40 +79,38 @@ public class UpLoadDataService {
                     public void run() {
                         // 上传数据信息
                         upLoad();
-                        SPUtil.putInt(SpTopics.SP_UPLOAD_DATA_DAY,day);
+                        SPUtil.putInt(SpTopics.SP_UPLOAD_DATA_DAY, day);
                     }
                 }, 1000 * 60 * num);
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
                         // 以防万一，12个小时候重置状态
-                        isUpLoad=false;
+                        isUpLoad = false;
                     }
-                },1000*60*60*12);
+                }, 1000 * 60 * 60 * 12);
             }
         }
     }
 
-    private void upLoad(){
+    private void upLoad() {
 
-        ExecutorService service= Executors.newSingleThreadExecutor();
+        ExecutorService service = Executors.newSingleThreadExecutor();
         service.execute(new Runnable() {
             @Override
             public void run() {
-                // 上传广告统计总数信息
-                upAdvertCountDb();
-
-                //上传广告详情数据
-                upAdvertInfoDb();
-
-                // 上传影视统计总数信息
-                upVideoCountDb();
-
-                // 复制数据到data数据库
+                try {
+                    // 上传广告统计总数信息
+                    upAdvertCountDb();
+                    // 上传影视统计总数信息
+                    upVideoCountDb();
+                    // 复制数据到data数据库
 //                moveDbToData();
-
-                // 获取token，上传数据库到七牛云
-                getToken(Constants.ZKYS_PAD_DB);
+                    // 获取token，上传数据库到七牛云
+                    getToken(Constants.ZKYS_PAD_DB);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -133,28 +132,12 @@ public class UpLoadDataService {
                 });
     }
 
-    /**
-     * 上传广告详情信息
-     */
-    public void upAdvertInfoDb() {
-        List<UpAdvertInfoDao> daoList = LitePal.findAll(UpAdvertInfoDao.class);
-        OkGo.<BaseBean<Void>>post(UrlUtil.getUpCountDb())
-                .params("data", new Gson().toJson(daoList))
-                .execute(new JsonCallback<BaseBean<Void>>() {
-                    @Override
-                    public void onSuccess(Response<BaseBean<Void>> response) {
-                        LitePalDb.setZkysDataDb();
-                        LitePal.deleteAll(UpAdvertInfoDao.class);
-                    }
-                });
-    }
-
 
     /**
-     *  上传影视数据
+     * 上传影视数据
      */
-    public void upVideoCountDb(){
-        List<VideoPlayerCountDao> daoList=LitePal.findAll(VideoPlayerCountDao.class);
+    public void upVideoCountDb() {
+        List<VideoPlayerCountDao> daoList = LitePal.findAll(VideoPlayerCountDao.class);
         OkGo.<BaseBean<Void>>post(UrlUtil.getUpVideoCountDb())
                 .params("data", new Gson().toJson(daoList))
                 .execute(new JsonCallback<BaseBean<Void>>() {
@@ -167,17 +150,17 @@ public class UpLoadDataService {
     }
 
     /**
-     *  移动数据到data数据库
+     * 移动数据到data数据库
      */
-    private void moveDbToData(){
+    private void moveDbToData() {
         // 移动广告详情数据到data数据库
         LitePalDb.setZkysDb();
         LitePal.findAllAsync(AdvertsInfoDao.class).listen(new FindMultiCallback<AdvertsInfoDao>() {
             @Override
             public void onFinish(List<AdvertsInfoDao> list) {
                 LitePalDb.setZkysDataDb();
-                for (AdvertsInfoDao dao:list){
-                    UpAdvertInfoDao infoDao=new UpAdvertInfoDao();
+                for (AdvertsInfoDao dao : list) {
+                    UpAdvertInfoDao infoDao = new UpAdvertInfoDao();
                     infoDao.setAdvertId(dao.getAdvertId());
                     infoDao.setDate(dao.getDate());
                     infoDao.setDepId(dao.getDepId());
@@ -200,8 +183,8 @@ public class UpLoadDataService {
             @Override
             public void onFinish(List<VideoPlayerInfoDao> list) {
                 LitePalDb.setZkysDataDb();
-                for (VideoPlayerInfoDao dao:list){
-                    UpVideoInfoDao infoDao=new UpVideoInfoDao();
+                for (VideoPlayerInfoDao dao : list) {
+                    UpVideoInfoDao infoDao = new UpVideoInfoDao();
                     infoDao.setDate(dao.getDate());
                     infoDao.setDepId(dao.getDepId());
                     infoDao.setEndTime(dao.getEndTime());
@@ -219,7 +202,8 @@ public class UpLoadDataService {
     }
 
     /**
-     *  获取七牛云tokend
+     * 获取七牛云tokend
+     *
      * @param bucketName
      */
     public void getToken(String bucketName) {
@@ -232,16 +216,20 @@ public class UpLoadDataService {
                         try {
                             jsonObject = new JSONObject(response.body());
                             if (jsonObject.optInt("code") == 200) {
-                                String token=jsonObject.optString("token");
-                                boolean isMount= Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
-                                if(isMount){
-                                    String path=Environment.getExternalStorageDirectory().getAbsolutePath()+ File.separator+"zkysdb/zkys-data.db";
-                                    File file=new File(path);
-                                    if(file.exists()){
-                                        LogUtil.d(TAG,"数据库文件"+file.exists());
+                                String token = jsonObject.optString("token");
+                                boolean isMount = Environment.getExternalStorageState().equals
+                                        (android.os.Environment.MEDIA_MOUNTED);
+                                if (isMount) {
+                                    String path = Environment.getExternalStorageDirectory()
+                                            .getAbsolutePath() + File.separator +
+                                            "zkysdb/zkys-data.db";
+                                    File file = new File(path);
+                                    if (file.exists()) {
+                                        LogUtil.d(TAG, "数据库文件" + file.exists());
                                     }
-                                    String key= MobileInfoUtil.getIMEI(LauncherApplication.getContext())+"_"+getStringDate();
-                                    upLoadQN(file,key,token);
+                                    String key = MobileInfoUtil.getIMEI(LauncherApplication
+                                            .getContext()) + "_" + getStringDate();
+                                    upLoadQN(file, key, token);
                                 }
                             }
                         } catch (Exception e) {
@@ -258,7 +246,8 @@ public class UpLoadDataService {
     }
 
     /**
-     *  上传数据到七牛云
+     * 上传数据到七牛云
+     *
      * @param data
      * @param key
      * @param token
@@ -273,17 +262,19 @@ public class UpLoadDataService {
                         //res包含hash、key等信息，具体字段取决于上传策略的设置
                         if (info.isOK()) {
                             try {
-                                LogUtil.d(TAG,"上传七牛云成功");
+                                LogUtil.d(TAG, "上传七牛云成功");
 //                            LitePalDb.setZkysDataDb();
 //                            LitePal.deleteAll(UpVideoInfoDao.class);
 //                            LitePal.deleteAll(UpAdvertInfoDao.class);
-                                DbHelper.clearTable(LitePalDb.DBNAME_ZKYS_DATA,UpAdvertInfoDao.class.getSimpleName());
-                                DbHelper.clearTable(LitePalDb.DBNAME_ZKYS_DATA,UpVideoInfoDao.class.getSimpleName());
-                            }catch (Exception e){
+                                DbHelper.clearTable(LitePalDb.DBNAME_ZKYS_DATA, UpAdvertInfoDao
+                                        .class.getSimpleName());
+                                DbHelper.clearTable(LitePalDb.DBNAME_ZKYS_DATA, UpVideoInfoDao
+                                        .class.getSimpleName());
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         } else {
-                            LogUtil.e(TAG,"上传七牛云失败");
+                            LogUtil.e(TAG, "上传七牛云失败");
                             //如果失败，这里可以把info信息上报自己的服务器，便于后面分析上传错误原因
                         }
                     }

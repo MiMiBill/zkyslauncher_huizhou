@@ -84,8 +84,8 @@ public class Banner extends LinearLayout {
 
         time = new Time();
         LayoutParams vp_param = new LayoutParams(
-                LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT);
+                LayoutParams.MATCH_PARENT,
+                LayoutParams.MATCH_PARENT);
 //        vp_param.gravity = Gravity.CENTER;
 //        vp_param.gravity = Gravity.BOTTOM | Gravity.START;
 
@@ -379,7 +379,7 @@ public class Banner extends LinearLayout {
                     } else {
                         final ImageView imageView = new ImageView(getContext());
                         imageView.setLayoutParams(lp);
-//                    imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    imageView.setScaleType(ImageView.ScaleType.FIT_XY);
 //                    LogFactory.l().e("index==="+index);
                         if (index == -100) {
                             if (bannerPage.url.equals("00")) {
@@ -405,14 +405,16 @@ public class Banner extends LinearLayout {
                             }
                         } else {
 //                        Glide.with(getContext()).load(bannerPage.url).apply(options).into
-// (imageView);
+// (imageView)
                             Glide.with(getContext()).load(bannerPage.url).apply(options).into(new SimpleTarget<Drawable>() {
                                 @Override
                                 public void onResourceReady(@NonNull Drawable resource, @Nullable
                                         Transition<? super Drawable> transition) {
-                                    imageView.setImageDrawable(resource);
-                                    if (imageSuccessListener != null) {
-                                        imageSuccessListener.OnImageSuccess();
+                                    if(imageView!=null){
+                                        imageView.setImageDrawable(resource);
+                                        if (imageSuccessListener != null) {
+                                            imageSuccessListener.OnImageSuccess();
+                                        }
                                     }
                                 }
                             });
@@ -496,15 +498,17 @@ public class Banner extends LinearLayout {
                 } else {
                     final ImageView imageView = new ImageView(getContext());
                     imageView.setLayoutParams(lp);
-//                imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                imageView.setScaleType(ImageView.ScaleType.FIT_XY);
 //                Glide.with(getContext()).load(bannerPage.url).apply(options).into(imageView);
                     Glide.with(getContext()).load(bannerPage.url).apply(options).into(new SimpleTarget<Drawable>() {
                         @Override
                         public void onResourceReady(@NonNull Drawable resource, @Nullable
                                 Transition<? super Drawable> transition) {
-                            imageView.setImageDrawable(resource);
-                            if (imageSuccessListener != null) {
-                                imageSuccessListener.OnImageSuccess();
+                            if(imageView!=null){
+                                imageView.setImageDrawable(resource);
+                                if (imageSuccessListener != null) {
+                                    imageSuccessListener.OnImageSuccess();
+                                }
                             }
                         }
                     });

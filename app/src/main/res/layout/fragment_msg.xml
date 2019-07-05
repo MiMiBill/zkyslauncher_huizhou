@@ -10,41 +10,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/px63">
-
-            <LinearLayout
-                android:id="@+id/ll_back"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/px20"
-                android:layout_centerVertical="true"
-                android:gravity="center_vertical">
-                <ImageView
-                    android:layout_width="@dimen/px34"
-                    android:layout_height="@dimen/px34"
-                    android:src="@mipmap/ic_back_black"/>
-                <TextView
-                    android:layout_width="@dimen/px60"
-                    android:layout_height="wrap_content"
-                    android:text="返回"
-                    android:textSize="@dimen/px20"
-                    android:textColor="@color/black"
-                    android:layout_marginLeft="@dimen/px10"/>
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="全部通知"
-                android:textColor="@color/black_gray"
-                android:textSize="@dimen/px23"
-                android:layout_centerInParent="true"
-                android:textStyle="bold"/>
-
-        </RelativeLayout>
+        <include layout="@layout/title_bar"/>
 
         <LinearLayout
             android:id="@+id/ll_content"

@@ -52,7 +52,7 @@ import java.util.List;
 public class AdvertsUtil {
 
     public static AdvertsUtil advertsUtil = null;
-
+    private boolean isUserTouch=false;
     public static AdvertsUtil getInstance() {
         if (advertsUtil == null) {
             advertsUtil = new AdvertsUtil();
@@ -159,6 +159,7 @@ public class AdvertsUtil {
         banner.setSlide(true);
         banner.setDataPlay(pageList, 0);
         final int[] id = {0};
+
         final long[] startTime = {System.currentTimeMillis()};
         banner.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -168,46 +169,51 @@ public class AdvertsUtil {
 
             @Override
             public void onPageSelected(int position) {
-//                LogFactory.l().i("position:"+position);
-                try {
-                    if (id[0] != 0) {
-                        if (position == 0) {
-                            return;
+//                LogFactory.l().i("isUserTouch==="+isUserTouch);
+                if(!isUserTouch){
+                    isUserTouch=false;
+                    try {
+                        if (id[0] != 0) {
+                            if (position == 0) {
+                                return;
+                            }
+                            if (position == list.size() + 1) {
+                                position = 1;
+                            }
+                            if (id[0] == list.get(position - 1).getAdid()) {
+                                return;
+                            }
+                            if (position == 1) {
+                                long currentTime = System.currentTimeMillis();
+                                addData(list.get(list.size() - 1).getAdid(), TAG_SHOWTIME, currentTime
+                                        - startTime[0]);
+                                addDataInfo(list.get(list.size() - 1).getAdid(), TAG_SHOWTIME,
+                                        startTime[0], currentTime);
+                            } else {
+                                long currentTime = System.currentTimeMillis();
+                                addData(list.get(position - 2).getAdid(), TAG_SHOWTIME, currentTime -
+                                        startTime[0]);
+                                addDataInfo(list.get(position - 2).getAdid(), TAG_SHOWTIME,
+                                        startTime[0], currentTime);
+                            }
+                            startTime[0] = System.currentTimeMillis();
                         }
-                        if (position == list.size() + 1) {
-                            position = 1;
+                        if (id[0] != list.get(position - 1).getAdid()) {
+                            addData(list.get(position - 1).getAdid(), TAG_SHOWCOUNT);
+                            addDataInfo(list.get(position - 1).getAdid(), TAG_SHOWCOUNT);
                         }
-                        if (id[0] == list.get(position - 1).getAdid()) {
-                            return;
-                        }
-                        if (position == 1) {
-                            long currentTime = System.currentTimeMillis();
-                            addData(list.get(list.size() - 1).getAdid(), TAG_SHOWTIME, currentTime
-                                    - startTime[0]);
-                            addDataInfo(list.get(list.size() - 1).getAdid(), TAG_SHOWTIME,
-                                    startTime[0], currentTime);
-                        } else {
-                            long currentTime = System.currentTimeMillis();
-                            addData(list.get(position - 2).getAdid(), TAG_SHOWTIME, currentTime -
-                                    startTime[0]);
-                            addDataInfo(list.get(position - 2).getAdid(), TAG_SHOWTIME,
-                                    startTime[0], currentTime);
-                        }
-                        startTime[0] = System.currentTimeMillis();
+                        id[0] = list.get(position - 1).getAdid();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    if (id[0] != list.get(position - 1).getAdid()) {
-                        addData(list.get(position - 1).getAdid(), TAG_SHOWCOUNT);
-                        addDataInfo(list.get(position - 1).getAdid(), TAG_SHOWCOUNT);
-                    }
-                    id[0] = list.get(position - 1).getAdid();
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
             }
 
             @Override
             public void onPageScrollStateChanged(int status) {
-//                LogFactory.l().i("status==="+status);
+                if(status==ViewPager.SCROLL_STATE_DRAGGING){
+                    isUserTouch=true;
+                }
             }
         });
         banner.setOnBannerListener(new OnBannerListener() {
@@ -316,11 +322,13 @@ public class AdvertsUtil {
             @Override
             public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super
                     Drawable> transition) {
-                imageView.setImageDrawable(resource);
-                if (showImgLoadListener != null) {
-                    showImgLoadListener.success();
+                if(imageView!=null && resource!=null){
+                    imageView.setImageDrawable(resource);
+                    if (showImgLoadListener != null) {
+                        showImgLoadListener.success();
+                    }
+                    relCorner.setVisibility(View.VISIBLE);
                 }
-                relCorner.setVisibility(View.VISIBLE);
             }
         });
         final long time = System.currentTimeMillis();
@@ -583,6 +591,7 @@ public class AdvertsUtil {
     public void addDataInfo(int advertId, int tag, long startTime, long endTime) {
         try {
             String date = getStringDate();
+            LitePalDb.setZkysDataDb();
             UpAdvertInfoDao dao = new UpAdvertInfoDao();
             dao.setAdvertId(advertId);
             dao.setDate(date);

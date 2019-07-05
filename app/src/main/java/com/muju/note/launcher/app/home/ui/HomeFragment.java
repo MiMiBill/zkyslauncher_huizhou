@@ -94,8 +94,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 
-public class HomeFragment extends BaseFragment<HomePresenter> implements HomeContract.View, View
-        .OnClickListener {
+public class HomeFragment extends BaseFragment<HomePresenter> implements HomeContract.View, View.OnClickListener {
     private static final String TAG = "HomeFragment";
     public static HomeFragment homeFragment = null;
     @BindView(R.id.tv_date)

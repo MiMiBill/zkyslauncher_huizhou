@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.setting.event.VolumeEvent;
@@ -27,19 +28,23 @@ import butterknife.BindView;
 
 public class VoiceFragment extends BaseFragment {
 
-    public static final String STATUS="status";
-
+    public static final String STATUS = "status";
     @BindView(R.id.rectProgress_light)
     RectProgress rectProgressLight;
     @BindView(R.id.rectProgress_voice)
     RectProgress rectProgressVoice;
     @BindView(R.id.ll_back)
     LinearLayout llBack;
-    @BindView(R.id.rl_title)
-    RelativeLayout rlTitle;
+
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
+    @BindView(R.id.rel_titlebar)
+    RelativeLayout relTitlebar;
+
+
     private boolean isRelease = true; //判断MediaPlayer是否释放的标志
     private MediaPlayer mediaPlayer = null;
-    private long maxVoice=0;
+    private long maxVoice = 0;
     private int voicePercent = -1;
 
     public static VoiceFragment newInstance(int status) {
@@ -108,18 +113,20 @@ public class VoiceFragment extends BaseFragment {
             }
         });
 
-        if(getArguments().getInt(STATUS)==1){
-            rlTitle.setVisibility(View.VISIBLE);
-        }else {
-            rlTitle.setVisibility(View.GONE);
+        if (getArguments().getInt(STATUS) == 1) {
+            relTitlebar.setVisibility(View.VISIBLE);
+            tvTitle.setText("系统设置");
+        } else {
+            relTitlebar.setVisibility(View.GONE);
         }
     }
 
 
-    RectProgress.OnProgressChangedListener onVoiceChangeListener = new RectProgress.OnProgressChangedListener() {
+    RectProgress.OnProgressChangedListener onVoiceChangeListener = new RectProgress
+            .OnProgressChangedListener() {
         @Override
         public void onProgressChanged(int currentValue, int percent) {
-            if (percent > maxVoice && maxVoice>0) {
+            if (percent > maxVoice && maxVoice > 0) {
                 percent = (int) maxVoice;
             }
             voicePercent = percent;

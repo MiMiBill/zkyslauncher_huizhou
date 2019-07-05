@@ -33,6 +33,7 @@
     <include layout="@layout/title_bar"/>
 
     <LinearLayout
+        android:visibility="gone"
         android:layout_width="@dimen/px112"
         android:layout_height="@dimen/px500"
         android:orientation="vertical"

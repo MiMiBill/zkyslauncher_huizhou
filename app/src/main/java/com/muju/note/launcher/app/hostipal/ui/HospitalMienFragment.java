@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -19,6 +20,7 @@ import com.muju.note.launcher.app.hostipal.db.MienInfoDao;
 import com.muju.note.launcher.app.hostipal.presenter.HospitalMienPresenter;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
+import com.muju.note.launcher.util.ActiveUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +33,8 @@ import butterknife.Unbinder;
 /**
  * 医院风采
  */
-public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> implements HospitalMienContract.View, View.OnClickListener {
+public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> implements
+        HospitalMienContract.View, View.OnClickListener {
 
     private static final String TAG = "HospitalMienFragment";
 
@@ -50,6 +53,11 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
     LinearLayout llNull;
     @BindView(R.id.tv_null)
     TextView tvNull;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
+    @BindView(R.id.rel_titlebar)
+    RelativeLayout relTitlebar;
+    Unbinder unbinder;
 
     private HospitalMienAdapter hospitalMienAdapter;
     private List<MienInfoDao> list;
@@ -69,10 +77,14 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
 
     @Override
     public void initData() {
+        if(ActiveUtils.getPadActiveInfo()!=null){
+            tvTitle.setText(ActiveUtils.getPadActiveInfo().getHospitalName());
+        }
 
         list = new ArrayList<>();
         hospitalMienAdapter = new HospitalMienAdapter(R.layout.rv_item_hospital_mien_type, list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(LauncherApplication.getContext(), LinearLayoutManager.VERTICAL, false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(LauncherApplication.getContext(),
+                LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(hospitalMienAdapter);
 
         hospitalMienAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -145,11 +157,25 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
     }
 
     public void setWvMien(String data) {
-        if(TextUtils.isEmpty(data)){
+        if (TextUtils.isEmpty(data)) {
             getMienNull();
             return;
         }
         wvMien.loadDataWithBaseURL(null, data, "text/html", "UTF-8", null);
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 }

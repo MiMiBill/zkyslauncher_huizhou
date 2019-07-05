@@ -40,7 +40,7 @@
 
         <TextView
             android:id="@+id/tv_hoipital"
-            android:text="东莞人民医院"
+            android:text=""
             android:textColor="@color/white"
             android:textSize="30px"
             android:layout_marginLeft="@dimen/px30"
@@ -57,7 +57,7 @@
             android:orientation="horizontal">
             <TextView
                 android:id="@+id/tv_date"
-                android:text="12:10"
+                android:text=""
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
@@ -125,7 +125,7 @@
                         android:id="@+id/tv_bed_num"
                         android:layout_width="wrap_content"
                         android:layout_weight="1"
-                        android:text="12"
+                        android:text=""
                         android:layout_centerVertical="true"
                         android:textColor="@color/white"
                         android:gravity="center"
@@ -406,7 +406,7 @@
                     android:id="@+id/tv_food"
                     android:textSize="@dimen/px40"
                     android:gravity="center"
-                    android:text="半流食"
+                    android:text=""
                     android:textColor="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />

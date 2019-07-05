@@ -4,6 +4,7 @@ package com.muju.note.launcher.app.hostipal.presenter;
 import com.muju.note.launcher.app.hostipal.contract.HospitalMissionContract;
 import com.muju.note.launcher.app.hostipal.db.MissionInfoDao;
 import com.muju.note.launcher.base.BasePresenter;
+import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.util.log.LogUtil;
 
 import org.litepal.LitePal;
@@ -19,6 +20,7 @@ public class HospitalMissionPresenter extends BasePresenter<HospitalMissionContr
      */
     @Override
     public void queryMiss() {
+        LitePalDb.setZkysDb();
         LitePal.findAllAsync(MissionInfoDao.class).listen(new FindMultiCallback<MissionInfoDao>() {
             @Override
             public void onFinish(List<MissionInfoDao> list) {

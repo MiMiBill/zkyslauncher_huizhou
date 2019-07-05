@@ -2,7 +2,6 @@ package com.muju.note.launcher.app.msg.ui;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,7 +18,6 @@ import com.muju.note.launcher.app.msg.presenter.MsgPresenter;
 import com.muju.note.launcher.app.publicui.WebViewFragment;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
-import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.sdcard.SdcardConfig;
 
 import java.io.File;
@@ -28,12 +26,11 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class MsgFragment extends BaseFragment<MsgPresenter> implements View.OnClickListener, MsgContract.View {
+public class MsgFragment extends BaseFragment<MsgPresenter> implements View.OnClickListener,
+        MsgContract.View {
 
     private static final String TAG = MsgFragment.class.getSimpleName();
 
-    @BindView(R.id.ll_back)
-    LinearLayout llBack;
     @BindView(R.id.rv_msg)
     RecyclerView rvMsg;
     @BindView(R.id.ll_content)
@@ -42,6 +39,10 @@ public class MsgFragment extends BaseFragment<MsgPresenter> implements View.OnCl
     TextView tvNull;
     @BindView(R.id.ll_null)
     LinearLayout llNull;
+    @BindView(R.id.ll_back)
+    LinearLayout llBack;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
 
     private List<CustomMessageDao> customMessageDaos;
     private MsgAdapter msgAdapter;
@@ -53,12 +54,14 @@ public class MsgFragment extends BaseFragment<MsgPresenter> implements View.OnCl
 
     @Override
     public void initData() {
+        tvTitle.setText("全部通知");
         llBack.setOnClickListener(this);
         tvNull.setOnClickListener(this);
 
         customMessageDaos = new ArrayList<>();
         msgAdapter = new MsgAdapter(R.layout.rv_item_msg, customMessageDaos);
-        rvMsg.setLayoutManager(new LinearLayoutManager(LauncherApplication.getContext(), LinearLayoutManager.VERTICAL, false));
+        rvMsg.setLayoutManager(new LinearLayoutManager(LauncherApplication.getContext(),
+                LinearLayoutManager.VERTICAL, false));
         rvMsg.setAdapter(msgAdapter);
 
         mPresenter.querymsg();
@@ -69,7 +72,8 @@ public class MsgFragment extends BaseFragment<MsgPresenter> implements View.OnCl
                 try {
                     CustomMessageDao dao = customMessageDaos.get(position);
                     if (dao.getType().equals("pdf")) {
-                        File file = new File(SdcardConfig.RESOURCE_FOLDER, dao.getUrl().hashCode() + ".pdf");
+                        File file = new File(SdcardConfig.RESOURCE_FOLDER, dao.getUrl().hashCode
+                                () + ".pdf");
                         if (!file.exists()) {
                             showToast("正在下载中，请稍后重试");
                             MissionService.getInstance().downMission();
@@ -77,7 +81,8 @@ public class MsgFragment extends BaseFragment<MsgPresenter> implements View.OnCl
                         }
                         start(HospitalMissionPdfFragment.newInstance(dao.getUrl()));
                     } else if (dao.getType().equals("video")) {
-                        File file = new File(SdcardConfig.RESOURCE_FOLDER, dao.getUrl().hashCode() + ".mp4");
+                        File file = new File(SdcardConfig.RESOURCE_FOLDER, dao.getUrl().hashCode
+                                () + ".mp4");
                         if (!file.exists()) {
                             showToast("正在下载中，请稍后重试");
                             MissionService.getInstance().downMission();

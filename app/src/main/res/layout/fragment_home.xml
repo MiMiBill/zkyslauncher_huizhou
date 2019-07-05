@@ -120,11 +120,11 @@
 
                         <RelativeLayout
                             android:layout_width="@dimen/px909"
-                            android:layout_height="@dimen/px358">
+                            android:layout_height="match_parent">
                             <com.muju.note.launcher.view.banana.Banner
                                 android:id="@+id/banner"
                                 android:layout_width="@dimen/px909"
-                                android:layout_height="@dimen/px358"></com.muju.note.launcher.view.banana.Banner>
+                                android:layout_height="match_parent"></com.muju.note.launcher.view.banana.Banner>
                             <VideoView
                                 android:id="@+id/videoview"
                                 android:visibility="gone"
@@ -523,8 +523,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:layout_marginLeft="@dimen/px16"
                     android:background="@color/white"
-                    android:layout_marginTop="@dimen/px20">
+                    android:layout_marginTop="@dimen/px15">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -576,20 +577,23 @@
 
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/px25"
                     android:text="影视频道"
+                    android:background="@color/white"
                     android:textColor="@color/black_gray"
                     android:layout_marginTop="@dimen/px40"
-                    android:layout_marginLeft="@dimen/px19"
+                    android:layout_marginLeft="@dimen/px16"
                     android:textStyle="bold"/>
 
                 <RelativeLayout
+                    android:layout_marginLeft="@dimen/px16"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/px320">
 
                     <HorizontalScrollView
+                        android:background="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
                         <LinearLayout

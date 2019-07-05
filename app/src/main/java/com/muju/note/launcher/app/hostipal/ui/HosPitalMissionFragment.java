@@ -1,16 +1,11 @@
 package com.muju.note.launcher.app.hostipal.ui;
 
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.muju.note.launcher.R;
@@ -28,11 +23,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.Unbinder;
 
 /**
  * 医院宣教界面
  */
-public class HosPitalMissionFragment extends BaseFragment<HospitalMissionPresenter> implements View.OnClickListener, HospitalMissionContract.View {
+public class HosPitalMissionFragment extends BaseFragment<HospitalMissionPresenter> implements
+        View.OnClickListener, HospitalMissionContract.View {
     @BindView(R.id.ll_back)
     LinearLayout llBack;
     @BindView(R.id.tv_null)
@@ -41,6 +38,9 @@ public class HosPitalMissionFragment extends BaseFragment<HospitalMissionPresent
     LinearLayout llNull;
     @BindView(R.id.rv_his_mission)
     RecyclerView rvHisMission;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
+    Unbinder unbinder;
 
     private List<MissionInfoDao> missionInfoDaos;
     private MissionAdapter missionAdapter;
@@ -52,12 +52,13 @@ public class HosPitalMissionFragment extends BaseFragment<HospitalMissionPresent
 
     @Override
     public void initData() {
+        tvTitle.setText("医院宣教");
         llBack.setOnClickListener(this);
         tvNull.setOnClickListener(this);
 
-        missionInfoDaos=new ArrayList<>();
-        missionAdapter=new MissionAdapter(R.layout.rv_item_his_mission,missionInfoDaos);
-        rvHisMission.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(),3));
+        missionInfoDaos = new ArrayList<>();
+        missionAdapter = new MissionAdapter(R.layout.rv_item_his_mission, missionInfoDaos);
+        rvHisMission.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(), 3));
         rvHisMission.setAdapter(missionAdapter);
 
         mPresenter.queryMiss();
@@ -67,16 +68,18 @@ public class HosPitalMissionFragment extends BaseFragment<HospitalMissionPresent
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 MissionInfoDao bean = missionAdapter.getData().get(position);
                 if (TextUtils.isEmpty(bean.getVideo())) {
-                    File file=new File(SdcardConfig.RESOURCE_FOLDER,bean.getFrontCover().hashCode()+".pdf");
-                    if(!file.exists()){
+                    File file = new File(SdcardConfig.RESOURCE_FOLDER, bean.getFrontCover()
+                            .hashCode() + ".pdf");
+                    if (!file.exists()) {
                         showToast("正在下载中，请稍后重试");
                         MissionService.getInstance().downMission();
                         return;
                     }
                     start(HospitalMissionPdfFragment.newInstance(bean.getFrontCover()));
                 } else {
-                    File file=new File(SdcardConfig.RESOURCE_FOLDER,bean.getVideo().hashCode()+".mp4");
-                    if(!file.exists()){
+                    File file = new File(SdcardConfig.RESOURCE_FOLDER, bean.getVideo().hashCode()
+                            + ".mp4");
+                    if (!file.exists()) {
                         showToast("正在下载中，请稍后重试");
                         MissionService.getInstance().downMission();
                         return;
@@ -90,7 +93,7 @@ public class HosPitalMissionFragment extends BaseFragment<HospitalMissionPresent
 
     @Override
     public void initPresenter() {
-        mPresenter=new HospitalMissionPresenter();
+        mPresenter = new HospitalMissionPresenter();
     }
 
     @Override

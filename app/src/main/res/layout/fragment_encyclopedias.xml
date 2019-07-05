@@ -23,7 +23,7 @@
                 <ImageView
                     android:layout_width="@dimen/px34"
                     android:layout_height="@dimen/px34"
-                    android:src="@mipmap/hos_back" />
+                    android:src="@mipmap/iv_back" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -42,7 +42,7 @@
 
             <RelativeLayout
                 android:layout_width="@dimen/px230"
-                android:layout_height="@dimen/px46"
+                android:layout_height="@dimen/px52"
                 android:layout_marginRight="@dimen/px40"
                 android:background="@mipmap/search_bg">
 
@@ -72,8 +72,8 @@
             android:layout_centerInParent="true"
             android:gravity="center"
             android:text="医疗百科"
-            android:textColor="@color/color_38B4E9"
-            android:textSize="22sp"
+            android:textColor="@color/black"
+            android:textSize="17sp"
             android:textStyle="bold" />
     </RelativeLayout>
 
