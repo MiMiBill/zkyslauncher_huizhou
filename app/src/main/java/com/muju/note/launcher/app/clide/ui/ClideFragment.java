@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import me.yokeyword.fragmentation.ISupportFragment;
 
 public class ClideFragment extends BaseFragment<ClidePresenter> implements View.OnClickListener, ClideContract.View {
     @BindView(R.id.iv_back)
@@ -205,7 +206,7 @@ public class ClideFragment extends BaseFragment<ClidePresenter> implements View.
         hisDao.setScreenUrl(infoDao.getScreenUrl());
         WotvPlayFragment wotvPlayFragment=new WotvPlayFragment();
         wotvPlayFragment.setHisDao(hisDao);
-        start(wotvPlayFragment);
+        start(wotvPlayFragment, ISupportFragment.SINGLETASK);
     }
 
 }

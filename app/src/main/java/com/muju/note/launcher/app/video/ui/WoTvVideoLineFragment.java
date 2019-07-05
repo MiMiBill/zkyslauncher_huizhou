@@ -141,6 +141,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
                 videoView.pause();
                 playVideoAndSetUI();
                 lineAdapter.notifyDataSetChanged();
+                RxUtil.closeDisposable(diVerifyPlayingStatus);
             }
         });
 

@@ -119,11 +119,19 @@ public class WebViewFragment extends BaseFragment implements View.OnClickListene
         switch (v.getId()) {
             case R.id.ll_back:
             case R.id.rl_back:
-                if (web.canGoBack()) {
-                    web.goBack();
-                    return;
+                try {
+                    if(web==null){
+                        pop();
+                        return;
+                    }
+                    if (web.canGoBack()) {
+                        web.goBack();
+                        return;
+                    }
+                    pop();
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
-                pop();
                 break;
         }
     }

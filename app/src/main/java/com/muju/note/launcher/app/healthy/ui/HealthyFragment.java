@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import me.yokeyword.fragmentation.ISupportFragment;
 
 public class HealthyFragment extends BaseFragment<HealthyPresenter> implements View.OnClickListener, HealthyContract.View {
 
@@ -171,6 +172,6 @@ public class HealthyFragment extends BaseFragment<HealthyPresenter> implements V
         hisDao.setScreenUrl(infoDao.getScreenUrl());
         WotvPlayFragment wotvPlayFragment=new WotvPlayFragment();
         wotvPlayFragment.setHisDao(hisDao);
-        start(wotvPlayFragment);
+        start(wotvPlayFragment, ISupportFragment.SINGLETASK);
     }
 }

@@ -182,7 +182,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
         activeInfo = ActiveUtils.getPadActiveInfo();
         BaseFragment fragment = (BaseFragment) findFragment(HomeFragment.class);
         if (fragment == null) {
-            loadRootFragment(R.id.fl_container, HomeFragment.newInstance());
+            loadRootFragment(R.id.fl_container, HomeFragment.newInstance(),false,false);
         }
 
 
@@ -324,16 +324,21 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
      */
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        switch (ev.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                startProtectionCountDown();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                break;
-            case MotionEvent.ACTION_UP:
-                break;
+        try {
+            switch (ev.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    startProtectionCountDown();
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    break;
+                case MotionEvent.ACTION_UP:
+                    break;
+            }
+            return mDelegate.dispatchTouchEvent(ev) || super.dispatchTouchEvent(ev);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
         }
-        return mDelegate.dispatchTouchEvent(ev) || super.dispatchTouchEvent(ev);
     }
 
     @Override
