@@ -2,7 +2,6 @@ package com.muju.note.launcher.app.startUp.ui;
 
 import android.graphics.Color;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,10 +24,14 @@ import com.muju.note.launcher.util.qr.QrCodeUtils;
 import com.muju.note.launcher.util.rx.RxUtil;
 import com.muju.note.launcher.util.sp.SPUtil;
 
+import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
+import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import me.yokeyword.fragmentation.ISupportFragment;
 
 /**
@@ -111,10 +114,10 @@ public class ActivationFragment extends BaseFragment<NewActivationPresenter> imp
 
     @Override
     public void bindFail() {
-        btnActive.setVisibility(View.VISIBLE);
+//        btnActive.setVisibility(View.VISIBLE);
         tvVersion.setText(String.format("版本:宝屏V%s", TextUtils.equals(UrlUtil.getHost(), "http://test" +
                 ".pad.zgzkys.com") ? BuildConfig.VERSION_NAME + "beta" : BuildConfig.VERSION_NAME));
-        /*RxUtil.closeDisposable(disposableCheckActive);
+        RxUtil.closeDisposable(disposableCheckActive);
         disposableCheckActive = Observable.interval(30, TimeUnit.SECONDS)
                 .take(1)
                 .subscribe(new Consumer<Long>() {
@@ -123,10 +126,14 @@ public class ActivationFragment extends BaseFragment<NewActivationPresenter> imp
                         mPresenter.bindingDevice(MobileInfoUtil.getIMEI(LauncherApplication
                                 .getContext()));
                     }
-                });*/
+                });
     }
 
-
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
+        RxUtil.closeDisposable(disposableCheckActive);
+    }
 
     @OnClick(R.id.btn_active)
     public void onViewClicked() {
