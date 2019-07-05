@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 
+import com.muju.note.launcher.app.home.ui.HomeFragment;
+import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.toast.FancyToast;
 
 import butterknife.ButterKnife;
@@ -26,9 +28,11 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator;
  * 展示自定制的MySupportFragment，不继承SupportFragment
  * Created by YoKey on 17/6/24.
  */
-public abstract class BaseFragment<T extends BasePresenter> extends Fragment implements ISupportFragment,IView {
+public abstract class BaseFragment<T extends BasePresenter> extends Fragment implements ISupportFragment, IView {
     final SupportFragmentDelegate mDelegate = new SupportFragmentDelegate(this);
     protected FragmentActivity _mActivity;
+
+    private static final String TAG = "BaseFragment";
 
     @Override
     public SupportFragmentDelegate getSupportDelegate() {
@@ -348,7 +352,22 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment imp
         mDelegate.replaceFragment(toFragment, addToBackStack);
     }
 
+    /**
+     * 得到位于栈顶Fragment
+     */
+    public ISupportFragment getTopFragment() {
+        return SupportHelper.getTopFragment(getFragmentManager());
+    }
+
+    public ISupportFragment getTopChildFragment() {
+        return SupportHelper.getTopFragment(getChildFragmentManager());
+    }
+
     public void pop() {
+        if (getTopFragment().getClass().getSimpleName().equals("HomeFragment")) {
+            LogUtil.e(TAG, "已位于栈顶，无法返回上级");
+            return;
+        }
         mDelegate.pop();
     }
 
@@ -380,15 +399,16 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment imp
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(getLayout(), null);
         initPresenter();
-        if(mPresenter!=null){
+        if (mPresenter != null) {
             mPresenter.attachView(this);
         }
         return view;
     }
 
-    public abstract int getLayout() ;
+    public abstract int getLayout();
 
     private Unbinder mUnBinder;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
