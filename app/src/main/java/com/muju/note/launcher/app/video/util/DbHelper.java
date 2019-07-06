@@ -17,12 +17,15 @@ import com.muju.note.launcher.litepal.UpAdvertInfoDao;
 import com.muju.note.launcher.litepal.UpVideoInfoDao;
 import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.util.Constants;
+import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.sp.SPUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.litepal.LitePal;
+import org.litepal.crud.callback.SaveCallback;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -58,8 +61,9 @@ public class DbHelper {
             public void run() {
                 try {
                     LitePal.deleteAll(VideoInfoDao.class);
-                    SQLiteDatabase database=getDataBase(dbPath);
-                    Cursor cursor=database.query(tableName,null,null,null,null,null,null);
+                    final SQLiteDatabase database=getDataBase(dbPath);
+                    ArrayList<VideoInfoDao> videoInfoDaos=new ArrayList<>();
+                    final Cursor cursor=database.query(tableName,null,null,null,null,null,null);
                     while (cursor.moveToNext()){
                         num[0]++;
                         EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_DB_PROGRESS,num[0]+"/"+count));
@@ -96,13 +100,24 @@ public class DbHelper {
                         dao.setNumber(cursor.getInt(cursor.getColumnIndex("number")));
                         dao.setLogoUrl(cursor.getString(cursor.getColumnIndex("logoUrl")));
                         dao.setTypeId(cursor.getString(cursor.getColumnIndex("typeId")));
-                        dao.saveDb(dao);
+//                        dao.saveDb(dao);
+                        videoInfoDaos.add(dao);
                     }
-                    cursor.close();
-                    database.close();
-                    SPUtil.putLong(SpTopics.SP_VIDEO_UPDATE_TIME,(createTime/1000));
-                    LogUtil.i(TAG,"数据插入结束时间："+System.currentTimeMillis());
-                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_SUCCESS));
+                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_DATA_SAVE));
+                    LitePal.saveAllAsync(videoInfoDaos).listen(new SaveCallback() {
+                        @Override
+                        public void onFinish(boolean success) {
+                            if(success){
+                                SPUtil.putLong(SpTopics.SP_VIDEO_UPDATE_TIME,(createTime/1000));
+                                LogUtil.i(TAG,"数据插入结束时间："+System.currentTimeMillis());
+                                EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_SUCCESS));
+                            }else {
+                                EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_DATA_SAVE_FAIL));
+                            }
+                            cursor.close();
+                            database.close();
+                        }
+                    });
                 }catch (Exception e){
                     e.printStackTrace();
                     EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_CARSH,e));
@@ -247,20 +262,37 @@ public class DbHelper {
                 try {
                     LitePalDb.setZkysDb();
                     LitePal.deleteAll(InfoDao.class);
-                    SQLiteDatabase database=getDataBase(dbPath);
-                    Cursor cursor=database.query(tableName,null,null,null,null,null,null);
+                    final SQLiteDatabase database=getDataBase(dbPath);
+                    final Cursor cursor=database.query(tableName,null,null,null,null,null,null);
+                    ArrayList<InfoDao> infoDaos=new ArrayList<>();
                     while (cursor.moveToNext()){
                         InfoDao dao=new InfoDao();
                         dao.setColumnId(cursor.getInt(cursor.getColumnIndex("id")));
                         dao.setName(cursor.getString(cursor.getColumnIndex("name")));
-                        dao.saveDb(dao);
+                        dao.setIsDel(cursor.getInt(cursor.getColumnIndex("isDel")));
+//                        dao.saveDb(dao);
+                        infoDaos.add(dao);
                     }
-                    cursor.close();
-                    database.close();
-                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_FIRST_DB_END));
-                    insertEncyInfoMationDb(dbPath,"medical_encyclopedia",createTime,count);
-//                    SPUtil.putLong(SpTopics.SP_VIDEO_UPDATE_TIME,(System.currentTimeMillis()/1000));
-                    LogUtil.i(TAG,"数据插入结束时间："+System.currentTimeMillis());
+                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.ENCY_KS_DATA_SAVE));
+                    LitePal.saveAllAsync(infoDaos).listen(new SaveCallback() {
+                        @Override
+                        public void onFinish(boolean success) {
+                            if(success){
+                                EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_FIRST_DB_END));
+                                try {
+                                    insertEncyInfoMationDb(dbPath,"medical_encyclopedia",createTime,count);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                LogUtil.i(TAG,"数据插入结束时间："+System.currentTimeMillis());
+                            }else {
+                                EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.ENCY_KS_DATA_SAVE_FAIL));
+                            }
+                            cursor.close();
+                            database.close();
+                        }
+                    });
+
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -286,8 +318,9 @@ public class DbHelper {
                 try {
                     LitePalDb.setZkysDb();
                     LitePal.deleteAll(InfomationDao.class);
-                    SQLiteDatabase database=getDataBase(dbPath);
-                    Cursor cursor=database.query(tableName,null,null,null,null,null,null);
+                    final SQLiteDatabase database=getDataBase(dbPath);
+                    ArrayList<InfomationDao> infomationDaos=new ArrayList<>();
+                    final Cursor cursor=database.query(tableName,null,null,null,null,null,null);
                     while (cursor.moveToNext()){
                         num[0]++;
                         EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_TWO_DB_PROGRESS,num[0]+"/"+count));
@@ -377,13 +410,26 @@ public class DbHelper {
                         dao.setDassification(classification);
                         dao.setClinicalManifestation(clinicalManifestation);
                         dao.setDietCare(dietCare);
-                        dao.saveDb(dao);
+//                        dao.saveDb(dao);
+                        infomationDaos.add(dao);
                     }
-                    cursor.close();
-                    database.close();
-                    SPUtil.putLong(Constants.SP_ENCY_UPDATE_TIME, createTime / 1000);
-                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_SUCCESS));
-                    LogUtil.i(TAG,"数据插入结束时间："+System.currentTimeMillis());
+                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.ENCY_DATA_SAVE));
+                    LitePal.saveAllAsync(infomationDaos).listen(new SaveCallback() {
+                        @Override
+                        public void onFinish(boolean success) {
+                            LogFactory.l().i("success==="+success);
+                            if(success){
+                                SPUtil.putLong(Constants.SP_ENCY_UPDATE_TIME, createTime / 1000);
+                                EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_SUCCESS));
+                                LogUtil.i(TAG,"数据插入结束时间："+System.currentTimeMillis());
+                            }else {
+                                EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.ENCY_DATA_SAVE_FAIL));
+                            }
+                            cursor.close();
+                            database.close();
+
+                        }
+                    });
                 }catch (Exception e){
                     e.printStackTrace();
                 }

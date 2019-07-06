@@ -129,6 +129,13 @@ public class StartCheckDataFragment extends BaseFragment {
                 list.add("影视详情后台数据获取失败！1分钟后重新初始化");
                 reStartVideoInfo(1);
                 break;
+            case VIDEO_DATA_SAVE:
+                list.add("影视详情数据正在存储...");
+                break;
+            case VIDEO_DATA_SAVE_FAIL:
+                list.add("影视详情数据存储失败!1分钟后重新初始化");
+                reStartVideoInfo(1);
+                break;
             case VIDEO_INFO_SUCCESS:
                 list.add("影视详情数据初始化成功！");
                 MienService.getInstance().startMien();
@@ -183,6 +190,20 @@ public class StartCheckDataFragment extends BaseFragment {
                 list.add("医疗百科数据初始化成功！");
                 MissionService.getInstance().startMiss();
                 break;
+            case ENCY_DATA_SAVE:
+                list.add("医疗百科详情数据正在存储...");
+                break;
+            case ENCY_DATA_SAVE_FAIL:
+                list.add("医疗百科数据存储失败!1分钟后重新初始化");
+                reStartEncy(1);
+                break;
+            case ENCY_KS_DATA_SAVE:
+                list.add("医疗百科科室正在存储...");
+                break;
+            case ENCY_KS_DATA_SAVE_FAIL:
+                list.add("医疗百科科室数据存储失败!1分钟后重新初始化");
+                reStartEncy(1);
+                break;
             case HOSPITAL_ENCY_HTTP_FAIL:
                 list.add("医疗百科后台数据获取失败！1分钟后重新初始化");
                 reStartEncy(1);
@@ -214,7 +235,6 @@ public class StartCheckDataFragment extends BaseFragment {
             case HOSPITAL_ENCY_TWO_DB_PROGRESS:
                 list.set(list.size()-1,"正在加载中："+event.getDbProgress());
                 break;
-
             case HOSPITAL_MISS_START:
                 list.add("正在初始化医院宣教数据，请稍候...");
                 break;

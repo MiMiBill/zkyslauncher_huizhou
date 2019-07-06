@@ -6,11 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-import com.google.gson.Gson;
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.Cabinet.event.ReturnBedEvent;
 import com.muju.note.launcher.app.home.event.PatientEvent;
-import com.muju.note.launcher.app.msg.db.CustomMessageDao;
 import com.muju.note.launcher.app.satisfaction.event.GotoSatisfationEvent;
 import com.muju.note.launcher.app.video.bean.PayEntity;
 import com.muju.note.launcher.app.video.bean.PayEvent;
@@ -20,7 +18,6 @@ import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.entity.BedSideEvent;
 import com.muju.note.launcher.entity.PushAutoMsgEntity;
 import com.muju.note.launcher.entity.PushCustomMessageEntity;
-import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.topics.FileTopics;
 import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.util.DateUtil;
@@ -33,7 +30,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.Iterator;
 
 import cn.jpush.android.api.JPushInterface;
@@ -69,9 +65,14 @@ public class JPUSHReceiver extends BroadcastReceiver {
                     case 11:
                         int volumeRate = Integer.parseInt(bundle.getString(JPushInterface.EXTRA_MESSAGE));
                         LogUtil.d("系统音量改变:%s ",volumeRate );
-                        //声音改变
-                        SPUtil.putLong(SpTopics.PAD_CONFIG_VOLUME_RATE, volumeRate);
-                        SystemUtils.setVolume(LauncherApplication.getInstance(),volumeRate);
+                        int currentVolume=SystemUtils.getCurrentVolume(LauncherApplication.getInstance());
+                        int maxVolume=SystemUtils.getMaxVolume(LauncherApplication.getInstance());
+                        int systemRate=(int)(currentVolume*100D/maxVolume);
+                        if(volumeRate<systemRate){
+                            //声音改变
+                            SPUtil.putLong(SpTopics.PAD_CONFIG_VOLUME_RATE, volumeRate);
+                            SystemUtils.setVolume(LauncherApplication.getInstance(),volumeRate);
+                        }
                         break;
                     case 201:
                         FileUtils.playReplay(LauncherApplication.getInstance().getApplicationContext(), R.raw.messagetips);

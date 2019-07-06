@@ -94,6 +94,14 @@ public class StartCheckDataEvent {
         HOME_MENU_REBOOT_HTTP_FAIL,
         HOME_MENU_REBOOT_HTTP_DATA_NULL,
         HOME_MENU_REBOOT_DB_START,
+
+        VIDEO_DATA_SAVE,
+        VIDEO_DATA_SAVE_FAIL,
+        ENCY_DATA_SAVE,
+        ENCY_DATA_SAVE_FAIL,
+        ENCY_KS_DATA_SAVE,
+        ENCY_KS_DATA_SAVE_FAIL,
+
     }
 
     private Status status;

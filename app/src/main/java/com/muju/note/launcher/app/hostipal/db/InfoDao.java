@@ -10,6 +10,7 @@ public class InfoDao extends LitePalSupport {
     private int id;
     private String name;
     private boolean isCheck;
+    private int isDel;
 
 
     /**
@@ -20,6 +21,15 @@ public class InfoDao extends LitePalSupport {
         LitePal.use(LitePalDb.zkysDb);
         dao.save();
     }
+
+    public int getIsDel() {
+        return isDel;
+    }
+
+    public void setIsDel(int isDel) {
+        this.isDel = isDel;
+    }
+
     public boolean isCheck() {
         return isCheck;
     }
