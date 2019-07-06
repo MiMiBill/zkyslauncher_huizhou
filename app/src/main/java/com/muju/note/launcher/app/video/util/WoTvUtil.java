@@ -261,6 +261,9 @@ public class WoTvUtil {
             maxUIStyle.setBackButtonVisiable(true);
         }
 
+        maxUIStyle.setChangeLiveVisiable(false);
+        maxUIStyle.setProgramVisiable(false);
+
 
         //TODO 是否具备锁定键的icon，默认是显示的
         minUIStyle.setLockButtonVisiable(true);
