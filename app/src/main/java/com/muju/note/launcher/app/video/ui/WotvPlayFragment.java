@@ -190,6 +190,8 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
             // 添加历史记录
             videoHisDao.setCreateTime(System.currentTimeMillis() + "");
             VideoService.getInstance().addVideoHisInfo(videoHisDao);
+
+            verifyPlayingStatus();
         } catch (Exception e) {
             e.printStackTrace();
         }
