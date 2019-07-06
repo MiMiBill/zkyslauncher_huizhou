@@ -1,6 +1,8 @@
 package com.muju.note.launcher.app.startUp.ui;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -43,12 +45,34 @@ public class StartCheckDataFragment extends BaseFragment {
     private ActivationCheckAdapter adapter;
 
     private Disposable disposable;
-
+    private int progress=1;
+    private int count=1;
     @Override
     public int getLayout() {
         return R.layout.fragment_start_check;
     }
 
+    private Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 1:
+                    handler.removeMessages(1);
+                    count++;
+                    progress=2*count;
+                    if(progress>99){
+                        progress=99;
+                    }
+//                    LogFactory.l().i("progress==="+progress);
+                    list.set(list.size()-1,"正在存储..."+progress+"%");
+                    adapter.notifyDataSetChanged();
+                    rvCheck.scrollToPosition(list.size()-1);
+                    handler.sendEmptyMessageDelayed(1,1000);
+                    break;
+            }
+        }
+    };
     @Override
     public void initData() {
         EventBus.getDefault().register(this);
@@ -58,7 +82,6 @@ public class StartCheckDataFragment extends BaseFragment {
         rvCheck.setAdapter(adapter);
 
         VideoService.getInstance().startColumns();
-
     }
 
     @Override
@@ -94,7 +117,6 @@ public class StartCheckDataFragment extends BaseFragment {
             case VIDEO_COLUMN_HTTP_DATA_NULL:
                 list.add("影视分类后台数据获取为空！请稍后重试或联系管理人员检查！");
                 break;
-
             case VIDEO_TOP_START:
                 list.add("正在初始化影视推荐数据，请稍候...");
                 break;
@@ -131,14 +153,18 @@ public class StartCheckDataFragment extends BaseFragment {
                 break;
             case VIDEO_DATA_SAVE:
                 list.add("影视详情数据正在存储...");
+                handler.sendEmptyMessage(1);
                 break;
             case VIDEO_DATA_SAVE_FAIL:
                 list.add("影视详情数据存储失败!1分钟后重新初始化");
                 reStartVideoInfo(1);
+                resetProgress();
                 break;
             case VIDEO_INFO_SUCCESS:
+                list.set(list.size()-1,"正在存储...100%");
                 list.add("影视详情数据初始化成功！");
                 MienService.getInstance().startMien();
+                resetProgress();
                 break;
             case VIDEO_INFO_DOWNLOAD_START:
                 list.add("开始下载影视详情数据，请稍候...");
@@ -187,15 +213,19 @@ public class StartCheckDataFragment extends BaseFragment {
                 list.add("正在获取后台医疗百科数据，请稍候...");
                 break;
             case HOSPITAL_ENCY_SUCCESS:
+                list.set(list.size()-1,"正在存储...100%");
                 list.add("医疗百科数据初始化成功！");
                 MissionService.getInstance().startMiss();
+                resetProgress();
                 break;
             case ENCY_DATA_SAVE:
                 list.add("医疗百科详情数据正在存储...");
+                handler.sendEmptyMessageDelayed(1,1000);
                 break;
             case ENCY_DATA_SAVE_FAIL:
                 list.add("医疗百科数据存储失败!1分钟后重新初始化");
                 reStartEncy(1);
+                resetProgress();
                 break;
             case ENCY_KS_DATA_SAVE:
                 list.add("医疗百科科室正在存储...");
@@ -300,6 +330,13 @@ public class StartCheckDataFragment extends BaseFragment {
         rvCheck.scrollToPosition(list.size()-1);
     }
 
+    //重置进度
+    private void resetProgress() {
+        handler.removeMessages(1);
+        count=1;
+        progress=1;
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -363,6 +400,7 @@ public class StartCheckDataFragment extends BaseFragment {
                     }
                 });
     }
+
 
     /**
      *  重新获取医疗百科数据

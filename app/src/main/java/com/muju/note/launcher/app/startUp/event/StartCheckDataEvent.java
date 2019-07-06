@@ -101,6 +101,7 @@ public class StartCheckDataEvent {
         ENCY_DATA_SAVE_FAIL,
         ENCY_KS_DATA_SAVE,
         ENCY_KS_DATA_SAVE_FAIL,
+        DATA_SAVE_PROGRESS,
 
     }
 
