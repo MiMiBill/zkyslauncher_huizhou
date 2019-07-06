@@ -81,13 +81,13 @@ public class MainService extends Service {
         if(rebootPhone){
             // 自启动状态，不做操作
         }else {
+            // 查询更新
+            UpdateVersionService.getInstance().start();
             // 非自启动状态，10分钟内初始化操作
             Observable.timer((long) (Math.random() * 600), TimeUnit.SECONDS)
                     .subscribe(new Consumer<Long>() {
                         @Override
                         public void accept(Long aLong) throws Exception {
-                            // 查询更新
-                            UpdateVersionService.getInstance().start();
                             // 获取平板配置信息
                             ConfigService.getInstance().start();
                             // 获取定位信息
