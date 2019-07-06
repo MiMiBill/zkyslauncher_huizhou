@@ -42,6 +42,11 @@ public class ToolFragment extends BaseFragment {
 
     }
 
+    public static ToolFragment getInstance() {
+        ToolFragment toolFragment = new ToolFragment();
+        return toolFragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

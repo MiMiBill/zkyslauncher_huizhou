@@ -337,6 +337,7 @@ public class DbHelper {
                         String complicatingDisease = cursor.getString(cursor.getColumnIndex("complicatingDisease"));
                         String author = cursor.getString(cursor.getColumnIndex("author"));
                         int columnid = cursor.getInt(cursor.getColumnIndex("columnId"));
+                        int isDel = cursor.getInt(cursor.getColumnIndex("isDel"));
                         String classification = cursor.getString(cursor.getColumnIndex("classification"));
                         String clinicalManifestation = cursor.getString(cursor.getColumnIndex
                                 ("clinicalManifestation"));
@@ -404,6 +405,7 @@ public class DbHelper {
                         dao.setComplicatingDisease(complicatingDisease);
                         dao.setAuthor(author);
                         dao.setColumnid(columnid);
+                        dao.setIsDel(isDel);
                         dao.setClickCount(clickCount);
                         dao.setTag(tag);
                         dao.setDassification(classification);

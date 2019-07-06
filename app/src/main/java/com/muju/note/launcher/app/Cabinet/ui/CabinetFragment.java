@@ -34,6 +34,9 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.litepal.LitePal;
+import org.litepal.crud.callback.FindMultiCallback;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -165,24 +168,31 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
     //播放视频
     private void playVideo() {
         LitePalDb.setZkysDb();
-        PadConfigSubDao subDao = LitePal.where("type =?", "openVideo").findFirst(PadConfigSubDao
-        .class);
-        if(subDao!=null){
-            String path=subDao.getContent();
-            String videoPath=SdcardConfig.RESOURCE_FOLDER+path.hashCode()+".mp4";
-            Uri uri=Uri.parse(videoPath);
-            videoView.setVideoURI(uri);
-            videoView.setVisibility(View.VISIBLE);
-            videoView.start();
-            EventBus.getDefault().post(new VideoNoLockEvent(false));
-            videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    videoView.stopPlayback();
-                    videoView.setVisibility(View.GONE);
+        LitePal.where("type =?", "openVideo").limit(1).findAsync(PadConfigSubDao
+        .class).listen(new FindMultiCallback<PadConfigSubDao>() {
+            @Override
+            public void onFinish(List<PadConfigSubDao> list) {
+                if(list!=null && list.size()>0){
+                    PadConfigSubDao subDao = list.get(0);
+                    if(subDao!=null){
+                        String path=subDao.getContent();
+                        String videoPath=SdcardConfig.RESOURCE_FOLDER+path.hashCode()+".mp4";
+                        Uri uri=Uri.parse(videoPath);
+                        videoView.setVideoURI(uri);
+                        videoView.setVisibility(View.VISIBLE);
+                        videoView.start();
+                        EventBus.getDefault().post(new VideoNoLockEvent(false));
+                        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mp) {
+                                videoView.stopPlayback();
+                                videoView.setVisibility(View.GONE);
+                            }
+                        });
+                    }
                 }
-            });
-        }
+            }
+        });
     }
 
 

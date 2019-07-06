@@ -1,7 +1,6 @@
 package com.muju.note.launcher.app.setting.ui;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.view.View;
@@ -22,7 +21,7 @@ import com.muju.note.launcher.url.UrlUtil;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-
+//个人中心
 public class UserSettingFragment extends BaseFragment {
     @BindView(R.id.iv_back)
     ImageView ivBack;
@@ -49,6 +48,13 @@ public class UserSettingFragment extends BaseFragment {
     Unbinder unbinder;
     @BindView(R.id.radio_group)
     RadioGroup radioGroup;
+    private int selectCheckedId = -1;
+    private UserFragment userFragment;
+    private FeedBackFragment feedBackFragment;
+    private ToolFragment toolFragment;
+    private GuideFragment guideFragment;
+    private VoiceFragment voiceFragment;
+    private RadioButton firstRadio;
 
     @Override
     public int getLayout() {
@@ -57,8 +63,6 @@ public class UserSettingFragment extends BaseFragment {
 
     @Override
     public void initData() {
-        rbtUser.setChecked(true);
-        replaceFragment(0);
         tvTitle.setText("个人中心");
         tvVersion.setText(String.format("宝屏V%s", TextUtils.equals(UrlUtil.getHost(), "http://test" +
                 ".pad.zgzkys.com") ? BuildConfig.VERSION_NAME + "beta" : BuildConfig.VERSION_NAME));
@@ -70,37 +74,96 @@ public class UserSettingFragment extends BaseFragment {
                 return true;
             }
         });
-        radioGroup.setOnCheckedChangeListener(new MyCheckChangeListener());
+
+        radioGroup.setOnCheckedChangeListener(checkedChangeListener);
+        firstRadio = (RadioButton) radioGroup.getChildAt(0);
+        firstRadio.setChecked(true);
+
     }
 
 
-    private class MyCheckChangeListener implements RadioGroup.OnCheckedChangeListener{
+    RadioGroup.OnCheckedChangeListener checkedChangeListener = new RadioGroup.OnCheckedChangeListener() {
 
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
-            switch (checkedId) {
+            if (selectCheckedId == checkedId) {
+                return;
+            }
+            Fragment showFg = null;
+            Fragment hideFg = null;
+            switch (selectCheckedId) {
                 case R.id.rbt_user:
-                    replaceFragment(0);
-                    break;
-                case R.id.rbt_order:
-                    replaceFragment(1);
+                    hideFg = userFragment;
                     break;
                 case R.id.rbt_tool:
-                    replaceFragment(2);
+                    hideFg = toolFragment;
                     break;
                 case R.id.rbt_feedback:
-                    replaceFragment(3);
+                    hideFg = feedBackFragment;
                     break;
                 case R.id.rbt_guide:
-                    replaceFragment(4);
+                    hideFg = guideFragment;
                     break;
                 case R.id.rbt_setting:
-                    replaceFragment(5);
+                    hideFg = voiceFragment;
                     break;
-
-
             }
+            switch (checkedId) {
+                case R.id.rbt_user:
+                    showFg = getUserFragment();
+                    break;
+                case R.id.rbt_tool:
+                    showFg = getToolFragment();
+                    break;
+                case R.id.rbt_feedback:
+                    showFg = getFeedBackFragment();
+                    break;
+                case R.id.rbt_guide:
+                    showFg = getGuideFragment();
+                    break;
+                case R.id.rbt_setting:
+                    showFg = getVoiceFragment();
+                    break;
+            }
+            selectCheckedId = checkedId;
+            addShowOrHideFragment(showFg, hideFg);
         }
+    };
+
+
+    private UserFragment getUserFragment() {
+        if (userFragment == null) {
+            userFragment = UserFragment.getInstance();
+        }
+        return userFragment;
+    }
+
+    private ToolFragment getToolFragment() {
+        if (toolFragment == null) {
+            toolFragment = ToolFragment.getInstance();
+        }
+        return toolFragment;
+    }
+
+    private FeedBackFragment getFeedBackFragment() {
+        if (feedBackFragment == null) {
+            feedBackFragment = FeedBackFragment.getInstance();
+        }
+        return feedBackFragment;
+    }
+
+    private VoiceFragment getVoiceFragment() {
+        if (voiceFragment == null) {
+            voiceFragment = VoiceFragment.newInstance(2);
+        }
+        return voiceFragment;
+    }
+
+    private GuideFragment getGuideFragment() {
+        if (guideFragment == null) {
+            guideFragment = GuideFragment.newInstance(2);
+        }
+        return guideFragment;
     }
 
 
@@ -116,37 +179,18 @@ public class UserSettingFragment extends BaseFragment {
 
 
 
-
-    private void replaceFragment(int type) {
-        Fragment fragment = null;
-        switch (type) {
-            case 0:
-                fragment = new UserFragment();
-                break;
-            case 1:
-                fragment = new UserOrderFragment();
-                break;
-            case 2:
-                fragment = new ToolFragment();
-                break;
-            case 3:
-                fragment = new FeedBackFragment();
-                break;
-            case 4:
-                fragment = GuideFragment.newInstance(2);
-                break;
-            case 5:
-                fragment = VoiceFragment.newInstance(2);
-                break;
+    private void addShowOrHideFragment(Fragment showFg, Fragment hideFg) {
+        FragmentTransaction tran = getChildFragmentManager().beginTransaction();
+        if (showFg.isAdded()) {
+            tran.show(showFg);
+        } else {
+            tran.add(R.id.fl_container, showFg);
         }
-        FragmentManager fm = getChildFragmentManager();
-        FragmentTransaction transaction = fm.beginTransaction();
-        transaction.replace(R.id.fl_container, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+        if (hideFg != null) {
+            tran.hide(hideFg);
+        }
+        tran.commitAllowingStateLoss();
     }
-
-
 
 
     @OnClick(R.id.ll_back)

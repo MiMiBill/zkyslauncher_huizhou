@@ -182,7 +182,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
         activeInfo = ActiveUtils.getPadActiveInfo();
         BaseFragment fragment = (BaseFragment) findFragment(HomeFragment.class);
         if (fragment == null) {
-            loadRootFragment(R.id.fl_container, HomeFragment.newInstance(),false,false);
+            loadRootFragment(R.id.fl_container, HomeFragment.newInstance(),true,false);
         }
 
 
