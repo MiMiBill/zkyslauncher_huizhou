@@ -17,7 +17,6 @@ import com.muju.note.launcher.litepal.UpAdvertInfoDao;
 import com.muju.note.launcher.litepal.UpVideoInfoDao;
 import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.util.Constants;
-import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.sp.SPUtil;
 
@@ -417,7 +416,6 @@ public class DbHelper {
                     LitePal.saveAllAsync(infomationDaos).listen(new SaveCallback() {
                         @Override
                         public void onFinish(boolean success) {
-                            LogFactory.l().i("success==="+success);
                             if(success){
                                 SPUtil.putLong(Constants.SP_ENCY_UPDATE_TIME, createTime / 1000);
                                 EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_SUCCESS));
@@ -427,7 +425,6 @@ public class DbHelper {
                             }
                             cursor.close();
                             database.close();
-
                         }
                     });
                 }catch (Exception e){
