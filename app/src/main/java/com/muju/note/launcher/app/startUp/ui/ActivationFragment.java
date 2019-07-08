@@ -1,6 +1,7 @@
 package com.muju.note.launcher.app.startUp.ui;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -20,6 +21,7 @@ import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
+import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.qr.QrCodeUtils;
 import com.muju.note.launcher.util.rx.RxUtil;
 import com.muju.note.launcher.util.sp.SPUtil;
@@ -39,6 +41,9 @@ import me.yokeyword.fragmentation.ISupportFragment;
  */
 public class ActivationFragment extends BaseFragment<NewActivationPresenter> implements
         NewActivationContract.View {
+
+    private static final String TAG=ActivationFragment.class.getSimpleName();
+
     @BindView(R.id.iv_hide)
     ImageView ivHide;
     @BindView(R.id.tv_active_result)
@@ -70,9 +75,9 @@ public class ActivationFragment extends BaseFragment<NewActivationPresenter> imp
 
         tvIccid.setText("iccId:" + MobileInfoUtil.getICCID(LauncherApplication.getContext()));
         tvImei.setText("imei:" + MobileInfoUtil.getIMEI(LauncherApplication.getContext()));
-        ivActivePadQrcode.setImageBitmap(QrCodeUtils.generateBitmap(MobileInfoUtil.getICCID
-                (LauncherApplication.getContext())
-                + "," + MobileInfoUtil.getIMEI(LauncherApplication.getContext()), 232, 232));
+        String str=MobileInfoUtil.getICCID(LauncherApplication.getContext())+","+MobileInfoUtil.getIMEI(LauncherApplication.getContext())+","+Build.DISPLAY;
+        LogUtil.d(TAG,str);
+        ivActivePadQrcode.setImageBitmap(QrCodeUtils.generateBitmap(str, 232, 232));
 
         boolean isReboot = SPUtil.getBoolean(SpTopics.SP_REBOOT);
         if (isReboot) {
