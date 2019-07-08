@@ -19,8 +19,13 @@ public class EncyPresenter extends BasePresenter<EncyHosContract.View> implement
      */
     @Override
     public void queryEncyCloumn() {
+        if(mView==null){
+            LogUtil.e("mView为空");
+            return;
+        }
         LitePalDb.setZkysDb();
-        LitePal.findAllAsync(InfoDao.class).listen(new FindMultiCallback<InfoDao>() {
+        LitePal.where("isDel = 0").findAsync(InfoDao.class).listen(new FindMultiCallback<InfoDao>() {
+//        LitePal.findAllAsync(InfoDao.class).listen(new FindMultiCallback<InfoDao>() {
             @Override
             public void onFinish(List<InfoDao> list) {
                 if(mView==null){
@@ -43,14 +48,22 @@ public class EncyPresenter extends BasePresenter<EncyHosContract.View> implement
      */
     @Override
     public void queryTopEncyClopedia() {
-        if(mView==null){
-            LogUtil.e("mView为空");
-            return;
-        }
         LitePalDb.setZkysDb();
-        InfomationDao infomationDao = LitePal.findFirst(InfomationDao.class);
-        if(infomationDao!=null)
-        mView.setTopInfomation(infomationDao);
+        LitePal.where("isDel = ?","0").limit(1).findAsync(InfomationDao.class).listen(new FindMultiCallback<InfomationDao>() {
+
+            @Override
+            public void onFinish(List<InfomationDao> list) {
+                if(mView==null){
+                    LogUtil.e("mView为空");
+                    return;
+                }
+                if(list!=null&&list.size()>0) {
+                    mView.setTopInfomation(list.get(0));
+                }else {
+                    LogUtil.i("size:"+list.size());
+                }
+            }
+        });
     }
 
 
@@ -60,9 +73,18 @@ public class EncyPresenter extends BasePresenter<EncyHosContract.View> implement
     @Override
     public void queryEncyClopediaById(int id) {
         LitePalDb.setZkysDb();
-        InfomationDao infomationDao= LitePal.find(InfomationDao.class,id);
-        if(infomationDao!=null)
-        mView.setInfomationById(infomationDao);
+        LitePal.where("isDel = 0 and id =?",id+"").limit(1).findAsync(InfomationDao.class).listen(new FindMultiCallback<InfomationDao>() {
+            @Override
+            public void onFinish(List<InfomationDao> list) {
+                if(mView==null){
+                    LogUtil.e("mView为空");
+                    return;
+                }
+                if(list!=null&&list.size()>0) {
+                    mView.setInfomationById(list.get(0));
+                }
+            }
+        });
     }
 
 
@@ -71,8 +93,12 @@ public class EncyPresenter extends BasePresenter<EncyHosContract.View> implement
      */
     @Override
     public void queryEncyClopediapage(int columnId,int pageNum,int type) {
+        if(mView==null){
+            LogUtil.e("mView为空");
+            return;
+        }
         LitePalDb.setZkysDb();
-        LitePal.where("columnId ="+columnId).limit(12).offset(pageNum*10).findAsync(InfomationDao.class).listen(new FindMultiCallback<InfomationDao>() {
+        LitePal.where("isDel = 0 and columnId =?",""+columnId).limit(12).offset(pageNum*10).findAsync(InfomationDao.class).listen(new FindMultiCallback<InfomationDao>() {
             @Override
             public void onFinish(List<InfomationDao> list) {
                 if(list==null||list.size()<=0){
@@ -91,7 +117,7 @@ public class EncyPresenter extends BasePresenter<EncyHosContract.View> implement
     @Override
     public void querySearch(String keyWord) {
         LitePalDb.setZkysDb();
-        LitePal.where("title like" + "\'" + "%" + keyWord + "%" + "\'").limit(40).findAsync(InfomationDao.class).listen(new FindMultiCallback<InfomationDao>() {
+        LitePal.where("isDel = 0 and title like"+"\'" + "%" + keyWord + "%" + "\'").limit(40).findAsync(InfomationDao.class).listen(new FindMultiCallback<InfomationDao>() {
             @Override
             public void onFinish(List<InfomationDao> list) {
                 if(list==null||list.size()<=0){

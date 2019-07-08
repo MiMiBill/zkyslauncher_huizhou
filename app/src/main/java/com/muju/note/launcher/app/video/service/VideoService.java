@@ -5,7 +5,6 @@ import com.lzy.okgo.callback.FileCallback;
 import com.lzy.okgo.model.HttpParams;
 import com.lzy.okgo.model.Progress;
 import com.lzy.okgo.model.Response;
-import com.muju.note.launcher.app.startUp.CheckMsgEvent;
 import com.muju.note.launcher.app.startUp.event.StartCheckDataEvent;
 import com.muju.note.launcher.app.video.bean.VideoDownLoadBean;
 import com.muju.note.launcher.app.video.db.VideoColumnsDao;
@@ -25,7 +24,6 @@ import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
-import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.sp.SPUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -35,14 +33,10 @@ import org.litepal.crud.callback.FindCallback;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -60,6 +54,7 @@ public class VideoService {
     }
 
     public void start(){
+        LitePalDb.setZkysDb();
         LitePal.countAsync(VideoInfoDao.class).listen(new CountCallback() {
             @Override
             public void onFinish(int count) {

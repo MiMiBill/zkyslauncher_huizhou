@@ -76,6 +76,10 @@ public class UserFragment extends BaseFragment<UserPresenter> implements UserPre
         }
     };
 
+    public static UserFragment getInstance() {
+        UserFragment userFragment = new UserFragment();
+        return userFragment;
+    }
 
     @Override
     public int getLayout() {
@@ -111,11 +115,19 @@ public class UserFragment extends BaseFragment<UserPresenter> implements UserPre
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+//        LogFactory.l().i("onSupportVisible");
+        showView();
     }
 
     @Override
     public void onSupportInvisible() {
+//        LogFactory.l().i("onSupportInvisible");
         super.onSupportInvisible();
         handler.removeMessages(0x01);
         handler.removeMessages(0x03);
@@ -137,7 +149,7 @@ public class UserFragment extends BaseFragment<UserPresenter> implements UserPre
         // TODO: inflate a fragment view
         View rootView = inflater.inflate(R.layout.fragment_user, container, false);
         unbinder = ButterKnife.bind(this, rootView);
-        showView();
+//        showView();
         return rootView;
     }
 

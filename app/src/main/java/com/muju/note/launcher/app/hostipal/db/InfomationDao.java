@@ -25,6 +25,7 @@ public class InfomationDao extends LitePalSupport {
     private String prophylaxis;
     private String complicatingDisease;
     private String dietCare;
+    private int isDel;
     /**
      *   新增数据
      * @param dao
@@ -32,6 +33,14 @@ public class InfomationDao extends LitePalSupport {
     public void saveDb(InfomationDao dao){
         LitePal.use(LitePalDb.zkysDb);
         dao.save();
+    }
+
+    public int getIsDel() {
+        return isDel;
+    }
+
+    public void setIsDel(int isDel) {
+        this.isDel = isDel;
     }
 
     public int getId() {

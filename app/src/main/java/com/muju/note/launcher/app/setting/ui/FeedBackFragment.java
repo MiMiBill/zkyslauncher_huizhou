@@ -34,6 +34,10 @@ public class FeedBackFragment extends BaseFragment<FeedBackPresenter> implements
     Button activityFeedbackSumbit;
     Unbinder unbinder;
 
+    public static FeedBackFragment getInstance() {
+        FeedBackFragment feedBackFragment = new FeedBackFragment();
+        return feedBackFragment;
+    }
     @Override
     public int getLayout() {
         return R.layout.fragment_feedback;

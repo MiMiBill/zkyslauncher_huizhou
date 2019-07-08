@@ -23,6 +23,9 @@ import com.muju.note.launcher.view.password.PopEnterPassword;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.litepal.LitePal;
+import org.litepal.crud.callback.FindMultiCallback;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -63,13 +66,20 @@ public class PublicNumFragment extends BaseFragment<PublicPresenter> implements 
     public void initData() {
         tvTitle.setText("做任务");
         LitePalDb.setZkysDb();
-        AdvertsCodeDao codeDao = LitePal.where("taskType =?", "1").findFirst(AdvertsCodeDao.class);
-        if (codeDao != null) {
-            advertId = codeDao.getAdid();
-            url = codeDao.getTaskUrl();
-//        Glide.with(LauncherApplication.getContext()).load(url).into(ivImg);
-            ivCode.setImageBitmap(QrCodeUtils.generateOriginalBitmap(url, 350, 350));
-        }
+        LitePal.where("taskType =?","1").limit(1).findAsync(AdvertsCodeDao.class).listen(new FindMultiCallback<AdvertsCodeDao>() {
+            @Override
+            public void onFinish(List<AdvertsCodeDao> list) {
+                if(list!=null && list.size()>0){
+                    AdvertsCodeDao codeDao = list.get(0);
+                    if (codeDao != null) {
+                        advertId = codeDao.getAdid();
+                        url = codeDao.getTaskUrl();
+                        ivCode.setImageBitmap(QrCodeUtils.generateOriginalBitmap(url, 350, 350));
+                    }
+                }
+            }
+        });
+
     }
 
     @Override

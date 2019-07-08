@@ -30,7 +30,6 @@
                 android:textColor="@color/rbt_user_item_tv_bg"
                 android:textSize="15sp"
                 android:button="@null"
-                android:checked="true"
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/px100" />

@@ -9,6 +9,7 @@
     <dimen name="px8">8px</dimen>
     <dimen name="px9">9px</dimen>
     <dimen name="px10">10px</dimen>
+    <dimen name="px11">11px</dimen>
     <dimen name="px12">12px</dimen>
     <dimen name="px14">14px</dimen>
     <dimen name="px15">15px</dimen>
@@ -37,6 +38,7 @@
     <dimen name="px40">40px</dimen>
     <dimen name="px42">43px</dimen>
     <dimen name="px44">44px</dimen>
+    <dimen name="px45">45px</dimen>
     <dimen name="px46">46px</dimen>
     <dimen name="px47">47px</dimen>
     <dimen name="px48">48px</dimen>
@@ -50,6 +52,7 @@
     <dimen name="px68">68px</dimen>
     <dimen name="px63">63px</dimen>
     <dimen name="px65">65px</dimen>
+    <dimen name="px66">66px</dimen>
     <dimen name="px70">70px</dimen>
     <dimen name="px72">72px</dimen>
     <dimen name="px74">74px</dimen>
@@ -67,6 +70,8 @@
     <dimen name="px108">108px</dimen>
     <dimen name="px110">110px</dimen>
     <dimen name="px112">112px</dimen>
+    <dimen name="px120">120px</dimen>
+    <dimen name="px125">125px</dimen>
     <dimen name="px127">127px</dimen>
     <dimen name="px128">128px</dimen>
     <dimen name="px130">130px</dimen>
@@ -108,6 +113,7 @@
     <dimen name="px378">378px</dimen>
     <dimen name="px380">380px</dimen>
     <dimen name="px400">400px</dimen>
+    <dimen name="px420">420px</dimen>
     <dimen name="px429">429px</dimen>
     <dimen name="px430">430px</dimen>
     <dimen name="px438">438px</dimen>
@@ -117,6 +123,7 @@
     <dimen name="px514">514px</dimen>
     <dimen name="px550">550px</dimen>
     <dimen name="px600">600px</dimen>
+    <dimen name="px700">700px</dimen>
     <dimen name="px786">786px</dimen>
     <dimen name="px444">444px</dimen>
     <dimen name="px909">909px</dimen>

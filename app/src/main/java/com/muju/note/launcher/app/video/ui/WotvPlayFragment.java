@@ -56,6 +56,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.litepal.LitePal;
+import org.litepal.crud.callback.FindMultiCallback;
 
 import java.util.HashMap;
 import java.util.List;
@@ -471,11 +472,18 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
                 videoOrImageDialog.dismiss();
             }
             LitePalDb.setZkysDb();
-            AdvertsCodeDao codeDao = LitePal.where("code =?", AdvertsTopics.CODE_VIDEO_CORNER).
-                    findFirst(AdvertsCodeDao.class);
-            if (codeDao != null && (!codeDao.getResourceUrl().equals(""))) {
-                AdvertsUtil.getInstance().showByImageView(getActivity(), codeDao, ivCorner, ivColse, relCornor);
-            }
+            LitePal.where("code =?", AdvertsTopics.CODE_VIDEO_CORNER).
+                    limit(1).findAsync(AdvertsCodeDao.class).listen(new FindMultiCallback<AdvertsCodeDao>() {
+                @Override
+                public void onFinish(List<AdvertsCodeDao> list) {
+                    if(list!=null && list.size()>0){
+                        AdvertsCodeDao codeDao = list.get(0);
+                        if (codeDao != null && (!codeDao.getResourceUrl().equals(""))) {
+                            AdvertsUtil.getInstance().showByImageView(getActivity(), codeDao, ivCorner, ivColse, relCornor);
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -540,22 +548,30 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
 //        LogFactory.l().i("VideoPauseEvent==" + event.isPause);
         if (event.isPause && isShowDialog) {
             LitePalDb.setZkysDb();
-            AdvertsCodeDao codeDao = LitePal.where("code =?", AdvertsTopics.CODE_VIDEO_DIALOG).findFirst(AdvertsCodeDao.class);
-            try {
-                if (videoOrImageDialog == null) {
-                    videoOrImageDialog = new VideoOrImageDialog(getActivity(), R.style.dialog);
-                    if (codeDao != null ){
-                        AdvertsUtil.getInstance().showVideoDialog(codeDao, videoOrImageDialog);
-                    }
-                } else {
-                    if(codeDao != null && codeDao.getCloseType()==2){
-                        videoOrImageDialog.closeBySelf(codeDao.getSecond());
-                    }
-                    videoOrImageDialog.show();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            LitePal.where("code =?", AdvertsTopics.CODE_VIDEO_DIALOG).limit(1).findAsync(AdvertsCodeDao.class).
+                    listen(new FindMultiCallback<AdvertsCodeDao>() {
+                        @Override
+                        public void onFinish(List<AdvertsCodeDao> list) {
+                            if(list!=null && list.size()>0){
+                                AdvertsCodeDao codeDao = list.get(0);
+                                try {
+                                    if (videoOrImageDialog == null) {
+                                        videoOrImageDialog = new VideoOrImageDialog(getActivity(), R.style.dialog);
+                                        if (codeDao != null ){
+                                            AdvertsUtil.getInstance().showVideoDialog(codeDao, videoOrImageDialog);
+                                        }
+                                    } else {
+                                        if(codeDao != null && codeDao.getCloseType()==2){
+                                            videoOrImageDialog.closeBySelf(codeDao.getSecond());
+                                        }
+                                        videoOrImageDialog.show();
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    });
         }
     }
 
@@ -658,12 +674,20 @@ public class WotvPlayFragment extends BaseFragment implements View.OnClickListen
         //开启轮询
         selectPayInterval();
         LitePalDb.setZkysDb();
-        AdvertsCodeDao codeDao = LitePal.where("taskType =?", "1").findFirst(AdvertsCodeDao.class);
-        if (codeDao != null && (!codeDao.getTaskUrl().equals(""))) {
-            dialogType=0;
-        }else {
-            dialogType=1;
-        }
+        LitePal.where("taskType =?", "1").limit(1).findAsync(AdvertsCodeDao.class).listen(new FindMultiCallback<AdvertsCodeDao>() {
+            @Override
+            public void onFinish(List<AdvertsCodeDao> list) {
+                if(list!=null && list.size()>0){
+                    AdvertsCodeDao codeDao = list.get(0);
+                    if (codeDao != null && (!codeDao.getTaskUrl().equals(""))) {
+                        dialogType=0;
+                    }else {
+                        dialogType=1;
+                    }
+                }
+            }
+        });
+
 
         payDialog = new VideoPayDialog(getActivity(), R.style.DialogFullscreen,dialogType, new View.OnClickListener() {
             @Override

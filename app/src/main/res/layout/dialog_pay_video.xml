@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/rel_dialog"
+    >
+
+    <LinearLayout
+        android:id="@+id/lly_pay"
+        android:background="@drawable/pay_shape_yellow_bg"
+        android:layout_marginTop="@dimen/px125"
+        android:layout_width="@dimen/px700"
+        android:orientation="vertical"
+        android:layout_height="@dimen/px420">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/px108"
+            android:layout_marginLeft="@dimen/px61"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px50">
+            <TextView
+                android:text="选择"
+                android:gravity="center"
+                android:textColor="@color/color_585858"
+                android:textSize="@dimen/px22"
+                android:layout_marginRight="@dimen/px20"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/px10"
+            android:layout_marginLeft="@dimen/px61"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px50">
+            <TextView
+                android:text="支付"
+                android:gravity="center"
+                android:textColor="@color/color_585858"
+                android:textSize="@dimen/px22"
+                android:layout_marginRight="@dimen/px20"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+            <LinearLayout
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:background="@drawable/pay_shape_wechat_bg"
+                android:layout_height="@dimen/px39">
+                <ImageView
+                    android:layout_marginLeft="@dimen/px11"
+                    android:layout_marginRight="@dimen/px7"
+                    android:src="@mipmap/wechat_white"
+                    android:layout_width="@dimen/px31"
+                    android:layout_height="@dimen/px25" />
+                <TextView
+                    android:textSize="@dimen/px22"
+                    android:textColor="@color/white"
+                    android:text="微信"
+                    android:layout_marginRight="@dimen/px11"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+        </LinearLayout>
+        <View
+            android:layout_marginLeft="@dimen/px61"
+            android:layout_marginRight="@dimen/px61"
+            android:layout_width="match_parent"
+            android:background="#E8E8E8"
+            android:layout_height="@dimen/px1"/>
+        <TextView
+            android:textSize="@dimen/px18"
+            android:textColor="#D97D1A"
+            android:text="购买后到期的日期为：2019年7月1日"
+            android:layout_marginTop="@dimen/px6"
+            android:layout_marginLeft="@dimen/px61"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_marginTop="@dimen/px15"
+            android:layout_marginLeft="@dimen/px268"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textSize="@dimen/px22"
+                android:textColor="@color/color_585858"
+                android:text="订单金额:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:textSize="@dimen/px22"
+                android:textColor="@color/color_585858"
+                android:text="应付金额:"
+                android:layout_marginLeft="@dimen/px60"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="@dimen/px15"
+            android:layout_marginLeft="@dimen/px268"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:layout_height="@dimen/px56">
+            <ImageView
+                android:src="@mipmap/pay_choice"
+                android:layout_width="@dimen/px21"
+                android:layout_height="@dimen/px21" />
+            <TextView
+                android:textSize="@dimen/px18"
+                android:textColor="@color/color_585858"
+                android:text="我已阅读并同意<服务协议>"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Button
+                android:textSize="@dimen/px18"
+                android:textColor="@color/white"
+                android:text="确认支付"
+                android:background="#40291C"
+                android:layout_marginLeft="@dimen/px12"
+                android:layout_width="@dimen/px120"
+                android:layout_height="@dimen/px45" />
+        </LinearLayout>
+    </LinearLayout>
+    <ImageView
+        android:src="@mipmap/pay_video"
+        android:layout_width="@dimen/px430"
+        android:layout_height="@dimen/px200" />
+    <LinearLayout
+        android:layout_below="@id/lly_pay"
+        android:layout_marginTop="@dimen/px18"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px66">
+        <ImageView
+            android:src="@mipmap/pay_by_rent"
+            android:layout_width="@dimen/px306"
+            android:layout_height="match_parent" />
+        <ImageView
+            android:layout_marginLeft="@dimen/px87"
+            android:src="@mipmap/pay_by_task"
+            android:layout_width="@dimen/px306"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+</RelativeLayout>
