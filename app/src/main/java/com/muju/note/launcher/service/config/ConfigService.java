@@ -112,6 +112,7 @@ public class ConfigService {
             @Override
             public void onFinish(List<PadConfigDao> list) {
                 try {
+                    LitePalDb.setZkysDb();
                     if (list == null || list.size() <= 0) {
                         LogUtil.e(TAG, "平板配置信息为空，请检查配置");
                         return;

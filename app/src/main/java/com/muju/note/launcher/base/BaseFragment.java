@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 
 import com.muju.note.launcher.app.home.ui.HomeFragment;
+import com.muju.note.launcher.app.home.util.ModelDbUtil;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.toast.FancyToast;
 
@@ -33,6 +34,8 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment imp
     protected FragmentActivity _mActivity;
 
     private static final String TAG = "BaseFragment";
+
+    public long startTime;
 
     @Override
     public SupportFragmentDelegate getSupportDelegate() {
@@ -177,6 +180,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment imp
     @Override
     public void onSupportVisible() {
         mDelegate.onSupportVisible();
+        startTime=System.currentTimeMillis();
     }
 
     /**
@@ -187,6 +191,8 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment imp
     @Override
     public void onSupportInvisible() {
         mDelegate.onSupportInvisible();
+        ModelDbUtil.getInstance().modelCount(this.getClass().getSimpleName(),startTime,System.currentTimeMillis());
+        ModelDbUtil.getInstance().modelInfo(this.getClass().getSimpleName(),startTime,System.currentTimeMillis());
     }
 
     /**
