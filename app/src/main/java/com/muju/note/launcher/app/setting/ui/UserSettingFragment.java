@@ -1,9 +1,13 @@
 package com.muju.note.launcher.app.setting.ui;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -70,7 +74,8 @@ public class UserSettingFragment extends BaseFragment {
         tvVersion.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                HideActivity.launch(LauncherApplication.getContext());
+//                HideActivity.launch(LauncherApplication.getContext());
+                toHide();
                 return true;
             }
         });
@@ -79,6 +84,36 @@ public class UserSettingFragment extends BaseFragment {
         firstRadio = (RadioButton) radioGroup.getChildAt(0);
         firstRadio.setChecked(true);
 
+    }
+
+    private void toHide(){
+        final EditText et = new EditText(getContext());
+        AlertDialog dialog = new AlertDialog.Builder(getContext())
+                .setView(et)
+                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (et.getText().toString().equals("147258369")) {
+                            HideActivity.launch(LauncherApplication.getContext());
+                        } else {
+                            showToast("验证码错误");
+                        }
+
+                    }
+                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                et.setText("");
+            }
+        });
+        dialog.show();
     }
 
 

@@ -101,6 +101,7 @@ import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import me.yokeyword.fragmentation.SupportFragment;
+import me.yokeyword.fragmentation.SupportHelper;
 
 public class MainActivity extends BaseActivity<MainPresenter> implements MainPresenter.TaskListener, MainContract.View {
 
@@ -182,7 +183,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
         activeInfo = ActiveUtils.getPadActiveInfo();
         BaseFragment fragment = (BaseFragment) findFragment(HomeFragment.class);
         if (fragment == null) {
+<<<<<<< HEAD
+            loadRootFragment(R.id.fl_container, HomeFragment.newInstance());
+=======
             loadRootFragment(R.id.fl_container, HomeFragment.newInstance(),true,false);
+>>>>>>> 9691fcd91530d17c3f775d53f5e176ff381e47e2
         }
 
 
@@ -200,6 +205,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
         drawlayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View view, float v) {
+
 
             }
 

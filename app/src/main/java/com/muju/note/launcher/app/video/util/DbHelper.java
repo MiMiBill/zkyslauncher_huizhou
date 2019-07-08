@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.muju.note.launcher.app.home.bean.AdverNewBean;
 import com.muju.note.launcher.app.home.bean.AdvertsBean;
 import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
+import com.muju.note.launcher.app.home.db.ModelInfoDao;
 import com.muju.note.launcher.app.home.event.GetAdvertEvent;
 import com.muju.note.launcher.app.hostipal.db.InfoDao;
 import com.muju.note.launcher.app.hostipal.db.InfomationDao;
@@ -144,6 +145,35 @@ public class DbHelper {
             values.put("endTime",dao.getEndTime());
             values.put("time",dao.getTime());
             database.insert("UpAdvertInfoDao",null,values);
+            database.close();
+        }catch (Exception e){
+            e.printStackTrace();
+            LitePalDb.setZkysDataDb();
+            UpAdvertInfoDao infoDao=new UpAdvertInfoDao();
+            infoDao.setImei("异常数据");
+            infoDao.save();
+        }
+    }
+
+    /**
+     *  插入模块详情数据
+     * @param dbPath
+     * @param dao
+     */
+    public static void insertToModelData(String dbPath, ModelInfoDao dao) throws Exception{
+        try {
+            SQLiteDatabase database=getDataBase(dbPath);
+            ContentValues values=new ContentValues();
+            values.put("imei",dao.getImei());
+            values.put("modelName",dao.getModelName());
+            values.put("hosId",dao.getHosId());
+            values.put("depId",dao.getDepId());
+            values.put("date",dao.getDate());
+            values.put("modelTag",dao.getModelTag());
+            values.put("startTime",dao.getStartTime());
+            values.put("endTime",dao.getEndTime());
+            values.put("time",dao.getTime());
+            database.insert("ModelInfoDao",null,values);
             database.close();
         }catch (Exception e){
             e.printStackTrace();

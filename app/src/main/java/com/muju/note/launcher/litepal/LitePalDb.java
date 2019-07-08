@@ -6,6 +6,8 @@ import com.muju.note.launcher.app.home.db.AdvertsCountDao;
 import com.muju.note.launcher.app.home.db.AdvertsInfoDao;
 import com.muju.note.launcher.app.home.db.HomeMenuDao;
 import com.muju.note.launcher.app.home.db.HomeMenuSubDao;
+import com.muju.note.launcher.app.home.db.ModelCountDao;
+import com.muju.note.launcher.app.home.db.ModelInfoDao;
 import com.muju.note.launcher.app.hostipal.db.InfoDao;
 import com.muju.note.launcher.app.hostipal.db.InfomationDao;
 import com.muju.note.launcher.app.hostipal.db.MienInfoDao;
@@ -41,6 +43,7 @@ public class LitePalDb {
         zkysDataDb.setStorage("zkysdb");
         zkysDataDb.addClassName(UpAdvertInfoDao.class.getName());
         zkysDataDb.addClassName(UpVideoInfoDao.class.getName());
+        zkysDataDb.addClassName(ModelInfoDao.class.getName());
         LitePal.use(zkysDataDb);
 
        if(LitePal.count(UpVideoInfoDao.class)<=0){
@@ -52,6 +55,12 @@ public class LitePalDb {
         if(LitePal.count(UpAdvertInfoDao.class)<=0){
             UpAdvertInfoDao dao=new UpAdvertInfoDao();
             dao.setImei("异常数据");
+            dao.save();
+        }
+
+        if(LitePal.count(ModelInfoDao.class)<=0){
+            ModelInfoDao dao=new ModelInfoDao();
+            dao.setModelName("异常数据");
             dao.save();
         }
 
@@ -79,6 +88,7 @@ public class LitePalDb {
         zkysDb.addClassName(AdvertsCodeDao.class.getName());
         zkysDb.addClassName(HomeMenuDao.class.getName());
         zkysDb.addClassName(HomeMenuSubDao.class.getName());
+        zkysDb.addClassName(ModelCountDao.class.getName());
         LitePal.use(zkysDb);
     }
 
