@@ -34,6 +34,7 @@ public class MienService {
     }
 
     public void start(){
+        LitePalDb.setZkysDb();
         LitePal.countAsync(MienInfoDao.class).listen(new CountCallback() {
             @Override
             public void onFinish(int count) {
@@ -48,6 +49,7 @@ public class MienService {
      *  检查本地是否有医院风采数据
      */
     public void startMien(){
+        LitePalDb.setZkysDb();
         EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_MIEN_START));
         LitePal.countAsync(MienInfoDao.class).listen(new CountCallback() {
             @Override

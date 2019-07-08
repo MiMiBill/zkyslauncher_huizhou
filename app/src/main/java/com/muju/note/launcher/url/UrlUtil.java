@@ -102,6 +102,26 @@ public class UrlUtil {
         return getHost() + "/device/getDeviceStatus";
     }
 
+
+    //查询套餐
+    public static String getComboList() {
+        return getHost() + "/hospital/combo/list";
+    }
+
+    //创建订单
+    public static String orderCreate() {
+        return getHost() + "/video/order/create";
+    }
+
+
+    //查询公众号类型
+    public static String getWxType() {
+        return getHost() + "/advert/getWxType";
+    }
+
+
+
+
     /**
      * 根据集合获取广告列表
      *

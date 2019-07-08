@@ -206,6 +206,10 @@ public class DbHelper {
                             String advertType = adBean.getAdvertType();
                             String additionUrl = adBean.getAdditionUrl();
                             String taskUrl = adBean.getTaskUrl();
+                            String pubCode = adBean.getCode();
+                            if(null==pubCode){
+                                pubCode="";
+                            }
                             if(null==linkContent){
                                 linkContent="";
                             }
@@ -226,6 +230,7 @@ public class DbHelper {
                             }
                             advertsCodeDao.setTaskType(adBean.getTaskType());
                             advertsCodeDao.setCloseType(adBean.getCloseType());
+                            advertsCodeDao.setPubCode(pubCode);
                             advertsCodeDao.setSecond(adBean.getSecond());
                             advertsCodeDao.setStatus(adBean.getStatus());
                             advertsCodeDao.setLinkType(adBean.getLinkType());

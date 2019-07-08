@@ -3,11 +3,7 @@ package com.muju.note.launcher.app.hostipal.service;
 import android.text.TextUtils;
 
 import com.lzy.okgo.OkGo;
-import com.lzy.okgo.model.Progress;
 import com.lzy.okgo.model.Response;
-import com.lzy.okgo.request.GetRequest;
-import com.lzy.okserver.OkDownload;
-import com.lzy.okserver.download.DownloadListener;
 import com.muju.note.launcher.app.hostipal.db.MissionInfoDao;
 import com.muju.note.launcher.app.startUp.event.StartCheckDataEvent;
 import com.muju.note.launcher.litepal.LitePalDb;
@@ -44,6 +40,7 @@ public class MissionService {
     }
 
     public void start(){
+        LitePalDb.setZkysDb();
         LitePal.countAsync(MissionInfoDao.class).listen(new CountCallback() {
             @Override
             public void onFinish(int count) {
@@ -56,6 +53,7 @@ public class MissionService {
 
     public void startMiss(){
         EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_MISS_START));
+        LitePalDb.setZkysDb();
         LitePal.countAsync(MissionInfoDao.class).listen(new CountCallback() {
             @Override
             public void onFinish(int count) {
@@ -113,6 +111,7 @@ public class MissionService {
      *  下载宣教视频
      */
     public void downMission(){
+        LitePalDb.setZkysDb();
         LitePal.findAllAsync(MissionInfoDao.class).listen(new FindMultiCallback<MissionInfoDao>() {
             @Override
             public void onFinish(List<MissionInfoDao> list) {
@@ -129,19 +128,21 @@ public class MissionService {
 
     public void downLoad(String url, int tag){
         File file;
-        if(tag==1) {
-            file = new File(SdcardConfig.RESOURCE_FOLDER, url.hashCode()+".pdf");
-        }else {
-            file = new File(SdcardConfig.RESOURCE_FOLDER, url.hashCode()+".mp4");
-        }
-        if(file.exists()){
-            LogUtil.d(TAG,"文件已下载，无需重新下载:"+file.getAbsolutePath());
-            return;
-        }
-        if (tag==1) {
-            DownLoadService.getInstance().downLoadHaseCode(url, ".pdf");
-        }else {
-            DownLoadService.getInstance().downLoadHaseCode(url, ".mp4");
+        if(url!=null){
+            if(tag==1) {
+                file = new File(SdcardConfig.RESOURCE_FOLDER, url.hashCode()+".pdf");
+            }else {
+                file = new File(SdcardConfig.RESOURCE_FOLDER, url.hashCode()+".mp4");
+            }
+            if(file.exists()){
+                LogUtil.d(TAG,"文件已下载，无需重新下载:"+file.getAbsolutePath());
+                return;
+            }
+            if (tag==1) {
+                DownLoadService.getInstance().downLoadHaseCode(url, ".pdf");
+            }else {
+                DownLoadService.getInstance().downLoadHaseCode(url, ".mp4");
+            }
         }
     }
 

@@ -59,6 +59,7 @@ public class EncyclopeService {
         EventBus.getDefault().register(this);
 //        LitePal.deleteAll(InfoDao.class);
 //        LitePal.deleteAll(InfomationDao.class);
+        LitePalDb.setZkysDb();
         LitePal.countAsync(InfomationDao.class).listen(new CountCallback() {
             @Override
             public void onFinish(int count) {
@@ -71,6 +72,7 @@ public class EncyclopeService {
 
     public void startEncy() {
         EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_START));
+        LitePalDb.setZkysDb();
         LitePal.countAsync(InfomationDao.class).listen(new CountCallback() {
             @Override
             public void onFinish(int count) {
@@ -158,6 +160,7 @@ public class EncyclopeService {
             ZipUtils.UnZipFolder(zipFileString, outPathString, new OnZipSuccessListener() {
                 @Override
                 public void OnZipSuccess() {
+                    LitePalDb.setZkysDb();
                     LitePal.countAsync(InfoDao.class).listen(new CountCallback() {
                         @Override
                         public void onFinish(int count) {

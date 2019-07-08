@@ -148,6 +148,13 @@ public class DateUtil {
     }
 
 
+    //时间戳格式化成时间
+    public static String formartTimeToDate(long time) {
+        String date= new SimpleDateFormat("yyyy-MM-dd").format(time*1000);
+        return date.substring(0,4)+"年"+date.substring(5,7)+"月"+date.substring(8,10)+"日";
+    }
+
+
     //获取倒计时
     public static String getTime(int tempTime) {
         if (tempTime > 0) {

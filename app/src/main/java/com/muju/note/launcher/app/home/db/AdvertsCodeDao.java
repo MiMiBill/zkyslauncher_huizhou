@@ -24,6 +24,7 @@ public class AdvertsCodeDao extends LitePalSupport implements Serializable {
     private int status;
     private int interval;
     private String code;
+    private String pubCode;   //公众号回复码
     private String taskUrl ;
     private int  taskType;
 
@@ -35,6 +36,15 @@ public class AdvertsCodeDao extends LitePalSupport implements Serializable {
     public void saveDb(AdvertsCodeDao dao) {
         LitePal.use(LitePalDb.zkysDb);
         dao.save();
+    }
+
+
+    public String getPubCode() {
+        return pubCode;
+    }
+
+    public void setPubCode(String pubCode) {
+        this.pubCode = pubCode;
     }
 
     public String getTaskUrl() {
