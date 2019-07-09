@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -57,7 +58,6 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
     TextView tvTitle;
     @BindView(R.id.rel_titlebar)
     RelativeLayout relTitlebar;
-    Unbinder unbinder;
 
     private HospitalMienAdapter hospitalMienAdapter;
     private List<MienInfoDao> list;
@@ -119,6 +119,7 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
     }
 
     @Override
+
     public void getMien(List<MienInfoDao> list) {
         llTypeTitle.setVisibility(View.VISIBLE);
         list.get(0).setSelete(true);
@@ -162,20 +163,5 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
             return;
         }
         wvMien.loadDataWithBaseURL(null, data, "text/html", "UTF-8", null);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
-            savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
-        return rootView;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
     }
 }

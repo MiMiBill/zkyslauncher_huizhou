@@ -8,6 +8,8 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 import com.muju.note.launcher.app.home.db.AdvertsCountDao;
 import com.muju.note.launcher.app.home.db.AdvertsInfoDao;
+import com.muju.note.launcher.app.home.db.ModelCountDao;
+import com.muju.note.launcher.app.home.db.ModelInfoDao;
 import com.muju.note.launcher.app.video.db.VideoPlayerCountDao;
 import com.muju.note.launcher.app.video.db.VideoPlayerInfoDao;
 import com.muju.note.launcher.app.video.util.DbHelper;
@@ -104,6 +106,8 @@ public class UpLoadDataService {
                     upAdvertCountDb();
                     // 上传影视统计总数信息
                     upVideoCountDb();
+                    // 上传模块统计总数信息
+                    upModelCountDb();
                     // 复制数据到data数据库
 //                moveDbToData();
                     // 获取token，上传数据库到七牛云
@@ -120,6 +124,7 @@ public class UpLoadDataService {
      * 上传广告总数信息
      */
     public void upAdvertCountDb() {
+        LitePalDb.setZkysDb();
         List<AdvertsCountDao> daoList = LitePal.findAll(AdvertsCountDao.class);
         OkGo.<BaseBean<Void>>post(UrlUtil.getUpCountDb())
                 .params("data", new Gson().toJson(daoList))
@@ -137,6 +142,7 @@ public class UpLoadDataService {
      * 上传影视数据
      */
     public void upVideoCountDb() {
+        LitePalDb.setZkysDb();
         List<VideoPlayerCountDao> daoList = LitePal.findAll(VideoPlayerCountDao.class);
         OkGo.<BaseBean<Void>>post(UrlUtil.getUpVideoCountDb())
                 .params("data", new Gson().toJson(daoList))
@@ -145,6 +151,23 @@ public class UpLoadDataService {
                     public void onSuccess(Response<BaseBean<Void>> response) {
                         LitePalDb.setZkysDb();
                         LitePal.deleteAll(VideoPlayerCountDao.class);
+                    }
+                });
+    }
+
+    /**
+     *  上传模块统计数据
+     */
+    public void upModelCountDb(){
+        LitePalDb.setZkysDb();
+        List<ModelCountDao> daoList=LitePal.findAll(ModelCountDao.class);
+        OkGo.<BaseBean<Void>>post(UrlUtil.getUpModelCountDb())
+                .params("data", new Gson().toJson(daoList))
+                .execute(new JsonCallback<BaseBean<Void>>() {
+                    @Override
+                    public void onSuccess(Response<BaseBean<Void>> response) {
+                        LitePalDb.setZkysDb();
+                        LitePal.deleteAll(ModelCountDao.class);
                     }
                 });
     }
@@ -269,6 +292,8 @@ public class UpLoadDataService {
                                 DbHelper.clearTable(LitePalDb.DBNAME_ZKYS_DATA, UpAdvertInfoDao
                                         .class.getSimpleName());
                                 DbHelper.clearTable(LitePalDb.DBNAME_ZKYS_DATA, UpVideoInfoDao
+                                        .class.getSimpleName());
+                                DbHelper.clearTable(LitePalDb.DBNAME_ZKYS_DATA, ModelInfoDao
                                         .class.getSimpleName());
                             } catch (Exception e) {
                                 e.printStackTrace();

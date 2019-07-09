@@ -248,6 +248,8 @@
             </intent-filter>
         </service>
 
+        <service android:name=".service.audio.PlayerAudioService" />
+
 
         <!-- 设备管理 -->
         <receiver

@@ -185,6 +185,14 @@ public class UrlUtil {
         return getHost() + "/video/statistics";
     }
 
+    /**
+     *  上传模块统计数据
+     * @return
+     */
+    public static String getUpModelCountDb(){
+        return getHost()+"/model/statistics/save";
+    }
+
     //获取病人信息
     public static String getGetPaitentInfo() {
 //        return getHost() + "/hospitalBedTabb/list";
