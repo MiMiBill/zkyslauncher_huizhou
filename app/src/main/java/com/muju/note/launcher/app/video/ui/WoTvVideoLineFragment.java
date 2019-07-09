@@ -235,6 +235,9 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
     public void onSupportInvisible() {
         super.onSupportInvisible();
         EventBus.getDefault().post(new VideoNoLockEvent(true));
+        if(videoView!=null){
+            videoView.pause();
+        }
     }
 
     /**
