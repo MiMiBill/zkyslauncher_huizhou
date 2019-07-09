@@ -5,22 +5,20 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.devbrackets.android.api.video.impl.VideoErrorInfo;
 import com.devbrackets.android.media.listener.OnVideoPreparedListener;
 import com.google.gson.Gson;
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.callback.StringCallback;
-import com.lzy.okgo.model.Response;
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
 import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
-import com.muju.note.launcher.app.publicAdress.ui.PublicNumFragment;
 import com.muju.note.launcher.app.video.bean.PayEntity;
 import com.muju.note.launcher.app.video.bean.PayEvent;
 import com.muju.note.launcher.app.video.bean.PriceBean;
@@ -29,7 +27,6 @@ import com.muju.note.launcher.app.video.contract.VideoPlayContract;
 import com.muju.note.launcher.app.video.db.VideoHisDao;
 import com.muju.note.launcher.app.video.dialog.NewVideoPayDialog;
 import com.muju.note.launcher.app.video.dialog.VideoOrImageDialog;
-import com.muju.note.launcher.app.video.dialog.VideoPayDialog;
 import com.muju.note.launcher.app.video.dialog.WotvPlayErrorDialog;
 import com.muju.note.launcher.app.video.event.VideoCodeFailEvent;
 import com.muju.note.launcher.app.video.event.VideoNoLockEvent;
@@ -44,13 +41,14 @@ import com.muju.note.launcher.app.video.util.wotv.ExpandVideoView2;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.topics.AdvertsTopics;
-import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.DateUtil;
 import com.muju.note.launcher.util.adverts.AdvertsUtil;
-import com.muju.note.launcher.util.app.MobileInfoUtil;
+import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
+import com.muju.note.launcher.view.password.OnPasswordFinish;
+import com.muju.note.launcher.view.password.PopEnterPassword;
 import com.unicom.common.VideoSdkConfig;
 import com.unicom.common.base.video.IVideoEvent;
 import com.unicom.common.base.video.expand.ExpandVideoListener;
@@ -64,9 +62,7 @@ import org.litepal.LitePal;
 import org.litepal.crud.callback.FindMultiCallback;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -77,7 +73,8 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import pl.droidsonroids.gif.GifImageView;
 
-public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implements VideoPlayContract.View,View.OnClickListener {
+public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implements
+        VideoPlayContract.View, View.OnClickListener {
     @BindView(R.id.video_view)
     ExpandVideoView2 videoView;
     @BindView(R.id.iv_loading)
@@ -100,7 +97,8 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
     RelativeLayout relCornor;
     private boolean isCodeFail = false;
     private static final String TAG = "WotvPlayFragment";
-    private boolean isShowDialog=true;
+    private boolean isShowDialog = true;
+    private boolean isPaySuccess = false;
     /**
      * 视频类型
      * 1：电视台直播
@@ -122,13 +120,15 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
     private long startTime;
     private WotvPlayErrorDialog errorDialog;
     private ActivePadInfo.DataBean activeInfo;
-    private List<PriceBean.DataBean> priceList=new ArrayList<>();
+    private List<PriceBean.DataBean> priceList = new ArrayList<>();
     private NewVideoPayDialog newVideoPayDialog;
+    private PopEnterPassword popEnterPassword;
 
     public void setHisDao(VideoHisDao videoHisDao) {
         this.videoHisDao = videoHisDao;
     }
-    private int dialogType=0;  //0表示有公众号任务
+
+    private int dialogType = 0;  //0表示有公众号任务
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -139,12 +139,12 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
                             .subscribe(new Consumer<Integer>() {
                                 @Override
                                 public void accept(Integer integer) throws Exception {
-                                    setPayPackageList();
+                                    mPresenter.setPayPackageList();
                                 }
                             });
                 }
                 if (msg.what == 0x01) {
-                    if(llDes==null){
+                    if (llDes == null) {
                         return;
                     }
                     llDes.setVisibility(View.GONE);
@@ -190,7 +190,7 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
                     try {
                         videoView.setBasicControlDialogsVisible(true, true);
                         llLoading.setVisibility(View.GONE);
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -208,7 +208,7 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
 
     @Override
     public void initPresenter() {
-        mPresenter=new VideoPlayPresenter();
+        mPresenter = new VideoPlayPresenter();
     }
 
     @Override
@@ -220,7 +220,7 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_back:
-                isShowDialog=false;
+                isShowDialog = false;
                 videoView.pause();
                 pop();
                 break;
@@ -228,7 +228,7 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
     }
 
     /**
-     *  界面可见时
+     * 界面可见时
      */
     @Override
     public void onSupportVisible() {
@@ -237,18 +237,21 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
     }
 
     /**
-     *  界面不可见时
+     * 界面不可见时
      */
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
-        if(payDialog!=null&&payDialog.isShowing()){
-            LogUtil.i(TAG,"支付窗口弹出，不发送锁屏消息");
+        if (newVideoPayDialog != null && newVideoPayDialog.isShowing()) {
+            LogUtil.i(TAG, "支付窗口弹出，不发送锁屏消息");
             return;
         }
-        if(errorDialog!=null&&errorDialog.isShowing()){
+        if (errorDialog != null && errorDialog.isShowing()) {
             return;
         }
+
+        if (popEnterPassword != null && popEnterPassword.isShowing())
+            popEnterPassword.dismiss();
 //        videoView.unregisterVideoTouchEventObserver(observer);
         EventBus.getDefault().post(new VideoNoLockEvent(true));
     }
@@ -265,13 +268,13 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
                     verifyPlayingStatus();
                     //TODO 播放器的默认海报展示的时候，会通知业务层，由业务层处理业务逻辑。
                     Log.e(TAG, "海报是否显示：" + isVisiable);
-                    if(videoView==null){
+                    if (videoView == null) {
                         return;
                     }
-                    if (videoView!=null && !videoView.isPlaying()) {
+                    if (videoView != null && !videoView.isPlaying()) {
                         llLoading.setVisibility(View.VISIBLE);
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -315,7 +318,7 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
                             break;
                     }
                     return true;
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     pop();
                 }
@@ -334,10 +337,11 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
                     //TODO VideoErrorInfo配套查阅错误代码
                     LogUtil.e(TAG, "错误代码：" + e.getCode());
                     LogUtil.e(TAG, "错误信息：" + e.getMessage());
-                    if(errorDialog!=null&&errorDialog.isShowing()){
+                    if (errorDialog != null && errorDialog.isShowing()) {
                         return;
                     }
-                    errorDialog=new WotvPlayErrorDialog(getActivity(), R.style.DialogFullscreen,e.getMessage(), new View.OnClickListener() {
+                    errorDialog = new WotvPlayErrorDialog(getActivity(), R.style
+                            .DialogFullscreen, e.getMessage(), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             errorDialog.dismiss();
@@ -365,10 +369,10 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
                             WoTvUtil.getInstance().login();
                             break;
                     }
-                }catch (Exception es){
+                } catch (Exception es) {
                     es.printStackTrace();
                     pop();
-                    if(errorDialog!=null&&errorDialog.isShowing()){
+                    if (errorDialog != null && errorDialog.isShowing()) {
                         errorDialog.dismiss();
                     }
                 }
@@ -466,7 +470,7 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
                         if (videoView == null) return;
                         LogUtil.e("switchContentWithCid", "cid:" + cid);
                         WoTvUtil.getInstance().switchContent(videoView, cid, videoType, null,
-                                videoHisDao.getName(), mControlListener,1);
+                                videoHisDao.getName(), mControlListener, 1);
                     }
                 });
     }
@@ -485,10 +489,11 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
                     limit(1).findAsync(AdvertsCodeDao.class).listen(new FindMultiCallback<AdvertsCodeDao>() {
                 @Override
                 public void onFinish(List<AdvertsCodeDao> list) {
-                    if(list!=null && list.size()>0){
+                    if (list != null && list.size() > 0) {
                         AdvertsCodeDao codeDao = list.get(0);
                         if (codeDao != null && (!codeDao.getResourceUrl().equals(""))) {
-                            AdvertsUtil.getInstance().showByImageView(getActivity(), codeDao, ivCorner, ivColse, relCornor);
+                            AdvertsUtil.getInstance().showByImageView(getActivity(), codeDao,
+                                    ivCorner, ivColse, relCornor);
                         }
                     }
                 }
@@ -498,7 +503,7 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
 
 
     @Override
-    public void onStart () {
+    public void onStart() {
         super.onStart();
         if (videoView != null && (!isCodeFail)) {
 //            LogFactory.l().e("onStart");
@@ -507,7 +512,7 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
     }
 
     @Override
-    public void onPause () {
+    public void onPause() {
         super.onPause();
         if (videoView != null) {
 //            LogFactory.l().e("onPause");
@@ -536,7 +541,7 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
 //            LogFactory.l().i("event.VideoReStartEvent==" + event.isStart);
         if (event.isStart) {
             videoView.start();
-            payDialog.dismiss();
+            newVideoPayDialog.dismiss();
         }
     }
 
@@ -556,20 +561,23 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
 //        LogFactory.l().i("VideoPauseEvent==" + event.isPause);
         if (event.isPause && isShowDialog) {
             LitePalDb.setZkysDb();
-            LitePal.where("code =?", AdvertsTopics.CODE_VIDEO_DIALOG).limit(1).findAsync(AdvertsCodeDao.class).
+            LitePal.where("code =?", AdvertsTopics.CODE_VIDEO_DIALOG).limit(1).findAsync
+                    (AdvertsCodeDao.class).
                     listen(new FindMultiCallback<AdvertsCodeDao>() {
                         @Override
                         public void onFinish(List<AdvertsCodeDao> list) {
-                            if(list!=null && list.size()>0){
+                            if (list != null && list.size() > 0) {
                                 AdvertsCodeDao codeDao = list.get(0);
                                 try {
                                     if (videoOrImageDialog == null) {
-                                        videoOrImageDialog = new VideoOrImageDialog(getActivity(), R.style.dialog);
-                                        if (codeDao != null ){
-                                            AdvertsUtil.getInstance().showVideoDialog(codeDao, videoOrImageDialog);
+                                        videoOrImageDialog = new VideoOrImageDialog(getActivity()
+                                                , R.style.dialog);
+                                        if (codeDao != null) {
+                                            AdvertsUtil.getInstance().showVideoDialog(codeDao,
+                                                    videoOrImageDialog);
                                         }
                                     } else {
-                                        if(codeDao != null && codeDao.getCloseType()==2){
+                                        if (codeDao != null && codeDao.getCloseType() == 2) {
                                             videoOrImageDialog.closeBySelf(codeDao.getSecond());
                                         }
                                         videoOrImageDialog.show();
@@ -615,62 +623,12 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
                 });
     }
 
-    /**
-     * 查询支付信息
-     */
-    private void setPayPackageList() {
-        Map<String, String> params = new HashMap();
-        String iccid = MobileInfoUtil.getIMEI(getContext());
-        params.put("code", iccid);
-        OkGo.<String>post(UrlUtil.getGetDeviceStatus())
-                .tag(this)
-                .params("code", iccid)
-                .execute(new StringCallback() {
-                    @Override
-                    public void onSuccess(Response<String> response) {
-                        String body = response.body();
-                        LogUtil.d("body:%s", body);
-                        try {
-                            JSONObject jsonObject = new JSONObject(body).getJSONObject("data");
 
-                            int status = jsonObject.optInt("status");
-                            int isConvention = jsonObject.optInt("isConvention");
-                            //status 1 没有租用
-                            /*
-                            * if (status == 1 || contentStatus != 2 || contentStatus != 3) {
-                                showPayDialog(isConvention);
-                            }
-                            * */
-                            if (status == 1 || (jsonObject.getJSONObject("data").optInt
-                                    ("status")
-                                    != 2 && jsonObject.getJSONObject("data").optInt("status") !=
-                                    3)) {
-                                showPayDialog(isConvention);
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-
-                        }
-                    }
-
-                    @Override
-                    public void onError(Response<String> response) {
-                        super.onError(response);
-                        LogUtil.d(response.body());
-
-                    }
-                });
-    }
 
     /**
      * 展示支付信息
-     *
-     * @param isConvention
      */
-    private VideoPayDialog payDialog;
-
-    private void showPayDialog(int isConvention) {
+    private void showPayDialog() {
         //暂停播放
         if (videoView != null) {
             videoView.pause();
@@ -686,71 +644,37 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
         LitePal.where("taskType =?", "1").limit(1).findAsync(AdvertsCodeDao.class).listen(new FindMultiCallback<AdvertsCodeDao>() {
             @Override
             public void onFinish(List<AdvertsCodeDao> list) {
-                if(list!=null && list.size()>0){
+                if (list != null && list.size() > 0) {
                     AdvertsCodeDao codeDao = list.get(0);
                     if (codeDao != null && (!codeDao.getTaskUrl().equals(""))) {
-                        dialogType=0;
-                    }else {
-                        dialogType=1;
+                        dialogType = 0;
+                    } else {
+                        dialogType = 1;
                     }
                 }
             }
         });
-        if(activeInfo!=null){
-            mPresenter.getComboList(activeInfo.getHospitalId(),activeInfo.getDeptId());
+        if (activeInfo != null) {
+            mPresenter.getComboList(activeInfo.getHospitalId(), activeInfo.getDeptId());
         }
-
-       /* payDialog = new VideoPayDialog(getActivity(), R.style.DialogFullscreen,dialogType, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.ivClose:
-                    case R.id.ivClose2:
-                        pop();
-                        isShowDialog=false;
-                        payDialog.dismiss();
-                        break;
-
-                    case R.id.tvHelp:
-                        payDialog.dismiss();
-                        startForResult(new VideoHelperFragment(), 1001);
-                        break;
-
-                    case R.id.btPay:
-                        payDialog.setPay();
-                        payDialog.setQrde();
-                        break;
-                    case R.id.tv_login:
-                        payDialog.dismiss();
-                        goToPublicFragment();
-                        break;
-                }
-            }
-        });
-        payDialog.setCanceledOnTouchOutside(false);
-        payDialog.show();*/
     }
-
 
 
     @Override
     public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
         super.onFragmentResult(requestCode, resultCode, data);
         if (requestCode == 1001) {
-            payDialog.show();
-        }else if(requestCode==1002){
-            if(resultCode==RESULT_OK){
+            newVideoPayDialog.show();
+        } else if (requestCode == 1002) {
+            if (resultCode == RESULT_OK) {
                 videoView.start();
-                payDialog.dismiss();
-            }else {
-                payDialog.show();
+                newVideoPayDialog.dismiss();
+            } else {
+                newVideoPayDialog.show();
             }
         }
     }
 
-    private void goToPublicFragment() {
-        startForResult(new PublicNumFragment(),1002);
-    }
 
     /**
      * 轮询查询用户支付信息,8s一次,轮询20次
@@ -765,7 +689,7 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        intervalSLOrder();
+                        mPresenter.intervalSLOrder();
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -784,66 +708,6 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
                 });
     }
 
-    /**
-     * 轮播查询订单
-     */
-    private void intervalSLOrder() {
-        Map<String, String> params = new HashMap();
-        String iccid = MobileInfoUtil.getIMEI(getContext());
-        params.put("code", iccid);
-        OkGo.<String>post(UrlUtil.getGetDeviceStatus())
-                .tag(this)
-                .params("code", iccid)
-                .execute(new StringCallback() {
-                    @Override
-                    public void onSuccess(Response<String> response) {
-                        String body = response.body();
-                        LogUtil.d("body:%s", body);
-                        try {
-                            JSONObject jsonObject = new JSONObject(body).getJSONObject("data");
-                            int status = jsonObject.optInt("status");
-                            //status 1 没有租用
-                            //第二层data 1等待支付 2正在租用 3正在逾期 4已完成 5已取消
-                            if (status == 0) { //租用状态看看是否已过期
-                                if (jsonObject.getJSONObject("data").getInt("status") == 2) {
-                                    String expire_time = jsonObject.getJSONObject("data")
-                                            .optString("expire_time");
-                                    boolean isValid = DateUtil.isValid
-                                            (expire_time);
-                                    if (isValid && !PayUtils.isValid(PayEntity
-                                            .ORDER_TYPE_VIDEO)) {
-                                        PayEntity payEntity = new PayEntity(PayEntity
-                                                .ORDER_TYPE_VIDEO, expire_time);
-                                        PayUtils.setPaied(payEntity);
-                                        EventBus.getDefault().post(new VideoEvent(VideoEvent
-                                                .RESUME));
-                                        EventBus.getDefault().post(new PayEvent(PayEntity
-                                                .ORDER_TYPE_VIDEO));
-                                        RxUtil.closeDisposable(disposableSlPay);
-                                        if (videoOrImageDialog != null && videoOrImageDialog
-                                                .isShowing()) {
-                                            videoOrImageDialog.dismiss();
-                                        }
-                                        if(payDialog!=null&&payDialog.isShowing()){
-                                            payDialog.dismiss();
-                                        }
-                                    }
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onError(Response<String> response) {
-                        super.onError(response);
-                        LogUtil.d(response.body());
-
-                    }
-                });
-
-    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(VideoEvent event) {
@@ -869,8 +733,8 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
                 if (videoOrImageDialog != null && videoOrImageDialog.isShowing()) {
                     videoOrImageDialog.dismiss();
                 }
-                if(payDialog!=null&&payDialog.isShowing()){
-                    payDialog.dismiss();
+                if (newVideoPayDialog != null && newVideoPayDialog.isShowing()) {
+                    newVideoPayDialog.dismiss();
                 }
                 videoView.start();
                 break;
@@ -898,8 +762,10 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
     @Override
     public void onDestroy() {
         try {
-            VideoService.getInstance().addVideoCount(videoHisDao.getVideoId() + "",videoHisDao.getCid(), videoHisDao.getName(), startTime, System.currentTimeMillis());
-            VideoService.getInstance().addVideoInfoDb(videoHisDao.getVideoId() + "",videoHisDao.getCid(), videoHisDao.getName(), startTime, System.currentTimeMillis());
+            VideoService.getInstance().addVideoCount(videoHisDao.getVideoId() + "", videoHisDao
+                    .getCid(), videoHisDao.getName(), startTime, System.currentTimeMillis());
+            VideoService.getInstance().addVideoInfoDb(videoHisDao.getVideoId() + "", videoHisDao
+                    .getCid(), videoHisDao.getName(), startTime, System.currentTimeMillis());
             if (handler != null) {
                 handler.removeMessages(SHOW_PAY_DIALOG);
                 handler.removeMessages(0x01);
@@ -925,14 +791,19 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
                 PriceBean priceBean = gson.fromJson(data, PriceBean.class);
                 priceList = priceBean.getData();
 
-                newVideoPayDialog = new NewVideoPayDialog(getActivity(),R.style.DialogFullscreen,dialogType,priceList,new View.OnClickListener() {
+                newVideoPayDialog = new NewVideoPayDialog(getActivity(), R.style
+                        .DialogFullscreen, dialogType, priceList, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         switch (v.getId()) {
                             case R.id.iv_close:
                                 pop();
-                                isShowDialog=false;
+                                isShowDialog = false;
                                 newVideoPayDialog.dismiss();
+                                break;
+                            case R.id.btn_code:
+                                newVideoPayDialog.dismiss();
+                                showPassDialog();
                                 break;
                         }
                     }
@@ -940,13 +811,117 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
                 newVideoPayDialog.setCanceledOnTouchOutside(false);
                 newVideoPayDialog.show();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void orderCreate(String data) {
+    public void verfycode(String response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            if (jsonObject.optInt("code") == 200) {
+                showToast("验证码验证成功");
+                isPaySuccess = true;
+                popEnterPassword.dismiss();
+                videoView.start();
+            } else {
+                isPaySuccess = false;
+                showToast("验证码验证失败");
+            }
+            if (popEnterPassword.isShowing())
+                popEnterPassword.dismiss();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
+    @Override
+    public void verfycodeError() {
+        showToast("网络错误,请重试");
+    }
+
+    @Override
+    public void setPayPackageList(String data) {
+        try {
+            JSONObject jsonObject = new JSONObject(data);
+            String objdata = jsonObject.optString("data");
+            JSONObject obj = new JSONObject(objdata);
+            int status = obj.optInt("status");
+            if(status==0){
+                String secondData = obj.optString("data");
+                JSONObject secondObj = new JSONObject(secondData);
+                if (secondObj.optInt("status") != 2 && secondObj.optInt("status") != 3) {
+                    showPayDialog();
+                }
+            }else {
+                showPayDialog();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+
+        }
+    }
+
+    @Override
+    public void intervalSLOrder(String data) {
+        try {
+            JSONObject jsonObject = new JSONObject(data);
+            String objdata = jsonObject.optString("data");
+            JSONObject obj = new JSONObject(objdata);
+            int status = obj.optInt("status");
+            //status 1 没有租用
+            //第二层data 1等待支付 2正在租用 3正在逾期 4已完成 5已取消
+            if (status == 0) { //租用状态看看是否已过期
+                String secondData = obj.optString("data");
+                JSONObject secondObj = new JSONObject(secondData);
+                if (secondObj.optInt("status") == 2) {
+                    String expire_time = secondObj.optString("expire_time");
+                    boolean isValid = DateUtil.isValid(expire_time);
+                    if (isValid && !PayUtils.isValid(PayEntity.ORDER_TYPE_VIDEO)) {
+                        PayEntity payEntity = new PayEntity(PayEntity.ORDER_TYPE_VIDEO,
+                                expire_time);
+                        PayUtils.setPaied(payEntity);
+                        EventBus.getDefault().post(new VideoEvent(VideoEvent.RESUME));
+                        EventBus.getDefault().post(new PayEvent(PayEntity.ORDER_TYPE_VIDEO));
+                        RxUtil.closeDisposable(disposableSlPay);
+                        if (videoOrImageDialog != null && videoOrImageDialog.isShowing()) {
+                            videoOrImageDialog.dismiss();
+                        }
+                        if (newVideoPayDialog != null && newVideoPayDialog.isShowing()) {
+                            newVideoPayDialog.dismiss();
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    //输入验证码框
+    private void showPassDialog() {
+        popEnterPassword = new PopEnterPassword(getActivity());
+        // 显示窗口
+        popEnterPassword.showAtLocation(getActivity().findViewById(R.id.rel_video_play),
+                Gravity.CENTER, 0, 0); // 设置layout在PopupWindow中显示的位置
+        popEnterPassword.setOutsideTouchable(false);
+        popEnterPassword.setFocusable(false);
+        popEnterPassword.setTouchable(true);
+        popEnterPassword.setOnPassFinish(new OnPasswordFinish() {
+            @Override
+            public void passwordFinish(String password) {
+                mPresenter.verfycode(password);
+            }
+        });
+        popEnterPassword.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                if (!isPaySuccess) {
+                    newVideoPayDialog.show();
+                }
+            }
+        });
     }
 }

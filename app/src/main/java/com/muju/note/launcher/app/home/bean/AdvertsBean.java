@@ -54,6 +54,15 @@ public class AdvertsBean implements Serializable {
     private String code;
     private String taskUrl ;
     private int  taskType;
+    private int wxType;
+
+    public int getWxType() {
+        return wxType;
+    }
+
+    public void setWxType(int wxType) {
+        this.wxType = wxType;
+    }
 
     public String getTaskUrl() {
         return taskUrl;

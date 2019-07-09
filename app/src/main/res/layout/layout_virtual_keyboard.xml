@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="@dimen/px390">
 
     <!-- 输入键盘 -->
     <GridView
         android:id="@+id/gv_keybord"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/px330"
         android:layout_alignParentBottom="true"
-        android:background="#FFFFFF"
-        android:horizontalSpacing="1px"
+        android:background="#BDBDBD"
+        android:horizontalSpacing="7px"
         android:numColumns="3"
-        android:verticalSpacing="1px" />
+        android:verticalSpacing="7px" />
 
     <View
         android:id="@+id/line"
@@ -24,9 +24,9 @@
     <RelativeLayout
         android:id="@+id/layoutBack"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/px60"
         android:layout_above="@id/line"
-        android:background="#f5f5f5"
+        android:background="#BDBDBD"
         android:padding="10dp">
 
         <ImageView
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@mipmap/keyboard_back_img" />
+             />
 
     </RelativeLayout>
 

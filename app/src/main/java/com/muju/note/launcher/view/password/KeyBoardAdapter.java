@@ -61,7 +61,7 @@ public class KeyBoardAdapter extends BaseAdapter {
             viewHolder.imgDelete.setVisibility(View.INVISIBLE);
             viewHolder.btnKey.setVisibility(View.VISIBLE);
             viewHolder.btnKey.setText(valueList.get(position).get("name"));
-            viewHolder.btnKey.setBackgroundColor(Color.parseColor("#e0e0e0"));
+            viewHolder.btnKey.setBackgroundColor(Color.parseColor("#FFFFFF"));
         } else if (position == 11) {
             viewHolder.btnKey.setBackgroundResource(R.mipmap.keyboard_delete_img);
             viewHolder.imgDelete.setVisibility(View.VISIBLE);

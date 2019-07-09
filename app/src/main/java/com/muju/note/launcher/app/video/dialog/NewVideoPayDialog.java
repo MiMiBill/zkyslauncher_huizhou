@@ -90,7 +90,7 @@ public class NewVideoPayDialog extends Dialog {
     private int type = 0;
     private Context context;
     private int selectIndexId=-1;
-    private int selectPosition=1;
+    private int selectPosition=0;
     private double payPrice=0.0;
     private View.OnClickListener listener;
     private List<PriceBean.DataBean> priceList=new ArrayList<>();
@@ -121,6 +121,7 @@ public class NewVideoPayDialog extends Dialog {
 
 
         ivClose.setOnClickListener(listener);
+        btnCode.setOnClickListener(listener);
     }
 
 
@@ -149,6 +150,7 @@ public class NewVideoPayDialog extends Dialog {
 
     private void initRecyclerview() {
         videoPriceAdapter = new VideoPriceAdapter(context,priceList);
+        priceList.get(0).setCheck(true);
         GridLayoutManager gridLayoutManager=new GridLayoutManager(LauncherApplication.getContext(), 3);
         recyclerview.setLayoutManager(gridLayoutManager);
         recyclerview.setAdapter(videoPriceAdapter);
@@ -251,7 +253,7 @@ public class NewVideoPayDialog extends Dialog {
             llyTaskCodeUser.setVisibility(View.VISIBLE);
         }
         LitePalDb.setZkysDb();
-        LitePal.where("taskType =?","1").limit(1).findAsync(AdvertsCodeDao.class).listen(new FindMultiCallback<AdvertsCodeDao>() {
+        LitePal.where("taskType =? and wxType =?","1",type+"").limit(1).findAsync(AdvertsCodeDao.class).listen(new FindMultiCallback<AdvertsCodeDao>() {
             @Override
             public void onFinish(List<AdvertsCodeDao> list) {
                 if(list!=null && list.size()>0){
@@ -269,6 +271,7 @@ public class NewVideoPayDialog extends Dialog {
                 }
             }
         });
+
     }
 
 

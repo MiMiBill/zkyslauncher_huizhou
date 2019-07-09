@@ -16,8 +16,11 @@ import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.ImageViewState;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.muju.note.launcher.R;
+import com.muju.note.launcher.app.video.event.VideoCodeFailEvent;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.util.adverts.AdvertsUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 
@@ -96,7 +99,7 @@ public class LargePicFragment extends BaseFragment {
                 currentTime-startTime);
         AdvertsUtil.getInstance().addDataInfo(advertId, AdvertsUtil.TAG_BROWSETIME,
                 startTime, currentTime);
-//        EventBus.getDefault().post(new VideoCodeFailEvent(true));
+        EventBus.getDefault().post(new VideoCodeFailEvent(true));
         pop();
     }
 

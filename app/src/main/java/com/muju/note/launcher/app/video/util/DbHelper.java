@@ -259,6 +259,7 @@ public class DbHelper {
                                 taskUrl="";
                             }
                             advertsCodeDao.setTaskType(adBean.getTaskType());
+                            advertsCodeDao.setWxType(adBean.getWxType());
                             advertsCodeDao.setCloseType(adBean.getCloseType());
                             advertsCodeDao.setPubCode(pubCode);
                             advertsCodeDao.setSecond(adBean.getSecond());

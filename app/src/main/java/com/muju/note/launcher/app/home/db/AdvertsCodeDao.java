@@ -27,6 +27,7 @@ public class AdvertsCodeDao extends LitePalSupport implements Serializable {
     private String pubCode;   //公众号回复码
     private String taskUrl ;
     private int  taskType;
+    private int wxType;
 
     /**
      * 新增数据
@@ -38,6 +39,13 @@ public class AdvertsCodeDao extends LitePalSupport implements Serializable {
         dao.save();
     }
 
+    public int getWxType() {
+        return wxType;
+    }
+
+    public void setWxType(int wxType) {
+        this.wxType = wxType;
+    }
 
     public String getPubCode() {
         return pubCode;

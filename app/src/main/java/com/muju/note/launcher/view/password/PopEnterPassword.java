@@ -41,7 +41,7 @@ public class PopEnterPassword extends PopupWindow {
             @Override
             public void inputFinish(String password) {
 
-                dismiss();
+//                dismiss();
                 onPasswordFinish.passwordFinish(password);
             }
         });
@@ -55,12 +55,12 @@ public class PopEnterPassword extends PopupWindow {
         });
 
         // 监听键盘上方的返回
-        pwdView.getVirtualKeyboardView().getLayoutBack().setOnClickListener(new View.OnClickListener() {
+       /* pwdView.getVirtualKeyboardView().getLayoutBack().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
             }
-        });
+        });*/
 
         // 设置SelectPicPopupWindow的View
         this.setContentView(mMenuView);

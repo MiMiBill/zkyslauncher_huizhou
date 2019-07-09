@@ -2,13 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#bdbdbd">
+    android:background="#FFFFFF">
 
     <LinearLayout
         android:id="@+id/linear_pass"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#bdbdbd"
+        android:layout_height="@dimen/px190"
+        android:background="#FFFFFF"
         android:orientation="vertical">
 
         <LinearLayout
@@ -306,11 +306,17 @@
 
     </LinearLayout>
 
+
     <com.muju.note.launcher.view.password.VirtualKeyboardView
         android:id="@+id/virtualKeyboardView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/px330"
+        android:background="#E8E8E8"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom" />
-
+    <View
+        android:background="#E8E8E8"
+        android:layout_above="@id/virtualKeyboardView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px60"/>
 </RelativeLayout>

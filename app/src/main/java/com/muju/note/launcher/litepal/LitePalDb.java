@@ -30,8 +30,8 @@ import org.litepal.LitePalDB;
 
 public class LitePalDb {
 
-    public static final LitePalDB zkysDataDb=new LitePalDB("zkys-data",36);
-    public static final LitePalDB zkysDb=new LitePalDB("zkys",36);
+    public static final LitePalDB zkysDataDb=new LitePalDB("zkys-data",37);
+    public static final LitePalDB zkysDb=new LitePalDB("zkys",37);
 
     public static final String DBNAME_ZKYS_DATA="/sdcard/zkysdb/zkys-data.db";
 

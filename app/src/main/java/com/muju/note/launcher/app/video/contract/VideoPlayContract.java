@@ -8,13 +8,18 @@ public interface VideoPlayContract {
 
     interface View extends IView {
         void getComboList(String data);
-        void orderCreate(String data);
+        void verfycode(String response);
+        void verfycodeError();
+        void setPayPackageList(String data);
+        void intervalSLOrder(String data);
     }
 
 
     interface Presenter extends IPresenter<VideoPlayContract.View> {
         void getComboList(int hospitalId,int deptId);
-        void orderCreate(int comboId, String imei,int payType);
+        void verfycode(String code);
+        void setPayPackageList();
+        void intervalSLOrder();
     }
 
 }
