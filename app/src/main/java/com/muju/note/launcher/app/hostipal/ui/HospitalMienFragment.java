@@ -162,6 +162,12 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
             getMienNull();
             return;
         }
+        wvMien.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return true;
+            }
+        });
         wvMien.loadDataWithBaseURL(null, data, "text/html", "UTF-8", null);
     }
 }

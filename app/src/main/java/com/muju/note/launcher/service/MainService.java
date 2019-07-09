@@ -93,7 +93,7 @@ public class MainService extends Service {
                             // 获取定位信息
                             LocationService.getInstance().start();
 
-                            //检查医院宣教视频数据
+                            //检查医院风采数据
                             MienService.getInstance().getMienInfo();
 
                             // 检查影视数据

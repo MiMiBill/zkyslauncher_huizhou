@@ -1,10 +1,12 @@
 package com.muju.note.launcher.service.operation;
 
+import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.service.config.ConfigService;
 import com.muju.note.launcher.service.updatedata.UpdateDataService;
 import com.muju.note.launcher.service.uploaddata.UpLoadDataService;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
+import com.muju.note.launcher.util.update.PackageUtils;
 
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
@@ -72,6 +74,10 @@ public class OneMinuteDisposable {
 
     private void runStruct() {
         try {
+
+            // 设置应用为最上层
+            PackageUtils.setTopApp(LauncherApplication.getContext());
+
             // 查看配置文件是否需要有执行的操作
             ConfigService.getInstance().playConfig();
 
