@@ -253,6 +253,10 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
             popEnterPassword.dismiss();
 //        videoView.unregisterVideoTouchEventObserver(observer);
         EventBus.getDefault().post(new VideoNoLockEvent(true));
+
+        if(videoView!=null){
+            videoView.pause();
+        }
     }
 
     /**
