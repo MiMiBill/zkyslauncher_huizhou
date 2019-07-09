@@ -70,8 +70,6 @@ public class VoiceFragment extends BaseFragment {
         maxVoice = SPUtil.getLong(SpTopics.PAD_CONFIG_VOLUME_RATE);
         rectProgressVoice.setMax(SystemUtils.getMaxVolume(LauncherApplication.getContext()));
         int currentVolume = SystemUtils.getCurrentVolume(LauncherApplication.getContext());
-//        LogFactory.l().i("maxVoice===" + maxVoice);
-//        LogFactory.l().i("currentVolume===" + currentVolume);
         rectProgressVoice.setProgress(currentVolume);
         rectProgressLight.setProgress(SystemUtils.getScreenBrightness());
         rectProgressLight.setChangedListener(new RectProgress.OnProgressChangedListener() {
@@ -155,13 +153,18 @@ public class VoiceFragment extends BaseFragment {
     public static void saveBrightness(ContentResolver resolver, int brightness) {
         //改变系统的亮度值
         //设置为手动调节模式
-        Settings.System.putInt(resolver, Settings.System.SCREEN_BRIGHTNESS_MODE,
-                Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
-        //保存到系统中
-        Uri uri = Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS);
-        Settings.System.putInt(resolver, Settings.System.SCREEN_BRIGHTNESS,
-                brightness);
-        resolver.notifyChange(uri, null);
+        try {
+            Settings.System.putInt(resolver, Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
+            if(brightness<10){
+                brightness=10;
+            }
+            //保存到系统中
+            Uri uri = Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS);
+            Settings.System.putInt(resolver, Settings.System.SCREEN_BRIGHTNESS, brightness);
+            resolver.notifyChange(uri, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

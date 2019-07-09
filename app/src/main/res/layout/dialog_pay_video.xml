@@ -5,21 +5,20 @@
     android:layout_height="wrap_content"
     android:id="@+id/rel_dialog"
     >
-
     <LinearLayout
         android:id="@+id/lly_pay"
-        android:background="@drawable/pay_shape_yellow_bg"
         android:layout_marginTop="@dimen/px125"
         android:layout_width="@dimen/px700"
         android:orientation="vertical"
+        android:gravity="center"
         android:layout_height="@dimen/px420">
         <LinearLayout
             android:visibility="gone"
             android:id="@+id/lly_pay_rent"
             android:orientation="vertical"
             android:background="@color/white"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="@dimen/px650"
+            android:layout_height="@dimen/px370">
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_marginTop="@dimen/px108"
@@ -144,9 +143,9 @@
             android:visibility="gone"
             android:background="@color/white"
             android:id="@+id/lly_pay_task"
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/px650"
             android:orientation="horizontal"
-            android:layout_height="match_parent">
+            android:layout_height="@dimen/px370">
             <LinearLayout
                 android:layout_width="@dimen/px296"
                 android:orientation="vertical"
@@ -383,8 +382,8 @@
             android:orientation="horizontal"
             android:gravity="center"
             android:background="@color/white"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="@dimen/px650"
+            android:layout_height="@dimen/px370">
             <ImageView
                 android:layout_marginLeft="@dimen/px130"
                 android:id="@+id/iv_pay_code"
@@ -416,8 +415,8 @@
             android:visibility="gone"
             android:background="@color/white"
             android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="@dimen/px650"
+            android:layout_height="@dimen/px370">
             <ImageView
                 android:id="@+id/iv_xcx_code"
                 android:layout_width="@dimen/px234"
@@ -436,6 +435,13 @@
         </LinearLayout>
 
         </LinearLayout>
+    <RelativeLayout
+        android:background="@drawable/pay_shape_yellow_bg"
+        android:layout_width="@dimen/px700"
+        android:layout_marginTop="@dimen/px125"
+        android:layout_height="@dimen/px420">
+
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/iv_type"

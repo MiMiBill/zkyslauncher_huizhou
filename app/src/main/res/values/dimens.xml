@@ -112,6 +112,7 @@
     <dimen name="px348">348px</dimen>
     <dimen name="px350">350px</dimen>
     <dimen name="px358">358px</dimen>
+    <dimen name="px370">370px</dimen>
     <dimen name="px378">378px</dimen>
     <dimen name="px380">380px</dimen>
     <dimen name="px390">390px</dimen>
@@ -126,6 +127,7 @@
     <dimen name="px514">514px</dimen>
     <dimen name="px550">550px</dimen>
     <dimen name="px600">600px</dimen>
+    <dimen name="px650">650px</dimen>
     <dimen name="px700">700px</dimen>
     <dimen name="px786">786px</dimen>
     <dimen name="px444">444px</dimen>
