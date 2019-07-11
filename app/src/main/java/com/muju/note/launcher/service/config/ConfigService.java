@@ -66,6 +66,8 @@ public class ConfigService {
     private static final String CLOSE_PAD = "closePad";
     private static final String OPEN_PAD = "openPad";
 
+    public static int VIDEO_PAY_TIME=0;
+
     public void start() {
         getPadConfigs();
     }
@@ -133,6 +135,10 @@ public class ConfigService {
 
                             case "launch":
                                 lockScreen(dao.getPadConfigs());
+                                break;
+
+                            case "freeTime":
+                                setVideoPayTime(dao);
                                 break;
                         }
                     }
@@ -275,6 +281,27 @@ public class ConfigService {
             return;
         }
         DownLoadService.getInstance().downLoadHaseCode(path,".mp4");
+    }
+
+
+    /**
+     *  设置影视免费时长
+     * @param dao
+     */
+    private void setVideoPayTime(PadConfigDao dao){
+        try {
+            if(dao==null||dao.getPadConfigs()==null||dao.getPadConfigs().size()<=0){
+                LogUtil.d(TAG,"影视时长配置为空");
+                return;
+            }
+            PadConfigSubDao subDao=dao.getPadConfigs().get(0);
+            if(subDao==null){
+                return;
+            }
+            VIDEO_PAY_TIME=Integer.parseInt(subDao.getContent());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 }

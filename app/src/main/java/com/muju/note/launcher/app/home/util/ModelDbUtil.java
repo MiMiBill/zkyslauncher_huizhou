@@ -14,6 +14,8 @@ import org.litepal.crud.callback.FindCallback;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  *  模块数据统计
@@ -38,19 +40,25 @@ public class ModelDbUtil {
      * @param endTime
      */
     public void modelCount(final String className, final long startTime, final long endTime){
-        final String tagName=getTagName(className);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date d = new Date(System.currentTimeMillis());
-        final String date = format.format(d);
-        LitePalDb.setZkysDb();
-        LitePal.where("modelTag=? and date=? and modelName=?",tagName,date,className).findFirstAsync(ModelCountDao.class).listen(new FindCallback<ModelCountDao>() {
+        ExecutorService service= Executors.newSingleThreadExecutor();
+        service.execute(new Runnable() {
             @Override
-            public void onFinish(ModelCountDao modelCountDao) {
-                if(modelCountDao==null){
-                    addCount(tagName,className,date,startTime,endTime);
-                }else {
-                    updateCount(modelCountDao,startTime,endTime);
-                }
+            public void run() {
+                final String tagName=getTagName(className);
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                Date d = new Date(System.currentTimeMillis());
+                final String date = format.format(d);
+                LitePalDb.setZkysDb();
+                LitePal.where("modelTag=? and date=? and modelName=?",tagName,date,className).findFirstAsync(ModelCountDao.class).listen(new FindCallback<ModelCountDao>() {
+                    @Override
+                    public void onFinish(ModelCountDao modelCountDao) {
+                        if(modelCountDao==null){
+                            addCount(tagName,className,date,startTime,endTime);
+                        }else {
+                            updateCount(modelCountDao,startTime,endTime);
+                        }
+                    }
+                });
             }
         });
     }

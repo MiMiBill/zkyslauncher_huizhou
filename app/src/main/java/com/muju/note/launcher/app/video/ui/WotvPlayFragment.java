@@ -40,6 +40,7 @@ import com.muju.note.launcher.app.video.util.WoTvUtil;
 import com.muju.note.launcher.app.video.util.wotv.ExpandVideoView2;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.litepal.LitePalDb;
+import com.muju.note.launcher.service.config.ConfigService;
 import com.muju.note.launcher.topics.AdvertsTopics;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.DateUtil;
@@ -200,6 +201,15 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
             VideoService.getInstance().addVideoHisInfo(videoHisDao);
 
             verifyPlayingStatus();
+
+            // 设置免费时长事件
+            if(ConfigService.VIDEO_PAY_TIME==0){
+                pay_cuntDown = 60 * 1000 * 16;
+            }else {
+                pay_cuntDown=(ConfigService.VIDEO_PAY_TIME*60*1000);
+            }
+
+            LogUtil.d(TAG,"免费影视时长："+pay_cuntDown);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -612,8 +622,8 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
                             if (videoView == null) {
                                 return;
                             }
-                            if (videoView.getPlayedDuration() != 0 && videoView
-                                    .getCurrentPosition() != 0) {
+
+                            if (videoView.getPlayedDuration() != 0 && videoView.getCurrentPosition() != 0) {
                                 if (videoView.getCurrentPosition() > pay_cuntDown || videoView
                                         .getPlayedDuration() > pay_cuntDown) {
                                     handler.sendEmptyMessage(SHOW_PAY_DIALOG);
