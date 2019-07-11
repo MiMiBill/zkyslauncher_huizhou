@@ -618,7 +618,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     private void menuClick(HomeMenuDao dao) {
         switch (dao.getTab()) {
             case "风采":
-                start(new HospitalMienFragment());
+                start(HospitalMienFragment.newInstance());
                 break;
             case "宣教":
                 start(new HosPitalMissionFragment());

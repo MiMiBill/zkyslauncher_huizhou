@@ -527,11 +527,10 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
 
     @Override
     public void onPause() {
-        super.onPause();
         if (videoView != null) {
-//            LogFactory.l().e("onPause");
             videoView.onPause();
         }
+        super.onPause();
     }
 
 
@@ -743,8 +742,10 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
 
     @Override
     public void onStop() {
+        if(videoView!=null) {
+            videoView.onStop();
+        }
         super.onStop();
-        videoView.onStop();
     }
 
     @Override
