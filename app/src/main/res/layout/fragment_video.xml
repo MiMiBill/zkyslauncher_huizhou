@@ -108,5 +108,38 @@
             android:textColor="@color/blue_gray"
             android:layout_marginTop="@dimen/px17"/>
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/vip_time_layout"
+        android:layout_width="@dimen/px177"
+        android:layout_height="51px"
+        android:visibility="gone"
+        android:layout_gravity="right|bottom"
+        android:layout_marginRight="50px"
+        android:layout_marginBottom="50px"
+        android:background="@mipmap/vip_weight_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        >
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="VIP"
+            android:layout_marginLeft="@dimen/px42"
+            android:layout_marginTop="@dimen/px5"
+            android:textColor="@android:color/black"
+            android:textSize="18px" />
+
+        <TextView
+            android:id="@+id/vip_time"
+            android:layout_marginTop="@dimen/px5"
+            android:layout_marginLeft="@dimen/px8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="18px" />
+
+    </LinearLayout>
 </RelativeLayout>

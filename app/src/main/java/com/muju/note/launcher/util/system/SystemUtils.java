@@ -10,6 +10,7 @@ import android.provider.Settings;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.broadcast.ScreenOffAdminReceiver;
 import com.muju.note.launcher.topics.SpTopics;
+import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.sp.SPUtil;
 

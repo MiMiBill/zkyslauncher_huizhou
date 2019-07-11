@@ -1,5 +1,6 @@
 package com.muju.note.launcher.app.video.ui;
 
+import android.os.CountDownTimer;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -9,16 +10,25 @@ import android.widget.TextView;
 
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.video.adapter.VideoPageAdapter;
+import com.muju.note.launcher.app.video.bean.PayEntity;
+import com.muju.note.launcher.app.video.bean.PayEvent;
 import com.muju.note.launcher.app.video.contract.VideoContract;
+import com.muju.note.launcher.app.video.db.PayInfoDao;
 import com.muju.note.launcher.app.video.db.VideoColumnsDao;
 import com.muju.note.launcher.app.video.event.VideoFinishEvent;
 import com.muju.note.launcher.app.video.presenter.VideoPresenter;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
+import com.muju.note.launcher.litepal.LitePalDb;
+import com.muju.note.launcher.util.DateUtil;
+import com.muju.note.launcher.util.FormatUtils;
+import com.muju.note.launcher.util.log.LogUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.litepal.LitePal;
+import org.litepal.crud.callback.FindMultiCallback;
 
 import java.util.List;
 
@@ -44,9 +54,12 @@ public class VideoFragment extends BaseFragment<VideoPresenter> implements View.
     TabLayout tabLayout;
     @BindView(R.id.tv_his)
     TextView tvHis;
-
-
+    @BindView(R.id.vip_time_layout)
+    LinearLayout vipTimeLayout;
+    private CountDownTimer countDownTimer;
     private VideoPageAdapter pageAdapter;
+    @BindView(R.id.vip_time)
+    TextView vipTime;
 
     public static VideoFragment getIntance() {
         if (videoContentFragment == null) {
@@ -90,7 +103,6 @@ public class VideoFragment extends BaseFragment<VideoPresenter> implements View.
             case R.id.tv_null:
                 pop();
                 break;
-
             case R.id.tv_his:
                 start(new VideoHisFragment());
                 break;
@@ -115,6 +127,7 @@ public class VideoFragment extends BaseFragment<VideoPresenter> implements View.
 
         // 设置tablayout选中字体大小
         setTabLayoutTextSize();
+        setVIPTime();
     }
 
     @Override
@@ -157,6 +170,78 @@ public class VideoFragment extends BaseFragment<VideoPresenter> implements View.
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+            countDownTimer = null;
+        }
     }
 
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(PayEvent event) {
+        LogUtil.e(TAG, event.getOrderType() + "");
+        if (event.getOrderType() == PayEntity.ORDER_TYPE_VIDEO || event.getOrderType() == PayEntity.ORDER_TYPE_VIDEO_PREMIUM) {
+            setVIPTime();
+        }
+    }
+
+    private void setVIPTime() {
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+            countDownTimer = null;
+        }
+
+        LitePalDb.setZkysDb();
+        LitePal.where("expireTime > 0").findAsync(PayInfoDao.class).listen(new FindMultiCallback<PayInfoDao>() {
+            @Override
+            public void onFinish(List<PayInfoDao> list) {
+                if(list!=null && list.size()>0){
+                    PayInfoDao payInfoDao = list.get(0);
+                    if(payInfoDao!=null && payInfoDao.getExpireTime()!=null){
+                        countDownTimer = new CountDownTimer(FormatUtils.FormatDateUtil.parseDate(payInfoDao.getExpireTime()).getTime() - System.currentTimeMillis(), 1000) {
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+                                if(vipTime!=null && millisUntilFinished>0){
+                                    vipTimeLayout.setVisibility(View.VISIBLE);
+                                    vipTime.setText(DateUtil.diffTime(millisUntilFinished));
+                                }
+                            }
+
+                            @Override
+                            public void onFinish() {
+                                vipTimeLayout.setVisibility(View.GONE);
+                            }
+                        };
+                        countDownTimer.start();
+                    }
+                }else {
+                    vipTimeLayout.setVisibility(View.GONE);
+                }
+            }
+        });
+
+
+
+       /* PayEntity entity = PayUtils.getPayEntity(PayEntity.ORDER_TYPE_VIDEO);
+        if (entity == null) {
+            vipTimeLayout.setVisibility(View.GONE);
+        } else {
+            countDownTimer = new CountDownTimer(FormatUtils.FormatDateUtil.parseDate(entity.getExpireTime()).getTime() - System.currentTimeMillis(), 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    if(vipTime!=null && millisUntilFinished>0){
+                        vipTimeLayout.setVisibility(View.VISIBLE);
+                        vipTime.setText(DateUtil.diffTime(millisUntilFinished));
+                    }
+                }
+
+                @Override
+                public void onFinish() {
+                    vipTimeLayout.setVisibility(View.GONE);
+                }
+            };
+            countDownTimer.start();
+        }*/
+
+    }
 }

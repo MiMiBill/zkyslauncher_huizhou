@@ -1,6 +1,5 @@
 package com.muju.note.launcher.app.video.ui;
 
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -24,6 +23,7 @@ import com.muju.note.launcher.app.video.bean.PayEvent;
 import com.muju.note.launcher.app.video.bean.PriceBean;
 import com.muju.note.launcher.app.video.bean.VideoEvent;
 import com.muju.note.launcher.app.video.contract.VideoPlayContract;
+import com.muju.note.launcher.app.video.db.PayInfoDao;
 import com.muju.note.launcher.app.video.db.VideoHisDao;
 import com.muju.note.launcher.app.video.dialog.NewVideoPayDialog;
 import com.muju.note.launcher.app.video.dialog.VideoOrImageDialog;
@@ -35,7 +35,7 @@ import com.muju.note.launcher.app.video.event.VideoReStartEvent;
 import com.muju.note.launcher.app.video.event.VideoStartEvent;
 import com.muju.note.launcher.app.video.presenter.VideoPlayPresenter;
 import com.muju.note.launcher.app.video.service.VideoService;
-import com.muju.note.launcher.app.video.util.PayUtils;
+import com.muju.note.launcher.app.video.util.DbHelper;
 import com.muju.note.launcher.app.video.util.WoTvUtil;
 import com.muju.note.launcher.app.video.util.wotv.ExpandVideoView2;
 import com.muju.note.launcher.base.BaseFragment;
@@ -257,6 +257,7 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
         if(videoView!=null){
             videoView.pause();
         }
+
     }
 
     /**
@@ -632,6 +633,8 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
      * 展示支付信息
      */
     private void showPayDialog() {
+        LitePalDb.setZkysDb();
+        LitePal.deleteAll(PayInfoDao.class);
         //暂停播放
         if (videoView != null) {
             videoView.pause();
@@ -659,22 +662,6 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
         });
         if (activeInfo != null) {
             mPresenter.getComboList(activeInfo.getHospitalId(), activeInfo.getDeptId());
-        }
-    }
-
-
-    @Override
-    public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
-        super.onFragmentResult(requestCode, resultCode, data);
-        if (requestCode == 1001) {
-            newVideoPayDialog.show();
-        } else if (requestCode == 1002) {
-            if (resultCode == RESULT_OK) {
-                videoView.start();
-                newVideoPayDialog.dismiss();
-            } else {
-                newVideoPayDialog.show();
-            }
         }
     }
 
@@ -854,13 +841,23 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
             if(status==0){
                 String secondData = obj.optString("data");
                 JSONObject secondObj = new JSONObject(secondData);
+                if (secondObj.optInt("status") == 2) {
+                    String expire_time = secondObj.optString("expire_time");
+                    boolean isValid = DateUtil.isValid(expire_time);
+                    if (isValid) {
+                        LitePalDb.setZkysDb();
+                        PayInfoDao payInfoDao=new PayInfoDao();
+                        payInfoDao.setExpireTime(expire_time);
+                        DbHelper.insertToVipData(LitePalDb.DBNAME_ZKYS,payInfoDao);
+                    }
+                }
                 if (secondObj.optInt("status") != 2 && secondObj.optInt("status") != 3) {
                     showPayDialog();
                 }
             }else {
                 showPayDialog();
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
         }
@@ -881,10 +878,15 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
                 if (secondObj.optInt("status") == 2) {
                     String expire_time = secondObj.optString("expire_time");
                     boolean isValid = DateUtil.isValid(expire_time);
-                    if (isValid && !PayUtils.isValid(PayEntity.ORDER_TYPE_VIDEO)) {
-                        PayEntity payEntity = new PayEntity(PayEntity.ORDER_TYPE_VIDEO,
-                                expire_time);
-                        PayUtils.setPaied(payEntity);
+//                    if (isValid && !PayUtils.isValid(PayEntity.ORDER_TYPE_VIDEO)) {
+                    if (isValid ) {
+//                        PayEntity payEntity = new PayEntity(PayEntity.ORDER_TYPE_VIDEO, expire_time);
+//                        PayUtils.setPaied(payEntity);
+                        LitePalDb.setZkysDb();
+                        PayInfoDao payInfoDao=new PayInfoDao();
+                        payInfoDao.setExpireTime(expire_time);
+                        DbHelper.insertToVipData(LitePalDb.DBNAME_ZKYS,payInfoDao);
+
                         EventBus.getDefault().post(new VideoEvent(VideoEvent.RESUME));
                         EventBus.getDefault().post(new PayEvent(PayEntity.ORDER_TYPE_VIDEO));
                         RxUtil.closeDisposable(disposableSlPay);

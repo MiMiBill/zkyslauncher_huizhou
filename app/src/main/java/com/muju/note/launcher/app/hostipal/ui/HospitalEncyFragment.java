@@ -286,7 +286,6 @@ public class HospitalEncyFragment extends BaseFragment<EncyPresenter> implements
         popupWindow.setOnClickListener(new SearchPopupWindow.OnClickListener() {
             @Override
             public void onClick(int position) {
-                String title = searchList.get(position).getTitle();
                 int searchId = searchList.get(position).getId();
                 mPresenter.queryEncyClopediaById(searchId);
             }

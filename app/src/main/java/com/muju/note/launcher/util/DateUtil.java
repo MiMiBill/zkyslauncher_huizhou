@@ -221,6 +221,40 @@ public class DateUtil {
                 return  "0小时";
             }
         }
-
     }
+
+
+    public static String diffTime(long diff) {
+        String d =  0 + ":" + 0 + ":" + 0 ;
+        String showHours="";
+        String showMinutes="";
+        String showSecond="";
+        try {
+            long hours = diff / (1000 * 60 * 60);
+            long minutes = (diff - hours * (1000 * 60 * 60)) / (1000 * 60);
+            long second = (diff - hours * (1000 * 60 * 60) - minutes * (1000 * 60)) / (1000);
+
+            if(hours<10){
+                showHours="0"+hours;
+            }else {
+                showHours=hours+" ";
+            }
+            if(minutes<10){
+                showMinutes="0"+minutes;
+            }else {
+                showMinutes=" "+minutes;
+            }
+            if(second<10){
+                showSecond="0"+second;
+            }else {
+                showSecond=" "+second;
+            }
+
+            d = showHours + ":" + showMinutes + ":" + showSecond;
+            return d;
+        } catch (Exception e) {
+        }
+        return d;
+    }
+
 }

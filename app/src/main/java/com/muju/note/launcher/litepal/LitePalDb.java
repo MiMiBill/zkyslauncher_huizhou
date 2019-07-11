@@ -14,6 +14,7 @@ import com.muju.note.launcher.app.hostipal.db.MienInfoDao;
 import com.muju.note.launcher.app.hostipal.db.MissionInfoDao;
 import com.muju.note.launcher.app.msg.db.CustomMessageDao;
 import com.muju.note.launcher.app.startUp.db.ActivitionDao;
+import com.muju.note.launcher.app.video.db.PayInfoDao;
 import com.muju.note.launcher.app.video.db.VideoColumnsDao;
 import com.muju.note.launcher.app.video.db.VideoHisDao;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
@@ -30,10 +31,11 @@ import org.litepal.LitePalDB;
 
 public class LitePalDb {
 
-    public static final LitePalDB zkysDataDb=new LitePalDB("zkys-data",37);
-    public static final LitePalDB zkysDb=new LitePalDB("zkys",37);
+    public static final LitePalDB zkysDataDb=new LitePalDB("zkys-data",38);
+    public static final LitePalDB zkysDb=new LitePalDB("zkys",38);
 
     public static final String DBNAME_ZKYS_DATA="/sdcard/zkysdb/zkys-data.db";
+    public static final String DBNAME_ZKYS="/sdcard/zkysdb/zkys.db";
 
     /**
      *  初始化数据库
@@ -89,6 +91,7 @@ public class LitePalDb {
         zkysDb.addClassName(HomeMenuDao.class.getName());
         zkysDb.addClassName(HomeMenuSubDao.class.getName());
         zkysDb.addClassName(ModelCountDao.class.getName());
+        zkysDb.addClassName(PayInfoDao.class.getName());
         LitePal.use(zkysDb);
     }
 

@@ -12,6 +12,7 @@ import com.muju.note.launcher.app.home.event.GetAdvertEvent;
 import com.muju.note.launcher.app.hostipal.db.InfoDao;
 import com.muju.note.launcher.app.hostipal.db.InfomationDao;
 import com.muju.note.launcher.app.startUp.event.StartCheckDataEvent;
+import com.muju.note.launcher.app.video.db.PayInfoDao;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
 import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.litepal.UpAdvertInfoDao;
@@ -471,6 +472,29 @@ public class DbHelper {
             }
         });
     }
+
+
+    /**
+     *  插入VIP时间
+     * @param dbPath
+     * @param dao
+     */
+    public static void insertToVipData(String dbPath, PayInfoDao dao) throws Exception{
+        try {
+            SQLiteDatabase database=getDataBase(dbPath);
+            ContentValues values=new ContentValues();
+            values.put("expireTime",dao.getExpireTime());
+            database.insert("PayInfoDao",null,values);
+            database.close();
+        }catch (Exception e){
+            e.printStackTrace();
+            LitePalDb.setZkysDb();
+            PayInfoDao infoDao=new PayInfoDao();
+            infoDao.setExpireTime("0");
+            infoDao.save();
+        }
+    }
+
 
     /**
      *  清除表数据

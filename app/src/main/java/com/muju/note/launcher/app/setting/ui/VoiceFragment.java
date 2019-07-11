@@ -1,10 +1,7 @@
 package com.muju.note.launcher.app.setting.ui;
 
-import android.content.ContentResolver;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -16,6 +13,7 @@ import com.muju.note.launcher.app.setting.event.VolumeEvent;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.topics.SpTopics;
+import com.muju.note.launcher.util.BrightnessUtils;
 import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.util.system.SystemUtils;
 import com.muju.note.launcher.view.light.RectProgress;
@@ -71,11 +69,12 @@ public class VoiceFragment extends BaseFragment {
         rectProgressVoice.setMax(SystemUtils.getMaxVolume(LauncherApplication.getContext()));
         int currentVolume = SystemUtils.getCurrentVolume(LauncherApplication.getContext());
         rectProgressVoice.setProgress(currentVolume);
-        rectProgressLight.setProgress(SystemUtils.getScreenBrightness());
+        rectProgressLight.setProgress(BrightnessUtils.getScreenBrightness(getActivity()));
         rectProgressLight.setChangedListener(new RectProgress.OnProgressChangedListener() {
             @Override
             public void onProgressChanged(int currentValue, int percent) {
-                saveBrightness(getContext().getContentResolver(), currentValue);
+                BrightnessUtils.setBrightness(getActivity(),currentValue);
+                BrightnessUtils.saveBrightness(getActivity(),currentValue);
             }
         });
 
@@ -147,24 +146,6 @@ public class VoiceFragment extends BaseFragment {
 //        LogFactory.l().i("VolumeEvent==="+currentVolume);
         rectProgressVoice.setProgress(currentVolume);
         rectProgressVoice.setChangedListener(onVoiceChangeListener);
-    }
-
-
-    public static void saveBrightness(ContentResolver resolver, int brightness) {
-        //改变系统的亮度值
-        //设置为手动调节模式
-        try {
-            Settings.System.putInt(resolver, Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
-            if(brightness<10){
-                brightness=10;
-            }
-            //保存到系统中
-            Uri uri = Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS);
-            Settings.System.putInt(resolver, Settings.System.SCREEN_BRIGHTNESS, brightness);
-            resolver.notifyChange(uri, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

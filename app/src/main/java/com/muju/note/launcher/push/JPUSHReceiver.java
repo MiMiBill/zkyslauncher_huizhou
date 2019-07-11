@@ -13,12 +13,13 @@ import com.muju.note.launcher.app.satisfaction.event.GotoSatisfationEvent;
 import com.muju.note.launcher.app.video.bean.PayEntity;
 import com.muju.note.launcher.app.video.bean.PayEvent;
 import com.muju.note.launcher.app.video.bean.VideoEvent;
-import com.muju.note.launcher.app.video.util.PayUtils;
+import com.muju.note.launcher.app.video.db.PayInfoDao;
+import com.muju.note.launcher.app.video.util.DbHelper;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.entity.BedSideEvent;
 import com.muju.note.launcher.entity.PushAutoMsgEntity;
 import com.muju.note.launcher.entity.PushCustomMessageEntity;
-import com.muju.note.launcher.topics.FileTopics;
+import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.util.DateUtil;
 import com.muju.note.launcher.util.file.FileUtils;
@@ -29,6 +30,7 @@ import com.muju.note.launcher.util.system.SystemUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.LitePal;
 
 import java.util.Iterator;
 
@@ -76,7 +78,9 @@ public class JPUSHReceiver extends BroadcastReceiver {
                         break;
                     case 201:
                         FileUtils.playReplay(LauncherApplication.getInstance().getApplicationContext(), R.raw.messagetips);
-                        FileUtils.deleteFile(FileTopics.FILE_VIP_VIDEO);
+//                        FileUtils.deleteFile(FileTopics.FILE_VIP_VIDEO);
+                        LitePalDb.setZkysDb();
+                        LitePal.deleteAll(PayInfoDao.class);
                         EventBus.getDefault().post(new PayEvent(PayEntity.ORDER_TYPE_VIDEO_PREMIUM));
                         EventBus.getDefault().post(new VideoEvent(VideoEvent.PREMIUM));
                         break;
@@ -88,12 +92,18 @@ public class JPUSHReceiver extends BroadcastReceiver {
                         String expire_time = extraMsgObj.getString("expire_time");
                         boolean isValid = DateUtil.isValid(expire_time);
                         if (isValid) {
-                            if(!PayUtils.isValid(PayEntity.ORDER_TYPE_VIDEO)) {
-                                PayEntity payEntity = new PayEntity(PayEntity.ORDER_TYPE_VIDEO, expire_time);
-                                PayUtils.setPaied(payEntity);
+//                            if(!PayUtils.isValid(PayEntity.ORDER_TYPE_VIDEO)) {
+//                                PayEntity payEntity = new PayEntity(PayEntity.ORDER_TYPE_VIDEO, expire_time);
+//                                PayUtils.setPaied(payEntity);
+
+                            LitePalDb.setZkysDb();
+                            PayInfoDao payInfoDao=new PayInfoDao();
+                            payInfoDao.setExpireTime(expire_time);
+                            DbHelper.insertToVipData(LitePalDb.DBNAME_ZKYS,payInfoDao);
+
                                 EventBus.getDefault().post(new VideoEvent(VideoEvent.RESUME));
-                                EventBus.getDefault().post(new PayEvent(PayEntity.ORDER_TYPE_VIDEO));
-                            }
+                                EventBus.getDefault().post(new PayEvent( PayEntity.ORDER_TYPE_VIDEO));
+//                            }
                             EventBus.getDefault().post(new ReturnBedEvent());
                         }
                         break;
