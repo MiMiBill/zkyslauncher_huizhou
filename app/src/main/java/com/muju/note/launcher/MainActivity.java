@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentationMagician;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
@@ -186,7 +188,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
         if (fragment == null) {
 //            loadRootFragment(R.id.fl_container, HomeFragment.newInstance());
 
-            loadRootFragment(R.id.fl_container, HomeFragment.newInstance(),true,false);
+            loadRootFragment(R.id.fl_container, HomeFragment.newInstance(),false,false);
 
         }
 
@@ -582,10 +584,18 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
         LogUtil.d(TAG, "bedCode:" + event.getCode());
         if (event.getCode() == 13) {
             start(BedSideCardFragment.newInstance(HomeFragment.entity,true));
-        }/* else {
-            popTo(HomeFragment.class, false);
-//            popTo(HomeFragment.class, true);
-        }*/
+        } else {
+            popToHome();
+        }
+    }
+
+    private void popToHome(){
+        List<Fragment> fragmentList = FragmentationMagician.getActiveFragments(this.getSupportFragmentManager());
+        for (Fragment fragment:fragmentList){
+            if("HomeFragment".equals(fragment.getClass().getSimpleName())){
+                pop();
+            }
+        }
     }
 
     @Override

@@ -444,8 +444,8 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
 
     @Override
     public void onStop() {
-        super.onStop();
         videoView.onStop();
+        super.onStop();
     }
 
     @Override

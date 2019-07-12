@@ -63,11 +63,11 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
     private List<MienInfoDao> list;
 
 
-    public static HospitalMienFragment getInstance() {
-        if (hospitalMienFragment == null) {
-            hospitalMienFragment = new HospitalMienFragment();
-        }
-        return hospitalMienFragment;
+    public static HospitalMienFragment newInstance() {
+        Bundle args = new Bundle();
+        HospitalMienFragment fragment = new HospitalMienFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
