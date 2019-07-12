@@ -16,9 +16,11 @@ import com.muju.note.launcher.app.bedsidecard.presenter.BedsidePresenter;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.app.home.event.OutHospitalEvent;
 import com.muju.note.launcher.app.home.event.PatientInfoEvent;
+import com.muju.note.launcher.app.home.ui.HomeFragment;
 import com.muju.note.launcher.app.video.event.VideoNoLockEvent;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
+import com.muju.note.launcher.entity.BedSideEvent;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.FormatUtils;
 import com.muju.note.launcher.util.log.LogFactory;
@@ -30,7 +32,9 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 
-public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implements BedsideContract.View {
+//床头卡
+public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implements
+        BedsideContract.View {
     @BindView(R.id.tv_date)
     TextView tvDate;
     @BindView(R.id.tv_net)
@@ -77,17 +81,35 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
     LinearLayout llBack;
     @BindView(R.id.lly_title)
     RelativeLayout llyTitle;
+    @BindView(R.id.tv_hint)
+    TextView tvHint;
+    @BindView(R.id.iv_hl)
+    ImageView ivHl;
+    @BindView(R.id.iv_food)
+    ImageView ivFood;
+    @BindView(R.id.iv_bl)
+    ImageView ivBl;
+    @BindView(R.id.rel_nurse)
+    RelativeLayout relNurse;
+    @BindView(R.id.lly_no_info)
+    LinearLayout llyNoInfo;
+    @BindView(R.id.tv_gm)
+    TextView tvGm;
+    @BindView(R.id.tv_no_info)
+    TextView tvNoInfo;
+
+
     private ActivePadInfo.DataBean activeInfo;
     private static final String BEDSIDE_INFO = "bedside_info";
     private static final String BEDSIDE_ISPUSH = "bedside_ispush";
     private PatientResponse.DataBean info;
     private boolean isPush = true;
-    private String netType="";
-    private Handler handler=new Handler(){
+    private String netType = "";
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case 1:
                     handler.removeMessages(1);
                     int netDbm = (int) msg.obj;
@@ -96,6 +118,7 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
             }
         }
     };
+
     @Override
     public int getLayout() {
         return R.layout.fragment_bedside_card;
@@ -113,7 +136,7 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-        if(!EventBus.getDefault().isRegistered(this)){//加上判断
+        if (!EventBus.getDefault().isRegistered(this)) {//加上判断
             EventBus.getDefault().register(this);
         }
         mPresenter.updateDate();
@@ -136,8 +159,11 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
 
         setHosiptal();
 
-        if (info != null)
+        if (info != null) {
             setPatientInfo(info);
+        } else {
+            outHospital();
+        }
 
 
         llBack.setOnClickListener(new View.OnClickListener() {
@@ -147,9 +173,9 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
             }
         });
 
-        if(isPush){
+        if (isPush) {
             llBack.setVisibility(View.GONE);
-        }else {
+        } else {
             llBack.setVisibility(View.VISIBLE);
         }
     }
@@ -170,17 +196,37 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
 
     //出院信息
     private void outHospital() {
-        if(tvName!=null){
-            tvName.setText("");
-            tvAge.setText("");
-            tvDoctor.setText("");
-            tvNurse.setText("");
-            tvCardTime.setText("");
-            tvSex.setText("");
-            tvHl.setText("");
-            tvZbNurse.setText("");
-            tvFood.setText("");
-        }else {
+        if (tvName != null) {
+            String text = getResources().getString(R.string.no_info);
+            tvName.setText(text);
+            tvName.setTextSize(getResources().getDimension(R.dimen.px40));
+            tvAge.setText(text);
+            tvDoctor.setText(text);
+            tvNurse.setText(text);
+            tvCardTime.setText(text);
+            tvSex.setVisibility(View.GONE);
+            tvHl.setText(text);
+            tvZbNurse.setText(text);
+            tvFood.setText(text);
+            tvName.setTextColor(getResources().getColor(R.color.color_0B8CD1));
+            tvAge.setTextColor(getResources().getColor(R.color.color_0B8CD1));
+            tvAge.setTextSize(getResources().getDimension(R.dimen.px40));
+            tvDoctor.setTextColor(getResources().getColor(R.color.color_0B8CD1));
+            tvNurse.setTextColor(getResources().getColor(R.color.color_0B8CD1));
+            tvCardTime.setTextColor(getResources().getColor(R.color.color_0B8CD1));
+            tvHl.setTextColor(getResources().getColor(R.color.color_0B8CD1));
+            tvZbNurse.setTextColor(getResources().getColor(R.color.color_0B8CD1));
+            tvFood.setTextColor(getResources().getColor(R.color.color_0B8CD1));
+            tvGm.setText(getResources().getString(R.string.no_info));
+            tvGm.setTextColor(getResources().getColor(R.color.color_0B8CD1));
+            tvNoInfo.setTextColor(getResources().getColor(R.color.color_0B8CD1));
+            relNurse.setVisibility(View.GONE);
+            llyNoInfo.setVisibility(View.VISIBLE);
+            tvHint.setText("请联系护士登录");
+            ivHl.setImageResource(R.mipmap.card_hl_none);
+            ivFood.setImageResource(R.mipmap.card_food_none);
+            ivBl.setImageResource(R.mipmap.card_gm_none);
+        } else {
             LogFactory.l().i("tvName==null");
         }
 
@@ -193,16 +239,38 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
     }
 
     private void setPatientInfo(PatientResponse.DataBean entity) {
-        if(tvName!=null){
+        if (tvName != null) {
             tvName.setText(entity.getUserName());
+            tvName.setTextSize(getResources().getDimension(R.dimen.px70));
             tvAge.setText(entity.getAge() + "岁");
             tvDoctor.setText(entity.getChargeDoctor());
             tvNurse.setText(entity.getChargeNurse());
-            tvCardTime.setText(FormatUtils.FormatDateUtil.parseLong(Long.parseLong(entity.getCreateTime())));
+            tvCardTime.setText(FormatUtils.FormatDateUtil.parseLong(Long.parseLong(entity
+                    .getCreateTime())));
+            tvSex.setVisibility(View.VISIBLE);
+            tvSex.setTextSize(getResources().getDimension(R.dimen.px70));
             tvSex.setText(entity.getSex() == 1 ? "男" : "女");
             tvHl.setText(entity.getNursingLevel());
             tvZbNurse.setText(entity.getChargeNurse());
             tvFood.setText(entity.getDietCategory());
+            tvName.setTextColor(getResources().getColor(R.color.white));
+            tvAge.setTextColor(getResources().getColor(R.color.white));
+            tvDoctor.setTextColor(getResources().getColor(R.color.white));
+            tvNurse.setTextColor(getResources().getColor(R.color.white));
+            tvCardTime.setTextColor(getResources().getColor(R.color.white));
+            tvSex.setTextColor(getResources().getColor(R.color.white));
+            tvHl.setTextColor(getResources().getColor(R.color.white));
+            tvZbNurse.setTextColor(getResources().getColor(R.color.white));
+            tvFood.setTextColor(getResources().getColor(R.color.white));
+            tvHint.setText(getResources().getString(R.string.card_notice));
+            tvGm.setText(getResources().getString(R.string.no_info));
+            tvGm.setTextColor(getResources().getColor(R.color.white));
+
+            relNurse.setVisibility(View.VISIBLE);
+            llyNoInfo.setVisibility(View.GONE);
+            ivHl.setImageResource(R.mipmap.card_hl);
+            ivFood.setImageResource(R.mipmap.card_food);
+            ivBl.setImageResource(R.mipmap.card_gm);
         }
     }
 
@@ -216,6 +284,17 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
 
     }
 
+    /**
+     * 床头卡模式
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void bedSide(BedSideEvent event) {
+        if (event.getCode() == 14) {
+            popTo(HomeFragment.class, false);
+        }
+    }
 
     @Override
     public void getDate(String date, String time, String week, String net, String netType) {
@@ -245,7 +324,7 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
             ivWifi.setImageResource(R.mipmap.white_wifi_level_none);
             ivNet.setImageResource(R.mipmap.white_net_level_none);
         } else {
-            this.netType=netType;
+            this.netType = netType;
             ivWifi.setVisibility(View.GONE);
             ivNet.setVisibility(View.VISIBLE);
             tvNetType.setVisibility(View.VISIBLE);
@@ -255,9 +334,9 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
                 @Override
                 public void run() {
                     int netDbm = NetWorkUtil.getCurrentNetDBM(LauncherApplication.getContext());
-                    Message message=new Message();
-                    message.what=1;
-                    message.obj= netDbm;
+                    Message message = new Message();
+                    message.what = 1;
+                    message.obj = netDbm;
                     handler.sendMessage(message);
                 }
             }).run();
@@ -265,8 +344,8 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
     }
 
 
-    private void setNetIcon(String netType,int netDbm) {
-        if(netType.equals("4G")){
+    private void setNetIcon(String netType, int netDbm) {
+        if (netType.equals("4G")) {
             if (netDbm > -95) {
                 ivNet.setImageResource(R.mipmap.white_net_level_good);
             } else if (netDbm > -105) {
@@ -278,7 +357,7 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
             } else {
                 ivNet.setImageResource(R.mipmap.white_net_level_none);
             }
-        }else {
+        } else {
             if (netDbm > -75) {
                 ivNet.setImageResource(R.mipmap.white_net_level_good);
             } else if (netDbm > -85) {

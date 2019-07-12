@@ -60,7 +60,7 @@ public class UIUtils {
      * 重启程序
      */
     public static void restartApplication() {
-        final Intent intent = mContext.getPackageManager().getLaunchIntentForPackage(LauncherApplication.getContext().getPackageName());
+        final Intent intent = LauncherApplication.getInstance().getPackageManager().getLaunchIntentForPackage(LauncherApplication.getContext().getPackageName());
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         LauncherApplication.getContext().startActivity(intent);
     }

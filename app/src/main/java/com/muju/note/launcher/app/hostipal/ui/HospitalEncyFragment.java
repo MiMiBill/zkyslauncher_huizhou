@@ -312,7 +312,7 @@ public class HospitalEncyFragment extends BaseFragment<EncyPresenter> implements
         }
         tvAuthor.setText(bean.getAuthor() + "   " + bean.getSource() + "   " + bean.getClickCount
                 () + "次点击");
-        if (!"".equals(bean.getSummary().trim())) {
+        if (bean.getSummary()!=null && (!"".equals(bean.getSummary().trim()))) {
             tvSummary.setText(bean.getSummary());
             tvSummary.setVisibility(View.VISIBLE);
             tvSummaryDe.setVisibility(View.VISIBLE);
@@ -320,7 +320,7 @@ public class HospitalEncyFragment extends BaseFragment<EncyPresenter> implements
             tvSummary.setVisibility(View.GONE);
             tvSummaryDe.setVisibility(View.GONE);
         }
-        if (!"".equals(bean.getCause().trim())) {
+        if (bean.getCause()!=null && (!"".equals(bean.getCause().trim()))) {
             tvCause.setText(bean.getCause());
             tvCause.setVisibility(View.VISIBLE);
             tvCauseDe.setVisibility(View.VISIBLE);
@@ -328,7 +328,7 @@ public class HospitalEncyFragment extends BaseFragment<EncyPresenter> implements
             tvCause.setVisibility(View.GONE);
             tvCauseDe.setVisibility(View.GONE);
         }
-        if (!"".equals(bean.getCheck().trim())) {
+        if (bean.getCheck()!=null && (!"".equals(bean.getCheck().trim()))) {
             tvCheck.setText(bean.getCheck());
             tvCheck.setVisibility(View.VISIBLE);
             tvCheckDe.setVisibility(View.VISIBLE);
@@ -336,7 +336,7 @@ public class HospitalEncyFragment extends BaseFragment<EncyPresenter> implements
             tvCheck.setVisibility(View.GONE);
             tvCheckDe.setVisibility(View.GONE);
         }
-        if (!"".equals(bean.getClinicalManifestation().trim())) {
+        if (bean.getClinicalManifestation()!=null && (!"".equals(bean.getClinicalManifestation().trim()))) {
             tvClinicalManifestation.setText(bean.getClinicalManifestation());
             tvClinicalManifestation.setVisibility(View.VISIBLE);
             tvClinicalManifestationDe.setVisibility(View.VISIBLE);
@@ -344,7 +344,7 @@ public class HospitalEncyFragment extends BaseFragment<EncyPresenter> implements
             tvClinicalManifestation.setVisibility(View.GONE);
             tvClinicalManifestationDe.setVisibility(View.GONE);
         }
-        if (!"".equals(bean.getComplicatingDisease().trim())) {
+        if (bean.getComplicatingDisease()!=null && (!"".equals(bean.getComplicatingDisease().trim()))) {
             tvComplicatingdisease.setText(bean.getComplicatingDisease());
             tvComplicatingdisease.setVisibility(View.VISIBLE);
             tvComplicatingdiseaseDe.setVisibility(View.VISIBLE);
@@ -352,7 +352,7 @@ public class HospitalEncyFragment extends BaseFragment<EncyPresenter> implements
             tvComplicatingdisease.setVisibility(View.GONE);
             tvComplicatingdiseaseDe.setVisibility(View.GONE);
         }
-        if (!"".equals(bean.getAntidiastole().trim())) {
+        if (bean.getAntidiastole()!=null && (!"".equals(bean.getAntidiastole().trim()))) {
             tvAntidiastole.setText(bean.getAntidiastole());
             tvAntidiastole.setVisibility(View.VISIBLE);
             tvAntidiastoleDe.setVisibility(View.VISIBLE);
@@ -360,7 +360,7 @@ public class HospitalEncyFragment extends BaseFragment<EncyPresenter> implements
             tvAntidiastole.setVisibility(View.GONE);
             tvAntidiastoleDe.setVisibility(View.GONE);
         }
-        if (!"".equals(bean.getDassification().trim())) {
+        if (bean.getDassification()!=null && (!"".equals(bean.getDassification().trim()))) {
             tvDassification.setText(bean.getDassification());
             tvDassification.setVisibility(View.VISIBLE);
             tvDassificationDe.setVisibility(View.VISIBLE);
@@ -368,7 +368,7 @@ public class HospitalEncyFragment extends BaseFragment<EncyPresenter> implements
             tvDassification.setVisibility(View.GONE);
             tvDassificationDe.setVisibility(View.GONE);
         }
-        if (!"".equals(bean.getDiacrsis().trim())) {
+        if (bean.getDiacrsis()!=null && (!"".equals(bean.getDiacrsis().trim()))) {
             tvDiacrisis.setText(bean.getDiacrsis());
             tvDiacrisis.setVisibility(View.VISIBLE);
             tvDiacrisisDe.setVisibility(View.VISIBLE);
@@ -376,7 +376,7 @@ public class HospitalEncyFragment extends BaseFragment<EncyPresenter> implements
             tvDiacrisis.setVisibility(View.GONE);
             tvDiacrisisDe.setVisibility(View.GONE);
         }
-        if (!"".equals(bean.getDietCare().trim())) {
+        if (bean.getDietCare()!=null && (!"".equals(bean.getDietCare().trim()))) {
             tvDietcare.setText(bean.getDietCare());
             tvDietcare.setVisibility(View.VISIBLE);
             tvDietcareDe.setVisibility(View.VISIBLE);
@@ -384,7 +384,7 @@ public class HospitalEncyFragment extends BaseFragment<EncyPresenter> implements
             tvDietcare.setVisibility(View.GONE);
             tvDietcareDe.setVisibility(View.GONE);
         }
-        if (!"".equals(bean.getCure().trim())) {
+        if (bean.getCure()!=null &&(!"".equals(bean.getCure().trim()))) {
             tvCure.setText(bean.getCure());
             tvCure.setVisibility(View.VISIBLE);
             tvCureDe.setVisibility(View.VISIBLE);
@@ -392,7 +392,7 @@ public class HospitalEncyFragment extends BaseFragment<EncyPresenter> implements
             tvCure.setVisibility(View.GONE);
             tvCureDe.setVisibility(View.GONE);
         }
-        if (!"".equals(bean.getPrognosis().trim())) {
+        if (bean.getPrognosis()!=null && (!"".equals(bean.getPrognosis().trim()))) {
             tvPrognosis.setText(bean.getPrognosis());
             tvPrognosis.setVisibility(View.VISIBLE);
             tvPrognosisDe.setVisibility(View.VISIBLE);
@@ -400,7 +400,7 @@ public class HospitalEncyFragment extends BaseFragment<EncyPresenter> implements
             tvPrognosis.setVisibility(View.GONE);
             tvPrognosisDe.setVisibility(View.GONE);
         }
-        if (!"".equals(bean.getProphylaxis().trim())) {
+        if (bean.getProphylaxis()!=null && (!"".equals(bean.getProphylaxis().trim()))) {
             tvProphylaxis.setText(bean.getProphylaxis());
             tvProphylaxis.setVisibility(View.VISIBLE);
             tvProphylaxisDe.setVisibility(View.VISIBLE);

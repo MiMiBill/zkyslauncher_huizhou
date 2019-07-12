@@ -176,7 +176,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
     @Override
     public void initData() {
         mPresenter.setOnTaskListener(this);
-        EventBus.getDefault().register(this);
+        if (!EventBus.getDefault().isRegistered(this)) {//加上判断
+            EventBus.getDefault().register(this);
+        }
         startService(new Intent(this, MainService.class));
 
         activeInfo = ActiveUtils.getPadActiveInfo();
@@ -580,9 +582,10 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
         LogUtil.d(TAG, "bedCode:" + event.getCode());
         if (event.getCode() == 13) {
             start(BedSideCardFragment.newInstance(HomeFragment.entity,true));
-        } else {
+        }/* else {
             popTo(HomeFragment.class, false);
-        }
+//            popTo(HomeFragment.class, true);
+        }*/
     }
 
     @Override

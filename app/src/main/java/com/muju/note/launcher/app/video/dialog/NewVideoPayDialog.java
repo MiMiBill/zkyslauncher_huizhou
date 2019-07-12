@@ -113,10 +113,7 @@ public class NewVideoPayDialog extends Dialog {
             initRecyclerview();
             initPrice(0);
         }else {
-            llyPayXcx.setVisibility(View.VISIBLE);
-            llyPayRent.setVisibility(View.GONE);
-            llyPayTask.setVisibility(View.GONE);
-            llyPayWechat.setVisibility(View.GONE);
+            payByXcx();
         }
 
 

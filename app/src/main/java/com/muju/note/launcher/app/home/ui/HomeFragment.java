@@ -205,7 +205,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void initData() {
-        EventBus.getDefault().register(this);
+        if (!EventBus.getDefault().isRegistered(this)) {//加上判断
+            EventBus.getDefault().register(this);
+        }
         activeInfo = ActiveUtils.getPadActiveInfo();
         initBanner();
         saveRegisterId();
