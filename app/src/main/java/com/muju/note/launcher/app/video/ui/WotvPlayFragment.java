@@ -253,9 +253,11 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
         super.onSupportInvisible();
         if (newVideoPayDialog != null && newVideoPayDialog.isShowing()) {
             LogUtil.i(TAG, "支付窗口弹出，不发送锁屏消息");
+            newVideoPayDialog.dismiss();
             return;
         }
         if (errorDialog != null && errorDialog.isShowing()) {
+            errorDialog.dismiss();
             return;
         }
 

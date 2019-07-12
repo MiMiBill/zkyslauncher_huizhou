@@ -103,7 +103,6 @@ import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import me.yokeyword.fragmentation.SupportFragment;
-import me.yokeyword.fragmentation.SupportHelper;
 
 public class MainActivity extends BaseActivity<MainPresenter> implements MainPresenter.TaskListener, MainContract.View {
 
@@ -179,7 +178,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
     @Override
     public void initData() {
         mPresenter.setOnTaskListener(this);
-        EventBus.getDefault().register(this);
+        if (!EventBus.getDefault().isRegistered(this)) {//加上判断
+            EventBus.getDefault().register(this);
+        }
         startService(new Intent(this, MainService.class));
 
         activeInfo = ActiveUtils.getPadActiveInfo();

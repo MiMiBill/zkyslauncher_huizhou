@@ -151,7 +151,7 @@
                     android:text=""
                     android:textColor="@color/white"
                     android:gravity="center"
-                    android:textSize="80px"
+                    android:textSize="70px"
                     android:background="@color/color_006DA8"
                     android:layout_height="match_parent" />
                 <RelativeLayout
@@ -358,7 +358,8 @@
                     android:layout_width="@dimen/px34"
                     android:layout_height="@dimen/px34" />
                 <TextView
-                    android:text="@string/card_notice"
+                    android:id="@+id/tv_hint"
+                    android:text=""
                     android:textColor="@color/white"
                     android:gravity="center_vertical"
                     android:textSize="@dimen/px30"
@@ -378,6 +379,7 @@
                 android:gravity="center_vertical"
                 android:layout_height="@dimen/px151">
                 <ImageView
+                    android:id="@+id/iv_hl"
                     android:src="@mipmap/card_hl"
                     android:layout_marginLeft="@dimen/px27"
                     android:layout_width="@dimen/px48"
@@ -398,6 +400,7 @@
                 android:gravity="center_vertical"
                 android:layout_height="@dimen/px151">
                 <ImageView
+                    android:id="@+id/iv_food"
                     android:src="@mipmap/card_food"
                     android:layout_marginLeft="@dimen/px27"
                     android:layout_width="@dimen/px48"
@@ -418,19 +421,22 @@
                 android:gravity="center_vertical"
                 android:layout_height="@dimen/px151">
                 <ImageView
+                    android:id="@+id/iv_bl"
                     android:src="@mipmap/card_gm"
                     android:layout_marginLeft="@dimen/px27"
                     android:layout_width="@dimen/px48"
                     android:layout_height="@dimen/px47" />
                 <TextView
+                    android:id="@+id/tv_gm"
                     android:textSize="@dimen/px40"
                     android:gravity="center"
-                    android:text="无过敏"
+                    android:text="暂无信息"
                     android:textColor="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </LinearLayout>
             <RelativeLayout
+                android:id="@+id/rel_nurse"
                 android:layout_width="match_parent"
                 android:background="@color/color_006DA8"
                 android:layout_weight="1"
@@ -464,6 +470,28 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/lly_no_info"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:background="@color/color_5DBA21"
+                android:layout_marginTop="@dimen/px19"
+                android:gravity="center_vertical"
+                android:layout_height="@dimen/px151">
+                <ImageView
+                    android:src="@mipmap/card_yf"
+                    android:layout_marginLeft="@dimen/px27"
+                    android:layout_width="@dimen/px48"
+                    android:layout_height="@dimen/px47" />
+                <TextView
+                    android:id="@+id/tv_no_info"
+                    android:textSize="@dimen/px40"
+                    android:gravity="center"
+                    android:text="暂无信息"
+                    android:textColor="@color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
