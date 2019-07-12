@@ -222,8 +222,8 @@ public class VideoService {
                         service.execute(new Runnable() {
                             @Override
                             public void run() {
-                                LitePalDb.setZkysDb();
                                for (VideoInfoDao dao:response.body().getData()){
+                                   LitePalDb.setZkysDb();
                                    VideoInfoDao videoInfoDao=LitePal.where("cid = ?",dao.getCid()+"").findFirst(VideoInfoDao.class);
                                    if(videoInfoDao==null){
                                        dao.setVideoId(dao.getId());

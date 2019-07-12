@@ -589,11 +589,15 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
     }
 
     private void popToHome(){
-        List<Fragment> fragmentList = FragmentationMagician.getActiveFragments(this.getSupportFragmentManager());
-        for (Fragment fragment:fragmentList){
-            if("HomeFragment".equals(fragment.getClass().getSimpleName())){
-                pop();
+        try {
+            List<Fragment> fragmentList = FragmentationMagician.getActiveFragments(this.getSupportFragmentManager());
+            for (Fragment fragment:fragmentList){
+                if("HomeFragment".equals(fragment.getClass().getSimpleName())){
+                    pop();
+                }
             }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 

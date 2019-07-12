@@ -298,6 +298,9 @@ public class ConfigService {
             if(subDao==null){
                 return;
             }
+            if(TextUtils.isEmpty(subDao.getContent())){
+                return;
+            }
             VIDEO_PAY_TIME=Integer.parseInt(subDao.getContent());
         }catch (Exception e){
             e.printStackTrace();
