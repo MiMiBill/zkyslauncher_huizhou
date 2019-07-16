@@ -23,7 +23,7 @@ import java.io.File;
 import butterknife.BindView;
 
 /**
- *  医院宣教PDF播放
+ * 医院宣教PDF播放
  */
 public class HospitalMissionPdfFragment extends BaseFragment implements OnPageChangeListener, OnLoadCompleteListener,
         OnPageErrorListener {
@@ -33,7 +33,7 @@ public class HospitalMissionPdfFragment extends BaseFragment implements OnPageCh
     @BindView(R.id.ll_back)
     LinearLayout llBack;
 
-    public static final String MISSION_PDF_PATH="mission_pdf_path";
+    public static final String MISSION_PDF_PATH = "mission_pdf_path";
 
     public static HospitalMissionPdfFragment newInstance(String path) {
         Bundle args = new Bundle();
@@ -57,8 +57,8 @@ public class HospitalMissionPdfFragment extends BaseFragment implements OnPageCh
             }
         });
 
-        File file=new File(SdcardConfig.RESOURCE_FOLDER,getArguments().getString(MISSION_PDF_PATH).hashCode()+".pdf");
-        if(!file.exists()){
+        File file = new File(SdcardConfig.RESOURCE_FOLDER, getArguments().getString(MISSION_PDF_PATH).hashCode() + ".pdf");
+        if (!file.exists()) {
             showToast("文件路径不存在，请稍后重试");
             return;
         }

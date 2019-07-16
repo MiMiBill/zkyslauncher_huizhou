@@ -24,7 +24,7 @@ public class SignPresenter extends BasePresenter<SignContract.View> implements S
                 .cacheMode(CacheMode.NO_CACHE).execute(new JsonCallback<BaseBean<SignBean>>() {
             @Override
             public void onSuccess(Response<BaseBean<SignBean>> response) {
-                if(mView==null){
+                if (mView == null) {
                     LogUtil.e("mView为空");
                     return;
                 }
@@ -45,7 +45,7 @@ public class SignPresenter extends BasePresenter<SignContract.View> implements S
                 .execute(new JsonCallback<BaseBean<SignStatusBean>>() {
                     @Override
                     public void onSuccess(Response<BaseBean<SignStatusBean>> response) {
-                        if(mView==null){
+                        if (mView == null) {
                             LogUtil.e("mView为空");
                             return;
                         }
@@ -61,7 +61,7 @@ public class SignPresenter extends BasePresenter<SignContract.View> implements S
 
 
     @Override
-    public void doTask(int userId,int advertId) {
+    public void doTask(int userId, int advertId) {
         OkGo.<BaseBean<TaskBean>>post(UrlUtil.doTask())
                 .tag(this)
                 .params("userId", userId)
@@ -69,15 +69,15 @@ public class SignPresenter extends BasePresenter<SignContract.View> implements S
                 .params("deptId", ActiveUtils.getPadActiveInfo().getDeptId())
                 .params("advertId", advertId)
                 .execute(new JsonCallback<BaseBean<TaskBean>>() {
-            @Override
-            public void onSuccess(Response<BaseBean<TaskBean>> response) {
+                    @Override
+                    public void onSuccess(Response<BaseBean<TaskBean>> response) {
 
-            }
+                    }
 
-            @Override
-            public void onError(Response<BaseBean<TaskBean>> response) {
-                super.onError(response);
-            }
-        });
+                    @Override
+                    public void onError(Response<BaseBean<TaskBean>> response) {
+                        super.onError(response);
+                    }
+                });
     }
 }

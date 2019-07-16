@@ -16,12 +16,12 @@ public class LuckPresenter extends BasePresenter<LuckContract.View> implements L
 
     @Override
     public void startLuck(int id) {
-        OkGo.<String>get(String.format(UrlUtil.startLuck(),id))
+        OkGo.<String>get(String.format(UrlUtil.startLuck(), id))
                 .tag(this)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        if(mView==null){
+                        if (mView == null) {
                             LogUtil.e("mView为空");
                             return;
                         }
@@ -32,7 +32,7 @@ public class LuckPresenter extends BasePresenter<LuckContract.View> implements L
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
-                        if(mView==null){
+                        if (mView == null) {
                             LogUtil.e("mView为空");
                             return;
                         }
@@ -50,7 +50,7 @@ public class LuckPresenter extends BasePresenter<LuckContract.View> implements L
                 .execute(new JsonCallback<BaseBean<PriseBean>>() {
                     @Override
                     public void onSuccess(Response<BaseBean<PriseBean>> response) {
-                        if(mView==null){
+                        if (mView == null) {
                             LogUtil.e("mView为空");
                             return;
                         }

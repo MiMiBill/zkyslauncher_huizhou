@@ -20,17 +20,17 @@ public class CustDatePick {
     private String days;
     private TextView mTvDate;
 
-    public CustDatePick(Context context){
+    public CustDatePick(Context context) {
         this.mContext = context;
     }
 
-    public void show(TextView tvDate){
+    public void show(TextView tvDate) {
         this.mTvDate = tvDate;
         init();
         new DatePickerDialog(mContext, onDateSetListener, mYear, mMonth, mDay).show();
     }
 
-    private void init(){
+    private void init() {
         Calendar ca = Calendar.getInstance();
         mYear = ca.get(Calendar.YEAR);
         mMonth = ca.get(Calendar.MONTH);

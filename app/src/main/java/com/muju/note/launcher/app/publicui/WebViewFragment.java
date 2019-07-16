@@ -120,7 +120,7 @@ public class WebViewFragment extends BaseFragment implements View.OnClickListene
             case R.id.ll_back:
             case R.id.rl_back:
                 try {
-                    if(web==null){
+                    if (web == null) {
                         pop();
                         return;
                     }
@@ -129,7 +129,7 @@ public class WebViewFragment extends BaseFragment implements View.OnClickListene
                         return;
                     }
                     pop();
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;

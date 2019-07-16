@@ -16,26 +16,26 @@ import java.util.Random;
 public class ClidePresenter extends BasePresenter<ClideContract.View> implements ClideContract.Presenter {
 
     /**
-     *  查询儿童相关影视
+     * 查询儿童相关影视
      */
     @Override
-    public void getCilde(String name , int pageNum) {
+    public void getCilde(String name, int pageNum) {
         LitePalDb.setZkysDb();
-        String sql="columnName like '%"+name+"%' and status = 1 order by number desc,onwayTime desc,editTime desc,updateTime desc";
-        int limit=(pageNum*30)-30;
+        String sql = "columnName like '%" + name + "%' and status = 1 order by number desc,onwayTime desc,editTime desc,updateTime desc";
+        int limit = (pageNum * 30) - 30;
         LitePal.where(sql).limit(30).offset(limit).findAsync(VideoInfoDao.class).listen(new FindMultiCallback<VideoInfoDao>() {
             @Override
             public void onFinish(List<VideoInfoDao> list) {
-                if(mView==null){
+                if (mView == null) {
                     LogUtil.e("mView为空");
                     return;
                 }
-                if(list==null||list.size()<=0){
+                if (list == null || list.size() <= 0) {
                     mView.getClideNull();
                     return;
                 }
                 mView.getClideSuccess(list);
-                if(list.size()>0&&list.size()<30){
+                if (list.size() > 0 && list.size() < 30) {
                     mView.getClideEnd();
                 }
             }
@@ -46,30 +46,30 @@ public class ClidePresenter extends BasePresenter<ClideContract.View> implements
     @Override
     public void getHeader(String name) {
         LitePalDb.setZkysDb();
-        String sql="columnName like '%"+name+"%'";
+        String sql = "columnName like '%" + name + "%'";
         LitePal.where(sql).findAsync(VideoInfoDao.class).listen(new FindMultiCallback<VideoInfoDao>() {
             @Override
             public void onFinish(List<VideoInfoDao> list) {
-                if(mView==null){
+                if (mView == null) {
                     LogUtil.e("mView为空");
                     return;
                 }
-                if(list==null||list.size()<=0){
+                if (list == null || list.size() <= 0) {
                     mView.getClideNull();
                     return;
                 }
-                getHeaderNum(list.size(),list);
+                getHeaderNum(list.size(), list);
             }
         });
     }
 
-    private void getHeaderNum(int count,List<VideoInfoDao> list){
-        List<VideoInfoDao> numList=new ArrayList<>();
-        for (int i=0;i<6;i++){
-            int num=new Random().nextInt(count+1);
+    private void getHeaderNum(int count, List<VideoInfoDao> list) {
+        List<VideoInfoDao> numList = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            int num = new Random().nextInt(count + 1);
             numList.add(list.get(num));
         }
-        if(mView==null){
+        if (mView == null) {
             LogUtil.e("mView为空");
             return;
         }

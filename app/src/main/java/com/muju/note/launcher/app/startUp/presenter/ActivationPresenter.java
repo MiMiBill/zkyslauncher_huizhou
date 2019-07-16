@@ -10,6 +10,7 @@ import com.muju.note.launcher.util.log.LogFactory;
 
 public class ActivationPresenter extends BasePresenter<ActivationContract.View> implements ActivationContract.Presenter {
     private ActivationListener listener;
+
     @Override
     public void bindingDevice(String iccid) {
         OkGo.<String>post(UrlUtil.getQueryPadActiveState())
@@ -19,10 +20,10 @@ public class ActivationPresenter extends BasePresenter<ActivationContract.View> 
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        if(mView==null){
+                        if (mView == null) {
                             LogFactory.l().i("mView==null");
                         }
-                        if(listener!=null){
+                        if (listener != null) {
                             listener.bindSuccess(response.body());
                         }
 //                        mView.bindSuccess(response.body());
@@ -33,7 +34,7 @@ public class ActivationPresenter extends BasePresenter<ActivationContract.View> 
                         super.onError(response);
                         //网络异常
 //                        mView.bindFail();
-                        if(listener!=null){
+                        if (listener != null) {
                             listener.bindFail();
                         }
                     }
@@ -41,14 +42,13 @@ public class ActivationPresenter extends BasePresenter<ActivationContract.View> 
     }
 
 
-
-
-    public void setOnActivationListener(ActivationListener listener){
-        this.listener=listener;
+    public void setOnActivationListener(ActivationListener listener) {
+        this.listener = listener;
     }
 
-    public interface ActivationListener{
+    public interface ActivationListener {
         void bindSuccess(String data);
+
         void bindFail();
     }
 }

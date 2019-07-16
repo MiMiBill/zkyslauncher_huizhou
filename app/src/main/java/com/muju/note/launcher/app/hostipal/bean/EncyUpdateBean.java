@@ -7,8 +7,8 @@ import com.muju.note.launcher.okgo.BaseBean;
 import java.util.ArrayList;
 
 public class EncyUpdateBean extends BaseBean {
-   private ArrayList<InfoDao> columns;
-   private ArrayList<InfomationDao> mes;
+    private ArrayList<InfoDao> columns;
+    private ArrayList<InfomationDao> mes;
 
     public ArrayList<InfoDao> getColumns() {
         return columns;

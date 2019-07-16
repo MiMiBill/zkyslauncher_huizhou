@@ -71,92 +71,91 @@ public class ActivePadInfo {
          */
 
 
-      
         private int id;
 
         //"唯一编号")
-      
+
         private String code;
 
         //"1:已激活，0：未激活")
-     
+
         private int activetion;
 
         //"设备名")
-      
+
         private String name;
 
         //"厂商")
-      
+
         private String company;
 
         //"型号")
         private String modelNumber;
 
         //"屏幕尺寸")
-       
+
         private String screenSize;
 
         //"1:可用，0：不可用")
-       
+
         private int disabled;
 
         //"pad在极光注册设备标识")
-       
+
         private String jpushRegistid;
 
         //"1:商用，2：测试机，3：样机")
-       
+
         private int type;
 
         //"SIM卡串码")
-       
+
         private String simCode;
 
         //"SIM卡号码")
-       
+
         private String simMobile;
 
         //"支架id")
-       
+
         private String kickstandCode;
 
         //"输液设备id")
-        
+
         private String transfusionCode;
 
         //"备注")
-        
+
         private String remark;
 
         //"绑定记录id，没有绑定默认0")
-        
+
         private int bindingId;
 
         //"病床id，拓展字段")
-       
+
         private int bedId;
 
         //"病床号，拓展字段")
-       
+
         private String bedNumber;
 
         //"病床所属医院id，拓展字段")
-       
+
         private int hospitalId;
 
         //"病床所属医院名称，拓展字段")
-      
+
         private String hospitalName;
 
         //"病床所属科室id，拓展字段")
-      
+
         private int deptId;
 
         //"病床所属科室名称，拓展字段")
-       
+
         private String deptName;
-        
+
         //"签名key")
         private String pad;
         private String host;

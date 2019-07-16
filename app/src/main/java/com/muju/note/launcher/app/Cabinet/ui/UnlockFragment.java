@@ -55,7 +55,7 @@ public class UnlockFragment extends BaseFragment<CabinetOrderPresenter> implemen
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
-                    if(requestCount<6){
+                    if (requestCount < 6) {
                         requestCount++;
                         handler.removeMessages(1);
                         mPresenter.findByDid(dataBean.getCabinetCode());
@@ -144,18 +144,18 @@ public class UnlockFragment extends BaseFragment<CabinetOrderPresenter> implemen
                 LockInfo lockInfo = gson.fromJson(optString, LockInfo.class);
 //                LogFactory.l().i("requestCount==="+requestCount);
                 if (lockInfo.getLockStatus() == 2) {  //开锁成功
-                    if(requestCount>=6){
+                    if (requestCount >= 6) {
                         setSuccessUi();
                         isLock = true;
                     }
                 } else {
-                    if(requestCount>=6){
+                    if (requestCount >= 6) {
                         isLock = false;
                         setFailUi("第三方开锁失败");
                     }
                 }
             } else {
-                if(requestCount>=6) {
+                if (requestCount >= 6) {
                     isLock = false;
                     setFailUi("第三方服务器异常");
                 }

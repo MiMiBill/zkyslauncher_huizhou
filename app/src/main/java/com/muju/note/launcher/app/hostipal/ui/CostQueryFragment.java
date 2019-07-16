@@ -78,7 +78,6 @@ public class CostQueryFragment extends BaseFragment {
     }
 
 
-
     @OnClick(R.id.ll_back)
     public void onViewClicked() {
     }

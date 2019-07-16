@@ -22,7 +22,7 @@ public class ZkRecycleViewCostAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private List<CostInfo> mList;
 
-    public ZkRecycleViewCostAdapter(Context context, List<CostInfo> list){
+    public ZkRecycleViewCostAdapter(Context context, List<CostInfo> list) {
         this.mContext = context;
         this.mList = list;
     }
@@ -49,7 +49,7 @@ public class ZkRecycleViewCostAdapter extends RecyclerView.Adapter {
 
 
     //自定义的ViewHolder，持有每个Item的的所有界面元素
-    class OneViewHolder extends RecyclerView.ViewHolder{
+    class OneViewHolder extends RecyclerView.ViewHolder {
         private final TextView entryName;
         private final TextView number;
         private final TextView unit;
@@ -57,7 +57,7 @@ public class ZkRecycleViewCostAdapter extends RecyclerView.Adapter {
         private final TextView totlePrice;
         private final TextView dateTime;
 
-        public OneViewHolder(View view){
+        public OneViewHolder(View view) {
             super(view);
             entryName = view.findViewById(R.id.tv_enteyName);
             number = view.findViewById(R.id.tv_number);
@@ -67,7 +67,7 @@ public class ZkRecycleViewCostAdapter extends RecyclerView.Adapter {
             dateTime = view.findViewById(R.id.tv_dateTime);
         }
 
-        public void setData(int position){
+        public void setData(int position) {
             entryName.setText(mList.get(position).getEntryName());
             number.setText(mList.get(position).getNumber());
             unit.setText(mList.get(position).getUnit());

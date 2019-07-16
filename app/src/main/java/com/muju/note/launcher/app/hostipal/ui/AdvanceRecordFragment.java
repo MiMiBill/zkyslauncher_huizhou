@@ -66,7 +66,7 @@ public class AdvanceRecordFragment extends BaseFragment {
 // DividerItemDecoration.VERTICAL));//设置分割线
         mRclAdvanceRecord.addItemDecoration(new RecycleViewDivider(getActivity(),
                 LinearLayoutManager
-                .VERTICAL, 1, getResources().getColor(R.color.table_line)));//设置分割线
+                        .VERTICAL, 1, getResources().getColor(R.color.table_line)));//设置分割线
         advanceAdapter = new ZkRecycleViewAdvanceAdapter(getActivity(), mList);
         mRclAdvanceRecord.setAdapter(advanceAdapter);
     }

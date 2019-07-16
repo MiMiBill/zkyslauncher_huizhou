@@ -24,6 +24,7 @@ public class DBManager {
     public ArrayList<InfoDao> infoLists = new ArrayList<InfoDao>();
     public InfomationDao infomationBean;
     public OnQuerySuccessListener listener;
+
     public DBManager(Context mContext) {
         this.mContext = mContext;
     }
@@ -45,7 +46,7 @@ public class DBManager {
                 @Override
                 public void run() {
                     Cursor cursor = sqliteDB.rawQuery("select * from " + table + " where columnId=" +
-                            VALUE_ID +" limit "+12, null);
+                            VALUE_ID + " limit " + 12, null);
                     while (cursor.moveToNext()) {
                         InfomationDao bean = setInfomationBean(cursor);
                         mBeanLists.add(bean);
@@ -64,14 +65,14 @@ public class DBManager {
 
     //分页查询第二张表
     public List<InfomationDao> query(final SQLiteDatabase sqliteDB, final int VALUE_ID, final int pageNum) {
-        LogFactory.l().i("pageNum=="+pageNum);
+        LogFactory.l().i("pageNum==" + pageNum);
         try {
             final String table = "medical_encyclopedia";
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     Cursor cursor = sqliteDB.rawQuery("select * from " + table + " where columnId=" +
-                            VALUE_ID +" limit "+11+" offset "+pageNum, null);
+                            VALUE_ID + " limit " + 11 + " offset " + pageNum, null);
                     while (cursor.moveToNext()) {
                         InfomationDao bean = setInfomationBean(cursor);
                         mBeanLists.add(bean);
@@ -219,10 +220,10 @@ public class DBManager {
                         infomationBean = setInfomationBean(cursor);
                     }
                     cursor.close();
-                    if(listener!=null){
+                    if (listener != null) {
                         listener.OnQuerySuccess();
                     }
-                    LogUtil.i(""+System.currentTimeMillis());
+                    LogUtil.i("" + System.currentTimeMillis());
                 }
             }).run();
             return infomationBean;
@@ -245,7 +246,7 @@ public class DBManager {
                         infomationBean = setInfomationBean(cursor);
                     }
                     cursor.close();
-                    LogUtil.i(""+System.currentTimeMillis());
+                    LogUtil.i("" + System.currentTimeMillis());
                 }
             }).run();
             return infomationBean;
@@ -266,7 +267,7 @@ public class DBManager {
                     Cursor cursor = sqliteDB.query(table, columns, selection, selectionArgs,
                             null, null,
                             null);
-                    LogUtil.i(""+System.currentTimeMillis());
+                    LogUtil.i("" + System.currentTimeMillis());
                     while (cursor.moveToNext()) {
                         String title = cursor.getString(cursor.getColumnIndex("name"));
                         int id = cursor.getInt(cursor.getColumnIndex("id"));

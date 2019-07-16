@@ -10,7 +10,9 @@ public interface HealthyContract {
 
     interface View extends IView {
         void getHealthySuccess(List<VideoInfoDao> list);
+
         void getHealthyNull();
+
         void getHealthyEnd();
     }
 

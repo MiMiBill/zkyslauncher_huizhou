@@ -32,13 +32,13 @@ public class UserPresenter extends BasePresenter<UserContract.View> implements U
 //                        LogFactory.l().i("response==="+response.body().getData());
                         if (response.body().getData() == null) {
 //                            mView.qeryNotLogin();
-                            if(listener!=null)
+                            if (listener != null)
                                 listener.qeryNotLogin();
                             return;
-                        }else {
+                        } else {
                             UserUtil.setUserBean(response.body().getData());
                             EventBus.getDefault().post(new UserInfoEvent(response.body().getData()));
-                            if(listener!=null)
+                            if (listener != null)
                                 listener.startQueryUser(response.body().getData());
                         }
                     }
@@ -47,7 +47,7 @@ public class UserPresenter extends BasePresenter<UserContract.View> implements U
                     public void onError(Response<BaseBean<UserBean>> response) {
                         super.onError(response);
 //                        mView.qeryNotLogin();
-                        if(listener!=null)
+                        if (listener != null)
                             listener.qeryNotLogin();
                     }
                 });
@@ -62,28 +62,30 @@ public class UserPresenter extends BasePresenter<UserContract.View> implements U
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        if(listener!=null)
+                        if (listener != null)
                             listener.QueryCode(response.body());
                     }
 
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
-                        if(listener!=null)
+                        if (listener != null)
                             listener.qeryNotLogin();
                     }
                 });
     }
 
 
-    public void setOnUserListener(UserListener listener){
-        this.listener=listener;
+    public void setOnUserListener(UserListener listener) {
+        this.listener = listener;
     }
 
 
-    public interface UserListener{
+    public interface UserListener {
         void startQueryUser(UserBean bean);
+
         void qeryNotLogin();
+
         void QueryCode(String data);
     }
 

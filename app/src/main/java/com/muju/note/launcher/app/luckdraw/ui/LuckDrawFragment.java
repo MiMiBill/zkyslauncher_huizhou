@@ -39,7 +39,7 @@ public class LuckDrawFragment extends BaseFragment<LuckPresenter> implements Luc
     Button btnList;
     private LoginDialog loginDialog;
     private List<PriseBean.GiftListBean> giftBeans = new ArrayList<>();
-    private List<PriseBean.PointListBean> pointList=new ArrayList<>();
+    private List<PriseBean.PointListBean> pointList = new ArrayList<>();
     private int[] luckIndex = {1, 4, 6, 9, 11};
     private Handler handler = new Handler() {
         @Override
@@ -62,7 +62,7 @@ public class LuckDrawFragment extends BaseFragment<LuckPresenter> implements Luc
     @Override
     public void initData() {
         EventBus.getDefault().register(this);
-        if(UserUtil.getUserBean()!=null){
+        if (UserUtil.getUserBean() != null) {
             mPresenter.getPointList(UserUtil.getUserBean().getId());
         }
 
@@ -95,7 +95,7 @@ public class LuckDrawFragment extends BaseFragment<LuckPresenter> implements Luc
     //获取奖品列表个人信息
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(GetGiftListEvent event) {
-       mPresenter.getPointList(UserUtil.getUserBean().getId());
+        mPresenter.getPointList(UserUtil.getUserBean().getId());
     }
 
     @Override
@@ -109,16 +109,16 @@ public class LuckDrawFragment extends BaseFragment<LuckPresenter> implements Luc
     }
 
 
-    @OnClick({R.id.ll_back,R.id.btn_list})
+    @OnClick({R.id.ll_back, R.id.btn_list})
     public void onViewClicked(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.ll_back:
                 pop();
                 break;
             case R.id.btn_list:
-                if(UserUtil.getUserBean()==null){
+                if (UserUtil.getUserBean() == null) {
                     showLoginDialog();
-                }else {
+                } else {
                     start(new PriseFragment());
                 }
                 break;
@@ -160,6 +160,6 @@ public class LuckDrawFragment extends BaseFragment<LuckPresenter> implements Luc
         giftBeans = priseBeans.getGiftList();
         pointList = priseBeans.getPointList();
         SPUtil.saveDataList(Constants.PRISE_TASK_LIST, pointList);
-        SPUtil.saveDataList(Constants.USER_TASK_LIST,giftBeans);
+        SPUtil.saveDataList(Constants.USER_TASK_LIST, giftBeans);
     }
 }

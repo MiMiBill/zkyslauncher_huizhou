@@ -14,7 +14,7 @@ import java.util.List;
 public class MsgPresenter extends BasePresenter<MsgContract.View> implements MsgContract.Presenter {
 
     /**
-     *  查询通知消息
+     * 查询通知消息
      */
     @Override
     public void querymsg() {
@@ -22,11 +22,11 @@ public class MsgPresenter extends BasePresenter<MsgContract.View> implements Msg
         LitePal.order("createTime desc").findAsync(CustomMessageDao.class).listen(new FindMultiCallback<CustomMessageDao>() {
             @Override
             public void onFinish(List<CustomMessageDao> list) {
-                if(mView==null){
+                if (mView == null) {
                     LogUtil.e("mView为空");
                     return;
                 }
-                if(list==null||list.size()<=0){
+                if (list == null || list.size() <= 0) {
                     mView.getMsgNull();
                     return;
                 }

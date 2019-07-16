@@ -14,21 +14,22 @@ import java.util.List;
 
 public class ProtectionPresenter extends BasePresenter<ProtectionContract.View> implements ProtectionContract
         .Presenter {
-    private static final String TAG="ProtectionPresenter";
+    private static final String TAG = "ProtectionPresenter";
+
     /**
      * 获取轮播广告
      */
     @Override
     public void getLockBananaList(String code) {
         LitePalDb.setZkysDb();
-        LitePal.where("code =?",code).findAsync(AdvertsCodeDao.class).listen(new FindMultiCallback<AdvertsCodeDao>() {
+        LitePal.where("code =?", code).findAsync(AdvertsCodeDao.class).listen(new FindMultiCallback<AdvertsCodeDao>() {
             @Override
             public void onFinish(List<AdvertsCodeDao> list) {
-                if(mView==null){
+                if (mView == null) {
                     LogUtil.e("mView为空");
                     return;
                 }
-                LogFactory.l().i("list"+list.size());
+                LogFactory.l().i("list" + list.size());
                 if (list == null || list.size() <= 0) {
                     mView.getLockBananaNull();
                     return;

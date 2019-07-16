@@ -7,43 +7,43 @@ public class ModelCountDao extends LitePalSupport {
     private int id;
 
     /**
-     *  imei
+     * imei
      */
     private String imei;
 
     /**
-     *  模块名称，类名
+     * 模块名称，类名
      */
     private String modelName;
 
     /**
-     *  模块标识
+     * 模块标识
      */
     private String modelTag;
 
     /**
-     *  医院ID
+     * 医院ID
      */
     private int hosId;
 
     /**
-     *  科室ID
+     * 科室ID
      */
     private int depId;
 
     /**
-     *   日期
+     * 日期
      */
     private String date;
 
 
     /**
-     *  展示时长，单位毫秒
+     * 展示时长，单位毫秒
      */
     private long showTime;
 
     /**
-     *  展示次数
+     * 展示次数
      */
     private int showCount;
 

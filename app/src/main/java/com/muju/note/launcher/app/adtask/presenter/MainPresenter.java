@@ -71,7 +71,7 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
 
                     @Override
                     public void onNext(Long aLong) {
-                        if(mView==null){
+                        if (mView == null) {
                             LogUtil.e("mView为空");
                             return;
                         }

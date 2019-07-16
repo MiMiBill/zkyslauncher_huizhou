@@ -70,8 +70,8 @@ public class ClideFragment extends BaseFragment<ClidePresenter> implements View.
         tvTitle.setText("儿童专栏");
         llBack.setOnClickListener(this);
 
-        videoInfoDaos=new ArrayList<>();
-        clideAdapter=new ClideAdapter(R.layout.rv_item_video_content,videoInfoDaos);
+        videoInfoDaos = new ArrayList<>();
+        clideAdapter = new ClideAdapter(R.layout.rv_item_video_content, videoInfoDaos);
         rlClide.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(), 5));
         rlClide.setAdapter(clideAdapter);
 
@@ -92,7 +92,7 @@ public class ClideFragment extends BaseFragment<ClidePresenter> implements View.
 
     @Override
     public void initPresenter() {
-        mPresenter=new ClidePresenter();
+        mPresenter = new ClidePresenter();
     }
 
     @Override
@@ -111,7 +111,7 @@ public class ClideFragment extends BaseFragment<ClidePresenter> implements View.
 
     @Override
     public void getClideSuccess(List<VideoInfoDao> list) {
-        if(pageNum==1){
+        if (pageNum == 1) {
             videoInfoDaos.clear();
         }
         smartRefresh.finishRefresh();
@@ -136,44 +136,44 @@ public class ClideFragment extends BaseFragment<ClidePresenter> implements View.
         headerList.clear();
         headerList.addAll(list);
         clideHeaderAdapter.notifyDataSetChanged();
-        mPresenter.getCilde("少儿",pageNum);
+        mPresenter.getCilde("少儿", pageNum);
     }
 
     /**
-     *  刷新数据
+     * 刷新数据
      */
-    private void refreshVideo(){
+    private void refreshVideo() {
         smartRefresh.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                pageNum=1;
+                pageNum = 1;
                 mPresenter.getHeader("少儿");
             }
         });
     }
 
     /**
-     *  加载更多
+     * 加载更多
      */
-    private void loadMore(){
+    private void loadMore() {
         clideAdapter.setEnableLoadMore(true);
         clideAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
                 pageNum++;
-                mPresenter.getCilde("少儿",pageNum);
+                mPresenter.getCilde("少儿", pageNum);
             }
         });
     }
 
     /**
-     *  添加头部
+     * 添加头部
      */
-    private void addHeader(){
-        View headerView=LayoutInflater.from(LauncherApplication.getContext()).inflate(R.layout.header_clide,null);
-        rvHeader=headerView.findViewById(R.id.rv_clide_top);
-        headerList=new ArrayList<>();
-        clideHeaderAdapter=new ClideHeaderAdapter(R.layout.rv_item_clide_header,headerList);
+    private void addHeader() {
+        View headerView = LayoutInflater.from(LauncherApplication.getContext()).inflate(R.layout.header_clide, null);
+        rvHeader = headerView.findViewById(R.id.rv_clide_top);
+        headerList = new ArrayList<>();
+        clideHeaderAdapter = new ClideHeaderAdapter(R.layout.rv_item_clide_header, headerList);
         rvHeader.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(), 3));
         rvHeader.setAdapter(clideHeaderAdapter);
         clideHeaderAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -186,16 +186,17 @@ public class ClideFragment extends BaseFragment<ClidePresenter> implements View.
     }
 
     /**
-     *  跳转播放
+     * 跳转播放
+     *
      * @param infoDao
      */
-    private void toPlay(VideoInfoDao infoDao){
+    private void toPlay(VideoInfoDao infoDao) {
         if (!VideoSdkConfig.getInstance().getUser().isLogined()) {
             WoTvUtil.getInstance().login();
             showToast("登入视频中，请稍后");
             return;
         }
-        VideoHisDao hisDao=new VideoHisDao();
+        VideoHisDao hisDao = new VideoHisDao();
         hisDao.setCid(infoDao.getCid());
         hisDao.setCustomTag(infoDao.getCustomTag());
         hisDao.setDescription(infoDao.getDescription());
@@ -204,7 +205,7 @@ public class ClideFragment extends BaseFragment<ClidePresenter> implements View.
         hisDao.setVideoId(infoDao.getVideoId());
         hisDao.setVideoType(infoDao.getVideoType());
         hisDao.setScreenUrl(infoDao.getScreenUrl());
-        WotvPlayFragment wotvPlayFragment=new WotvPlayFragment();
+        WotvPlayFragment wotvPlayFragment = new WotvPlayFragment();
         wotvPlayFragment.setHisDao(hisDao);
         start(wotvPlayFragment, ISupportFragment.SINGLETASK);
     }

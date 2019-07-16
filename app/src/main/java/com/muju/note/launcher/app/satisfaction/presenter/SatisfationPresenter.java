@@ -26,7 +26,7 @@ public class SatisfationPresenter extends BasePresenter<SatisfationContract.View
 
             @Override
             public void onSuccess(Response<String> response) {
-                if(mView==null){
+                if (mView == null) {
                     LogUtil.e("mView为空");
                     return;
                 }
@@ -36,7 +36,7 @@ public class SatisfationPresenter extends BasePresenter<SatisfationContract.View
             @Override
             public void onError(Response<String> response) {
                 super.onError(response);
-                if(mView==null){
+                if (mView == null) {
                     LogUtil.e("mView为空");
                     return;
                 }
@@ -47,13 +47,13 @@ public class SatisfationPresenter extends BasePresenter<SatisfationContract.View
     }
 
     @Override
-    public void getSurveyData(String id,String sign) {
+    public void getSurveyData(String id, String sign) {
         OkGo.<String>get(String.format(UrlUtil.getGetSurveyData(), id)).
                 headers(Constants.PAD_SIGN, sign)
                 .tag(this).execute(new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
-                if(mView==null){
+                if (mView == null) {
                     LogUtil.e("mView为空");
                     return;
                 }

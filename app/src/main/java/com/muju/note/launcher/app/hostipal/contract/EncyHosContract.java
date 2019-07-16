@@ -11,21 +11,32 @@ public interface EncyHosContract {
 
     interface View extends IView {
         void getInfoNull();
+
         void getInfo(List<InfoDao> list);
+
         void getInfoMation(List<InfomationDao> list);
+
         void getInfoMationPage(List<InfomationDao> list);
+
         void setTopInfomation(InfomationDao infomation);
+
         void setInfomationById(InfomationDao infomation);
+
         void setInfomationByTitle(InfomationDao infomation);
+
         void search(List<InfomationDao> list);
     }
 
 
     interface Presenter extends IPresenter<View> {
         void queryEncyCloumn();
+
         void queryTopEncyClopedia();
-        void queryEncyClopediapage(int columnId,int pageNum,int type);
+
+        void queryEncyClopediapage(int columnId, int pageNum, int type);
+
         void queryEncyClopediaById(int columnId);
+
         void querySearch(String keyWord);
     }
 }

@@ -175,12 +175,12 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     private VideoInfoDao imgVideoInfo;
     private AdvertsDialog dialog;
     private HospitalServiceDialog serviceDialog;
-    private String netType="";
-    private Handler handler=new Handler(){
+    private String netType = "";
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case 1:
                     handler.removeMessages(1);
                     int netDbm = (int) msg.obj;
@@ -299,7 +299,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         hisDao.setScreenUrl(infoDao.getScreenUrl());
         WotvPlayFragment wotvPlayFragment = new WotvPlayFragment();
         wotvPlayFragment.setHisDao(hisDao);
-        start(wotvPlayFragment,ISupportFragment.SINGLETASK);
+        start(wotvPlayFragment, ISupportFragment.SINGLETASK);
     }
 
     //加载广告
@@ -413,7 +413,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             ivWifi.setImageResource(R.mipmap.wifi_level_none);
             ivNet.setImageResource(R.mipmap.net_level_none);
         } else {
-            this.netType=netType;
+            this.netType = netType;
             ivWifi.setVisibility(View.GONE);
             ivNet.setVisibility(View.VISIBLE);
             tvNetType.setVisibility(View.VISIBLE);
@@ -423,17 +423,17 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 @Override
                 public void run() {
                     int netDbm = NetWorkUtil.getCurrentNetDBM(LauncherApplication.getContext());
-                    Message message=new Message();
-                    message.what=1;
-                    message.obj= netDbm;
+                    Message message = new Message();
+                    message.what = 1;
+                    message.obj = netDbm;
                     handler.sendMessage(message);
                 }
             }).run();
         }
     }
 
-    private void setNetIcon(String netType,int netDbm) {
-        if(netType.equals("4G")){
+    private void setNetIcon(String netType, int netDbm) {
+        if (netType.equals("4G")) {
             if (netDbm > -95) {
                 ivNet.setImageResource(R.mipmap.net_level_good);
             } else if (netDbm > -105) {
@@ -445,7 +445,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             } else {
                 ivNet.setImageResource(R.mipmap.net_level_none);
             }
-        }else {
+        } else {
             if (netDbm > -75) {
                 ivNet.setImageResource(R.mipmap.net_level_good);
             } else if (netDbm > -85) {
@@ -483,7 +483,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     //没有入院信息
     @Override
     public void notPatientInfo() {
-        this.entity=null;
+        this.entity = null;
         EventBus.getDefault().post(new OutHospitalEvent());
         tvNoHosInfo.setText(activeInfo.getHospitalName() + "-" + activeInfo.getDeptName() + "-" +
                 activeInfo.getBedNumber() + "床");
@@ -612,7 +612,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 EventBus.getDefault().post(new DrawOutEvent());
                 break;
             case R.id.iv_bed_card:
-                start(BedSideCardFragment.newInstance(HomeFragment.entity,false));
+                start(BedSideCardFragment.newInstance(HomeFragment.entity, false));
                 break;
         }
     }

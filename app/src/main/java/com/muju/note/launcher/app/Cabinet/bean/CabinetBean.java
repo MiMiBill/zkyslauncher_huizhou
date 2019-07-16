@@ -43,7 +43,7 @@ public class CabinetBean implements Serializable {
         this.msg = msg;
     }
 
-    public static class DataBean implements Serializable{
+    public static class DataBean implements Serializable {
         /**
          * agentId : 25
          * cabinetCode : 1000000178

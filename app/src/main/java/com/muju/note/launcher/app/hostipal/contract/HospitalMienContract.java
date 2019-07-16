@@ -10,6 +10,7 @@ public interface HospitalMienContract {
 
     interface View extends IView {
         void getMien(List<MienInfoDao> list);
+
         void getMienNull();
     }
 

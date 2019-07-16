@@ -40,8 +40,8 @@ public class PriseFragment extends BaseFragment<PrisePresenter> implements Prise
 
     @Override
     public void initData() {
-        priseBeans=SPUtil.getPriseTaskList(Constants.PRISE_TASK_LIST);
-        giftBeans=SPUtil.getUserTaskList(Constants.USER_TASK_LIST);
+        priseBeans = SPUtil.getPriseTaskList(Constants.PRISE_TASK_LIST);
+        giftBeans = SPUtil.getUserTaskList(Constants.USER_TASK_LIST);
         recyclerView.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(), 4));
         priseAdapter = new PriseAdapter(R.layout.item_prise, priseBeans);
         recyclerView.setAdapter(priseAdapter);
@@ -53,7 +53,7 @@ public class PriseFragment extends BaseFragment<PrisePresenter> implements Prise
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 PriseBean.PointListBean pointListBean = priseBeans.get(position);
-                if(pointListBean.getCount()>0 && giftBeans.get(0).getCount()>=pointListBean.getPoint()){
+                if (pointListBean.getCount() > 0 && giftBeans.get(0).getCount() >= pointListBean.getPoint()) {
                     showRewardDialog(pointListBean);
                 }
             }
@@ -63,12 +63,12 @@ public class PriseFragment extends BaseFragment<PrisePresenter> implements Prise
 
     //显示兑换dialog
     private void showRewardDialog(final PriseBean.PointListBean pointListBean) {
-        rewardDialog = new RewardDialog(getActivity(),"将消耗您"+pointListBean.getPoint()+"积分兑换此奖品")
+        rewardDialog = new RewardDialog(getActivity(), "将消耗您" + pointListBean.getPoint() + "积分兑换此奖品")
                 .setCustView(R.layout.dialog_reward);
         rewardDialog.setOnRewardListener(new RewardDialog.OnRewardListener() {
             @Override
             public void onReward() {
-                mPresenter.useReward(pointListBean.getId(),1);
+                mPresenter.useReward(pointListBean.getId(), 1);
             }
         });
         rewardDialog.show();
@@ -94,12 +94,12 @@ public class PriseFragment extends BaseFragment<PrisePresenter> implements Prise
 
     private void setGift(PriseBean priseBean) {
         giftBeans.clear();
-        giftBeans=priseBean.getGiftList();
+        giftBeans = priseBean.getGiftList();
         priseBeans.clear();
-        priseBeans=priseBean.getPointList();
+        priseBeans = priseBean.getPointList();
         priseAdapter.setNewData(priseBean.getPointList());
         SPUtil.saveDataList(Constants.PRISE_TASK_LIST, priseBeans);
-        SPUtil.saveDataList(Constants.USER_TASK_LIST,giftBeans);
+        SPUtil.saveDataList(Constants.USER_TASK_LIST, giftBeans);
     }
 
     @Override

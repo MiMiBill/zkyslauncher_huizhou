@@ -37,15 +37,16 @@ public class LargePicFragment extends BaseFragment {
     @BindView(R.id.progress)
     ProgressBar progress;
 
-    private static final String LARGE_PIC_TITLE="large_pic_title";
-    private static final String LARGE_PIC_ID="large_pic_id";
-    private static final String LARGE_PIC_URL="large_pic_url";
+    private static final String LARGE_PIC_TITLE = "large_pic_title";
+    private static final String LARGE_PIC_ID = "large_pic_id";
+    private static final String LARGE_PIC_URL = "large_pic_url";
 
     private String title;
     private int advertId;
     private String url;
     private long startTime;
-    public static LargePicFragment newInstance(String title, int id,String url) {
+
+    public static LargePicFragment newInstance(String title, int id, String url) {
         Bundle args = new Bundle();
         args.putString(LARGE_PIC_TITLE, title);
         args.putString(LARGE_PIC_URL, url);
@@ -63,9 +64,9 @@ public class LargePicFragment extends BaseFragment {
     @Override
     public void initData() {
 
-        advertId=getArguments().getInt(LARGE_PIC_ID);
-        title=getArguments().getString(LARGE_PIC_TITLE);
-        url=getArguments().getString(LARGE_PIC_URL);
+        advertId = getArguments().getInt(LARGE_PIC_ID);
+        title = getArguments().getString(LARGE_PIC_TITLE);
+        url = getArguments().getString(LARGE_PIC_URL);
 
         imageView.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_CUSTOM);
         startTime = System.currentTimeMillis();
@@ -94,9 +95,9 @@ public class LargePicFragment extends BaseFragment {
 
 
     private void doFinish() {
-        long currentTime=System.currentTimeMillis();
+        long currentTime = System.currentTimeMillis();
         AdvertsUtil.getInstance().addData(advertId, AdvertsUtil.TAG_BROWSETIME,
-                currentTime-startTime);
+                currentTime - startTime);
         AdvertsUtil.getInstance().addDataInfo(advertId, AdvertsUtil.TAG_BROWSETIME,
                 startTime, currentTime);
         EventBus.getDefault().post(new VideoCodeFailEvent(true));

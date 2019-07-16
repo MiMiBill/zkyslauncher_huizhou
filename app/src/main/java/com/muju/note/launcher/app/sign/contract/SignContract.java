@@ -9,14 +9,18 @@ import com.muju.note.launcher.base.IView;
 public interface SignContract {
     interface View extends IView {
         void chesignStatus(SignStatusBean bean);
+
         void checkSign(SignBean data);
+
         void doTask(TaskBean taskBean);
     }
 
 
     interface Presenter extends IPresenter<SignContract.View> {
         void checkSign(int id);
+
         void checkSignStatus(int id);
-        void doTask(int userId,int advertId);
+
+        void doTask(int userId, int advertId);
     }
 }

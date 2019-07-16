@@ -34,17 +34,17 @@ public class FeedBackPresenter extends BasePresenter<FeedBackContract.View> impl
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        if(mView==null){
+                        if (mView == null) {
                             LogUtil.e("mView为空");
                             return;
                         }
-                       mView.post(response.body());
+                        mView.post(response.body());
                     }
 
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
-                        if(mView==null){
+                        if (mView == null) {
                             LogUtil.e("mView为空");
                             return;
                         }

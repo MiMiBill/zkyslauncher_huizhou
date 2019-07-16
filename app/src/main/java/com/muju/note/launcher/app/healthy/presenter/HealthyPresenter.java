@@ -15,16 +15,16 @@ public class HealthyPresenter extends BasePresenter<HealthyContract.View> implem
     @Override
     public void getHealthy(String name, int pageNum) {
         LitePalDb.setZkysDb();
-        String sql="customTag like '%"+name+"%' or keywords like '%"+name+"%' or name like '%"+name+"%'" +
+        String sql = "customTag like '%" + name + "%' or keywords like '%" + name + "%' or name like '%" + name + "%'" +
                 " and status = 1 order by number desc,onwayTime desc,editTime desc,updateTime desc";
         LitePal.where(sql).findAsync(VideoInfoDao.class).listen(new FindMultiCallback<VideoInfoDao>() {
             @Override
             public void onFinish(List<VideoInfoDao> list) {
-                if(mView==null){
+                if (mView == null) {
                     LogUtil.e("mView为空");
                     return;
                 }
-                if(list==null||list.size()<=0){
+                if (list == null || list.size() <= 0) {
                     mView.getHealthyNull();
                     return;
                 }

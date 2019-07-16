@@ -17,7 +17,8 @@ import java.util.List;
 public class DepartmentAdapter extends BaseAdapter {
     List<InfoDao> infoBeans = new ArrayList<>();
     private Context context;
-    public DepartmentAdapter(List<InfoDao> infoBeans,Context context) {
+
+    public DepartmentAdapter(List<InfoDao> infoBeans, Context context) {
         this.infoBeans = infoBeans;
         this.context = context;
     }
@@ -67,7 +68,7 @@ public class DepartmentAdapter extends BaseAdapter {
         return convertView;
     }
 
-     class ViewHolder {
+    class ViewHolder {
         public TextView textView;
         public ImageView imageView;
         public LinearLayout layout;

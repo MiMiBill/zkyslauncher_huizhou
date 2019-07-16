@@ -46,12 +46,12 @@ public class NullFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.ll_back:
                 pop();
                 break;
             case R.id.iv_null:
-                popTo(HomeFragment.class,false);
+                popTo(HomeFragment.class, false);
                 break;
         }
     }

@@ -16,10 +16,9 @@ import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2018/8/1.
- *
  */
 
-public class CustomMsgDialog extends Dialog implements View.OnClickListener{
+public class CustomMsgDialog extends Dialog implements View.OnClickListener {
 
     private String mContent;
     private int mLayoutId;
@@ -42,9 +41,9 @@ public class CustomMsgDialog extends Dialog implements View.OnClickListener{
         attr.height = (int) (outMetric.heightPixels * 0.75625f);
         getWindow().setAttributes(attr);
         setCancelable(false);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){//6.0+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {//6.0+
             getWindow().setType(WindowManager.LayoutParams.TYPE_TOAST);
-        }else {
+        } else {
             getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         }
 //        getWindow().setType(WindowManager.LayoutParams.TYPE_TOAST);
@@ -52,7 +51,7 @@ public class CustomMsgDialog extends Dialog implements View.OnClickListener{
 
     }
 
-    private void initView(){
+    private void initView() {
         TextView tvContent = findViewById(R.id.tv_content);
         //展示的内容
         tvContent.setText(mContent);
@@ -61,7 +60,7 @@ public class CustomMsgDialog extends Dialog implements View.OnClickListener{
         btnPosition.setOnClickListener(this);
     }
 
-    public CustomMsgDialog setCustView(int id){
+    public CustomMsgDialog setCustView(int id) {
         this.mLayoutId = id;
         return this;
     }
@@ -69,7 +68,7 @@ public class CustomMsgDialog extends Dialog implements View.OnClickListener{
     @OnClick({R.id.btn_positive})
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_positive:
                 dismiss();
                 break;

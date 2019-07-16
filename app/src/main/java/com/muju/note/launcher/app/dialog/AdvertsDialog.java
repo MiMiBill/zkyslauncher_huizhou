@@ -32,22 +32,23 @@ public class AdvertsDialog extends Dialog {
 
     private View.OnClickListener listener;
     private OnAdDialogDismissListener dismissListener;
-    private Handler handler=new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case 1:
                     dismissListener.OnAdDialogDismiss();
                     break;
             }
         }
     };
+
     public AdvertsDialog(@NonNull Context context, int themeResId) {
         super(context, themeResId);
     }
 
-    public void removeHandler(){
+    public void removeHandler() {
         handler.removeMessages(1);
     }
 
@@ -78,9 +79,9 @@ public class AdvertsDialog extends Dialog {
 
     public void loadImg(String url, int closeType, int second) {
 //        Glide.with(LauncherApplication.getContext()).load(url).into(ivAdvert);
-        if(closeType==2){
+        if (closeType == 2) {
             ivDissmiss.setVisibility(View.GONE);
-            handler.sendEmptyMessageDelayed(1,second*1000);
+            handler.sendEmptyMessageDelayed(1, second * 1000);
         }
         Glide.with(LauncherApplication.getContext()).load(url).into(new SimpleTarget<Drawable>() {
             @Override
@@ -92,8 +93,8 @@ public class AdvertsDialog extends Dialog {
         });
     }
 
-    public void setOnAdDialogDismissListener(OnAdDialogDismissListener listener){
-        this.dismissListener=listener;
+    public void setOnAdDialogDismissListener(OnAdDialogDismissListener listener) {
+        this.dismissListener = listener;
     }
 
 }

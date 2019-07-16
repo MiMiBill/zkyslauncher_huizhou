@@ -25,6 +25,7 @@ import com.muju.note.launcher.url.UrlUtil;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+
 //个人中心
 public class UserSettingFragment extends BaseFragment {
     @BindView(R.id.iv_back)
@@ -86,7 +87,7 @@ public class UserSettingFragment extends BaseFragment {
 
     }
 
-    private void toHide(){
+    private void toHide() {
         final EditText et = new EditText(getContext());
         AlertDialog dialog = new AlertDialog.Builder(getContext())
                 .setView(et)
@@ -211,7 +212,6 @@ public class UserSettingFragment extends BaseFragment {
     public void showError(String msg) {
 
     }
-
 
 
     private void addShowOrHideFragment(Fragment showFg, Fragment hideFg) {

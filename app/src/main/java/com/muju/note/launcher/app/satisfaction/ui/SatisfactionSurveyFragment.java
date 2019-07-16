@@ -48,13 +48,14 @@ public class SatisfactionSurveyFragment extends BaseFragment<SatisfationPresente
     Button btnCommit;
     @BindView(R.id.satisfaction_data)
     RecyclerView satisfactionData;
-    List<SatisfactionDetailResponse.DataBean.ProblemsBean> data=new ArrayList<>();
+    List<SatisfactionDetailResponse.DataBean.ProblemsBean> data = new ArrayList<>();
     SatisfactionAdapter2 adapter;
     View head, foot;
     ProgressDialog progressDialog;
     int failure = 0;
     private Context context;
-    private String padsurveyid="";
+    private String padsurveyid = "";
+
     @Override
     public int getLayout() {
         return R.layout.activity_satisfaction;
@@ -71,9 +72,9 @@ public class SatisfactionSurveyFragment extends BaseFragment<SatisfationPresente
     @Override
     public void initData() {
         EventBus.getDefault().post(new VideoNoLockEvent(false));
-        context=getActivity();
+        context = getActivity();
         title.hideBackBtn();
-        padsurveyid=getArguments().getString(Constants.PAD_SURVEY_ID);
+        padsurveyid = getArguments().getString(Constants.PAD_SURVEY_ID);
         satisfactionData.setLayoutManager(new LinearLayoutManager(context));
         inHeadAndFoot();
         head = LayoutInflater.from(context).inflate(R.layout.head_satisfaction_layout, null);
@@ -104,7 +105,7 @@ public class SatisfactionSurveyFragment extends BaseFragment<SatisfationPresente
 
     @Override
     public void initPresenter() {
-        mPresenter=new SatisfationPresenter();
+        mPresenter = new SatisfationPresenter();
     }
 
     private void inHeadAndFoot() {
@@ -131,7 +132,7 @@ public class SatisfactionSurveyFragment extends BaseFragment<SatisfationPresente
         params.put("answerList", result);
         String sign = Signature.getSign(params, MobileInfoUtil.getICCID(context));
 
-        mPresenter.getCommitSurveyData(sign,adapter.getSatisfaResult());
+        mPresenter.getCommitSurveyData(sign, adapter.getSatisfaResult());
     }
 
     private void getSatisfactionData(String id) {
@@ -140,7 +141,7 @@ public class SatisfactionSurveyFragment extends BaseFragment<SatisfationPresente
         params.put("id", id);
         String sign = Signature.getSign(params, MobileInfoUtil.getICCID(context));
 
-        mPresenter.getSurveyData(id,sign);
+        mPresenter.getSurveyData(id, sign);
     }
 
 

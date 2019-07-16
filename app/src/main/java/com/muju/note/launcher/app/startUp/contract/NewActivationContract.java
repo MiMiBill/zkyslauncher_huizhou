@@ -9,6 +9,7 @@ public interface NewActivationContract {
 
     interface View extends IView {
         void bindSuccess(ActivePadInfo.DataBean bean);
+
         void bindFail();
     }
 

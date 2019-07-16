@@ -19,7 +19,7 @@ public class PriseAdapter extends BaseQuickAdapter<PriseBean.PointListBean, Base
     protected void convert(BaseViewHolder helper, PriseBean.PointListBean item) {
 //        GlideUtil.loadImg(item.getImg(), (ImageView) helper.getView(R.id.iv_img),R.mipmap.ic_video_load_default);
         helper.setText(R.id.tv_name, item.getName());
-        helper.setText(R.id.tv_count, item.getCount()+"");
+        helper.setText(R.id.tv_count, item.getCount() + "");
 
         helper.addOnClickListener(R.id.rel_gift);
     }

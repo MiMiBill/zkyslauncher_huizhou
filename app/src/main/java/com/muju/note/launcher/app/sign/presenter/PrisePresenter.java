@@ -23,7 +23,7 @@ public class PrisePresenter extends BasePresenter<PriseContract.View> implements
                 .execute(new JsonCallback<BaseBean<PriseBean>>() {
                     @Override
                     public void onSuccess(Response<BaseBean<PriseBean>> response) {
-                        if(mView==null){
+                        if (mView == null) {
                             LogUtil.e("mView为空");
                             return;
                         }

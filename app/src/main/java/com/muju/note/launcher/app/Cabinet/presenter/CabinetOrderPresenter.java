@@ -15,11 +15,11 @@ public class CabinetOrderPresenter extends BasePresenter<CabinetOrderContract.Vi
     public void unLock(String did) {
         OkGo.<String>post(UrlUtil.unLock())
                 .tag(UrlUtil.unLock())
-                .params("did",did)
+                .params("did", did)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        if(mView==null){
+                        if (mView == null) {
                             LogUtil.e("mView为空");
                             return;
                         }
@@ -29,7 +29,7 @@ public class CabinetOrderPresenter extends BasePresenter<CabinetOrderContract.Vi
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
-                        if(mView==null){
+                        if (mView == null) {
                             LogUtil.e("mView为空");
                             return;
                         }
@@ -42,11 +42,11 @@ public class CabinetOrderPresenter extends BasePresenter<CabinetOrderContract.Vi
     public void returnBed(int id) {
         OkGo.<String>post(UrlUtil.returnBed())
                 .tag(UrlUtil.returnBed())
-                .params("id",id)
+                .params("id", id)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        if(mView==null){
+                        if (mView == null) {
                             LogUtil.e("mView为空");
                             return;
                         }
@@ -56,7 +56,7 @@ public class CabinetOrderPresenter extends BasePresenter<CabinetOrderContract.Vi
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
-                        if(mView==null){
+                        if (mView == null) {
                             LogUtil.e("mView为空");
                             return;
                         }
@@ -69,11 +69,11 @@ public class CabinetOrderPresenter extends BasePresenter<CabinetOrderContract.Vi
     public void findByDid(String did) {
         OkGo.<String>post(UrlUtil.findByDId())
                 .tag(UrlUtil.findByDId())
-                .params("did",did)
+                .params("did", did)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        if(mView==null){
+                        if (mView == null) {
                             LogUtil.e("mView为空");
                             return;
                         }
@@ -83,7 +83,7 @@ public class CabinetOrderPresenter extends BasePresenter<CabinetOrderContract.Vi
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
-                        if(mView==null){
+                        if (mView == null) {
                             LogUtil.e("mView为空");
                             return;
                         }

@@ -81,7 +81,7 @@ public class PatientResponse implements Serializable {
         private int pageNum;
         private String chargeNurse;
         private String number;
-//        private String createTabbDate;
+        //        private String createTabbDate;
         private String jpushRegistid;
         private int teamId;
         private String chargeDoctor;
@@ -286,7 +286,7 @@ public class PatientResponse implements Serializable {
         }
 
         public boolean getDisabled() {
-            return disabled==1;
+            return disabled == 1;
         }
 
         public void setDisabled(int disabled) {

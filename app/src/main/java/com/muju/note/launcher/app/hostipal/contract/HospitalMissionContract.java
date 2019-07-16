@@ -11,6 +11,7 @@ public interface HospitalMissionContract {
 
     interface View extends IView {
         void getMission(List<MissionInfoDao> list);
+
         void getMissNull();
     }
 

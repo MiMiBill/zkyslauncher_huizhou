@@ -14,10 +14,11 @@ public class InfoDao extends LitePalSupport {
 
 
     /**
-     *   新增数据
+     * 新增数据
+     *
      * @param dao
      */
-    public void saveDb(InfoDao dao){
+    public void saveDb(InfoDao dao) {
         LitePal.use(LitePalDb.zkysDb);
         dao.save();
     }

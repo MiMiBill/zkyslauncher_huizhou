@@ -18,7 +18,7 @@ public class EncyclopsediasPresenter extends BasePresenter<EncyContract.View> im
         OkGo.<BaseBean<GetDownloadBean>>get(UrlUtil.getDb()).tag(this).execute(new JsonCallback<BaseBean<GetDownloadBean>>() {
             @Override
             public void onSuccess(Response<BaseBean<GetDownloadBean>> response) {
-                if(mView==null){
+                if (mView == null) {
                     LogUtil.e("mView为空");
                     return;
                 }

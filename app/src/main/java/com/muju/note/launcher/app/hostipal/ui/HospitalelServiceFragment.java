@@ -54,7 +54,7 @@ public class HospitalelServiceFragment extends BaseFragment {
         rl.setLayoutManager(new GridLayoutManager(LauncherApplication.getInstance(), 5));
         final List<Entity> data = new ArrayList<>();
 
-        data.add(new Entity(R.mipmap.icon_cost_query,null));
+        data.add(new Entity(R.mipmap.icon_cost_query, null));
         data.add(new Entity(R.mipmap.icon_laboratory_notice, null));
         data.add(new Entity(R.mipmap.icon_examination_report, null));
         data.add(new Entity(R.mipmap.icon_be_careful, null));
@@ -66,11 +66,11 @@ public class HospitalelServiceFragment extends BaseFragment {
         serviceAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if(position==0){
+                if (position == 0) {
                     start(new CostFragment());
-                }else if(position==2){
+                } else if (position == 2) {
                     start(new ChemotherapyFragment());
-                }else {
+                } else {
                     FancyToast.makeText(LauncherApplication.getInstance(), "更多功能,敬请期待", FancyToast.LENGTH_SHORT).show();
                 }
             }

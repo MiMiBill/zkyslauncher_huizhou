@@ -10,6 +10,7 @@ public interface MsgContract {
 
     interface View extends IView {
         void getMsg(List<CustomMessageDao> list);
+
         void getMsgNull();
     }
 

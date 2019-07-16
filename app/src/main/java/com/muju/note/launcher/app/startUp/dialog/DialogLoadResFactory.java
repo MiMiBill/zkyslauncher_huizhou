@@ -3,6 +3,7 @@ package com.muju.note.launcher.app.startUp.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
+
 import com.dyhdyh.widget.loading.factory.DialogFactory;
 import com.muju.note.launcher.R;
 
@@ -25,7 +26,7 @@ public class DialogLoadResFactory implements DialogFactory {
 
     ClickCallback clickCallback;
 
-    public interface ClickCallback{
+    public interface ClickCallback {
         void onClick(Dialog dialog, int type);
     }
 

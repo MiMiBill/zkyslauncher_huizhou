@@ -24,7 +24,7 @@ import cn.youngkaaa.yviewpager.YViewPager;
 
 public class GuideFragment extends BaseFragment {
 
-    public static final String STATUS="status";
+    public static final String STATUS = "status";
 
     @BindView(R.id.yvp_guide)
     YViewPager yvpGuide;
@@ -78,9 +78,9 @@ public class GuideFragment extends BaseFragment {
 
         yvpGuide.setAdapter(new FragmentAdapter(getChildFragmentManager()));
 
-        if(getArguments().getInt(STATUS)==1){
+        if (getArguments().getInt(STATUS) == 1) {
             imgClose.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             imgClose.setVisibility(View.GONE);
         }
     }

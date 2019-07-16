@@ -18,44 +18,45 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- *  模块数据统计
+ * 模块数据统计
  */
 public class ModelDbUtil {
 
-    private static final String TAG=ModelDbUtil.class.getSimpleName();
+    private static final String TAG = ModelDbUtil.class.getSimpleName();
 
-    public static ModelDbUtil modelDbUtil=null;
+    public static ModelDbUtil modelDbUtil = null;
 
-    public static ModelDbUtil getInstance(){
-        if(modelDbUtil==null){
-            modelDbUtil=new ModelDbUtil();
+    public static ModelDbUtil getInstance() {
+        if (modelDbUtil == null) {
+            modelDbUtil = new ModelDbUtil();
         }
         return modelDbUtil;
     }
 
     /**
-     *  添加模块count数据
+     * 添加模块count数据
+     *
      * @param className
      * @param startTime
      * @param endTime
      */
-    public void modelCount(final String className, final long startTime, final long endTime){
-        ExecutorService service= Executors.newSingleThreadExecutor();
+    public void modelCount(final String className, final long startTime, final long endTime) {
+        ExecutorService service = Executors.newSingleThreadExecutor();
         service.execute(new Runnable() {
             @Override
             public void run() {
-                final String tagName=getTagName(className);
+                final String tagName = getTagName(className);
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                 Date d = new Date(System.currentTimeMillis());
                 final String date = format.format(d);
                 LitePalDb.setZkysDb();
-                LitePal.where("modelTag=? and date=? and modelName=?",tagName,date,className).findFirstAsync(ModelCountDao.class).listen(new FindCallback<ModelCountDao>() {
+                LitePal.where("modelTag=? and date=? and modelName=?", tagName, date, className).findFirstAsync(ModelCountDao.class).listen(new FindCallback<ModelCountDao>() {
                     @Override
                     public void onFinish(ModelCountDao modelCountDao) {
-                        if(modelCountDao==null){
-                            addCount(tagName,className,date,startTime,endTime);
-                        }else {
-                            updateCount(modelCountDao,startTime,endTime);
+                        if (modelCountDao == null) {
+                            addCount(tagName, className, date, startTime, endTime);
+                        } else {
+                            updateCount(modelCountDao, startTime, endTime);
                         }
                     }
                 });
@@ -63,8 +64,8 @@ public class ModelDbUtil {
         });
     }
 
-    private void addCount(String tagName,String className,String date,long startTime,long endTime){
-        ModelCountDao dao=new ModelCountDao();
+    private void addCount(String tagName, String className, String date, long startTime, long endTime) {
+        ModelCountDao dao = new ModelCountDao();
         dao.setDate(date);
         dao.setDepId(ActiveUtils.getPadActiveInfo().getDeptId());
         dao.setHosId(ActiveUtils.getPadActiveInfo().getHospitalId());
@@ -72,32 +73,33 @@ public class ModelDbUtil {
         dao.setModelName(className);
         dao.setModelTag(tagName);
         dao.setShowCount(1);
-        dao.setShowTime((endTime-startTime));
+        dao.setShowTime((endTime - startTime));
         LitePalDb.setZkysDb();
         dao.save();
     }
 
-    private void updateCount(ModelCountDao dao,long startTime,long endTime){
-        dao.setShowCount(dao.getShowCount()+1);
-        dao.setShowTime(dao.getShowTime()+(endTime-startTime));
+    private void updateCount(ModelCountDao dao, long startTime, long endTime) {
+        dao.setShowCount(dao.getShowCount() + 1);
+        dao.setShowTime(dao.getShowTime() + (endTime - startTime));
         LitePalDb.setZkysDb();
         dao.update(dao.getId());
     }
 
     /**
-     *  添加模块详情数据
+     * 添加模块详情数据
+     *
      * @param className
      * @param startTime
      * @param endTime
      */
-    public void modelInfo(final String className, final long startTime, final long endTime){
+    public void modelInfo(final String className, final long startTime, final long endTime) {
         try {
-            final String tagName=getTagName(className);
+            final String tagName = getTagName(className);
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:dd");
             Date d = new Date(System.currentTimeMillis());
             final String date = format.format(d);
             LitePalDb.setZkysDb();
-            ModelInfoDao dao=new ModelInfoDao();
+            ModelInfoDao dao = new ModelInfoDao();
             dao.setDate(date);
             dao.setDepId(ActiveUtils.getPadActiveInfo().getDeptId());
             dao.setHosId(ActiveUtils.getPadActiveInfo().getHospitalId());
@@ -106,15 +108,15 @@ public class ModelDbUtil {
             dao.setModelTag(tagName);
             dao.setStartTime(startTime);
             dao.setEndTime(endTime);
-            dao.setTime((endTime-startTime));
+            dao.setTime((endTime - startTime));
             DbHelper.insertToModelData(LitePalDb.DBNAME_ZKYS_DATA, dao);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private String getTagName(String className){
-        switch (className){
+    private String getTagName(String className) {
+        switch (className) {
             case "HomeFragment":
                 return "首页";
 

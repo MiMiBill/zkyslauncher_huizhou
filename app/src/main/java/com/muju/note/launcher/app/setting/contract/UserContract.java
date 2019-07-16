@@ -8,13 +8,16 @@ public interface UserContract {
 
     interface View extends IView {
         void startQueryUser(UserBean bean);
+
         void qeryNotLogin();
+
         void QueryCode(String data);
     }
 
 
     interface Presenter extends IPresenter<View> {
         void startQueryUser();
+
         void getQueryCode();
     }
 }

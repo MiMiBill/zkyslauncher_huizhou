@@ -11,7 +11,7 @@ import com.muju.note.launcher.util.gilde.GlideUtil;
 
 import java.util.List;
 
-public class ClideHeaderAdapter extends BaseQuickAdapter<VideoInfoDao,BaseViewHolder> {
+public class ClideHeaderAdapter extends BaseQuickAdapter<VideoInfoDao, BaseViewHolder> {
 
     public ClideHeaderAdapter(int layoutResId, @Nullable List<VideoInfoDao> data) {
         super(layoutResId, data);
@@ -19,7 +19,7 @@ public class ClideHeaderAdapter extends BaseQuickAdapter<VideoInfoDao,BaseViewHo
 
     @Override
     protected void convert(BaseViewHolder helper, VideoInfoDao item) {
-        GlideUtil.loadImg(item.getScreenUrl(), (ImageView) helper.getView(R.id.iv_img),R.mipmap.ic_video_load_default);
-        helper.setText(R.id.tv_name,item.getName());
+        GlideUtil.loadImg(item.getScreenUrl(), (ImageView) helper.getView(R.id.iv_img), R.mipmap.ic_video_load_default);
+        helper.setText(R.id.tv_name, item.getName());
     }
 }

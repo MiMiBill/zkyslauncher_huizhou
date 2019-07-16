@@ -39,7 +39,7 @@ import io.reactivex.functions.Consumer;
 
 public class NewActivationActivity extends BaseActivity<NewActivationPresenter> implements NewActivationContract.View {
 
-    private final static String TAG=NewActivationActivity.class.getSimpleName();
+    private final static String TAG = NewActivationActivity.class.getSimpleName();
 
     @BindView(R.id.iv_hide)
     ImageView ivHide;
@@ -95,7 +95,7 @@ public class NewActivationActivity extends BaseActivity<NewActivationPresenter> 
 
     @Override
     public void bindSuccess(ActivePadInfo.DataBean bean) {
-        LogUtil.i(TAG,"bindSuccess");
+        LogUtil.i(TAG, "bindSuccess");
         RxUtil.closeDisposable(disposableCheckActive);
         bean.setHost(UrlUtil.getHost());
         ActiveUtils.setActiveInfo(bean);
@@ -134,16 +134,16 @@ public class NewActivationActivity extends BaseActivity<NewActivationPresenter> 
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void setMsg(CheckMsgEvent event){
+    public void setMsg(CheckMsgEvent event) {
         try {
-            LogUtil.d(TAG,"msg:"+event.getMsg());
-            if(event.isAdd()){
+            LogUtil.d(TAG, "msg:" + event.getMsg());
+            if (event.isAdd()) {
                 list.add(event.getMsg());
-            }else {
-                list.set(list.size()-1,event.getMsg());
+            } else {
+                list.set(list.size() - 1, event.getMsg());
             }
             adapter.notifyDataSetChanged();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

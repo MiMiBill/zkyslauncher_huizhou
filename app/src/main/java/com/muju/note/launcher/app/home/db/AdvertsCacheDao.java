@@ -5,20 +5,20 @@ import org.litepal.crud.LitePalSupport;
 public class AdvertsCacheDao extends LitePalSupport {
 
     /**
-     *  imei
+     * imei
      */
     private String resourceUrl; //图片或者视频地址url
 
     private byte[] imgdata;
 
     /**
-     *  广告ID
+     * 广告ID
      */
     private int advertId;
 
     /*
-    *  广告code
-    * */
+     *  广告code
+     * */
 
     private String adverCode;
 

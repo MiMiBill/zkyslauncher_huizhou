@@ -25,8 +25,8 @@ public class AdvertsCodeDao extends LitePalSupport implements Serializable {
     private int interval;
     private String code;
     private String pubCode;   //公众号回复码
-    private String taskUrl ;
-    private int  taskType;
+    private String taskUrl;
+    private int taskType;
     private int wxType;
 
     /**

@@ -66,10 +66,10 @@ public class PublicNumFragment extends BaseFragment<PublicPresenter> implements 
     public void initData() {
         tvTitle.setText("做任务");
         LitePalDb.setZkysDb();
-        LitePal.where("taskType =?","1").limit(1).findAsync(AdvertsCodeDao.class).listen(new FindMultiCallback<AdvertsCodeDao>() {
+        LitePal.where("taskType =?", "1").limit(1).findAsync(AdvertsCodeDao.class).listen(new FindMultiCallback<AdvertsCodeDao>() {
             @Override
             public void onFinish(List<AdvertsCodeDao> list) {
-                if(list!=null && list.size()>0){
+                if (list != null && list.size() > 0) {
                     AdvertsCodeDao codeDao = list.get(0);
                     if (codeDao != null) {
                         advertId = codeDao.getAdid();
@@ -111,7 +111,7 @@ public class PublicNumFragment extends BaseFragment<PublicPresenter> implements 
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
-        if(popEnterPassword!=null && popEnterPassword.isShowing())
+        if (popEnterPassword != null && popEnterPassword.isShowing())
             popEnterPassword.dismiss();
     }
 
@@ -144,7 +144,6 @@ public class PublicNumFragment extends BaseFragment<PublicPresenter> implements 
         setFragmentResult(RESULT_OK,bundle);
         EventBus.getDefault().post(new UserInfoEvent(UserUtil.getUserBean()));*/
     }
-
 
 
     @OnClick({R.id.ll_back, R.id.btn_code})

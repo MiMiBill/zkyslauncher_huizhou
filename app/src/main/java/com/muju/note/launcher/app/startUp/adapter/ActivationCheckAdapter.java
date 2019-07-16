@@ -16,6 +16,6 @@ public class ActivationCheckAdapter extends BaseQuickAdapter<String, BaseViewHol
 
     @Override
     protected void convert(BaseViewHolder helper, String item) {
-        helper.setText(R.id.tv_msg,item);
+        helper.setText(R.id.tv_msg, item);
     }
 }

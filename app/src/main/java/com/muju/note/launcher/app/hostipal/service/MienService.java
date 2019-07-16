@@ -20,25 +20,25 @@ import java.util.concurrent.Executors;
 
 
 /**
- *  医院风采相关
+ * 医院风采相关
  */
 public class MienService {
 
-    public static MienService mienService=null;
+    public static MienService mienService = null;
 
-    public static  MienService getInstance(){
-        if(mienService==null){
-            mienService=new MienService();
+    public static MienService getInstance() {
+        if (mienService == null) {
+            mienService = new MienService();
         }
         return mienService;
     }
 
-    public void start(){
+    public void start() {
         LitePalDb.setZkysDb();
         LitePal.countAsync(MienInfoDao.class).listen(new CountCallback() {
             @Override
             public void onFinish(int count) {
-                if(count<=0){
+                if (count <= 0) {
                     getMienInfo();
                 }
             }
@@ -46,17 +46,17 @@ public class MienService {
     }
 
     /**
-     *  检查本地是否有医院风采数据
+     * 检查本地是否有医院风采数据
      */
-    public void startMien(){
+    public void startMien() {
         LitePalDb.setZkysDb();
         EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_MIEN_START));
         LitePal.countAsync(MienInfoDao.class).listen(new CountCallback() {
             @Override
             public void onFinish(int count) {
-                if(count<=0){
+                if (count <= 0) {
                     getMienInfo();
-                }else {
+                } else {
                     EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_MIEN_SUCCESS));
                 }
             }
@@ -64,36 +64,36 @@ public class MienService {
     }
 
     /**
-     *   获取医院风采信息并保存到数据库
+     * 获取医院风采信息并保存到数据库
      */
-    public void getMienInfo(){
+    public void getMienInfo() {
         EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_MIEN_HTTP_START));
         OkGo.<BaseBean<List<MienInfoDao>>>get(String.format(UrlUtil.getHospitalInfo(), ActiveUtils.getPadActiveInfo().getHospitalId()))
-               .execute(new JsonCallback<BaseBean<List<MienInfoDao>>>() {
-                   @Override
-                   public void onSuccess(final Response<BaseBean<List<MienInfoDao>>> response) {
-                       EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_MIEN_DB_START));
-                       ExecutorService service=Executors.newSingleThreadExecutor();
-                       service.execute(new Runnable() {
-                           @Override
-                           public void run() {
-                               LitePalDb.setZkysDb();
-                               LitePal.deleteAll(MienInfoDao.class);
-                               for (MienInfoDao dao:response.body().getData()){
+                .execute(new JsonCallback<BaseBean<List<MienInfoDao>>>() {
+                    @Override
+                    public void onSuccess(final Response<BaseBean<List<MienInfoDao>>> response) {
+                        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_MIEN_DB_START));
+                        ExecutorService service = Executors.newSingleThreadExecutor();
+                        service.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                LitePalDb.setZkysDb();
+                                LitePal.deleteAll(MienInfoDao.class);
+                                for (MienInfoDao dao : response.body().getData()) {
                                     dao.setMienId(dao.getId());
                                     dao.save();
-                               }
-                               EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_MIEN_SUCCESS));
-                           }
-                       });
-                   }
+                                }
+                                EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_MIEN_SUCCESS));
+                            }
+                        });
+                    }
 
-                   @Override
-                   public void onError(Response<BaseBean<List<MienInfoDao>>> response) {
-                       super.onError(response);
-                       EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_MIEN_HTTP_FAIL));
-                   }
-               });
+                    @Override
+                    public void onError(Response<BaseBean<List<MienInfoDao>>> response) {
+                        super.onError(response);
+                        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_MIEN_HTTP_FAIL));
+                    }
+                });
     }
 
 }

@@ -15,7 +15,8 @@ import java.util.List;
 public class PathologyAdapter extends BaseAdapter {
     List<InfomationDao> infomationBeans = new ArrayList<>();
     private Context context;
-    public PathologyAdapter(List<InfomationDao> infomationBeans,Context context) {
+
+    public PathologyAdapter(List<InfomationDao> infomationBeans, Context context) {
         this.infomationBeans = infomationBeans;
         this.context = context;
     }
@@ -56,7 +57,7 @@ public class PathologyAdapter extends BaseAdapter {
         return convertView;
     }
 
-   class ViewHolder {
+    class ViewHolder {
         public TextView textView;
     }
 }

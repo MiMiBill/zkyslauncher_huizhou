@@ -16,7 +16,7 @@ public class MsgAdapter extends BaseQuickAdapter<CustomMessageDao, BaseViewHolde
 
     @Override
     protected void convert(BaseViewHolder helper, CustomMessageDao item) {
-        helper.setText(R.id.tv_title,item.getTitle());
-        helper.setText(R.id.tv_date,item.getTime());
+        helper.setText(R.id.tv_title, item.getTitle());
+        helper.setText(R.id.tv_date, item.getTime());
     }
 }

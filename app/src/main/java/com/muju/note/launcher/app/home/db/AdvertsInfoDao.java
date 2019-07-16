@@ -5,47 +5,47 @@ import org.litepal.crud.LitePalSupport;
 public class AdvertsInfoDao extends LitePalSupport {
 
     /**
-     *  imei
+     * imei
      */
     private String imei;
 
     /**
-     *  广告ID
+     * 广告ID
      */
     private int advertId;
 
     /**
-     *  医院ID
+     * 医院ID
      */
     private int hosId;
 
     /**
-     *  科室ID
+     * 科室ID
      */
     private int depId;
 
     /**
-     *   日期
+     * 日期
      */
     private String date;
 
     /**
-     *  类型
+     * 类型
      */
     private int type;
 
     /**
-     *  开始时间
+     * 开始时间
      */
     private long startTime;
 
     /**
-     *  结束时间
+     * 结束时间
      */
     private long endTime;
 
     /**
-     *  时长
+     * 时长
      */
     private long time;
 

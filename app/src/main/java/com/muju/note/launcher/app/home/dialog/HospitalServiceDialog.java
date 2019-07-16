@@ -51,7 +51,7 @@ public class HospitalServiceDialog extends Dialog {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btnConfirm:
-                if(listener!=null){
+                if (listener != null) {
                     listener.onClick(etNumber.getText().toString().trim());
                 }
                 break;
@@ -62,11 +62,11 @@ public class HospitalServiceDialog extends Dialog {
     }
 
 
-    public interface OnClickListener{
-         void onClick(String pass);
+    public interface OnClickListener {
+        void onClick(String pass);
     }
 
-    public void setOnClickListener(OnClickListener listener){
+    public void setOnClickListener(OnClickListener listener) {
         this.listener = listener;
     }
 }

@@ -45,40 +45,42 @@ public class StartCheckDataFragment extends BaseFragment {
     private ActivationCheckAdapter adapter;
 
     private Disposable disposable;
-    private int progress=1;
-    private int count=1;
+    private int progress = 1;
+    private int count = 1;
+
     @Override
     public int getLayout() {
         return R.layout.fragment_start_check;
     }
 
-    private Handler handler=new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case 1:
                     handler.removeMessages(1);
                     count++;
-                    progress=2*count;
-                    if(progress>99){
-                        progress=99;
+                    progress = 2 * count;
+                    if (progress > 99) {
+                        progress = 99;
                     }
 //                    LogFactory.l().i("progress==="+progress);
-                    list.set(list.size()-1,"正在存储..."+progress+"%");
+                    list.set(list.size() - 1, "正在存储..." + progress + "%");
                     adapter.notifyDataSetChanged();
-                    rvCheck.scrollToPosition(list.size()-1);
-                    handler.sendEmptyMessageDelayed(1,1000);
+                    rvCheck.scrollToPosition(list.size() - 1);
+                    handler.sendEmptyMessageDelayed(1, 1000);
                     break;
             }
         }
     };
+
     @Override
     public void initData() {
         EventBus.getDefault().register(this);
-        list=new ArrayList<>();
-        adapter=new ActivationCheckAdapter(R.layout.rv_item_activation_check_msg,list);
-        rvCheck.setLayoutManager(new LinearLayoutManager(LauncherApplication.getContext(),LinearLayoutManager.VERTICAL,false));
+        list = new ArrayList<>();
+        adapter = new ActivationCheckAdapter(R.layout.rv_item_activation_check_msg, list);
+        rvCheck.setLayoutManager(new LinearLayoutManager(LauncherApplication.getContext(), LinearLayoutManager.VERTICAL, false));
         rvCheck.setAdapter(adapter);
 
         VideoService.getInstance().startColumns();
@@ -95,8 +97,8 @@ public class StartCheckDataFragment extends BaseFragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void updateMsg(StartCheckDataEvent event){
-        switch (event.getStatus()){
+    public void updateMsg(StartCheckDataEvent event) {
+        switch (event.getStatus()) {
             case VIDEO_COLUMN_START:
                 list.add("正在初始化影视分类数据，请稍候...");
                 break;
@@ -161,7 +163,7 @@ public class StartCheckDataFragment extends BaseFragment {
                 resetProgress();
                 break;
             case VIDEO_INFO_SUCCESS:
-                list.set(list.size()-1,"正在存储...100%");
+                list.set(list.size() - 1, "正在存储...100%");
                 list.add("影视详情数据初始化成功！");
                 MienService.getInstance().startMien();
                 resetProgress();
@@ -175,17 +177,17 @@ public class StartCheckDataFragment extends BaseFragment {
                 reStartVideoInfo(1);
                 break;
             case VIDEO_INFO_DOWNLOAD_PROGRESS:
-                list.set(list.size()-1,"正在下载中："+event.getProgress()+"%");
+                list.set(list.size() - 1, "正在下载中：" + event.getProgress() + "%");
                 break;
             case VIDEO_INFO_CARSH:
-                list.add("遇到异常，请重启设备或联系管理人员："+event.getCarsh().getMessage());
+                list.add("遇到异常，请重启设备或联系管理人员：" + event.getCarsh().getMessage());
                 break;
             case VIDEO_INFO_DB_START:
                 list.add("开始加载影视详情数据，请稍候...");
                 list.add("正在加载中：0/0");
                 break;
             case VIDEO_INFO_DB_PROGRESS:
-                list.set(list.size()-1,"正在加载中："+event.getDbProgress());
+                list.set(list.size() - 1, "正在加载中：" + event.getDbProgress());
                 break;
 
             case HOSPITAL_MIEN_START:
@@ -213,14 +215,14 @@ public class StartCheckDataFragment extends BaseFragment {
                 list.add("正在获取后台医疗百科数据，请稍候...");
                 break;
             case HOSPITAL_ENCY_SUCCESS:
-                list.set(list.size()-1,"正在存储...100%");
+                list.set(list.size() - 1, "正在存储...100%");
                 list.add("医疗百科数据初始化成功！");
                 MissionService.getInstance().startMiss();
                 resetProgress();
                 break;
             case ENCY_DATA_SAVE:
                 list.add("医疗百科详情数据正在存储...");
-                handler.sendEmptyMessageDelayed(1,1000);
+                handler.sendEmptyMessageDelayed(1, 1000);
                 break;
             case ENCY_DATA_SAVE_FAIL:
                 list.add("医疗百科数据存储失败!1分钟后重新初始化");
@@ -246,7 +248,7 @@ public class StartCheckDataFragment extends BaseFragment {
                 list.add("正在下载中：0%");
                 break;
             case HOSPITAL_ENCY_DOWNLOAD_PROGRESS:
-                list.set(list.size()-1,"正在下载中："+event.getProgress()+"%");
+                list.set(list.size() - 1, "正在下载中：" + event.getProgress() + "%");
                 break;
             case HOSPITAL_ENCY_DOWNLOAD_FAIL:
                 list.add("下载失败! 1分钟后重试");
@@ -263,7 +265,7 @@ public class StartCheckDataFragment extends BaseFragment {
                 list.add("正在加载中：0/0");
                 break;
             case HOSPITAL_ENCY_TWO_DB_PROGRESS:
-                list.set(list.size()-1,"正在加载中："+event.getDbProgress());
+                list.set(list.size() - 1, "正在加载中：" + event.getDbProgress());
                 break;
             case HOSPITAL_MISS_START:
                 list.add("正在初始化医院宣教数据，请稍候...");
@@ -315,7 +317,7 @@ public class StartCheckDataFragment extends BaseFragment {
                 break;
             case HOME_MENU_REBOOT_SUCCESS:
                 list.add("首页模块数据更新成功！");
-                getActivity().startActivity(new Intent(getActivity(),MainActivity.class));
+                getActivity().startActivity(new Intent(getActivity(), MainActivity.class));
                 getActivity().finish();
                 break;
             case HOME_MENU_REBOOT_HTTP_FAIL:
@@ -327,14 +329,14 @@ public class StartCheckDataFragment extends BaseFragment {
                 break;
         }
         adapter.notifyDataSetChanged();
-        rvCheck.scrollToPosition(list.size()-1);
+        rvCheck.scrollToPosition(list.size() - 1);
     }
 
     //重置进度
     private void resetProgress() {
         handler.removeMessages(1);
-        count=1;
-        progress=1;
+        count = 1;
+        progress = 1;
     }
 
     @Override
@@ -344,9 +346,9 @@ public class StartCheckDataFragment extends BaseFragment {
     }
 
     /**
-     *  重新查询影视分类数据
+     * 重新查询影视分类数据
      */
-    private void reStartColumn(int min){
+    private void reStartColumn(int min) {
         RxUtil.closeDisposable(disposable);
         disposable = Observable.interval(min, TimeUnit.MINUTES)
                 .subscribe(new Consumer<Long>() {
@@ -358,10 +360,11 @@ public class StartCheckDataFragment extends BaseFragment {
     }
 
     /**
-     *  重新获取首页推荐数据
+     * 重新获取首页推荐数据
+     *
      * @param min
      */
-    private void reStartVideoTop(int min){
+    private void reStartVideoTop(int min) {
         RxUtil.closeDisposable(disposable);
         disposable = Observable.interval(min, TimeUnit.MINUTES)
                 .subscribe(new Consumer<Long>() {
@@ -373,10 +376,11 @@ public class StartCheckDataFragment extends BaseFragment {
     }
 
     /**
-     *  重新影视详情数据
+     * 重新影视详情数据
+     *
      * @param min
      */
-    private void reStartVideoInfo(int min){
+    private void reStartVideoInfo(int min) {
         RxUtil.closeDisposable(disposable);
         disposable = Observable.interval(min, TimeUnit.MINUTES)
                 .subscribe(new Consumer<Long>() {
@@ -388,9 +392,9 @@ public class StartCheckDataFragment extends BaseFragment {
     }
 
     /**
-     *  重新获取医院风采数据
+     * 重新获取医院风采数据
      */
-    private void reStartMien(int min){
+    private void reStartMien(int min) {
         RxUtil.closeDisposable(disposable);
         disposable = Observable.interval(min, TimeUnit.MINUTES)
                 .subscribe(new Consumer<Long>() {
@@ -403,10 +407,11 @@ public class StartCheckDataFragment extends BaseFragment {
 
 
     /**
-     *  重新获取医疗百科数据
+     * 重新获取医疗百科数据
+     *
      * @param min
      */
-    private void reStartEncy(int min){
+    private void reStartEncy(int min) {
         RxUtil.closeDisposable(disposable);
         disposable = Observable.interval(min, TimeUnit.MINUTES)
                 .subscribe(new Consumer<Long>() {
@@ -417,7 +422,7 @@ public class StartCheckDataFragment extends BaseFragment {
                 });
     }
 
-    private void reStartMiss(int min){
+    private void reStartMiss(int min) {
         RxUtil.closeDisposable(disposable);
         disposable = Observable.interval(min, TimeUnit.MINUTES)
                 .subscribe(new Consumer<Long>() {
@@ -428,7 +433,7 @@ public class StartCheckDataFragment extends BaseFragment {
                 });
     }
 
-    private void reHomeMenu(int min){
+    private void reHomeMenu(int min) {
         RxUtil.closeDisposable(disposable);
         disposable = Observable.interval(min, TimeUnit.MINUTES)
                 .subscribe(new Consumer<Long>() {
@@ -439,7 +444,7 @@ public class StartCheckDataFragment extends BaseFragment {
                 });
     }
 
-    private void reRebootHomeMenu(int min){
+    private void reRebootHomeMenu(int min) {
         RxUtil.closeDisposable(disposable);
         disposable = Observable.interval(min, TimeUnit.MINUTES)
                 .subscribe(new Consumer<Long>() {

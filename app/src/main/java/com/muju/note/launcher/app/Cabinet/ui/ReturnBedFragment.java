@@ -52,7 +52,7 @@ public class ReturnBedFragment extends BaseFragment<CabinetOrderPresenter> imple
     @BindView(R.id.lly_price)
     LinearLayout llyPrice;
     private CabinetBean.DataBean dataBean;
-    private boolean isSuccess=false;
+    private boolean isSuccess = false;
 
     public static ReturnBedFragment newInstance(CabinetBean.DataBean dataBean) {
         Bundle args = new Bundle();
@@ -76,7 +76,7 @@ public class ReturnBedFragment extends BaseFragment<CabinetOrderPresenter> imple
     @Override
     public void returnBedFail() {
         setFailUi("归还失败,请稍后再试");
-        isSuccess=false;
+        isSuccess = false;
     }
 
     @Override
@@ -84,10 +84,10 @@ public class ReturnBedFragment extends BaseFragment<CabinetOrderPresenter> imple
         try {
             JSONObject jsonObject = new JSONObject(data); //101812
             if (jsonObject.optInt("code") == 200) {
-                isSuccess=true;
+                isSuccess = true;
                 setSuccessUi();
             } else {
-                isSuccess=false;
+                isSuccess = false;
                 setFailUi(jsonObject.optString("msg"));
             }
         } catch (Exception e) {
@@ -116,7 +116,7 @@ public class ReturnBedFragment extends BaseFragment<CabinetOrderPresenter> imple
         tvStatus.setText("归还失败");
         relStatus.setVisibility(View.VISIBLE);
         llyPrice.setVisibility(View.GONE);
-        tvSu.setText("归还失败了"+reason);
+        tvSu.setText("归还失败了" + reason);
         tvSu.setVisibility(View.VISIBLE);
         btnSu.setText("重试");
     }
@@ -129,17 +129,17 @@ public class ReturnBedFragment extends BaseFragment<CabinetOrderPresenter> imple
         llyPrice.setVisibility(View.VISIBLE);
         tvSu.setVisibility(View.GONE);
         btnSu.setText("完成");
-        long currentTime=System.currentTimeMillis()/1000;
+        long currentTime = System.currentTimeMillis() / 1000;
         long formartTime = DateUtil.formartTime(dataBean.getLeaseTime());
-        tvTime.setText("租用时间:"+DateUtil.getTime((int)(currentTime-formartTime)));
-        tvRent.setText("归还成功,押金"+dataBean.getDeposit()+"元已退还到支付的账户中,请注意查收");
+        tvTime.setText("租用时间:" + DateUtil.getTime((int) (currentTime - formartTime)));
+        tvRent.setText("归还成功,押金" + dataBean.getDeposit() + "元已退还到支付的账户中,请注意查收");
 //        tvRentPrice.setText("¥"+ArithUtil.add(dataBean.getDeposit(),dataBean.getPayPrice()));
-        tvRentPrice.setText("¥"+ArithUtil.add(0.0,dataBean.getPayPrice()));
+        tvRentPrice.setText("¥" + ArithUtil.add(0.0, dataBean.getPayPrice()));
     }
 
     @Override
     public void initPresenter() {
-        mPresenter=new CabinetOrderPresenter();
+        mPresenter = new CabinetOrderPresenter();
     }
 
     @Override
@@ -155,9 +155,9 @@ public class ReturnBedFragment extends BaseFragment<CabinetOrderPresenter> imple
                 pop();
                 break;
             case R.id.btn_su:
-                if(isSuccess){
+                if (isSuccess) {
                     pop();
-                }else {
+                } else {
                     mPresenter.returnBed(dataBean.getId());
                 }
                 break;

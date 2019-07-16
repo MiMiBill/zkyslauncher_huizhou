@@ -52,8 +52,8 @@ public class AdvertsBean implements Serializable {
     private int interval;
     private int incomeType;
     private String code;
-    private String taskUrl ;
-    private int  taskType;
+    private String taskUrl;
+    private int taskType;
     private int wxType;
 
     public int getWxType() {

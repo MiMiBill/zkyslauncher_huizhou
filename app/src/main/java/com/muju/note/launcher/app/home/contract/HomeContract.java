@@ -15,7 +15,7 @@ import java.util.List;
 public interface HomeContract {
 
     interface View extends IView {
-        void getDate(String date, String time, String week,String net,String netType);
+        void getDate(String date, String time, String week, String net, String netType);
 
         void patientInfo(PatientResponse.DataBean entity);
 

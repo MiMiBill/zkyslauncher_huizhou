@@ -70,7 +70,7 @@ public class ProtectionProcessFragment extends BaseFragment<ProtectionPresenter>
 
     @Override
     public void initPresenter() {
-        mPresenter=new ProtectionPresenter();
+        mPresenter = new ProtectionPresenter();
     }
 
 
@@ -106,7 +106,7 @@ public class ProtectionProcessFragment extends BaseFragment<ProtectionPresenter>
     }
 
     /**
-     *  设置时间
+     * 设置时间
      */
     public void setTime() {
         tvTime.setText(FormatUtils.FormatDateUtil.formatDateHHmm());
@@ -121,7 +121,7 @@ public class ProtectionProcessFragment extends BaseFragment<ProtectionPresenter>
                         try {
                             tvTime.setText(FormatUtils.FormatDateUtil.formatDateHHmm());
                             tvDate.setText(FormatUtils.FormatDateUtil.formatDateWeek());
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -133,30 +133,30 @@ public class ProtectionProcessFragment extends BaseFragment<ProtectionPresenter>
         super.onDestroy();
         RxUtil.closeDisposable(disposableTimeAdd);
         RxUtil.closeDisposable(disposableAdjust);
-        if(bannerLc!=null){
+        if (bannerLc != null) {
             bannerLc.destroy();
         }
     }
 
     /**
-     *  界面可见时
+     * 界面可见时
      */
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-        if(bannerLc!=null){
+        if (bannerLc != null) {
             bannerLc.startAutoPlay();
         }
         EventBus.getDefault().post(new VideoNoLockEvent(false));
     }
 
     /**
-     *  界面不可见时
+     * 界面不可见时
      */
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
-        if(bannerLc!=null){
+        if (bannerLc != null) {
             bannerLc.stopAutoPlay();
         }
         EventBus.getDefault().post(new VideoNoLockEvent(true));
@@ -173,7 +173,7 @@ public class ProtectionProcessFragment extends BaseFragment<ProtectionPresenter>
 
     @Override
     public void getLockBananaList(List<AdvertsCodeDao> list) {
-        AdvertsUtil.getInstance().showByDbBanner(list,bannerLc);
+        AdvertsUtil.getInstance().showByDbBanner(list, bannerLc);
 //        RxUtil.closeDisposable(disposableAdjust);
 //        addBrightness();
         ivLauncher.setVisibility(View.GONE);
@@ -181,6 +181,6 @@ public class ProtectionProcessFragment extends BaseFragment<ProtectionPresenter>
 
     @Override
     public void getLockBananaNull() {
-        AdvertsUtil.getInstance().showDefaultBanner(bannerLc,0);
+        AdvertsUtil.getInstance().showDefaultBanner(bannerLc, 0);
     }
 }

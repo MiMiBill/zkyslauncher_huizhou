@@ -41,7 +41,7 @@ import io.reactivex.disposables.Disposable;
 
 public class HomePresenter extends BasePresenter<HomeContract.View> implements HomeContract
         .Presenter {
-    private static final String TAG="HomePresenter";
+    private static final String TAG = "HomePresenter";
     private Disposable diDateTimer;
 
     /**
@@ -58,12 +58,12 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
 
                     @Override
                     public void onNext(Long aLong) {
-                        if(mView==null){
+                        if (mView == null) {
                             LogUtil.e("mView为空");
                             return;
                         }
                         mView.getDate(DateUtil.getDate("yyyy年MM月dd日"), DateUtil.getDate
-                                ("HH:mm:ss"), DateUtil.getWeek(), NetWorkUtil.getNetWorkLine(),
+                                        ("HH:mm:ss"), DateUtil.getWeek(), NetWorkUtil.getNetWorkLine(),
                                 NetWorkUtil.getNetworkState(LauncherApplication.getContext()));
                     }
 
@@ -92,7 +92,7 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        if(mView==null){
+                        if (mView == null) {
                             LogUtil.e("mView为空");
                             return;
                         }
@@ -100,7 +100,7 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
                         Gson gson = new Gson();
                         PatientResponse patientResponse = gson.fromJson(response.body(),
                                 PatientResponse.class);
-                        if (patientResponse.getCode() == 200 && patientResponse.getData()!=null) {
+                        if (patientResponse.getCode() == 200 && patientResponse.getData() != null) {
                             PatientResponse.DataBean patient = patientResponse.getData();
                             if (patient.getDisabled()) {
 //                                SPUtil.saveDataList(Constants.PATIENT, patientResponse.getData());
@@ -133,11 +133,11 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
     @Override
     public void getBananaList(String code) {
         LitePalDb.setZkysDb();
-        LitePal.where("code =?",code).findAsync(AdvertsCodeDao.class).listen(new FindMultiCallback<AdvertsCodeDao>() {
+        LitePal.where("code =?", code).findAsync(AdvertsCodeDao.class).listen(new FindMultiCallback<AdvertsCodeDao>() {
             @Override
             public void onFinish(List<AdvertsCodeDao> list) {
 //                LogFactory.l().i("list"+list.size());
-                if(mView==null){
+                if (mView == null) {
                     LogUtil.e("mView为空");
                     return;
                 }
@@ -156,11 +156,11 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
     @Override
     public void getDialogAd(String code) {
         LitePalDb.setZkysDb();
-        LitePal.where("code =?",code).findAsync(AdvertsCodeDao.class).listen(new FindMultiCallback<AdvertsCodeDao>() {
+        LitePal.where("code =?", code).findAsync(AdvertsCodeDao.class).listen(new FindMultiCallback<AdvertsCodeDao>() {
             @Override
             public void onFinish(List<AdvertsCodeDao> list) {
 //                LogFactory.l().i("list"+list.size());
-                if(mView==null){
+                if (mView == null) {
                     LogUtil.e("mView为空");
                     return;
                 }
@@ -173,7 +173,7 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
     }
 
     /**
-     *  获取首页菜单模块
+     * 获取首页菜单模块
      */
     @Override
     public void getMenu() {
@@ -181,11 +181,11 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
         LitePal.findAllAsync(HomeMenuDao.class).listen(new FindMultiCallback<HomeMenuDao>() {
             @Override
             public void onFinish(List<HomeMenuDao> list) {
-                if(mView==null){
+                if (mView == null) {
                     LogUtil.e("mView为空");
                     return;
                 }
-                if(list==null||list.size()<=0){
+                if (list == null || list.size() <= 0) {
                     mView.getMenuNull();
                     return;
                 }
@@ -203,7 +203,7 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
         LitePal.limit(20).order("createTime desc").findAsync(VideoHisDao.class).listen(new FindMultiCallback<VideoHisDao>() {
             @Override
             public void onFinish(List<VideoHisDao> list) {
-                if(mView==null){
+                if (mView == null) {
                     LogUtil.e("mView为空");
                     return;
                 }
@@ -226,7 +226,7 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
                 () {
             @Override
             public void onFinish(List<VideoInfoTopDao> list) {
-                if(mView==null){
+                if (mView == null) {
                     LogUtil.e("mView为空");
                     return;
                 }

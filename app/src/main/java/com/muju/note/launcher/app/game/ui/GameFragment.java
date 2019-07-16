@@ -47,7 +47,7 @@ public class GameFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.ll_back,R.id.lly_game})
+    @OnClick({R.id.ll_back, R.id.lly_game})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_back:
@@ -58,8 +58,6 @@ public class GameFragment extends BaseFragment {
                 break;
         }
     }
-
-
 
 
 }

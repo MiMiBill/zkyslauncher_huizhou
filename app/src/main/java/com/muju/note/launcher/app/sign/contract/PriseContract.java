@@ -11,6 +11,6 @@ public interface PriseContract {
 
 
     interface Presenter extends IPresenter<PriseContract.View> {
-        void useReward(int typeId,int count);
+        void useReward(int typeId, int count);
     }
 }

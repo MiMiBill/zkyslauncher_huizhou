@@ -3,7 +3,7 @@ package com.muju.note.launcher.app.setting.ui;
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.base.BaseFragment;
 
-public class UserOrderFragment extends BaseFragment{
+public class UserOrderFragment extends BaseFragment {
 
 
     @Override

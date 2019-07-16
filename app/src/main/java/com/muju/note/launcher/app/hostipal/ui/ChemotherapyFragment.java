@@ -32,6 +32,7 @@ public class ChemotherapyFragment extends BaseFragment {
     FrameLayout container;
     List<String> tabsData = new ArrayList<>();
     List<Fragment> fragments = new ArrayList<>();
+
     @Override
     public int getLayout() {
         return R.layout.fragment_chemotherapy;
@@ -49,7 +50,7 @@ public class ChemotherapyFragment extends BaseFragment {
         tabsData.add("胸部正位DR");
         tabsData.add("血常规");
         tabsData.add("眼科检查");
-        for (int i = 0; i < 7; i++){
+        for (int i = 0; i < 7; i++) {
             fragments.add(new ChemotherFragment());
         }
         initTabs();
@@ -108,7 +109,6 @@ public class ChemotherapyFragment extends BaseFragment {
             }
         }
     }
-
 
 
     @OnClick(R.id.ll_back)

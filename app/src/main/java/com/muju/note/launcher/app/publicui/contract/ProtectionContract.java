@@ -11,6 +11,7 @@ public interface ProtectionContract {
     interface View extends IView {
 
         void getLockBananaList(List<AdvertsCodeDao> list);
+
         void getLockBananaNull();
     }
 

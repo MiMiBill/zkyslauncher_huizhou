@@ -88,7 +88,7 @@ public class StartCheckNetWorkFragment extends BaseFragment {
                 tvRetry.setText("正在重新检测网络");
             } else {
                 RxUtil.closeDisposable(diNetWork);
-                if(llyNoInternet!=null){
+                if (llyNoInternet != null) {
                     llyNoInternet.setVisibility(View.GONE);
                 }
                 start(new ActivationFragment(), ISupportFragment.SINGLETASK);

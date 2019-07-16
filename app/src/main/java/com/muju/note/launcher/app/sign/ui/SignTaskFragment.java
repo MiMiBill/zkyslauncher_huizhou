@@ -67,9 +67,9 @@ public class SignTaskFragment extends BaseFragment<SignPresenter> implements Sig
     }
 
     private void setTask() {
-        videoBean=null;
-        pubBean=null;
-        signBean=null;
+        videoBean = null;
+        pubBean = null;
+        signBean = null;
         adList.clear();
         adList = SPUtil.getTaskList(Constants.AD_TASK_LIST);
         for (TaskListBean bean : adList) {
@@ -81,9 +81,9 @@ public class SignTaskFragment extends BaseFragment<SignPresenter> implements Sig
                 signBean = bean;
             }
         }
-        if(signBean==null){
+        if (signBean == null) {
             tvSign.setTextColor(getResources().getColor(R.color.white_gray3));
-        }else {
+        } else {
             tvSign.setTextColor(getResources().getColor(R.color.white));
         }
     }
@@ -109,13 +109,13 @@ public class SignTaskFragment extends BaseFragment<SignPresenter> implements Sig
             case R.id.tv_sign:
                 setTask();
                 if (signBean != null) {
-                    mPresenter.doTask(UserUtil.getUserBean().getId(),signBean.getId());
+                    mPresenter.doTask(UserUtil.getUserBean().getId(), signBean.getId());
                 }
                 break;
             case R.id.iv_video:
                 setTask();
                 if (videoBean != null) {
-                    start(AdvideoViewFragment.newInstance(videoBean.getId(),videoBean.getResourceUrl(),1,videoBean.getSecond()));
+                    start(AdvideoViewFragment.newInstance(videoBean.getId(), videoBean.getResourceUrl(), 1, videoBean.getSecond()));
                 }
                 break;
             case R.id.iv_pub:
@@ -164,11 +164,11 @@ public class SignTaskFragment extends BaseFragment<SignPresenter> implements Sig
 
     @Override
     public void doTask(TaskBean taskBean) {
-        if(taskBean!=null){
-            if(taskBean.getAdverts()!=null){
-                SPUtil.saveDataList(Constants.AD_TASK_LIST,taskBean.getAdverts());
+        if (taskBean != null) {
+            if (taskBean.getAdverts() != null) {
+                SPUtil.saveDataList(Constants.AD_TASK_LIST, taskBean.getAdverts());
             }
-            if(taskBean.getPointRecords()!=null){
+            if (taskBean.getPointRecords() != null) {
                 TaskBean.PointRecordsBean recordsBean = taskBean.getPointRecords().get(0);
                 tvIntegral.setText("您总共有" + recordsBean.getCount() + "积分");
             }

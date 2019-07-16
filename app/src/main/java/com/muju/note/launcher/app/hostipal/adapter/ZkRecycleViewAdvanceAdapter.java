@@ -22,7 +22,7 @@ public class ZkRecycleViewAdvanceAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private List<AdvanceRecordInfo> mList;
 
-    public ZkRecycleViewAdvanceAdapter(Context context, List<AdvanceRecordInfo> list){
+    public ZkRecycleViewAdvanceAdapter(Context context, List<AdvanceRecordInfo> list) {
         this.mContext = context;
         this.mList = list;
     }
@@ -49,14 +49,14 @@ public class ZkRecycleViewAdvanceAdapter extends RecyclerView.Adapter {
 
 
     //自定义的ViewHolder，持有每个Item的的所有界面元素
-    class OneViewHolder extends RecyclerView.ViewHolder{
+    class OneViewHolder extends RecyclerView.ViewHolder {
         private final TextView mTvDateTime;
         private final TextView mTvAmount;
         private final TextView mTvAmountb;
         private final TextView mTvPayMethod;
         private final TextView mTvCashier;
 
-        public OneViewHolder(View view){
+        public OneViewHolder(View view) {
             super(view);
             mTvDateTime = view.findViewById(R.id.tv_date_time);
             mTvAmount = view.findViewById(R.id.tv_amount);
@@ -65,7 +65,7 @@ public class ZkRecycleViewAdvanceAdapter extends RecyclerView.Adapter {
             mTvCashier = view.findViewById(R.id.tv_cashier);
         }
 
-        public void setData(int position){
+        public void setData(int position) {
             mTvDateTime.setText(mList.get(position).getDateTime());
             mTvAmount.setText(mList.get(position).getAmount());
             mTvAmountb.setText(mList.get(position).getAmountb());

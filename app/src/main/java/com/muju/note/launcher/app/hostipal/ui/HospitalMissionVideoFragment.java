@@ -21,7 +21,8 @@ public class HospitalMissionVideoFragment extends BaseFragment implements VideoP
     @BindView(R.id.video_view)
     VideoPlayControlView videoView;
 
-    public static final String MISSION_VIDEO_PATH="mission_video_path";
+    public static final String MISSION_VIDEO_PATH = "mission_video_path";
+
     public static HospitalMissionVideoFragment newInstance(String path) {
         Bundle args = new Bundle();
         args.putString(MISSION_VIDEO_PATH, path);

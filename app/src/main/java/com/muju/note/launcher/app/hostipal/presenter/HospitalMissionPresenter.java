@@ -16,7 +16,7 @@ public class HospitalMissionPresenter extends BasePresenter<HospitalMissionContr
 
 
     /**
-     *  查询医院宣教数据
+     * 查询医院宣教数据
      */
     @Override
     public void queryMiss() {
@@ -24,11 +24,11 @@ public class HospitalMissionPresenter extends BasePresenter<HospitalMissionContr
         LitePal.findAllAsync(MissionInfoDao.class).listen(new FindMultiCallback<MissionInfoDao>() {
             @Override
             public void onFinish(List<MissionInfoDao> list) {
-                if(mView==null){
+                if (mView == null) {
                     LogUtil.e("mView为空");
                     return;
                 }
-                if(list==null||list.size()<=0){
+                if (list == null || list.size() <= 0) {
                     mView.getMissNull();
                     return;
                 }

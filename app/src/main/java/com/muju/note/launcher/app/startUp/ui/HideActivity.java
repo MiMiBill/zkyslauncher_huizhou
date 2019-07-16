@@ -119,7 +119,7 @@ public class HideActivity extends BaseActivity {
         }.start();
     }
 
-    @OnClick({R.id.one, R.id.two, R.id.three, R.id.four,R.id.btnConfig})
+    @OnClick({R.id.one, R.id.two, R.id.three, R.id.four, R.id.btnConfig})
     public void onViewClicked(View view) {
         if (view.getId() == R.id.btnConfig) {
             final Dialog dialog = DialogFactory.dialog(getContext(), R.layout.layout_config);

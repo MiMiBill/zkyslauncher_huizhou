@@ -26,11 +26,13 @@ public class InfomationDao extends LitePalSupport {
     private String complicatingDisease;
     private String dietCare;
     private int isDel;
+
     /**
-     *   新增数据
+     * 新增数据
+     *
      * @param dao
      */
-    public void saveDb(InfomationDao dao){
+    public void saveDb(InfomationDao dao) {
         LitePal.use(LitePalDb.zkysDb);
         dao.save();
     }

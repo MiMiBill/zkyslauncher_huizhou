@@ -19,6 +19,6 @@ public class HomeTopVideoAdapter extends BaseQuickAdapter<VideoInfoDao, BaseView
 
     @Override
     protected void convert(BaseViewHolder helper, VideoInfoDao item) {
-        GlideUtil.loadImg(item.getScreenUrl(), (ImageView) helper.getView(R.id.iv_img),R.mipmap.ic_video_load_default);
+        GlideUtil.loadImg(item.getScreenUrl(), (ImageView) helper.getView(R.id.iv_img), R.mipmap.ic_video_load_default);
     }
 }

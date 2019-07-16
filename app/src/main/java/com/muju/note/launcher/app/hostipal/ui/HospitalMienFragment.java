@@ -77,7 +77,7 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
 
     @Override
     public void initData() {
-        if(ActiveUtils.getPadActiveInfo()!=null){
+        if (ActiveUtils.getPadActiveInfo() != null) {
             tvTitle.setText(ActiveUtils.getPadActiveInfo().getHospitalName());
         }
 

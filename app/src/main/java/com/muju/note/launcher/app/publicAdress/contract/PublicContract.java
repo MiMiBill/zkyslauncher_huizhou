@@ -8,13 +8,16 @@ public interface PublicContract {
 
     interface View extends IView {
         void verfycode(String response);
+
         void verfycodeError();
+
         void doTask(TaskBean taskBean);
     }
 
 
     interface Presenter extends IPresenter<View> {
-        void verfycode(String code,int adverId,String advertCode);
-        void doTask(int userId,int advertId);
+        void verfycode(String code, int adverId, String advertCode);
+
+        void doTask(int userId, int advertId);
     }
 }

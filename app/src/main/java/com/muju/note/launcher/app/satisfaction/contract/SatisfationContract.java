@@ -9,13 +9,16 @@ public interface SatisfationContract {
 
     interface View extends IView {
         void commitErrow();
+
         void getCommitSurveyData(String data);
+
         void getSurveyData(String data);
     }
 
 
     interface Presenter extends IPresenter<View> {
         void getCommitSurveyData(String sign, JSONObject jsonObject);
-        void getSurveyData(String id,String sign);
+
+        void getSurveyData(String id, String sign);
     }
 }

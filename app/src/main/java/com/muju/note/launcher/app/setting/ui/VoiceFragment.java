@@ -73,8 +73,8 @@ public class VoiceFragment extends BaseFragment {
         rectProgressLight.setChangedListener(new RectProgress.OnProgressChangedListener() {
             @Override
             public void onProgressChanged(int currentValue, int percent) {
-                BrightnessUtils.setBrightness(getActivity(),currentValue);
-                BrightnessUtils.saveBrightness(getActivity(),currentValue);
+                BrightnessUtils.setBrightness(getActivity(), currentValue);
+                BrightnessUtils.saveBrightness(getActivity(), currentValue);
             }
         });
 

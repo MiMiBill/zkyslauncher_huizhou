@@ -18,7 +18,7 @@ public class HomeHisVideoAdapter extends BaseQuickAdapter<VideoHisDao, BaseViewH
 
     @Override
     protected void convert(BaseViewHolder helper, VideoHisDao item) {
-        helper.setText(R.id.tv_name,item.getName());
-        GlideUtil.loadImg(item.getScreenUrl(), (ImageView) helper.getView(R.id.iv_img),R.mipmap.ic_video_load_default);
+        helper.setText(R.id.tv_name, item.getName());
+        GlideUtil.loadImg(item.getScreenUrl(), (ImageView) helper.getView(R.id.iv_img), R.mipmap.ic_video_load_default);
     }
 }

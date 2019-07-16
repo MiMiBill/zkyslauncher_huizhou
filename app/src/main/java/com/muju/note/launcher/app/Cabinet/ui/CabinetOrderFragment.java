@@ -49,8 +49,9 @@ public class CabinetOrderFragment extends BaseFragment<CabinetOrderPresenter> im
     ImageView ivNormal;
     @BindView(R.id.rel_exception)
     RelativeLayout relException;
-    private static final String CABINET_BEAN="cabinet_bean";
+    private static final String CABINET_BEAN = "cabinet_bean";
     private CabinetBean.DataBean dataBean;
+
     public static CabinetOrderFragment newInstance(CabinetBean.DataBean dataBean) {
         Bundle args = new Bundle();
         args.putSerializable(CABINET_BEAN, dataBean);
@@ -68,15 +69,15 @@ public class CabinetOrderFragment extends BaseFragment<CabinetOrderPresenter> im
     public void initData() {
         EventBus.getDefault().register(this);
         dataBean = (CabinetBean.DataBean) getArguments().getSerializable(CABINET_BEAN);
-        if(dataBean!=null){
+        if (dataBean != null) {
             tvStart.setText(dataBean.getLeaseTime());
             tvEnd.setText(dataBean.getExpireTime());
-            if(dataBean.getStatus()==2){    //正在使用
+            if (dataBean.getStatus() == 2) {    //正在使用
                 tvStatus.setText("正在使用中");
                 ivNormal.setVisibility(View.VISIBLE);
                 relException.setVisibility(View.GONE);
                 tvStatus.setTextColor(getResources().getColor(R.color.color_333333));
-            }else {     //逾期使用
+            } else {     //逾期使用
                 tvStatus.setText("逾期使用中");
                 ivNormal.setVisibility(View.GONE);
                 relException.setVisibility(View.VISIBLE);
@@ -86,8 +87,6 @@ public class CabinetOrderFragment extends BaseFragment<CabinetOrderPresenter> im
             setTime();
         }
     }
-
-
 
 
     //推送成功或者订单页面归还成功,重新拉取订单
@@ -106,15 +105,15 @@ public class CabinetOrderFragment extends BaseFragment<CabinetOrderPresenter> im
 
     //设置时间显示
     private void setTime() {
-        long cuTime = System.currentTimeMillis()/1000;
-        long lastTime=DateUtil.formartTime(dataBean.getExpireTime());
-        tvDay.setText(DateUtil.getDay((int)(lastTime-cuTime)));
-        tvHour.setText(DateUtil.getHour((int)(lastTime-cuTime)));
+        long cuTime = System.currentTimeMillis() / 1000;
+        long lastTime = DateUtil.formartTime(dataBean.getExpireTime());
+        tvDay.setText(DateUtil.getDay((int) (lastTime - cuTime)));
+        tvHour.setText(DateUtil.getHour((int) (lastTime - cuTime)));
     }
 
     @Override
     public void initPresenter() {
-        mPresenter=new CabinetOrderPresenter();
+        mPresenter = new CabinetOrderPresenter();
     }
 
     @Override
@@ -142,30 +141,30 @@ public class CabinetOrderFragment extends BaseFragment<CabinetOrderPresenter> im
         try {
             JSONObject jsonObject = new JSONObject(data);
             if (jsonObject.optInt("code") == 200) {
-                if(jsonObject.optString("data")!=null){
-                    String objData=jsonObject.optString("data");
-                    JSONObject obj=new JSONObject(objData);
-                    if(obj.optInt("code")==200){
-                        if (obj.optString("object").equals("ok")){
+                if (jsonObject.optString("data") != null) {
+                    String objData = jsonObject.optString("data");
+                    JSONObject obj = new JSONObject(objData);
+                    if (obj.optInt("code") == 200) {
+                        if (obj.optString("object").equals("ok")) {
                             start(UnlockFragment.newInstance(dataBean));
-                        }else {
+                        } else {
                             String object = obj.optString("object");
-                            JSONObject lockObj=new JSONObject(object);
-                            if(lockObj!=null){
-                                if(lockObj.optInt("code")==200){
+                            JSONObject lockObj = new JSONObject(object);
+                            if (lockObj != null) {
+                                if (lockObj.optInt("code") == 200) {
                                     start(UnlockFragment.newInstance(dataBean));
-                                }else {
+                                } else {
                                     start(UnlockFragment.newInstance(dataBean));
                                 }
-                            }else {
+                            } else {
                                 start(UnlockFragment.newInstance(dataBean));
                             }
                         }
-                    }else {
+                    } else {
                         start(UnlockFragment.newInstance(dataBean));
                     }
                 }
-            }else {
+            } else {
                 start(UnlockFragment.newInstance(dataBean));
             }
         } catch (Exception e) {

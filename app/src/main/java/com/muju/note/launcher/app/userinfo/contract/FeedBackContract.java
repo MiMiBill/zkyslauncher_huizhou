@@ -7,6 +7,7 @@ public interface FeedBackContract {
 
     interface View extends IView {
         void post(String data);
+
         void postFail();
     }
 

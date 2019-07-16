@@ -21,7 +21,7 @@ public class ChemotherapayFragmentAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private List<ChemotherapayItemInfo> mList;
 
-    public ChemotherapayFragmentAdapter(Context context, List<ChemotherapayItemInfo> list){
+    public ChemotherapayFragmentAdapter(Context context, List<ChemotherapayItemInfo> list) {
         this.mContext = context;
         this.mList = list;
     }
@@ -43,7 +43,7 @@ public class ChemotherapayFragmentAdapter extends RecyclerView.Adapter {
         return mList.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView mTvProjectName;
         private final TextView mTvResult;
@@ -59,8 +59,9 @@ public class ChemotherapayFragmentAdapter extends RecyclerView.Adapter {
             mTvTip = itemView.findViewById(R.id.tv_tip);
             mTvReRange = itemView.findViewById(R.id.tv_reference_range);
         }
+
         //数据显示
-        public void setData(int position){
+        public void setData(int position) {
             mTvProjectName.setText(mList.get(position).getProjectNmae());
             mTvResult.setText(mList.get(position).getResult());
             mTvUnit.setText(mList.get(position).getUnit());

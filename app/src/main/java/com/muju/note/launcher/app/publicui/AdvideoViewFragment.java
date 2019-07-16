@@ -33,23 +33,24 @@ public class AdvideoViewFragment extends BaseFragment<PublicPresenter> implement
     VideoPlayControlView mVvVideoView;
     private int advertId;
     private long startTime;
-    private String videoUrl="";
-    private int type=0;  //0默认是普通广告,1是任务广告
-    private int second=0;
-    private boolean isTask=false;
-    private Handler handler=new Handler(){
+    private String videoUrl = "";
+    private int type = 0;  //0默认是普通广告,1是任务广告
+    private int second = 0;
+    private boolean isTask = false;
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case 1:
-                    if(isTask)
-                    mPresenter.doTask(UserUtil.getUserBean().getId(),advertId);
+                    if (isTask)
+                        mPresenter.doTask(UserUtil.getUserBean().getId(), advertId);
                     break;
             }
         }
     };
-    public static AdvideoViewFragment newInstance(int id, String url,int type,int second) {
+
+    public static AdvideoViewFragment newInstance(int id, String url, int type, int second) {
         Bundle args = new Bundle();
         args.putString(ADVIDEO_URL_FLAG, url);
         args.putInt(ADVIDEO_ID, id);
@@ -70,8 +71,8 @@ public class AdvideoViewFragment extends BaseFragment<PublicPresenter> implement
         startTime = System.currentTimeMillis();
         advertId = getArguments().getInt(ADVIDEO_ID, 0);
         videoUrl = getArguments().getString(ADVIDEO_URL_FLAG);
-        type = getArguments().getInt(ADVIDEO_TYPE,0);
-        second=getArguments().getInt(ADVIDEO_SECOND,0);
+        type = getArguments().getInt(ADVIDEO_TYPE, 0);
+        second = getArguments().getInt(ADVIDEO_SECOND, 0);
         if (videoUrl != null && !videoUrl.equals("")) {
             mVvVideoView.getVideoView().setVideoPath(videoUrl);
             mVvVideoView.getVideoView().setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -81,9 +82,9 @@ public class AdvideoViewFragment extends BaseFragment<PublicPresenter> implement
                 }
             });
         }
-        if(type==1){
-            isTask=true;
-            handler.sendEmptyMessageDelayed(1,1000*second); //暂定看second秒广告相当于做任务
+        if (type == 1) {
+            isTask = true;
+            handler.sendEmptyMessageDelayed(1, 1000 * second); //暂定看second秒广告相当于做任务
         }
         mVvVideoView.setBackListener(new VideoPlayControlView.BackListener() {
             @Override
@@ -95,9 +96,9 @@ public class AdvideoViewFragment extends BaseFragment<PublicPresenter> implement
 
 
     private void doFinish() {
-        long currentTime=System.currentTimeMillis();
-        AdvertsUtil.getInstance().addData(advertId,AdvertsUtil.TAG_BROWSETIME,currentTime-startTime);
-        AdvertsUtil.getInstance().addDataInfo(advertId,AdvertsUtil.TAG_BROWSETIME,startTime,currentTime);
+        long currentTime = System.currentTimeMillis();
+        AdvertsUtil.getInstance().addData(advertId, AdvertsUtil.TAG_BROWSETIME, currentTime - startTime);
+        AdvertsUtil.getInstance().addDataInfo(advertId, AdvertsUtil.TAG_BROWSETIME, startTime, currentTime);
         if (mVvVideoView != null) {
             mVvVideoView.onDestroy();
         }
@@ -114,13 +115,13 @@ public class AdvideoViewFragment extends BaseFragment<PublicPresenter> implement
     public void onSupportInvisible() {
         super.onSupportInvisible();
         EventBus.getDefault().post(new VideoNoLockEvent(true));
-        if(isTask)
-        handler.removeMessages(1);
+        if (isTask)
+            handler.removeMessages(1);
     }
 
     @Override
     public void initPresenter() {
-        mPresenter=new PublicPresenter();
+        mPresenter = new PublicPresenter();
     }
 
     @Override
@@ -140,7 +141,7 @@ public class AdvideoViewFragment extends BaseFragment<PublicPresenter> implement
 
     @Override
     public void doTask(TaskBean taskBean) {
-        if(taskBean!=null) {
+        if (taskBean != null) {
             if (taskBean.getAdverts() != null) {
                 SPUtil.saveDataList(Constants.AD_TASK_LIST, taskBean.getAdverts());
             }

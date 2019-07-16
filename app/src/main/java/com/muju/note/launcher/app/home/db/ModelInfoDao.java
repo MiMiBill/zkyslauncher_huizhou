@@ -7,48 +7,48 @@ public class ModelInfoDao extends LitePalSupport {
     private int id;
 
     /**
-     *  imei
+     * imei
      */
     private String imei;
 
     /**
-     *  模块名称，类名
+     * 模块名称，类名
      */
     private String modelName;
 
     /**
-     *  模块标识
+     * 模块标识
      */
     private String modelTag;
 
     /**
-     *  医院ID
+     * 医院ID
      */
     private int hosId;
 
     /**
-     *  科室ID
+     * 科室ID
      */
     private int depId;
 
     /**
-     *   日期
+     * 日期
      */
     private String date;
 
 
     /**
-     *  开始时间
+     * 开始时间
      */
     private long startTime;
 
     /**
-     *  结束时间
+     * 结束时间
      */
     private long endTime;
 
     /**
-     *  时长
+     * 时长
      */
     private long time;
 

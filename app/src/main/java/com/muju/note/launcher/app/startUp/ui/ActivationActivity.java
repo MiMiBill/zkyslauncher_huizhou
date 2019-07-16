@@ -125,7 +125,7 @@ public class ActivationActivity extends BaseActivity<ActivationPresenter> implem
 
     @Override
     public void initPresenter() {
-        mPresenter=new ActivationPresenter();
+        mPresenter = new ActivationPresenter();
     }
 
 

@@ -2,17 +2,17 @@ package com.muju.note.launcher.app.hostipal.bean;
 
 /**
  * Created by Administrator on 2018/6/14.
- *      对于表格信息
+ * 对于表格信息
  */
 
 public class CostInfo {
     /**
-     *             entryName.setText(mList.get(position).getEnteyName());
-     number.setText(mList.get(position).getNumber());
-     unit.setText(mList.get(position).getUnit());
-     unitPrice.setText(mList.get(position).getUnitPrice());
-     totlePrice.setText(mList.get(position).getTotlePrice());
-     dateTime.setText(mList.get(position).getDateTime());
+     * entryName.setText(mList.get(position).getEnteyName());
+     * number.setText(mList.get(position).getNumber());
+     * unit.setText(mList.get(position).getUnit());
+     * unitPrice.setText(mList.get(position).getUnitPrice());
+     * totlePrice.setText(mList.get(position).getTotlePrice());
+     * dateTime.setText(mList.get(position).getDateTime());
      */
 
     private String entryName;

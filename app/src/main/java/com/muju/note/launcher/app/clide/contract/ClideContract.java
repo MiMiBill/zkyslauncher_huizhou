@@ -10,14 +10,18 @@ public interface ClideContract {
 
     interface View extends IView {
         void getClideSuccess(List<VideoInfoDao> list);
+
         void getClideNull();
+
         void getClideEnd();
+
         void getHeaderSuccess(List<VideoInfoDao> list);
     }
 
 
     interface Presenter extends IPresenter<View> {
-        void getCilde(String name,int pageNum);
+        void getCilde(String name, int pageNum);
+
         void getHeader(String name);
     }
 }

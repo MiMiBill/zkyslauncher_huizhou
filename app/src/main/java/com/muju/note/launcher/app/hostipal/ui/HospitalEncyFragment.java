@@ -111,9 +111,9 @@ public class HospitalEncyFragment extends BaseFragment<EncyPresenter> implements
     private PathologyAdapter pathologyAdapter;
     private List<InfoDao> infoBeans = new ArrayList<>();
     private List<InfomationDao> infomationBeans = new ArrayList<>();
-    private int pageNum=0;
-    private int itenId=0;
-    private int type=0;
+    private int pageNum = 0;
+    private int itenId = 0;
+    private int type = 0;
     private SearchPopupWindow popupWindow;
 
     @Override
@@ -136,28 +136,28 @@ public class HospitalEncyFragment extends BaseFragment<EncyPresenter> implements
     }
 
 
-    @OnClick({R.id.lly_patient, R.id.btn_up, R.id.btn_next,R.id.lly_back})
+    @OnClick({R.id.lly_patient, R.id.btn_up, R.id.btn_next, R.id.lly_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.lly_patient:
                 llyItem.setVisibility(View.GONE);
                 break;
             case R.id.btn_up:
-                if(pageNum==0){
+                if (pageNum == 0) {
                     showToast("已经是第一页了");
                     return;
                 }
                 pageNum--;
-                type=1;
-                mPresenter.queryEncyClopediapage(itenId,pageNum,type);
+                type = 1;
+                mPresenter.queryEncyClopediapage(itenId, pageNum, type);
                 break;
             case R.id.btn_next:
                 pageNum++;
-                if(infomationBeans.size()<12){
+                if (infomationBeans.size() < 12) {
                     showToast("已经是最后一页了");
                     return;
                 }
-                mPresenter.queryEncyClopediapage(itenId,pageNum,type);
+                mPresenter.queryEncyClopediapage(itenId, pageNum, type);
                 break;
             case R.id.lly_back:
                 pop();
@@ -199,7 +199,7 @@ public class HospitalEncyFragment extends BaseFragment<EncyPresenter> implements
     public void onSupportInvisible() {
         super.onSupportInvisible();
         hideSoftInput();
-        if(popupWindow!=null && popupWindow.isShowing()){
+        if (popupWindow != null && popupWindow.isShowing()) {
             popupWindow.dismiss();
         }
     }
@@ -243,10 +243,10 @@ public class HospitalEncyFragment extends BaseFragment<EncyPresenter> implements
                         infoBean.setCheck(false);
                     }
                 }
-                pageNum=0;
-                type=0;
-                itenId=infoBeans.get(position).getColumnId();
-                mPresenter.queryEncyClopediapage(itenId,pageNum,type);
+                pageNum = 0;
+                type = 0;
+                itenId = infoBeans.get(position).getColumnId();
+                mPresenter.queryEncyClopediapage(itenId, pageNum, type);
             }
         });
 
@@ -305,106 +305,106 @@ public class HospitalEncyFragment extends BaseFragment<EncyPresenter> implements
 
     private void setUi(InfomationDao bean) {
         llyFrmlayout.setVisibility(View.VISIBLE);
-        if(!"".equals(bean.getTitle())){
+        if (!"".equals(bean.getTitle())) {
             tvTitle.setText(bean.getTitle());
-        }else {
+        } else {
             tvTitle.setVisibility(View.GONE);
         }
         tvAuthor.setText(bean.getAuthor() + "   " + bean.getSource() + "   " + bean.getClickCount
                 () + "次点击");
-        if (bean.getSummary()!=null && (!"".equals(bean.getSummary().trim()))) {
+        if (bean.getSummary() != null && (!"".equals(bean.getSummary().trim()))) {
             tvSummary.setText(bean.getSummary());
             tvSummary.setVisibility(View.VISIBLE);
             tvSummaryDe.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             tvSummary.setVisibility(View.GONE);
             tvSummaryDe.setVisibility(View.GONE);
         }
-        if (bean.getCause()!=null && (!"".equals(bean.getCause().trim()))) {
+        if (bean.getCause() != null && (!"".equals(bean.getCause().trim()))) {
             tvCause.setText(bean.getCause());
             tvCause.setVisibility(View.VISIBLE);
             tvCauseDe.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             tvCause.setVisibility(View.GONE);
             tvCauseDe.setVisibility(View.GONE);
         }
-        if (bean.getCheck()!=null && (!"".equals(bean.getCheck().trim()))) {
+        if (bean.getCheck() != null && (!"".equals(bean.getCheck().trim()))) {
             tvCheck.setText(bean.getCheck());
             tvCheck.setVisibility(View.VISIBLE);
             tvCheckDe.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             tvCheck.setVisibility(View.GONE);
             tvCheckDe.setVisibility(View.GONE);
         }
-        if (bean.getClinicalManifestation()!=null && (!"".equals(bean.getClinicalManifestation().trim()))) {
+        if (bean.getClinicalManifestation() != null && (!"".equals(bean.getClinicalManifestation().trim()))) {
             tvClinicalManifestation.setText(bean.getClinicalManifestation());
             tvClinicalManifestation.setVisibility(View.VISIBLE);
             tvClinicalManifestationDe.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             tvClinicalManifestation.setVisibility(View.GONE);
             tvClinicalManifestationDe.setVisibility(View.GONE);
         }
-        if (bean.getComplicatingDisease()!=null && (!"".equals(bean.getComplicatingDisease().trim()))) {
+        if (bean.getComplicatingDisease() != null && (!"".equals(bean.getComplicatingDisease().trim()))) {
             tvComplicatingdisease.setText(bean.getComplicatingDisease());
             tvComplicatingdisease.setVisibility(View.VISIBLE);
             tvComplicatingdiseaseDe.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             tvComplicatingdisease.setVisibility(View.GONE);
             tvComplicatingdiseaseDe.setVisibility(View.GONE);
         }
-        if (bean.getAntidiastole()!=null && (!"".equals(bean.getAntidiastole().trim()))) {
+        if (bean.getAntidiastole() != null && (!"".equals(bean.getAntidiastole().trim()))) {
             tvAntidiastole.setText(bean.getAntidiastole());
             tvAntidiastole.setVisibility(View.VISIBLE);
             tvAntidiastoleDe.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             tvAntidiastole.setVisibility(View.GONE);
             tvAntidiastoleDe.setVisibility(View.GONE);
         }
-        if (bean.getDassification()!=null && (!"".equals(bean.getDassification().trim()))) {
+        if (bean.getDassification() != null && (!"".equals(bean.getDassification().trim()))) {
             tvDassification.setText(bean.getDassification());
             tvDassification.setVisibility(View.VISIBLE);
             tvDassificationDe.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             tvDassification.setVisibility(View.GONE);
             tvDassificationDe.setVisibility(View.GONE);
         }
-        if (bean.getDiacrsis()!=null && (!"".equals(bean.getDiacrsis().trim()))) {
+        if (bean.getDiacrsis() != null && (!"".equals(bean.getDiacrsis().trim()))) {
             tvDiacrisis.setText(bean.getDiacrsis());
             tvDiacrisis.setVisibility(View.VISIBLE);
             tvDiacrisisDe.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             tvDiacrisis.setVisibility(View.GONE);
             tvDiacrisisDe.setVisibility(View.GONE);
         }
-        if (bean.getDietCare()!=null && (!"".equals(bean.getDietCare().trim()))) {
+        if (bean.getDietCare() != null && (!"".equals(bean.getDietCare().trim()))) {
             tvDietcare.setText(bean.getDietCare());
             tvDietcare.setVisibility(View.VISIBLE);
             tvDietcareDe.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             tvDietcare.setVisibility(View.GONE);
             tvDietcareDe.setVisibility(View.GONE);
         }
-        if (bean.getCure()!=null &&(!"".equals(bean.getCure().trim()))) {
+        if (bean.getCure() != null && (!"".equals(bean.getCure().trim()))) {
             tvCure.setText(bean.getCure());
             tvCure.setVisibility(View.VISIBLE);
             tvCureDe.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             tvCure.setVisibility(View.GONE);
             tvCureDe.setVisibility(View.GONE);
         }
-        if (bean.getPrognosis()!=null && (!"".equals(bean.getPrognosis().trim()))) {
+        if (bean.getPrognosis() != null && (!"".equals(bean.getPrognosis().trim()))) {
             tvPrognosis.setText(bean.getPrognosis());
             tvPrognosis.setVisibility(View.VISIBLE);
             tvPrognosisDe.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             tvPrognosis.setVisibility(View.GONE);
             tvPrognosisDe.setVisibility(View.GONE);
         }
-        if (bean.getProphylaxis()!=null && (!"".equals(bean.getProphylaxis().trim()))) {
+        if (bean.getProphylaxis() != null && (!"".equals(bean.getProphylaxis().trim()))) {
             tvProphylaxis.setText(bean.getProphylaxis());
             tvProphylaxis.setVisibility(View.VISIBLE);
             tvProphylaxisDe.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             tvProphylaxis.setVisibility(View.GONE);
             tvProphylaxisDe.setVisibility(View.GONE);
         }

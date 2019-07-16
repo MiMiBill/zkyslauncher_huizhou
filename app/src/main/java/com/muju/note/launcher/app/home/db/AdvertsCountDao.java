@@ -5,47 +5,47 @@ import org.litepal.crud.LitePalSupport;
 public class AdvertsCountDao extends LitePalSupport {
 
     /**
-     *  imei
+     * imei
      */
     private String imei;
 
     /**
-     *  广告ID
+     * 广告ID
      */
     private int advertId;
 
     /**
-     *  医院ID
+     * 医院ID
      */
     private int hosId;
 
     /**
-     *  科室ID
+     * 科室ID
      */
     private int depId;
 
     /**
-     *   日期
+     * 日期
      */
     private String date;
 
     /**
-     *  点击次数
+     * 点击次数
      */
     private int clickCount;
 
     /**
-     *  广告展示时长，单位毫秒
+     * 广告展示时长，单位毫秒
      */
     private long showTime;
 
     /**
-     *  广告浏览时长，单位毫秒
+     * 广告浏览时长，单位毫秒
      */
     private long browseTime;
 
     /**
-     *  广告展示次数
+     * 广告展示次数
      */
     private int showCount;
 

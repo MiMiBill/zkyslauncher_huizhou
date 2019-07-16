@@ -23,15 +23,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 //文章分类
-public class SearchPopupWindow extends PopupWindow implements SearchAdapter.OnItemClickListener{
-    private List<InfomationDao> datas=new ArrayList<>();
+public class SearchPopupWindow extends PopupWindow implements SearchAdapter.OnItemClickListener {
+    private List<InfomationDao> datas = new ArrayList<>();
     private Context mContext;
     private LayoutInflater mInflater;
     private RecyclerView recyclerView;
     private SearchAdapter articleAdapter;
     private Activity mActivity;
     private OnClickListener listener;
-    private int selectPosition=-1;
+    private int selectPosition = -1;
+
     public SearchPopupWindow(Context context, List<InfomationDao> list) {
         this.mContext = context;
         this.datas = list;
@@ -49,7 +50,7 @@ public class SearchPopupWindow extends PopupWindow implements SearchAdapter.OnIt
         //设置PopupWindow宽高
         WindowManager windowManager = mActivity.getWindowManager();
         Display display = windowManager.getDefaultDisplay();
-        setWidth(display.getWidth()/4);
+        setWidth(display.getWidth() / 4);
 //        setHeight(display.getHeight());
         setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         //设置背景
@@ -61,12 +62,10 @@ public class SearchPopupWindow extends PopupWindow implements SearchAdapter.OnIt
         //设置布局管理器
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         //设置adapter
-        articleAdapter = new SearchAdapter(mContext,datas);
+        articleAdapter = new SearchAdapter(mContext, datas);
         articleAdapter.setOnItemClickListener(this);
         recyclerView.setAdapter(articleAdapter);
     }
-
-   
 
 
     public void setOnClickListener(OnClickListener listener) {
@@ -75,12 +74,12 @@ public class SearchPopupWindow extends PopupWindow implements SearchAdapter.OnIt
 
     @Override
     public void onItemClick(int position) {
-        selectPosition=position;
-        if(listener!=null)
+        selectPosition = position;
+        if (listener != null)
             listener.onClick(selectPosition);
     }
 
-    public interface OnClickListener{
+    public interface OnClickListener {
         void onClick(int position);
     }
 

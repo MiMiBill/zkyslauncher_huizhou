@@ -38,6 +38,7 @@ public class FeedBackFragment extends BaseFragment<FeedBackPresenter> implements
         FeedBackFragment feedBackFragment = new FeedBackFragment();
         return feedBackFragment;
     }
+
     @Override
     public int getLayout() {
         return R.layout.fragment_feedback;
@@ -49,7 +50,7 @@ public class FeedBackFragment extends BaseFragment<FeedBackPresenter> implements
 
     @Override
     public void initPresenter() {
-        mPresenter=new FeedBackPresenter();
+        mPresenter = new FeedBackPresenter();
     }
 
     @Override
@@ -94,7 +95,7 @@ public class FeedBackFragment extends BaseFragment<FeedBackPresenter> implements
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if(hidden){
+        if (hidden) {
             hideSoftInput();
         }
     }
@@ -108,14 +109,14 @@ public class FeedBackFragment extends BaseFragment<FeedBackPresenter> implements
         }
         JsonObject jsonObject = (JsonObject) new JsonParser().parse(data);
         if (jsonObject.get("code").getAsInt() == 200) {
-            Toast.makeText(LauncherApplication.getContext(),"提交成功",Toast.LENGTH_SHORT).show();
-        }else {
+            Toast.makeText(LauncherApplication.getContext(), "提交成功", Toast.LENGTH_SHORT).show();
+        } else {
             postFail();
         }
     }
 
     @Override
     public void postFail() {
-        Toast.makeText(LauncherApplication.getContext(),"网络异常,请稍后再试",Toast.LENGTH_SHORT).show();
+        Toast.makeText(LauncherApplication.getContext(), "网络异常,请稍后再试", Toast.LENGTH_SHORT).show();
     }
 }

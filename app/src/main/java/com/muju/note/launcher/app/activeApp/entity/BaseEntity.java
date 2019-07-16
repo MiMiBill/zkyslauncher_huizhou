@@ -8,7 +8,7 @@ public class BaseEntity<T> implements Serializable {
     private String msg;
     public T data;
 
-    public BaseEntity(){
+    public BaseEntity() {
     }
 
     public BaseEntity(int code, String msg) {
@@ -43,7 +43,7 @@ public class BaseEntity<T> implements Serializable {
         this.data = data;
     }
 
-    public boolean success(){
+    public boolean success() {
         return code == 0;
     }
 

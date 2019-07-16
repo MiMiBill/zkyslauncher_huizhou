@@ -7,6 +7,7 @@ public interface ActivationContract {
 
     interface View extends IView {
         void bindSuccess(String data);
+
         void bindFail();
     }
 

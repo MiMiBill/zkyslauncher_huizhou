@@ -63,9 +63,9 @@ public class HealthyFragment extends BaseFragment<HealthyPresenter> implements V
         tvTitle.setText("健康资讯");
         llBack.setOnClickListener(this);
 
-        videoInfoDaos=new ArrayList<>();
-        healthyAdapter=new HealthyAdapter(R.layout.rv_item_healthy,videoInfoDaos);
-        GridLayoutManager gridLayoutManager=new GridLayoutManager(LauncherApplication.getContext(), 3);
+        videoInfoDaos = new ArrayList<>();
+        healthyAdapter = new HealthyAdapter(R.layout.rv_item_healthy, videoInfoDaos);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(LauncherApplication.getContext(), 3);
         gridLayoutManager.offsetChildrenHorizontal(20);
         rvHealthy.setLayoutManager(gridLayoutManager);
         rvHealthy.setAdapter(healthyAdapter);
@@ -80,12 +80,12 @@ public class HealthyFragment extends BaseFragment<HealthyPresenter> implements V
         refreshVideo();
         loadMore();
 
-        mPresenter.getHealthy("健康",pageNum);
+        mPresenter.getHealthy("健康", pageNum);
     }
 
     @Override
     public void initPresenter() {
-        mPresenter=new HealthyPresenter();
+        mPresenter = new HealthyPresenter();
     }
 
     @Override
@@ -104,7 +104,7 @@ public class HealthyFragment extends BaseFragment<HealthyPresenter> implements V
 
     @Override
     public void getHealthySuccess(List<VideoInfoDao> list) {
-        if(pageNum==1){
+        if (pageNum == 1) {
             videoInfoDaos.clear();
         }
         smartRefresh.finishRefresh();
@@ -125,43 +125,44 @@ public class HealthyFragment extends BaseFragment<HealthyPresenter> implements V
     }
 
     /**
-     *  刷新数据
+     * 刷新数据
      */
-    private void refreshVideo(){
+    private void refreshVideo() {
         smartRefresh.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                pageNum=1;
-                mPresenter.getHealthy("健康",pageNum);
+                pageNum = 1;
+                mPresenter.getHealthy("健康", pageNum);
             }
         });
     }
 
     /**
-     *  加载更多
+     * 加载更多
      */
-    private void loadMore(){
+    private void loadMore() {
         healthyAdapter.setEnableLoadMore(true);
         healthyAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
                 pageNum++;
-                mPresenter.getHealthy("健康",pageNum);
+                mPresenter.getHealthy("健康", pageNum);
             }
         });
     }
 
     /**
-     *  跳转播放
+     * 跳转播放
+     *
      * @param infoDao
      */
-    private void toPlay(VideoInfoDao infoDao){
+    private void toPlay(VideoInfoDao infoDao) {
         if (!VideoSdkConfig.getInstance().getUser().isLogined()) {
             WoTvUtil.getInstance().login();
             showToast("登入视频中，请稍后");
             return;
         }
-        VideoHisDao hisDao=new VideoHisDao();
+        VideoHisDao hisDao = new VideoHisDao();
         hisDao.setCid(infoDao.getCid());
         hisDao.setCustomTag(infoDao.getCustomTag());
         hisDao.setDescription(infoDao.getDescription());
@@ -170,7 +171,7 @@ public class HealthyFragment extends BaseFragment<HealthyPresenter> implements V
         hisDao.setVideoId(infoDao.getVideoId());
         hisDao.setVideoType(infoDao.getVideoType());
         hisDao.setScreenUrl(infoDao.getScreenUrl());
-        WotvPlayFragment wotvPlayFragment=new WotvPlayFragment();
+        WotvPlayFragment wotvPlayFragment = new WotvPlayFragment();
         wotvPlayFragment.setHisDao(hisDao);
         start(wotvPlayFragment, ISupportFragment.SINGLETASK);
     }

@@ -12,10 +12,11 @@ import com.muju.note.launcher.util.log.LogUtil;
 
 public class NewActivationPresenter extends BasePresenter<NewActivationContract.View> implements NewActivationContract.Presenter {
 
-    private static final String TAG=NewActivationPresenter.class.getSimpleName();
+    private static final String TAG = NewActivationPresenter.class.getSimpleName();
 
     /**
-     *  查询平板是否激活
+     * 查询平板是否激活
+     *
      * @param iccid
      */
     @Override
@@ -27,22 +28,22 @@ public class NewActivationPresenter extends BasePresenter<NewActivationContract.
                     @Override
                     public void onSuccess(Response<String> response) {
                         try {
-                            if(mView==null){
+                            if (mView == null) {
                                 LogUtil.e("mView为空");
                                 return;
                             }
-                            ActivePadInfo info=new Gson().fromJson(response.body(),ActivePadInfo.class);
-                            if(info.getCode()!=200){
+                            ActivePadInfo info = new Gson().fromJson(response.body(), ActivePadInfo.class);
+                            if (info.getCode() != 200) {
                                 mView.bindFail();
                                 return;
                             }
-                            ActivePadInfo.DataBean bean=info.getData().get(0);
-                            if(bean.getActivetion()==1){
+                            ActivePadInfo.DataBean bean = info.getData().get(0);
+                            if (bean.getActivetion() == 1) {
                                 mView.bindSuccess(bean);
-                            }else {
+                            } else {
                                 mView.bindFail();
                             }
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                             mView.bindFail();
                         }
@@ -51,7 +52,7 @@ public class NewActivationPresenter extends BasePresenter<NewActivationContract.
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
-                        if(mView==null){
+                        if (mView == null) {
                             LogUtil.e("mView为空");
                             return;
                         }

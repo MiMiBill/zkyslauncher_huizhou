@@ -15,13 +15,14 @@ import java.util.List;
  * Created by Administrator on 2018/10/8.
  */
 
-public class SearchAdapter extends BaseQuickAdapter<InfomationDao,SearchAdapter.SpinerHolder> {
+public class SearchAdapter extends BaseQuickAdapter<InfomationDao, SearchAdapter.SpinerHolder> {
     private List<InfomationDao> spinerList;
     private Context context;
     public OnItemClickListener mItemClickListener;
+
     public SearchAdapter(Context context, List<InfomationDao> data) {
-        super(R.layout.spiner_window_layout_item,data);
-        this.context=context;
+        super(R.layout.spiner_window_layout_item, data);
+        this.context = context;
         this.spinerList = new ArrayList<>();
         if (data != null) {
             this.spinerList.addAll(data);
@@ -39,16 +40,16 @@ public class SearchAdapter extends BaseQuickAdapter<InfomationDao,SearchAdapter.
     @Override
     protected void convert(SpinerHolder helper, InfomationDao item) {
 
-        helper.setText(R.id.item,item.getTitle()) ;
+        helper.setText(R.id.item, item.getTitle());
     }
 
 
-    public  interface OnItemClickListener {
+    public interface OnItemClickListener {
         void onItemClick(int position);
     }
 
-    public void setOnItemClickListener(OnItemClickListener mItemClickListener){
-        this.mItemClickListener=mItemClickListener;
+    public void setOnItemClickListener(OnItemClickListener mItemClickListener) {
+        this.mItemClickListener = mItemClickListener;
     }
 
     public class SpinerHolder extends BaseViewHolder {

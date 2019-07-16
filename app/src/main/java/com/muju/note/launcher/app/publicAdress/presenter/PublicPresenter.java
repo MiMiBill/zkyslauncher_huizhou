@@ -15,14 +15,14 @@ import com.muju.note.launcher.util.log.LogUtil;
 
 public class PublicPresenter extends BasePresenter<PublicContract.View> implements PublicContract.Presenter {
     @Override
-    public void verfycode(String code,int adverId,String advertCode) {
+    public void verfycode(String code, int adverId, String advertCode) {
         OkGo.<String>post(UrlUtil.verCode())
                 .params("code", code)
                 .tag(this)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        if(mView==null){
+                        if (mView == null) {
                             LogUtil.e("mView为空");
                             return;
                         }
@@ -33,7 +33,7 @@ public class PublicPresenter extends BasePresenter<PublicContract.View> implemen
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
-                        if(mView==null){
+                        if (mView == null) {
                             LogUtil.e("mView为空");
                             return;
                         }
@@ -43,7 +43,7 @@ public class PublicPresenter extends BasePresenter<PublicContract.View> implemen
     }
 
     @Override
-    public void doTask(int userId,int advertId) {
+    public void doTask(int userId, int advertId) {
         OkGo.<BaseBean<TaskBean>>post(UrlUtil.doTask())
                 .tag(this)
                 .params("userId", userId)
@@ -53,7 +53,7 @@ public class PublicPresenter extends BasePresenter<PublicContract.View> implemen
                 .execute(new JsonCallback<BaseBean<TaskBean>>() {
                     @Override
                     public void onSuccess(Response<BaseBean<TaskBean>> response) {
-                        if(mView==null){
+                        if (mView == null) {
                             LogUtil.e("mView为空");
                             return;
                         }

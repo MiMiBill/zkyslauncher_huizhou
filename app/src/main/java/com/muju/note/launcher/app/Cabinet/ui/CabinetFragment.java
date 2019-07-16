@@ -125,7 +125,7 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
     public void onSupportInvisible() {
         super.onSupportInvisible();
         handler.removeMessages(1);
-        if(videoView!=null){
+        if (videoView != null) {
             videoView.stopPlayback();
         }
         EventBus.getDefault().post(new VideoNoLockEvent(true));
@@ -138,7 +138,7 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
     }
 
 
-    @OnClick({R.id.lly_prise, R.id.lly_orser, R.id.btn_unlock, R.id.btn_lock,R.id.iv_cabinet_play})
+    @OnClick({R.id.lly_prise, R.id.lly_orser, R.id.btn_unlock, R.id.btn_lock, R.id.iv_cabinet_play})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.lly_prise:
@@ -169,15 +169,15 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
     private void playVideo() {
         LitePalDb.setZkysDb();
         LitePal.where("type =?", "openVideo").limit(1).findAsync(PadConfigSubDao
-        .class).listen(new FindMultiCallback<PadConfigSubDao>() {
+                .class).listen(new FindMultiCallback<PadConfigSubDao>() {
             @Override
             public void onFinish(List<PadConfigSubDao> list) {
-                if(list!=null && list.size()>0){
+                if (list != null && list.size() > 0) {
                     PadConfigSubDao subDao = list.get(0);
-                    if(subDao!=null){
-                        String path=subDao.getContent();
-                        String videoPath=SdcardConfig.RESOURCE_FOLDER+path.hashCode()+".mp4";
-                        Uri uri=Uri.parse(videoPath);
+                    if (subDao != null) {
+                        String path = subDao.getContent();
+                        String videoPath = SdcardConfig.RESOURCE_FOLDER + path.hashCode() + ".mp4";
+                        Uri uri = Uri.parse(videoPath);
                         videoView.setVideoURI(uri);
                         videoView.setVisibility(View.VISIBLE);
                         videoView.start();
@@ -211,8 +211,8 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
                 Gson gson = new Gson();
                 CabinetBean cabinetBean = gson.fromJson(data, CabinetBean.class);
                 dataBean = cabinetBean.getData();
-                if(dataBean.getHasLock()==1){  //有柜子有订单
-                    if(dataBean.getId()>0){
+                if (dataBean.getHasLock() == 1) {  //有柜子有订单
+                    if (dataBean.getId() > 0) {
                         isOrder = true;
                         llyNotLogin.setVisibility(View.GONE);
                         llyLogin.setVisibility(View.VISIBLE);
@@ -224,10 +224,10 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
                         tvStart.setText(dataBean.getLeaseTime());
                         tvRentTime.setText(dataBean.getNum() + "天");
                         setTime();
-                    }else { //有柜子无订单
+                    } else { //有柜子无订单
                         noOrder(0);
                     }
-                }else { //无柜子
+                } else { //无柜子
                     noOrder(1);
                 }
             } else { //无柜子
@@ -251,12 +251,12 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
     private void noOrder(int type) {
         isOrder = false;
         llyLogin.setVisibility(View.GONE);
-        if(type==0){
+        if (type == 0) {
             llyNoCabinet.setVisibility(View.GONE);
             llyNotLogin.setVisibility(View.VISIBLE);
             String code = String.format("https://xiao.zgzkys.com/qrcode?DevName=%s", MobileInfoUtil.getIMEI(getContext()));
             ivCode.setImageBitmap(QrCodeUtils.generateOriginalBitmap(code, 102, 102));
-        }else {
+        } else {
             llyNotLogin.setVisibility(View.GONE);
             llyNoCabinet.setVisibility(View.VISIBLE);
         }

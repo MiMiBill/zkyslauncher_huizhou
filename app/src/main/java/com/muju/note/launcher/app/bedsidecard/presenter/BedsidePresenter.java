@@ -17,7 +17,7 @@ import io.reactivex.disposables.Disposable;
 
 public class BedsidePresenter extends BasePresenter<BedsideContract.View> implements BedsideContract
         .Presenter {
-    private static final String TAG="HomePresenter";
+    private static final String TAG = "HomePresenter";
     private Disposable diDateTimer;
 
     /**
@@ -34,12 +34,12 @@ public class BedsidePresenter extends BasePresenter<BedsideContract.View> implem
 
                     @Override
                     public void onNext(Long aLong) {
-                        if(mView==null){
+                        if (mView == null) {
                             LogUtil.e("mView为空");
                             return;
                         }
                         mView.getDate(DateUtil.getDate("yyyy年MM月dd日"), DateUtil.getDate
-                                ("HH:mm:ss"), DateUtil.getWeek(), NetWorkUtil.getNetWorkLine(),
+                                        ("HH:mm:ss"), DateUtil.getWeek(), NetWorkUtil.getNetWorkLine(),
                                 NetWorkUtil.getNetworkState(LauncherApplication.getContext()));
                     }
 
@@ -54,7 +54,6 @@ public class BedsidePresenter extends BasePresenter<BedsideContract.View> implem
                     }
                 });
     }
-
 
 
     public void onDestroy() {

@@ -42,7 +42,7 @@ import me.yokeyword.fragmentation.ISupportFragment;
 public class ActivationFragment extends BaseFragment<NewActivationPresenter> implements
         NewActivationContract.View {
 
-    private static final String TAG=ActivationFragment.class.getSimpleName();
+    private static final String TAG = ActivationFragment.class.getSimpleName();
 
     @BindView(R.id.iv_hide)
     ImageView ivHide;
@@ -75,8 +75,8 @@ public class ActivationFragment extends BaseFragment<NewActivationPresenter> imp
 
         tvIccid.setText("iccId:" + MobileInfoUtil.getICCID(LauncherApplication.getContext()));
         tvImei.setText("imei:" + MobileInfoUtil.getIMEI(LauncherApplication.getContext()));
-        String str=MobileInfoUtil.getICCID(LauncherApplication.getContext())+","+MobileInfoUtil.getIMEI(LauncherApplication.getContext())+","+Build.DISPLAY;
-        LogUtil.d(TAG,str);
+        String str = MobileInfoUtil.getICCID(LauncherApplication.getContext()) + "," + MobileInfoUtil.getIMEI(LauncherApplication.getContext()) + "," + Build.DISPLAY;
+        LogUtil.d(TAG, str);
         ivActivePadQrcode.setImageBitmap(QrCodeUtils.generateBitmap(str, 232, 232));
 
         boolean isReboot = SPUtil.getBoolean(SpTopics.SP_REBOOT);

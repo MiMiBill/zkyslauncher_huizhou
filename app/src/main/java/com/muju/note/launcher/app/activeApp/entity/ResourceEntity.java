@@ -22,8 +22,6 @@ public class ResourceEntity {
     public static final int APP_UPDATE_PACKAGE = 4;
 
 
-
-
     private int type;
     private String url;
     private String fileName;

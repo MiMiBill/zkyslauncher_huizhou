@@ -101,7 +101,7 @@ public class CostFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.tv_date_pick1, R.id.tv_date_pick2, R.id.bt_advance_record,R.id.ll_back})
+    @OnClick({R.id.tv_date_pick1, R.id.tv_date_pick2, R.id.bt_advance_record, R.id.ll_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_date_pick1:

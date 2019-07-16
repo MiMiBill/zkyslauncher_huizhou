@@ -20,7 +20,7 @@ public class MissionAdapter extends BaseQuickAdapter<MissionInfoDao, BaseViewHol
 
     @Override
     protected void convert(BaseViewHolder helper, MissionInfoDao item) {
-        GlideUtil.loadImg(item.getImg(), (ImageView) helper.getView(R.id.iv_img),R.mipmap.ic_video_load_default);
+        GlideUtil.loadImg(item.getImg(), (ImageView) helper.getView(R.id.iv_img), R.mipmap.ic_video_load_default);
         helper.setText(R.id.tv_name, item.getTitle());
         helper.setText(R.id.tv_date, item.getUpdateTime());
     }

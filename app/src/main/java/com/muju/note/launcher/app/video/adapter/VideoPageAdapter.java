@@ -13,15 +13,15 @@ public class VideoPageAdapter extends FragmentPagerAdapter {
 
     private List<VideoColumnsDao> list;
 
-    public VideoPageAdapter(FragmentManager fm,List<VideoColumnsDao> list) {
+    public VideoPageAdapter(FragmentManager fm, List<VideoColumnsDao> list) {
         super(fm);
-        this.list=list;
+        this.list = list;
     }
 
 
     @Override
     public Fragment getItem(int i) {
-        return new VideoContentFragment().newInstance(list.get(i).getColumnsId(),list.get(i).getName());
+        return new VideoContentFragment().newInstance(list.get(i).getColumnsId(), list.get(i).getName());
     }
 
     @Override
