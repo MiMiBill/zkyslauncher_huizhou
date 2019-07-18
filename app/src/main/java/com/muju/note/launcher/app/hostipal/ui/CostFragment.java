@@ -1,93 +1,53 @@
 package com.muju.note.launcher.app.hostipal.ui;
 
+
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.muju.note.launcher.R;
-import com.muju.note.launcher.app.hostipal.adapter.ZkRecycleViewCostAdapter;
-import com.muju.note.launcher.app.hostipal.bean.CostInfo;
-import com.muju.note.launcher.app.hostipal.costquery.CustDatePick;
-import com.muju.note.launcher.app.hostipal.costquery.RecycleViewDivider;
+import com.muju.note.launcher.app.hostipal.adapter.CostAdapter;
+import com.muju.note.launcher.app.hostipal.bean.CostBean;
 import com.muju.note.launcher.base.BaseFragment;
+import com.muju.note.launcher.base.LauncherApplication;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
-import butterknife.Unbinder;
 
-public class CostFragment extends BaseFragment {
-    @BindView(R.id.tv_cost)
-    TextView tvCost;
-    @BindView(R.id.tv_cost_money)
-    TextView tvCostMoney;
-    @BindView(R.id.tv_advance_gold)
-    TextView tvAdvanceGold;
-    @BindView(R.id.tv_advance_golds)
-    TextView tvAdvanceGolds;
-    @BindView(R.id.tv_balance)
-    TextView tvBalance;
-    @BindView(R.id.bt_advance_record)
-    Button btAdvanceRecord;
-    @BindView(R.id.rl_advance_record)
-    RelativeLayout rlAdvanceRecord;
-    @BindView(R.id.tv_date_pick1)
-    TextView tvDatePick1;
-    @BindView(R.id.tv_date_pick2)
-    TextView tvDatePick2;
-    @BindView(R.id.tv_totle_money)
-    TextView tvTotleMoney;
-    @BindView(R.id.ll_advances)
-    LinearLayout llAdvances;
-    @BindView(R.id.ll_cost_title)
-    LinearLayout llCostTitle;
-    @BindView(R.id.zkrecycleview)
-    RecyclerView mZkrecycleview;
-    Unbinder unbinder;
-    List<CostInfo> mList = new ArrayList<>();
+/**
+ * 一日清单
+ */
+public class CostFragment extends BaseFragment implements View.OnClickListener {
+
     @BindView(R.id.ll_back)
     LinearLayout llBack;
     @BindView(R.id.tv_title)
     TextView tvTitle;
-    @BindView(R.id.rel_titlebar)
-    RelativeLayout relTitlebar;
-    private CustDatePick mCustDatePick;
+    @BindView(R.id.rv_cost)
+    RecyclerView rvCost;
+
+    private CostAdapter costAdapter;
+    private List<CostBean> costBeanList;
 
     @Override
     public int getLayout() {
-        return R.layout.fragment_cost;
+        return R.layout.fragment_new_cost;
     }
 
     @Override
     public void initData() {
-        tvTitle.setText("费用详情");
-        relTitlebar.setBackgroundColor(getResources().getColor(R.color.white));
+        llBack.setOnClickListener(this);
 
-        initRecyclerView();
-        mCustDatePick = new CustDatePick(getActivity());
-        mList.clear();
-        for (int i = 0; i < 10; i++) {
-            mList.add(new CostInfo("注射XX", "2", "瓶", "20.00", "40.00元", "2018.01." + i));
-        }
-    }
+        costBeanList=new ArrayList<>();
+        costAdapter=new CostAdapter(R.layout.item_rv_his_cost,costBeanList);
+        rvCost.setLayoutManager(new LinearLayoutManager(LauncherApplication.getContext(), LinearLayoutManager.VERTICAL, false));
+        rvCost.setAdapter(costAdapter);
 
-    private void initRecyclerView() {
-        mZkrecycleview.setLayoutManager(new LinearLayoutManager(getActivity()));
-        //创建默认的线性LayoutManager
-        mZkrecycleview.setHasFixedSize(true);//如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
-//        mZkrecycleview.addItemDecoration(new DividerItemDecoration(mContext,
-// DividerItemDecoration.VERTICAL, 1, getResources().getColor(R.color.default_bg));//设置分割线
-        mZkrecycleview.addItemDecoration(new RecycleViewDivider(getActivity(),
-                LinearLayoutManager.VERTICAL, 1, getResources().getColor(R.color.table_line)));
-        //设置分割线
-        ZkRecycleViewCostAdapter adapter = new ZkRecycleViewCostAdapter(getActivity(), mList);
-        mZkrecycleview.setAdapter(adapter);
+        addData();
     }
 
     @Override
@@ -100,23 +60,34 @@ public class CostFragment extends BaseFragment {
 
     }
 
-
-    @OnClick({R.id.tv_date_pick1, R.id.tv_date_pick2, R.id.bt_advance_record, R.id.ll_back})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.tv_date_pick1:
-                mCustDatePick.show(tvDatePick1);
-                break;
-            case R.id.tv_date_pick2:
-                mCustDatePick.show(tvDatePick2);
-                break;
-            case R.id.bt_advance_record:
-                start(new AdvanceRecordFragment());
-                break;
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
             case R.id.ll_back:
                 pop();
                 break;
         }
     }
 
+    private void addData(){
+        CostBean bean=new CostBean(1,"叶酸片","smg*100片/瓶",3,"片","70.00","西药","甲","2019-07-18");
+        costBeanList.add(bean);
+        CostBean bean1=new CostBean(2,"葡萄糖注射液","100ml*瓶/瓶",3,"瓶","52.30","西药","乙","2019-07-18");
+        costBeanList.add(bean1);
+        CostBean bean2=new CostBean(3,"注射用还原型谷","1g*瓶/瓶",2,"片","19.40","西药","甲","2019-07-18");
+        costBeanList.add(bean2);
+        CostBean bean3=new CostBean(4,"二级护理","--",1,"--","20.00","护理费","甲","2019-07-18");
+        costBeanList.add(bean3);
+        CostBean bean4=new CostBean(5,"住院夜查费","--",1,"--","10.00","护理费","甲","2019-07-18");
+        costBeanList.add(bean4);
+        CostBean bean5=new CostBean(6,"普通输液器","--",1,"--","20.00","治疗费","甲","2019-07-18");
+        costBeanList.add(bean5);
+        CostBean bean6=new CostBean(7,"静脉输液第一级","--",1,"--","30.00","治疗费","乙","2019-07-18");
+        costBeanList.add(bean6);
+        CostBean bean7=new CostBean(8,"床位","--",1,"--","10.00","床位费","乙","2019-07-18");
+        costBeanList.add(bean7);
+        CostBean bean8=new CostBean(9,"换药","--",2,"次","20.00","治疗费","乙","2019-07-18");
+        costBeanList.add(bean8);
+        costAdapter.notifyDataSetChanged();
+    }
 }
