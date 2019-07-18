@@ -1,6 +1,7 @@
 package com.muju.note.launcher.app.home.ui;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.gson.Gson;
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.Cabinet.ui.CabinetFragment;
 import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
@@ -27,11 +29,14 @@ import com.muju.note.launcher.app.healthy.ui.HealthyFragment;
 import com.muju.note.launcher.app.home.adapter.HomeHisVideoAdapter;
 import com.muju.note.launcher.app.home.adapter.HomeMenuAdapter;
 import com.muju.note.launcher.app.home.adapter.HomeTopVideoAdapter;
+import com.muju.note.launcher.app.home.bean.CrontabBean;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.app.home.contract.HomeContract;
 import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
+import com.muju.note.launcher.app.home.db.CrontabDao;
 import com.muju.note.launcher.app.home.db.HomeMenuDao;
 import com.muju.note.launcher.app.home.dialog.HospitalServiceDialog;
+import com.muju.note.launcher.app.home.event.CrontabEvent;
 import com.muju.note.launcher.app.home.event.DrawOutEvent;
 import com.muju.note.launcher.app.home.event.GetAdvertEvent;
 import com.muju.note.launcher.app.home.event.OutHospitalEvent;
@@ -49,6 +54,7 @@ import com.muju.note.launcher.app.setting.ui.GuideFragment;
 import com.muju.note.launcher.app.setting.ui.UserSettingFragment;
 import com.muju.note.launcher.app.setting.ui.VoiceFragment;
 import com.muju.note.launcher.app.shop.ShopFragment;
+import com.muju.note.launcher.app.timetask.CrontabService;
 import com.muju.note.launcher.app.video.bean.PayEntity;
 import com.muju.note.launcher.app.video.bean.PayEvent;
 import com.muju.note.launcher.app.video.bean.VideoEvent;
@@ -57,9 +63,11 @@ import com.muju.note.launcher.app.video.db.VideoInfoDao;
 import com.muju.note.launcher.app.video.ui.VideoFragment;
 import com.muju.note.launcher.app.video.ui.WoTvVideoLineFragment;
 import com.muju.note.launcher.app.video.ui.WotvPlayFragment;
+import com.muju.note.launcher.app.video.util.DbHelper;
 import com.muju.note.launcher.app.video.util.WoTvUtil;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
+import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.service.homemenu.HomeMenuService;
 import com.muju.note.launcher.topics.AdvertsTopics;
 import com.muju.note.launcher.util.ActiveUtils;
@@ -83,6 +91,8 @@ import com.unicom.common.VideoSdkConfig;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONObject;
+import org.litepal.LitePal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -463,7 +473,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     //设置病人信息
     @Override
     public void patientInfo(PatientResponse.DataBean entity) {
+        LogFactory.l().i("设置病人信息");
         this.entity = entity;
+        mPresenter.crontabTask(entity.getBedId());  //获取定时任务列表
         EventBus.getDefault().post(new PatientInfoEvent(entity));
         llyNoPatient.setVisibility(View.GONE);
         llyHavePaitent.setVisibility(View.VISIBLE);
@@ -553,6 +565,23 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         showToast("首页模块配置为空，请联系管理人员检查");
     }
 
+    @Override
+    public void crontabTask(String data) {
+        try {
+            JSONObject jsonObject = new JSONObject(data);
+            if (jsonObject.optInt("code") == 200) {
+                Gson gson=new Gson();
+                CrontabBean bean = gson.fromJson(data, CrontabBean.class);
+                List<CrontabBean.DataBean> crontabBean = bean.getData();
+                LitePalDb.setZkysDb();
+                LitePal.deleteAll(CrontabDao.class);
+                DbHelper.insertTaskListDb(crontabBean);
+            }
+       }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * 保存RegisterId到后台
@@ -588,6 +617,11 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 notPatientInfo();
                 EventBus.getDefault().post(new PayEvent(PayEntity.ORDER_TYPE_VIDEO_PREMIUM));
                 EventBus.getDefault().post(new VideoEvent(VideoEvent.PREMIUM));
+
+                Intent service=new Intent(getActivity(),CrontabService.class); //出院删除定时事件
+                if(service!=null){
+                    getActivity().stopService(service);
+                }
                 break;
             case PatientEvent.MISSION_ADD:
 //                setHomeMissionData();
@@ -600,6 +634,14 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     public void onEvent(GetAdvertEvent event) {
         mPresenter.getBananaList(AdvertsTopics.CODE_HOME_LB);
         mPresenter.getDialogAd(AdvertsTopics.CODE_HOME_DIALOG);
+    }
+
+
+    //开启定时事件
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(CrontabEvent event) {
+        Intent intent=new Intent(getActivity(),CrontabService.class);
+        getActivity().startService(intent);
     }
 
     @Override

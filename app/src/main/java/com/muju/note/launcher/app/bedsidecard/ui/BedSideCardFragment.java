@@ -16,11 +16,9 @@ import com.muju.note.launcher.app.bedsidecard.presenter.BedsidePresenter;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.app.home.event.OutHospitalEvent;
 import com.muju.note.launcher.app.home.event.PatientInfoEvent;
-import com.muju.note.launcher.app.home.ui.HomeFragment;
 import com.muju.note.launcher.app.video.event.VideoNoLockEvent;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
-import com.muju.note.launcher.entity.BedSideEvent;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.FormatUtils;
 import com.muju.note.launcher.util.log.LogFactory;
@@ -284,17 +282,6 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
 
     }
 
-    /**
-     * 床头卡模式
-     *
-     * @param event
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void bedSide(BedSideEvent event) {
-        if (event.getCode() == 14) {
-            popTo(HomeFragment.class, false);
-        }
-    }
 
     @Override
     public void getDate(String date, String time, String week, String net, String netType) {

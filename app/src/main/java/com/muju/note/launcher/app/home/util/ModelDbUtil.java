@@ -7,7 +7,6 @@ import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
-import com.muju.note.launcher.util.log.LogUtil;
 
 import org.litepal.LitePal;
 import org.litepal.crud.callback.FindCallback;
@@ -101,8 +100,14 @@ public class ModelDbUtil {
             LitePalDb.setZkysDb();
             ModelInfoDao dao = new ModelInfoDao();
             dao.setDate(date);
-            dao.setDepId(ActiveUtils.getPadActiveInfo().getDeptId());
-            dao.setHosId(ActiveUtils.getPadActiveInfo().getHospitalId());
+            if(ActiveUtils.getPadActiveInfo()!=null){
+                dao.setDepId(ActiveUtils.getPadActiveInfo().getDeptId());
+                dao.setHosId(ActiveUtils.getPadActiveInfo().getHospitalId());
+            }else {
+                dao.setDepId(0);
+                dao.setHosId(0);
+            }
+
             dao.setImei(MobileInfoUtil.getIMEI(LauncherApplication.getContext()));
             dao.setModelName(className);
             dao.setModelTag(tagName);

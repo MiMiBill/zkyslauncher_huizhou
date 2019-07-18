@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 
-import com.muju.note.launcher.app.home.ui.HomeFragment;
 import com.muju.note.launcher.app.home.util.ModelDbUtil;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.toast.FancyToast;

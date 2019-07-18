@@ -498,6 +498,19 @@
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
+        <!--定时事件-->
+        <receiver android:name=".broadcast.CrontabReceiver">
+            <intent-filter>
+                <action android:name="com.muju.note.launcher.single.receiver" />
+                <action android:name="com.muju.note.launcher.day.receiver" />
+                <action android:name="com.muju.note.launcher.week.receiver" />
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name=".app.timetask.CrontabService"
+            android:enabled="true"
+            android:exported="false" />
 
         <activity
             android:name=".app.startUp.ui.HideActivity"

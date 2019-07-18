@@ -18,6 +18,7 @@ import com.muju.note.launcher.base.BasePresenter;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.url.UrlUtil;
+import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.DateUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.log.LogUtil;
@@ -192,6 +193,26 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
                 mView.getMenuSuccess(list);
             }
         });
+    }
+
+
+    //定时任务列表
+    @Override
+    public void crontabTask(int bedId) {
+        OkGo.<String>post(UrlUtil.getBedList()).tag(UrlUtil.getBedList())
+                .params("bedId", bedId)
+                .params("hospId", ActiveUtils.getPadActiveInfo().getHospitalId())
+                .params("deptId", ActiveUtils.getPadActiveInfo().getDeptId())
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        if (mView == null) {
+                            LogUtil.e("mView为空");
+                            return;
+                        }
+                        mView.crontabTask(response.body());
+                    }
+                });
     }
 
     /**

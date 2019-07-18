@@ -61,4 +61,11 @@ public class Constants {
 
     //个人积分信息
     public static final String USER_TASK_LIST = "user_task_list";
+
+    //定时任务广播
+    public static final String CRONTAB_ACTION_SINGLE = "com.muju.note.launcher.single.receiver";
+    public static final String CRONTAB_ACTION_DAY = "com.muju.note.launcher.day.receiver";
+    public static final String CRONTAB_ACTION_WEEK= "com.muju.note.launcher.week.receiver";
+
+
 }

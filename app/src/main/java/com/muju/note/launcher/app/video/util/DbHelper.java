@@ -6,8 +6,11 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.muju.note.launcher.app.home.bean.AdverNewBean;
 import com.muju.note.launcher.app.home.bean.AdvertsBean;
+import com.muju.note.launcher.app.home.bean.CrontabBean;
 import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
+import com.muju.note.launcher.app.home.db.CrontabDao;
 import com.muju.note.launcher.app.home.db.ModelInfoDao;
+import com.muju.note.launcher.app.home.event.CrontabEvent;
 import com.muju.note.launcher.app.home.event.GetAdvertEvent;
 import com.muju.note.launcher.app.hostipal.db.InfoDao;
 import com.muju.note.launcher.app.hostipal.db.InfomationDao;
@@ -34,42 +37,49 @@ import java.util.concurrent.Executors;
 
 public class DbHelper {
 
-    public static final String TAG="DbHelper";
+    public static final String TAG = "DbHelper";
 
     public static SQLiteDatabase getDataBase(String dbPath) throws Exception {
-        SQLiteDatabase sqLiteDatabase=SQLiteDatabase.openDatabase(dbPath,null,0);
+        SQLiteDatabase sqLiteDatabase = SQLiteDatabase.openDatabase(dbPath, null, 0);
         return sqLiteDatabase;
     }
 
     public static Cursor query(String dbPath, String tableName) throws Exception {
-        SQLiteDatabase database=getDataBase(dbPath);
-        Cursor cursor=database.query(tableName,null,null,null,null,null,null);
+        SQLiteDatabase database = getDataBase(dbPath);
+        Cursor cursor = database.query(tableName, null, null, null, null, null, null);
         return cursor;
     }
 
     /**
-     *  插入影视数据
+     * 插入影视数据
+     *
      * @param dbPath
      * @param tableName
      */
-    public static void insertToVideo(final String dbPath, final String tableName, final int count, final long createTime) throws Exception {
-        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_DB_START));
+    public static void insertToVideo(final String dbPath, final String tableName, final int
+            count, final long createTime) throws Exception {
+        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status
+                .VIDEO_INFO_DB_START));
         final int[] num = {0};
-        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_DB_PROGRESS,num[0]+"/"+count));
-        ExecutorService service=Executors.newSingleThreadExecutor();
+        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status
+                .VIDEO_INFO_DB_PROGRESS, num[0] + "/" + count));
+        ExecutorService service = Executors.newSingleThreadExecutor();
         service.execute(new Runnable() {
             @Override
             public void run() {
                 try {
                     LitePal.deleteAll(VideoInfoDao.class);
-                    final SQLiteDatabase database=getDataBase(dbPath);
-                    ArrayList<VideoInfoDao> videoInfoDaos=new ArrayList<>();
-                    final Cursor cursor=database.query(tableName,null,null,null,null,null,null);
-                    while (cursor.moveToNext()){
+                    final SQLiteDatabase database = getDataBase(dbPath);
+                    ArrayList<VideoInfoDao> videoInfoDaos = new ArrayList<>();
+                    final Cursor cursor = database.query(tableName, null, null, null, null, null,
+                            null);
+                    while (cursor.moveToNext()) {
                         num[0]++;
-                        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_DB_PROGRESS,num[0]+"/"+count));
-                        VideoInfoDao dao=new VideoInfoDao();
-                        dao.setSerialVersionUID(cursor.getInt(cursor.getColumnIndex("serialVersionUID")));
+                        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent
+                                .Status.VIDEO_INFO_DB_PROGRESS, num[0] + "/" + count));
+                        VideoInfoDao dao = new VideoInfoDao();
+                        dao.setSerialVersionUID(cursor.getInt(cursor.getColumnIndex
+                                ("serialVersionUID")));
                         dao.setVideoId(cursor.getInt(cursor.getColumnIndex("id")));
                         dao.setCid(cursor.getString(cursor.getColumnIndex("cid")));
                         dao.setName(cursor.getString(cursor.getColumnIndex("name")));
@@ -104,111 +114,118 @@ public class DbHelper {
 //                        dao.saveDb(dao);
                         videoInfoDaos.add(dao);
                     }
-                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_DATA_SAVE));
+                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status
+                            .VIDEO_DATA_SAVE));
                     LitePal.saveAllAsync(videoInfoDaos).listen(new SaveCallback() {
                         @Override
                         public void onFinish(boolean success) {
-                            if(success){
-                                SPUtil.putLong(SpTopics.SP_VIDEO_UPDATE_TIME,(createTime/1000));
-                                LogUtil.i(TAG,"数据插入结束时间："+System.currentTimeMillis());
-                                EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_SUCCESS));
-                            }else {
-                                EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_DATA_SAVE_FAIL));
+                            if (success) {
+                                SPUtil.putLong(SpTopics.SP_VIDEO_UPDATE_TIME, (createTime / 1000));
+                                LogUtil.i(TAG, "数据插入结束时间：" + System.currentTimeMillis());
+                                EventBus.getDefault().post(new StartCheckDataEvent
+                                        (StartCheckDataEvent.Status.VIDEO_INFO_SUCCESS));
+                            } else {
+                                EventBus.getDefault().post(new StartCheckDataEvent
+                                        (StartCheckDataEvent.Status.VIDEO_DATA_SAVE_FAIL));
                             }
                             cursor.close();
                             database.close();
                         }
                     });
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
-                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_CARSH,e));
+                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status
+                            .VIDEO_INFO_CARSH, e));
                 }
             }
         });
     }
 
     /**
-     *  插入广告详情数据
+     * 插入广告详情数据
+     *
      * @param dbPath
      * @param dao
      */
-    public static void insertToAdvertData(String dbPath, UpAdvertInfoDao dao) throws Exception{
+    public static void insertToAdvertData(String dbPath, UpAdvertInfoDao dao) throws Exception {
         try {
-            SQLiteDatabase database=getDataBase(dbPath);
-            ContentValues values=new ContentValues();
-            values.put("imei",dao.getImei());
-            values.put("advertId",dao.getAdvertId());
-            values.put("hosId",dao.getHosId());
-            values.put("depId",dao.getDepId());
-            values.put("date",dao.getDate());
-            values.put("type",dao.getType());
-            values.put("startTime",dao.getStartTime());
-            values.put("endTime",dao.getEndTime());
-            values.put("time",dao.getTime());
-            database.insert("UpAdvertInfoDao",null,values);
+            SQLiteDatabase database = getDataBase(dbPath);
+            ContentValues values = new ContentValues();
+            values.put("imei", dao.getImei());
+            values.put("advertId", dao.getAdvertId());
+            values.put("hosId", dao.getHosId());
+            values.put("depId", dao.getDepId());
+            values.put("date", dao.getDate());
+            values.put("type", dao.getType());
+            values.put("startTime", dao.getStartTime());
+            values.put("endTime", dao.getEndTime());
+            values.put("time", dao.getTime());
+            database.insert("UpAdvertInfoDao", null, values);
             database.close();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             LitePalDb.setZkysDataDb();
-            UpAdvertInfoDao infoDao=new UpAdvertInfoDao();
+            UpAdvertInfoDao infoDao = new UpAdvertInfoDao();
             infoDao.setImei("异常数据");
             infoDao.save();
         }
     }
 
     /**
-     *  插入模块详情数据
+     * 插入模块详情数据
+     *
      * @param dbPath
      * @param dao
      */
-    public static void insertToModelData(String dbPath, ModelInfoDao dao) throws Exception{
+    public static void insertToModelData(String dbPath, ModelInfoDao dao) throws Exception {
         try {
-            SQLiteDatabase database=getDataBase(dbPath);
-            ContentValues values=new ContentValues();
-            values.put("imei",dao.getImei());
-            values.put("modelName",dao.getModelName());
-            values.put("hosId",dao.getHosId());
-            values.put("depId",dao.getDepId());
-            values.put("date",dao.getDate());
-            values.put("modelTag",dao.getModelTag());
-            values.put("startTime",dao.getStartTime());
-            values.put("endTime",dao.getEndTime());
-            values.put("time",dao.getTime());
-            database.insert("ModelInfoDao",null,values);
+            SQLiteDatabase database = getDataBase(dbPath);
+            ContentValues values = new ContentValues();
+            values.put("imei", dao.getImei());
+            values.put("modelName", dao.getModelName());
+            values.put("hosId", dao.getHosId());
+            values.put("depId", dao.getDepId());
+            values.put("date", dao.getDate());
+            values.put("modelTag", dao.getModelTag());
+            values.put("startTime", dao.getStartTime());
+            values.put("endTime", dao.getEndTime());
+            values.put("time", dao.getTime());
+            database.insert("ModelInfoDao", null, values);
             database.close();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             LitePalDb.setZkysDataDb();
-            UpAdvertInfoDao infoDao=new UpAdvertInfoDao();
+            UpAdvertInfoDao infoDao = new UpAdvertInfoDao();
             infoDao.setImei("异常数据");
             infoDao.save();
         }
     }
 
     /**
-     *  插入影视统计数据
+     * 插入影视统计数据
+     *
      * @param dbPath
      * @param dao
      */
-    public static void insertToVideoData(String dbPath, UpVideoInfoDao dao) throws Exception{
+    public static void insertToVideoData(String dbPath, UpVideoInfoDao dao) throws Exception {
         try {
-            SQLiteDatabase database=getDataBase(dbPath);
-            ContentValues values=new ContentValues();
-            values.put("imei",dao.getImei());
-            values.put("videoId",dao.getVideoId());
-            values.put("hosId",dao.getHosId());
-            values.put("depId",dao.getDepId());
-            values.put("date",dao.getDate());
-            values.put("videoName",dao.getVideoName());
-            values.put("startTime",dao.getStartTime());
-            values.put("endTime",dao.getEndTime());
-            values.put("cid",dao.getCid());
-            database.insert("UpVideoInfoDao",null,values);
+            SQLiteDatabase database = getDataBase(dbPath);
+            ContentValues values = new ContentValues();
+            values.put("imei", dao.getImei());
+            values.put("videoId", dao.getVideoId());
+            values.put("hosId", dao.getHosId());
+            values.put("depId", dao.getDepId());
+            values.put("date", dao.getDate());
+            values.put("videoName", dao.getVideoName());
+            values.put("startTime", dao.getStartTime());
+            values.put("endTime", dao.getEndTime());
+            values.put("cid", dao.getCid());
+            database.insert("UpVideoInfoDao", null, values);
             database.close();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             LitePalDb.setZkysDataDb();
-            UpVideoInfoDao infoDao=new UpVideoInfoDao();
+            UpVideoInfoDao infoDao = new UpVideoInfoDao();
             infoDao.setVideoName("异常数据");
             infoDao.save();
         }
@@ -216,19 +233,19 @@ public class DbHelper {
 
 
     /**
-     *  插入广告数据
+     * 插入广告数据
      */
     public static void insertAdvertListDb(final List<AdverNewBean> dataList) throws Exception {
-        LogUtil.i(TAG,"数据插入开始时间："+System.currentTimeMillis());
-        ExecutorService service=Executors.newSingleThreadExecutor();
+        LogUtil.i(TAG, "数据插入开始时间：" + System.currentTimeMillis());
+        ExecutorService service = Executors.newSingleThreadExecutor();
         service.execute(new Runnable() {
             @Override
             public void run() {
-                try{
+                try {
                     for (AdverNewBean adverNewBean : dataList) {
                         List<AdvertsBean> adverts = adverNewBean.getAdverts();
-                        for (AdvertsBean adBean: adverts) {
-                            AdvertsCodeDao advertsCodeDao=new AdvertsCodeDao();
+                        for (AdvertsBean adBean : adverts) {
+                            AdvertsCodeDao advertsCodeDao = new AdvertsCodeDao();
                             advertsCodeDao.setCode(adverNewBean.getCode());
                             advertsCodeDao.setAdid(adBean.getId());
                             String linkContent = adBean.getLinkContent();
@@ -238,26 +255,26 @@ public class DbHelper {
                             String additionUrl = adBean.getAdditionUrl();
                             String taskUrl = adBean.getTaskUrl();
                             String pubCode = adBean.getCode();
-                            if(null==pubCode){
-                                pubCode="";
+                            if (null == pubCode) {
+                                pubCode = "";
                             }
-                            if(null==linkContent){
-                                linkContent="";
+                            if (null == linkContent) {
+                                linkContent = "";
                             }
-                            if(null==resourceUrl){
-                                resourceUrl="";
+                            if (null == resourceUrl) {
+                                resourceUrl = "";
                             }
-                            if(null==name){
-                                name="";
+                            if (null == name) {
+                                name = "";
                             }
-                            if(null==advertType){
-                                advertType="";
+                            if (null == advertType) {
+                                advertType = "";
                             }
-                            if(null==additionUrl){
-                                additionUrl="";
+                            if (null == additionUrl) {
+                                additionUrl = "";
                             }
-                            if(null==taskUrl){
-                                taskUrl="";
+                            if (null == taskUrl) {
+                                taskUrl = "";
                             }
                             advertsCodeDao.setTaskType(adBean.getTaskType());
                             advertsCodeDao.setWxType(adBean.getWxType());
@@ -276,8 +293,8 @@ public class DbHelper {
                         }
                     }
                     EventBus.getDefault().post(new GetAdvertEvent());
-                    LogUtil.i(TAG,"数据插入结束时间："+System.currentTimeMillis());
-                }catch (Exception e){
+                    LogUtil.i(TAG, "数据插入结束时间：" + System.currentTimeMillis());
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -286,50 +303,57 @@ public class DbHelper {
 
 
     /**
-     *  插入科室数据
+     * 插入科室数据
      */
-    public static void insertEncyInfoDb(final String dbPath, final String tableName, final long createTime, final int count) throws Exception {
-        LogUtil.i(TAG,"数据插入开始时间："+System.currentTimeMillis());
-        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_FIRST_DB_START));
-        ExecutorService service=Executors.newSingleThreadExecutor();
+    public static void insertEncyInfoDb(final String dbPath, final String tableName, final long
+            createTime, final int count) throws Exception {
+        LogUtil.i(TAG, "数据插入开始时间：" + System.currentTimeMillis());
+        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status
+                .HOSPITAL_ENCY_FIRST_DB_START));
+        ExecutorService service = Executors.newSingleThreadExecutor();
         service.execute(new Runnable() {
             @Override
             public void run() {
                 try {
                     LitePalDb.setZkysDb();
                     LitePal.deleteAll(InfoDao.class);
-                    final SQLiteDatabase database=getDataBase(dbPath);
-                    final Cursor cursor=database.query(tableName,null,null,null,null,null,null);
-                    ArrayList<InfoDao> infoDaos=new ArrayList<>();
-                    while (cursor.moveToNext()){
-                        InfoDao dao=new InfoDao();
+                    final SQLiteDatabase database = getDataBase(dbPath);
+                    final Cursor cursor = database.query(tableName, null, null, null, null, null,
+                            null);
+                    ArrayList<InfoDao> infoDaos = new ArrayList<>();
+                    while (cursor.moveToNext()) {
+                        InfoDao dao = new InfoDao();
                         dao.setColumnId(cursor.getInt(cursor.getColumnIndex("id")));
                         dao.setName(cursor.getString(cursor.getColumnIndex("name")));
                         dao.setIsDel(cursor.getInt(cursor.getColumnIndex("isDel")));
 //                        dao.saveDb(dao);
                         infoDaos.add(dao);
                     }
-                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.ENCY_KS_DATA_SAVE));
+                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status
+                            .ENCY_KS_DATA_SAVE));
                     LitePal.saveAllAsync(infoDaos).listen(new SaveCallback() {
                         @Override
                         public void onFinish(boolean success) {
-                            if(success){
-                                EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_FIRST_DB_END));
+                            if (success) {
+                                EventBus.getDefault().post(new StartCheckDataEvent
+                                        (StartCheckDataEvent.Status.HOSPITAL_ENCY_FIRST_DB_END));
                                 try {
-                                    insertEncyInfoMationDb(dbPath,"medical_encyclopedia",createTime,count);
+                                    insertEncyInfoMationDb(dbPath, "medical_encyclopedia",
+                                            createTime, count);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                                LogUtil.i(TAG,"数据插入结束时间："+System.currentTimeMillis());
-                            }else {
-                                EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.ENCY_KS_DATA_SAVE_FAIL));
+                                LogUtil.i(TAG, "数据插入结束时间：" + System.currentTimeMillis());
+                            } else {
+                                EventBus.getDefault().post(new StartCheckDataEvent
+                                        (StartCheckDataEvent.Status.ENCY_KS_DATA_SAVE_FAIL));
                             }
                             cursor.close();
                             database.close();
                         }
                     });
 
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -338,44 +362,53 @@ public class DbHelper {
 
 
     /**
-     *  插入病例数据
+     * 插入病例数据
+     *
      * @param dbPath
      * @param tableName
      */
-    public static void insertEncyInfoMationDb(final String dbPath, final String tableName, final long createTime, final int count) throws Exception {
-        LogUtil.i(TAG,"数据插入开始时间："+System.currentTimeMillis());
-        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_TWO_DB_START));
+    public static void insertEncyInfoMationDb(final String dbPath, final String tableName, final
+    long createTime, final int count) throws Exception {
+        LogUtil.i(TAG, "数据插入开始时间：" + System.currentTimeMillis());
+        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status
+                .HOSPITAL_ENCY_TWO_DB_START));
         final int[] num = {0};
-        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_TWO_DB_PROGRESS,num[0]+"/"+count));
-        ExecutorService service=Executors.newSingleThreadExecutor();
+        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status
+                .HOSPITAL_ENCY_TWO_DB_PROGRESS, num[0] + "/" + count));
+        ExecutorService service = Executors.newSingleThreadExecutor();
         service.execute(new Runnable() {
             @Override
             public void run() {
                 try {
                     LitePalDb.setZkysDb();
                     LitePal.deleteAll(InfomationDao.class);
-                    final SQLiteDatabase database=getDataBase(dbPath);
-                    ArrayList<InfomationDao> infomationDaos=new ArrayList<>();
-                    final Cursor cursor=database.query(tableName,null,null,null,null,null,null);
-                    while (cursor.moveToNext()){
+                    final SQLiteDatabase database = getDataBase(dbPath);
+                    ArrayList<InfomationDao> infomationDaos = new ArrayList<>();
+                    final Cursor cursor = database.query(tableName, null, null, null, null, null,
+                            null);
+                    while (cursor.moveToNext()) {
                         num[0]++;
-                        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_TWO_DB_PROGRESS,num[0]+"/"+count));
-                        InfomationDao dao=new InfomationDao();
+                        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent
+                                .Status.HOSPITAL_ENCY_TWO_DB_PROGRESS, num[0] + "/" + count));
+                        InfomationDao dao = new InfomationDao();
                         String source = cursor.getString(cursor.getColumnIndex("source"));
                         String title = cursor.getString(cursor.getColumnIndex("title"));
                         String summary = cursor.getString(cursor.getColumnIndex("summary"));
                         String cause = cursor.getString(cursor.getColumnIndex("cause"));
                         String check = cursor.getString(cursor.getColumnIndex("check"));
                         String diacrsis = cursor.getString(cursor.getColumnIndex("diacrisis"));
-                        String antidiastole = cursor.getString(cursor.getColumnIndex("antidiastole"));
+                        String antidiastole = cursor.getString(cursor.getColumnIndex
+                                ("antidiastole"));
                         String cure = cursor.getString(cursor.getColumnIndex("cure"));
                         String prognosis = cursor.getString(cursor.getColumnIndex("prognosis"));
                         String prophylaxis = cursor.getString(cursor.getColumnIndex("prophylaxis"));
-                        String complicatingDisease = cursor.getString(cursor.getColumnIndex("complicatingDisease"));
+                        String complicatingDisease = cursor.getString(cursor.getColumnIndex
+                                ("complicatingDisease"));
                         String author = cursor.getString(cursor.getColumnIndex("author"));
                         int columnid = cursor.getInt(cursor.getColumnIndex("columnId"));
                         int isDel = cursor.getInt(cursor.getColumnIndex("isDel"));
-                        String classification = cursor.getString(cursor.getColumnIndex("classification"));
+                        String classification = cursor.getString(cursor.getColumnIndex
+                                ("classification"));
                         String clinicalManifestation = cursor.getString(cursor.getColumnIndex
                                 ("clinicalManifestation"));
                         String dietCare = cursor.getString(cursor.getColumnIndex("dietCare"));
@@ -451,22 +484,25 @@ public class DbHelper {
 //                        dao.saveDb(dao);
                         infomationDaos.add(dao);
                     }
-                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.ENCY_DATA_SAVE));
+                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status
+                            .ENCY_DATA_SAVE));
                     LitePal.saveAllAsync(infomationDaos).listen(new SaveCallback() {
                         @Override
                         public void onFinish(boolean success) {
-                            if(success){
+                            if (success) {
                                 SPUtil.putLong(Constants.SP_ENCY_UPDATE_TIME, createTime / 1000);
-                                EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_SUCCESS));
-                                LogUtil.i(TAG,"数据插入结束时间："+System.currentTimeMillis());
-                            }else {
-                                EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.ENCY_DATA_SAVE_FAIL));
+                                EventBus.getDefault().post(new StartCheckDataEvent
+                                        (StartCheckDataEvent.Status.HOSPITAL_ENCY_SUCCESS));
+                                LogUtil.i(TAG, "数据插入结束时间：" + System.currentTimeMillis());
+                            } else {
+                                EventBus.getDefault().post(new StartCheckDataEvent
+                                        (StartCheckDataEvent.Status.ENCY_DATA_SAVE_FAIL));
                             }
                             cursor.close();
                             database.close();
                         }
                     });
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -475,21 +511,22 @@ public class DbHelper {
 
 
     /**
-     *  插入VIP时间
+     * 插入VIP时间
+     *
      * @param dbPath
      * @param dao
      */
-    public static void insertToVipData(String dbPath, PayInfoDao dao) throws Exception{
+    public static void insertToVipData(String dbPath, PayInfoDao dao) throws Exception {
         try {
-            SQLiteDatabase database=getDataBase(dbPath);
-            ContentValues values=new ContentValues();
-            values.put("expireTime",dao.getExpireTime());
-            database.insert("PayInfoDao",null,values);
+            SQLiteDatabase database = getDataBase(dbPath);
+            ContentValues values = new ContentValues();
+            values.put("expireTime", dao.getExpireTime());
+            database.insert("PayInfoDao", null, values);
             database.close();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             LitePalDb.setZkysDb();
-            PayInfoDao infoDao=new PayInfoDao();
+            PayInfoDao infoDao = new PayInfoDao();
             infoDao.setExpireTime("0");
             infoDao.save();
         }
@@ -497,12 +534,69 @@ public class DbHelper {
 
 
     /**
-     *  清除表数据
+     * 插入定时事件数据
+     */
+    public static void insertTaskListDb(final List<CrontabBean.DataBean> dataList) throws Exception {
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        service.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    for (CrontabBean.DataBean bean : dataList) {
+                        CrontabDao dao = new CrontabDao();
+                        dao.setAddType(bean.getAddType());
+                        dao.setCrontabid(bean.getId());
+                        String fileType = bean.getFileType();
+                        String fileAddr = bean.getFileAddr();
+                        String startdate = bean.getStartDate();
+                        String stopdate = bean.getStopDate();
+                        String execTime = bean.getExecTime();
+                        String week = bean.getWeeks();
+
+                        if (null == fileType) {
+                            fileType = "";
+                        }
+                        if (null == fileAddr) {
+                            fileAddr = "";
+                        }
+                        if (null == startdate) {
+                            startdate = "";
+                        }
+                        if (null == stopdate) {
+                            stopdate = "";
+                        }
+                        if (null == execTime) {
+                            execTime = "";
+                        }
+                        if (null == week) {
+                            week = "";
+                        }
+
+                        dao.setFileType(fileType);
+                        dao.setFileAddr(fileAddr);
+                        dao.setStartDate(startdate);
+                        dao.setStopDate(stopdate);
+                        dao.setExecTime(execTime);
+                        dao.setWeeks(week);
+                        dao.saveDb(dao);
+                    }
+                   EventBus.getDefault().post(new CrontabEvent());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+
+    /**
+     * 清除表数据
+     *
      * @param dbPath
      * @param table
      */
-    public static void clearTable(String dbPath,String table) throws Exception{
-        SQLiteDatabase database=getDataBase(dbPath);
-        database.delete(table,null,null);
+    public static void clearTable(String dbPath, String table) throws Exception {
+        SQLiteDatabase database = getDataBase(dbPath);
+        database.delete(table, null, null);
     }
 }

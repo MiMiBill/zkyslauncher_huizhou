@@ -314,4 +314,9 @@ public class UrlUtil {
     public static String getHomeMenu(){
         return getHost()+"/menu/config";
     }
+
+    //定时任务列表
+    public static String getBedList(){
+        return getHost()+"/crontab/bedList";
+    }
 }
