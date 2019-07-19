@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/ll_item"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px45"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="@dimen/px200"
+            android:layout_height="match_parent"
+            android:text="项目名称"
+            android:textSize="@dimen/px18"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/px20"/>
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#DDDDDD"></View>
+
+        <TextView
+            android:id="@+id/tv_result"
+            android:layout_width="@dimen/px115"
+            android:layout_height="match_parent"
+            android:textSize="@dimen/px18"
+            android:gravity="center"
+            android:text="结果"
+            android:textColor="@color/black_gray"/>
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#DDDDDD"></View>
+
+        <TextView
+            android:id="@+id/tv_example"
+            android:layout_width="@dimen/px143"
+            android:layout_height="match_parent"
+            android:textSize="@dimen/px18"
+            android:gravity="center"
+            android:text="参考值"
+            android:textColor="@color/black_gray"/>
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#DDDDDD"></View>
+
+        <TextView
+            android:id="@+id/tv_company"
+            android:layout_width="@dimen/px121"
+            android:layout_height="match_parent"
+            android:textSize="@dimen/px18"
+            android:gravity="center"
+            android:text="单位"
+            android:textColor="@color/black_gray"/>
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/blue_gray"></View>
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/blue_gray"
+            android:layout_marginLeft="@dimen/px10"></View>
+
+        <TextView
+            android:id="@+id/tv_name_sub"
+            android:layout_width="@dimen/px200"
+            android:layout_height="match_parent"
+            android:text="项目名称"
+            android:textSize="@dimen/px18"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/px20"/>
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#DDDDDD"></View>
+
+        <TextView
+            android:id="@+id/tv_result_sub"
+            android:layout_width="@dimen/px115"
+            android:layout_height="match_parent"
+            android:textSize="@dimen/px18"
+            android:gravity="center"
+            android:text="结果"
+            android:textColor="@color/black_gray"/>
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#DDDDDD"></View>
+
+        <TextView
+            android:id="@+id/tv_example_sub"
+            android:layout_width="@dimen/px143"
+            android:layout_height="match_parent"
+            android:textSize="@dimen/px18"
+            android:gravity="center"
+            android:text="参考值"
+            android:textColor="@color/black_gray"/>
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#DDDDDD"></View>
+
+        <TextView
+            android:id="@+id/tv_company_sub"
+            android:layout_width="@dimen/px121"
+            android:layout_height="match_parent"
+            android:textSize="@dimen/px18"
+            android:gravity="center"
+            android:text="单位"
+            android:textColor="@color/black_gray"/>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view_line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/blue_gray"></View>
+
+</LinearLayout>

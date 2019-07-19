@@ -103,7 +103,7 @@
         android:layout_marginLeft="@dimen/px20"
         android:layout_marginRight="@dimen/px20"
         android:layout_marginBottom="@dimen/px20"
-        android:background="@color/white"
+        android:background="@drawable/shape_button_bg_white"
         android:orientation="vertical">
 
        <LinearLayout
