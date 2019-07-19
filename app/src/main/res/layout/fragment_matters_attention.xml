@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white_gray4">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px63">
+        <LinearLayout
+            android:id="@+id/ll_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/px20"
+            android:paddingRight="@dimen/px20"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/px34"
+                android:layout_height="@dimen/px34"
+                android:src="@mipmap/iv_back" />
+
+            <TextView
+                android:layout_width="@dimen/px60"
+                android:gravity="center"
+                android:layout_height="@dimen/px40"
+                android:layout_marginLeft="@dimen/px10"
+                android:text="返回"
+                android:textColor="@color/black"
+                android:textSize="@dimen/px20" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:textSize="17sp"
+            android:textColor="@color/color_333333"
+            android:text="注意事项"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/px20"
+        android:layout_marginRight="@dimen/px20"
+        android:layout_marginBottom="@dimen/px20"
+        android:background="@drawable/shape_button_bg_white">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_matters_attention"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            ></android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
+
+</LinearLayout>

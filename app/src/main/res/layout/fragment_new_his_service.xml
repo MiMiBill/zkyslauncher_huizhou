@@ -710,6 +710,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_matters_attention"
                     android:layout_width="@dimen/px425"
                     android:layout_height="@dimen/px188"
                     android:layout_alignParentRight="true"
