@@ -41,6 +41,8 @@ public class HospitalelServiceFragment extends BaseFragment implements View.OnCl
     LinearLayout llMattersAttention;
     @BindView(R.id.ll_custom_msg)
     LinearLayout llCustomMsg;
+    @BindView(R.id.ll_drugs)
+    LinearLayout llDrugs;
 
 
     @Override
@@ -59,6 +61,7 @@ public class HospitalelServiceFragment extends BaseFragment implements View.OnCl
         llChemotherapay.setOnClickListener(this);
         llMattersAttention.setOnClickListener(this);
         llCustomMsg.setOnClickListener(this);
+        llDrugs.setOnClickListener(this);
     }
 
     @Override
@@ -97,6 +100,11 @@ public class HospitalelServiceFragment extends BaseFragment implements View.OnCl
             case R.id.ll_custom_msg:
                 start(new CustomMsgFragment());
                 break;
+
+            case R.id.ll_drugs:
+                start(new DrugsFragment());
+                break;
         }
     }
+
 }

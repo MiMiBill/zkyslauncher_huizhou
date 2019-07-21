@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/px18">
+        <TextView
+            android:id="@+id/tv_pos"
+            android:layout_width="@dimen/px25"
+            android:layout_height="@dimen/px25"
+            android:background="@drawable/shape_button_bg_black"
+            android:text="1"
+            android:textColor="@color/black_gray"
+            android:textSize="@dimen/px20"
+            android:gravity="center"/>
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/px15"
+            android:text="盐酸左氧氟沙星"
+            android:textColor="@color/black_gray"
+            android:textSize="@dimen/px20" />
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/px22"
+            android:text="用法：每日服2次  每4小时一次  每次服3粒"
+            android:textColor="@color/color_FF633A"
+            android:textSize="@dimen/px18" />
+        <TextView
+            android:id="@+id/tv_tag"
+            android:layout_width="@dimen/px53"
+            android:layout_height="@dimen/px23"
+            android:layout_marginLeft="@dimen/px10"
+            android:text="内服"
+            android:textColor="@color/white"
+            android:textSize="@dimen/px16"
+            android:gravity="center"
+            android:background="@drawable/tv_drugs_tag_bg"/>
+    </LinearLayout>
+
+</LinearLayout>
