@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/px50"
+    android:paddingRight="@dimen/px20">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+
+        <View
+            android:id="@+id/view_round"
+            android:layout_width="@dimen/px29"
+            android:layout_height="@dimen/px29"
+            android:background="@drawable/view_drugs_round_bg"></View>
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/px10"
+            android:text="2019年07月28日  上午10：30"
+            android:textColor="@color/black_gray"
+            android:textSize="@dimen/px20" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="@dimen/px28"
+            android:background="@color/white_gray1"></View>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/px13"
+            android:background="@color/white_gray1"></View>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingRight="@dimen/px20"
+                android:paddingLeft="@dimen/px20"
+                android:paddingTop="@dimen/px20">
+                <ImageView
+                    android:id="@+id/iv_icon"
+                    android:layout_width="@dimen/px29"
+                    android:layout_height="@dimen/px29"
+                    android:src="@mipmap/ic_his_service_drugs"/>
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/px10"
+                    android:text="吃药提醒"
+                    android:textColor="@color/blue_gray1"
+                    android:textSize="@dimen/px20" />
+            </LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_drugs_sub"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/px10"
+                android:layout_marginLeft="@dimen/px20"></android.support.v7.widget.RecyclerView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px40"></View>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,764 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_gray4"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px63">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="医疗服务"
+            android:textColor="@color/color_333333"
+            android:textSize="17sp" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/px20"
+            android:layout_marginRight="@dimen/px20"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/px20">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/ll_cost"
+                    android:layout_width="@dimen/px795"
+                    android:layout_height="@dimen/px510"
+                    android:background="@drawable/shape_button_bg_white"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/px20"
+                    android:paddingTop="@dimen/px17"
+                    android:paddingRight="@dimen/px20">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="@dimen/px27"
+                            android:layout_height="@dimen/px28"
+                            android:src="@mipmap/ic_his_service_cost" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/px6"
+                            android:text="一日清单"
+                            android:textColor="@color/black_gray"
+                            android:textSize="@dimen/px20" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/shape_button_bg_white1"
+                        android:orientation="vertical"
+                        android:layout_marginTop="@dimen/px20">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/px40"
+                            android:background="@color/white_gray1"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="@dimen/px289"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="时间"
+                                android:textColor="@color/black_gray"
+                                android:textSize="@dimen/px20" />
+
+                            <TextView
+                                android:layout_width="@dimen/px230"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="名称"
+                                android:textColor="@color/black_gray"
+                                android:textSize="@dimen/px20" />
+
+                            <TextView
+                                android:layout_width="@dimen/px230"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="操作"
+                                android:textColor="@color/black_gray"
+                                android:textSize="@dimen/px20" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/px74"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="@dimen/px289"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="2019/07/01  00:00-24:00"
+                                android:textColor="@color/color_FF633A"
+                                android:textSize="@dimen/px20" />
+
+                            <View
+                                android:layout_width="1px"
+                                android:layout_height="match_parent"
+                                android:background="@color/white_gray1"></View>
+
+                            <TextView
+                                android:layout_width="@dimen/px230"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="住院清单"
+                                android:textColor="@color/color_FF633A"
+                                android:textSize="@dimen/px20" />
+
+                            <View
+                                android:layout_width="1px"
+                                android:layout_height="match_parent"
+                                android:background="@color/white_gray1"></View>
+
+                            <RelativeLayout
+                                android:layout_width="@dimen/px230"
+                                android:layout_height="match_parent">
+
+                                <Button
+                                    android:id="@+id/btn_cost1"
+                                    android:layout_width="@dimen/px90"
+                                    android:layout_height="@dimen/px35"
+                                    android:layout_centerInParent="true"
+                                    android:background="@drawable/shape_button_bg_blue3"
+                                    android:text="查看详情"
+                                    android:textColor="@color/blue_gray"
+                                    android:textSize="@dimen/px16" />
+                            </RelativeLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/px74"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="@dimen/px289"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="2019/06/30  00:00-24:00"
+                                android:textColor="@color/black_gray"
+                                android:textSize="@dimen/px20" />
+
+                            <View
+                                android:layout_width="1px"
+                                android:layout_height="match_parent"
+                                android:background="@color/white_gray1"></View>
+
+                            <TextView
+                                android:layout_width="@dimen/px230"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="住院清单"
+                                android:textColor="@color/black_gray"
+                                android:textSize="@dimen/px20" />
+
+                            <View
+                                android:layout_width="1px"
+                                android:layout_height="match_parent"
+                                android:background="@color/white_gray1"></View>
+
+                            <RelativeLayout
+                                android:layout_width="@dimen/px230"
+                                android:layout_height="match_parent">
+
+                                <Button
+                                    android:id="@+id/btn_cost2"
+                                    android:layout_width="@dimen/px90"
+                                    android:layout_height="@dimen/px35"
+                                    android:layout_centerInParent="true"
+                                    android:background="@drawable/shape_button_bg_blue3"
+                                    android:text="查看详情"
+                                    android:textColor="@color/blue_gray"
+                                    android:textSize="@dimen/px16" />
+                            </RelativeLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/px74"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="@dimen/px289"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="2019/06/29  00:00-24:00"
+                                android:textColor="@color/black_gray"
+                                android:textSize="@dimen/px20" />
+
+                            <View
+                                android:layout_width="1px"
+                                android:layout_height="match_parent"
+                                android:background="@color/white_gray1"></View>
+
+                            <TextView
+                                android:layout_width="@dimen/px230"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="住院清单"
+                                android:textColor="@color/black_gray"
+                                android:textSize="@dimen/px20" />
+
+                            <View
+                                android:layout_width="1px"
+                                android:layout_height="match_parent"
+                                android:background="@color/white_gray1"></View>
+
+                            <RelativeLayout
+                                android:layout_width="@dimen/px230"
+                                android:layout_height="match_parent">
+
+                                <Button
+                                    android:id="@+id/btn_cost3"
+                                    android:layout_width="@dimen/px90"
+                                    android:layout_height="@dimen/px35"
+                                    android:layout_centerInParent="true"
+                                    android:background="@drawable/shape_button_bg_blue3"
+                                    android:text="查看详情"
+                                    android:textColor="@color/blue_gray"
+                                    android:textSize="@dimen/px16" />
+                            </RelativeLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/px74"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="@dimen/px289"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="2019/06/28  00:00-24:00"
+                                android:textColor="@color/black_gray"
+                                android:textSize="@dimen/px20" />
+
+                            <View
+                                android:layout_width="1px"
+                                android:layout_height="match_parent"
+                                android:background="@color/white_gray1"></View>
+
+                            <TextView
+                                android:layout_width="@dimen/px230"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="住院清单"
+                                android:textColor="@color/black_gray"
+                                android:textSize="@dimen/px20" />
+
+                            <View
+                                android:layout_width="1px"
+                                android:layout_height="match_parent"
+                                android:background="@color/white_gray1"></View>
+
+                            <RelativeLayout
+                                android:layout_width="@dimen/px230"
+                                android:layout_height="match_parent">
+
+                                <Button
+                                    android:id="@+id/btn_cost4"
+                                    android:layout_width="@dimen/px90"
+                                    android:layout_height="@dimen/px35"
+                                    android:layout_centerInParent="true"
+                                    android:background="@drawable/shape_button_bg_blue3"
+                                    android:text="查看详情"
+                                    android:textColor="@color/blue_gray"
+                                    android:textSize="@dimen/px16" />
+                            </RelativeLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/px74"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="@dimen/px289"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="2019/06/27  00:00-24:00"
+                                android:textColor="@color/black_gray"
+                                android:textSize="@dimen/px20" />
+
+                            <View
+                                android:layout_width="1px"
+                                android:layout_height="match_parent"
+                                android:background="@color/white_gray1"></View>
+
+                            <TextView
+                                android:layout_width="@dimen/px230"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="住院清单"
+                                android:textColor="@color/black_gray"
+                                android:textSize="@dimen/px20" />
+
+                            <View
+                                android:layout_width="1px"
+                                android:layout_height="match_parent"
+                                android:background="@color/white_gray1"></View>
+
+                            <RelativeLayout
+                                android:layout_width="@dimen/px230"
+                                android:layout_height="match_parent">
+
+                                <Button
+                                    android:id="@+id/btn_cost5"
+                                    android:layout_width="@dimen/px90"
+                                    android:layout_height="@dimen/px35"
+                                    android:layout_centerInParent="true"
+                                    android:background="@drawable/shape_button_bg_blue3"
+                                    android:text="查看详情"
+                                    android:textColor="@color/blue_gray"
+                                    android:textSize="@dimen/px16" />
+                            </RelativeLayout>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_drugs"
+                    android:layout_width="@dimen/px795"
+                    android:layout_height="@dimen/px284"
+                    android:layout_marginTop="@dimen/px20"
+                    android:orientation="vertical"
+                    android:background="@drawable/shape_button_bg_white">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/px20">
+                        <ImageView
+                            android:layout_width="@dimen/px29"
+                            android:layout_height="@dimen/px29"
+                            android:src="@mipmap/ic_his_service_drugs"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/px6"
+                            android:text="药典"
+                            android:textColor="@color/black_gray"
+                            android:textSize="@dimen/px20" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/px6"
+                            android:text="【用药提醒】"
+                            android:textColor="@color/blue_gray1"
+                            android:textSize="@dimen/px20" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/px45"
+                        android:layout_marginLeft="@dimen/px20"
+                        android:gravity="center_vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/px6"
+                            android:text="盐酸左氧氟沙星"
+                            android:textColor="@color/black_gray"
+                            android:textSize="@dimen/px20" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/px6"
+                            android:text="用法：每日服2次  每4小时一次  每次服3粒"
+                            android:textColor="@color/color_FF633A"
+                            android:textSize="@dimen/px18" />
+                        <TextView
+                            android:layout_width="@dimen/px53"
+                            android:layout_height="@dimen/px23"
+                            android:layout_marginLeft="@dimen/px10"
+                            android:text="内服"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/px16"
+                            android:gravity="center"
+                            android:background="@drawable/shape_button_bg_blue2"/>
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/white_gray1"
+                        android:layout_marginLeft="@dimen/px20"
+                        android:layout_marginRight="@dimen/px20"></View>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/px45"
+                        android:layout_marginLeft="@dimen/px20"
+                        android:gravity="center_vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/px6"
+                            android:text="胶体洒酸秘"
+                            android:textColor="@color/black_gray"
+                            android:textSize="@dimen/px20" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/px6"
+                            android:text="用法：每日服2次  每4小时一次  每次服3粒"
+                            android:textColor="@color/color_FF633A"
+                            android:textSize="@dimen/px18" />
+                        <TextView
+                            android:layout_width="@dimen/px53"
+                            android:layout_height="@dimen/px23"
+                            android:layout_marginLeft="@dimen/px10"
+                            android:text="内服"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/px16"
+                            android:gravity="center"
+                            android:background="@drawable/shape_button_bg_blue2"/>
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/white_gray1"
+                        android:layout_marginLeft="@dimen/px20"
+                        android:layout_marginRight="@dimen/px20"></View>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/px45"
+                        android:layout_marginLeft="@dimen/px20"
+                        android:gravity="center_vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/px6"
+                            android:text="芙药师"
+                            android:textColor="@color/black_gray"
+                            android:textSize="@dimen/px20" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/px6"
+                            android:text="用法：每日服2次  每4小时一次"
+                            android:textColor="@color/color_FF633A"
+                            android:textSize="@dimen/px18" />
+                        <TextView
+                            android:layout_width="@dimen/px53"
+                            android:layout_height="@dimen/px23"
+                            android:layout_marginLeft="@dimen/px10"
+                            android:text="外用"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/px16"
+                            android:gravity="center"
+                            android:background="@drawable/shape_button_bg_orange"/>
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/white_gray1"
+                        android:layout_marginLeft="@dimen/px20"
+                        android:layout_marginRight="@dimen/px20"></View>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/px20"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/ll_chemotherapay"
+                    android:layout_width="@dimen/px425"
+                    android:layout_height="@dimen/px390"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/shape_button_bg_white"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/px20">
+                        <ImageView
+                            android:layout_width="@dimen/px29"
+                            android:layout_height="@dimen/px24"
+                            android:src="@mipmap/ic_his_service_msg"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/px6"
+                            android:text="检查通知"
+                            android:textColor="@color/black_gray"
+                            android:textSize="@dimen/px20" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/px45"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/px38"
+                        android:layout_marginTop="@dimen/px15">
+                        <View
+                            android:layout_width="@dimen/px7"
+                            android:layout_height="@dimen/px7"
+                            android:background="@drawable/shape_button_bg_blue4"></View>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/px8"
+                            android:text="血尿常规检查报告"
+                            android:textColor="@color/blue_gray1"
+                            android:textSize="@dimen/px18" />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/white_gray1"
+                        android:layout_marginLeft="@dimen/px38"
+                        android:layout_marginRight="@dimen/px25"></View>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/px45"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/px38">
+                        <View
+                            android:layout_width="@dimen/px7"
+                            android:layout_height="@dimen/px7"
+                            android:background="@drawable/shape_button_bg_blue4"></View>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/px8"
+                            android:text="肝功能肾功能检查报告"
+                            android:textColor="@color/black_gray"
+                            android:textSize="@dimen/px18" />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/white_gray1"
+                        android:layout_marginLeft="@dimen/px38"
+                        android:layout_marginRight="@dimen/px25"></View>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/px45"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/px38">
+                        <View
+                            android:layout_width="@dimen/px7"
+                            android:layout_height="@dimen/px7"
+                            android:background="@drawable/shape_button_bg_blue4"></View>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/px8"
+                            android:text="血糖血脂检查报告"
+                            android:textColor="@color/black_gray"
+                            android:textSize="@dimen/px18" />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/white_gray1"
+                        android:layout_marginLeft="@dimen/px38"
+                        android:layout_marginRight="@dimen/px25"></View>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/px45"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/px38">
+                        <View
+                            android:layout_width="@dimen/px7"
+                            android:layout_height="@dimen/px7"
+                            android:background="@drawable/shape_button_bg_blue4"></View>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/px8"
+                            android:text="心电图检查报告"
+                            android:textColor="@color/black_gray"
+                            android:textSize="@dimen/px18" />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/white_gray1"
+                        android:layout_marginLeft="@dimen/px38"
+                        android:layout_marginRight="@dimen/px25"></View>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/px45"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/px38">
+                        <View
+                            android:layout_width="@dimen/px7"
+                            android:layout_height="@dimen/px7"
+                            android:background="@drawable/shape_button_bg_blue4"></View>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/px8"
+                            android:text="胸透检查报告"
+                            android:textColor="@color/black_gray"
+                            android:textSize="@dimen/px18" />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/white_gray1"
+                        android:layout_marginLeft="@dimen/px38"
+                        android:layout_marginRight="@dimen/px25"></View>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/px45"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/px38">
+                        <View
+                            android:layout_width="@dimen/px7"
+                            android:layout_height="@dimen/px7"
+                            android:background="@drawable/shape_button_bg_blue4"></View>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/px8"
+                            android:text="肝胆脾胰腺检查报告"
+                            android:textColor="@color/black_gray"
+                            android:textSize="@dimen/px18" />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/white_gray1"
+                        android:layout_marginLeft="@dimen/px38"
+                        android:layout_marginRight="@dimen/px25"></View>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_custom_msg"
+                    android:layout_width="@dimen/px425"
+                    android:layout_height="@dimen/px188"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="@dimen/px20"
+                    android:orientation="vertical"
+                    android:background="@drawable/shape_button_bg_white">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/px20">
+                        <ImageView
+                            android:layout_width="@dimen/px29"
+                            android:layout_height="@dimen/px24"
+                            android:src="@mipmap/ic_his_service_msg"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/px6"
+                            android:text="自定义通知"
+                            android:textColor="@color/black_gray"
+                            android:textSize="@dimen/px20" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/px25"
+                        android:text="今天上午10点换药"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/px20"
+                        android:textColor="@color/color_FF633A"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_matters_attention"
+                    android:layout_width="@dimen/px425"
+                    android:layout_height="@dimen/px188"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="@dimen/px20"
+                    android:orientation="vertical"
+                    android:background="@drawable/shape_button_bg_white">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/px20">
+                        <ImageView
+                            android:layout_width="@dimen/px27"
+                            android:layout_height="@dimen/px27"
+                            android:src="@mipmap/ic_his_service_attention_matters"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/px6"
+                            android:text="注意事项"
+                            android:textColor="@color/black_gray"
+                            android:textSize="@dimen/px20" />
+                    </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="注意清洁："
+                        android:layout_marginTop="@dimen/px10"
+                        android:textSize="@dimen/px18"
+                        android:textColor="@color/black_gray"
+                        android:layout_marginLeft="@dimen/px20"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="备皮后清洗局部皮肤，如条件许可，可以沐浴，但要注意避受和摔倒等意外的发生。"
+                        android:layout_marginTop="@dimen/px10"
+                        android:textSize="@dimen/px18"
+                        android:textColor="@color/black_gray"
+                        android:layout_marginLeft="@dimen/px20"
+                        android:layout_marginRight="@dimen/px20"/>
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>
