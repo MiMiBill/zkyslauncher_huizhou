@@ -2,6 +2,7 @@ package com.muju.note.launcher.service.operation;
 
 import android.annotation.SuppressLint;
 
+import com.muju.note.launcher.app.timetask.CrontabService;
 import com.muju.note.launcher.service.config.ConfigService;
 import com.muju.note.launcher.service.homemenu.HomeMenuService;
 import com.muju.note.launcher.service.updateversion.UpdateVersionService;
@@ -66,7 +67,7 @@ public class SixHourDisposable {
         ConfigService.getInstance().getPadConfigs();
         // 更新首页列表
         HomeMenuService.getInstance().updateMenu(2);
+        //定时事件获取
+        CrontabService.getInstance().start();
     }
-
-
 }

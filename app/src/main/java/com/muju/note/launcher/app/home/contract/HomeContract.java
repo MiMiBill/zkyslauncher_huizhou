@@ -40,8 +40,6 @@ public interface HomeContract {
         void getMenuSuccess(List<HomeMenuDao> list);
 
         void getMenuNull();
-
-        void crontabTask(String data);
     }
 
 
@@ -59,7 +57,5 @@ public interface HomeContract {
         void getDialogAd(String code);
 
         void getMenu();
-
-        void crontabTask(int bedId);
     }
 }

@@ -10,6 +10,7 @@ import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.Cabinet.event.ReturnBedEvent;
 import com.muju.note.launcher.app.home.event.PatientEvent;
 import com.muju.note.launcher.app.satisfaction.event.GotoSatisfationEvent;
+import com.muju.note.launcher.app.timetask.event.TimeTaskEvent;
 import com.muju.note.launcher.app.video.bean.PayEntity;
 import com.muju.note.launcher.app.video.bean.PayEvent;
 import com.muju.note.launcher.app.video.bean.VideoEvent;
@@ -140,6 +141,12 @@ public class JPUSHReceiver extends BroadcastReceiver {
                     case 14: // 取消床头卡模式
                         EventBus.getDefault().post(new BedSideEvent(14));
                         break;
+                    case 15: // 收到定时事件
+                        EventBus.getDefault().post(new TimeTaskEvent(15));
+                        break;
+                    case 16: // 取消定时事件
+                        EventBus.getDefault().post(new TimeTaskEvent(15));
+                        break;
                 }
                 //processCustomMessage(context, bundle);
 
@@ -150,7 +157,6 @@ public class JPUSHReceiver extends BroadcastReceiver {
 
             } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
                 LogUtil.d("[JPUSHReceiver] 用户点击打开了通知");
-
                 //打开自定义的Activity
 				/*Intent i = new Intent(context, TestActivity.class);
 				i.putExtras(bundle);

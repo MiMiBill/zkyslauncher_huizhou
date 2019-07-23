@@ -57,6 +57,8 @@ import com.muju.note.launcher.app.setting.event.GotoLuckEvent;
 import com.muju.note.launcher.app.setting.event.GotoSignEvent;
 import com.muju.note.launcher.app.shop.ShopFragment;
 import com.muju.note.launcher.app.sign.ui.SignTaskFragment;
+import com.muju.note.launcher.app.timetask.CrontabService;
+import com.muju.note.launcher.app.timetask.event.TimeTaskEvent;
 import com.muju.note.launcher.app.video.event.VideoNoLockEvent;
 import com.muju.note.launcher.app.video.ui.VideoFragment;
 import com.muju.note.launcher.app.video.ui.WoTvVideoLineFragment;
@@ -275,9 +277,15 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
 
 
     private void outHospital() {
+        CrontabService.getInstance().cancleAlarm(this); //取消定时事件
         llNoPatient.setVisibility(View.VISIBLE);
         llHavePaitent.setVisibility(View.GONE);
     }
+
+
+
+
+
 
     /**
      * 开始倒计时
@@ -588,6 +596,24 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
             popToHome();
         }
     }
+
+
+    /**
+     * 收到/取消定时事件
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void timeTask(TimeTaskEvent event) {
+        if (event.getCode() == 15) {
+            CrontabService.getInstance().start();
+        }else {
+            CrontabService.getInstance().cancleAlarm(this);
+        }
+    }
+
+
+
 
     private void popToHome(){
         try {
