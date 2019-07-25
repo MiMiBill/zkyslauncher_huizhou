@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="@dimen/px650"
+        android:layout_height="@dimen/px470"
+        android:orientation="vertical"
+        android:background="@mipmap/ic_mission_push_bg"
+        android:layout_marginTop="@dimen/px30"
+        android:layout_marginLeft="@dimen/px30"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:id="@+id/iv_img"
+            android:layout_width="@dimen/px384"
+            android:layout_height="@dimen/px164"
+            android:src="@mipmap/ic_video_load_default"
+            android:layout_marginTop="@dimen/px90"/>
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/px30"
+            android:textColor="@color/black_gray"
+            android:layout_marginTop="@dimen/px20"
+            android:text="注意事项"/>
+
+        <Button
+            android:id="@+id/btn_toMission"
+            android:layout_width="@dimen/px230"
+            android:layout_height="@dimen/px45"
+            android:layout_marginTop="@dimen/px30"
+            android:background="@drawable/shape_button_bg_blue5"
+            android:text="查    看"
+            android:textColor="@color/white"
+            android:textSize="@dimen/px22"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="@dimen/px380"
+        android:layout_height="@dimen/px121"
+        android:src="@mipmap/ic_mission_push_title"/>
+
+</RelativeLayout>

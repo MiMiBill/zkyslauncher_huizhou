@@ -42,6 +42,7 @@ import com.muju.note.launcher.app.hostipal.ui.HospitalEncyFragment;
 import com.muju.note.launcher.app.hostipal.ui.HospitalMienFragment;
 import com.muju.note.launcher.app.hostipal.ui.HospitalMissionPdfFragment;
 import com.muju.note.launcher.app.hostipal.ui.HospitalMissionVideoFragment;
+import com.muju.note.launcher.app.hostipal.ui.MissionPushDialog;
 import com.muju.note.launcher.app.insurance.InsureanceFragment;
 import com.muju.note.launcher.app.luckdraw.ui.LuckDrawFragment;
 import com.muju.note.launcher.app.msg.db.CustomMessageDao;
@@ -155,15 +156,15 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
     @BindView(R.id.lly_draw)
     LinearLayout llDraw;
     private ActivePadInfo.DataBean activeInfo;
-    private String netType="";
+    private String netType = "";
     private Disposable disposableProtection;
     private boolean isStartProtection = true;
     private static String TAG = "MainActivity";
-    private Handler handler=new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case 1:
                     handler.removeMessages(1);
                     int netDbm = (int) msg.obj;
@@ -172,6 +173,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
             }
         }
     };
+
     @Override
     public int getLayout() {
         return R.layout.activity_main;
@@ -190,7 +192,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
         if (fragment == null) {
 //            loadRootFragment(R.id.fl_container, HomeFragment.newInstance());
 
-            loadRootFragment(R.id.fl_container, HomeFragment.newInstance(),false,false);
+            loadRootFragment(R.id.fl_container, HomeFragment.newInstance(), false, false);
 
         }
 
@@ -283,10 +285,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
     }
 
 
-
-
-
-
     /**
      * 开始倒计时
      */
@@ -351,7 +349,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
                     break;
             }
             return mDelegate.dispatchTouchEvent(ev) || super.dispatchTouchEvent(ev);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -380,56 +378,75 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
      *
      * @param entity
      */
+    private MissionPushDialog pushDialog;
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void pushCustomMsg(PushCustomMessageEntity entity) {
         LogUtil.d(TAG, "宣教推送ID：" + entity.getId());
         LitePalDb.setZkysDb();
         LitePal.where("missionid=?", entity.getId()).findFirstAsync(MissionInfoDao.class).listen(new FindCallback<MissionInfoDao>() {
             @Override
-            public void onFinish(MissionInfoDao missionInfoDao) {
+            public void onFinish(final MissionInfoDao missionInfoDao) {
                 if (missionInfoDao == null) {
                     return;
                 }
-                String type;
-                if (TextUtils.isEmpty(missionInfoDao.getVideo())) {
-                    File file = new File(SdcardConfig.RESOURCE_FOLDER, missionInfoDao.getFrontCover().hashCode() + ".pdf");
-                    if (!file.exists()) {
-                        showToast("正在下载中，请稍后重试");
-                        MissionService.getInstance().downMission();
-                        return;
+                pushDialog = new MissionPushDialog(MainActivity.this, R.style.DialogFullscreen, missionInfoDao.getImg(), missionInfoDao.getTitle(), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (v.getId() == R.id.btn_toMission) {
+                            pushDialog.dismiss();
+                            toMission(missionInfoDao);
+                        }
                     }
-                    start(HospitalMissionPdfFragment.newInstance(missionInfoDao.getFrontCover()));
-                    type="pdf";
-                } else {
-                    File file = new File(SdcardConfig.RESOURCE_FOLDER, missionInfoDao.getVideo().hashCode() + ".mp4");
-                    if (!file.exists()) {
-                        showToast("正在下载中，请稍后重试");
-                        MissionService.getInstance().downMission();
-                        return;
-                    }
-                    start(HospitalMissionVideoFragment.newInstance(missionInfoDao.getVideo()));
-                    type="video";
-                }
-
-                CustomMessageDao dao = new CustomMessageDao();
-                dao.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(System.currentTimeMillis()));
-                dao.setCreateTime(System.currentTimeMillis());
-                dao.setType(type);
-                dao.setTitle(missionInfoDao.getTitle());
-                dao.setMsgId(missionInfoDao.getMissionId());
-                if("pdf".equals(type)) {
-                    dao.setUrl(missionInfoDao.getFrontCover());
-                }else if("video".equals(type)){
-                    dao.setUrl(missionInfoDao.getVideo());
-                }
-                LitePalDb.setZkysDb();
-                dao.save();
+                });
+                pushDialog.setCanceledOnTouchOutside(false);
+                pushDialog.show();
             }
         });
     }
 
     /**
-     * 宣教推送
+     *  到宣教页面
+     * @param missionInfoDao
+     */
+    private void toMission(MissionInfoDao missionInfoDao) {
+        String type;
+        if (TextUtils.isEmpty(missionInfoDao.getVideo())) {
+            File file = new File(SdcardConfig.RESOURCE_FOLDER, missionInfoDao.getFrontCover().hashCode() + ".pdf");
+            if (!file.exists()) {
+                showToast("正在下载中，请稍后重试");
+                MissionService.getInstance().downMission();
+                return;
+            }
+            start(HospitalMissionPdfFragment.newInstance(missionInfoDao.getFrontCover()));
+            type = "pdf";
+        } else {
+            File file = new File(SdcardConfig.RESOURCE_FOLDER, missionInfoDao.getVideo().hashCode() + ".mp4");
+            if (!file.exists()) {
+                showToast("正在下载中，请稍后重试");
+                MissionService.getInstance().downMission();
+                return;
+            }
+            start(HospitalMissionVideoFragment.newInstance(missionInfoDao.getVideo()));
+            type = "video";
+        }
+
+        CustomMessageDao dao = new CustomMessageDao();
+        dao.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(System.currentTimeMillis()));
+        dao.setCreateTime(System.currentTimeMillis());
+        dao.setType(type);
+        dao.setTitle(missionInfoDao.getTitle());
+        dao.setMsgId(missionInfoDao.getMissionId());
+        if ("pdf".equals(type)) {
+            dao.setUrl(missionInfoDao.getFrontCover());
+        } else if ("video".equals(type)) {
+            dao.setUrl(missionInfoDao.getVideo());
+        }
+        LitePalDb.setZkysDb();
+        dao.save();
+    }
+
+    /**
+     * 自定义消息推送
      *
      * @param entity
      */
@@ -452,13 +469,13 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
                 start(WebViewFragment.newInstance(entity.getTitle(), entity.getUrl(), entity.getAdvertId()));
                 break;
             case 2:
-                 start(new GameFragment());
+                start(new GameFragment());
                 break;
             case 3:
-               start(AdvideoViewFragment.newInstance(entity.getAdvertId(), entity.getUrl(), 0, 0));
+                start(AdvideoViewFragment.newInstance(entity.getAdvertId(), entity.getUrl(), 0, 0));
                 break;
             case 4:
-                switch (entity.getUrl()){   //模块跳转
+                switch (entity.getUrl()) {   //模块跳转
                     case AdvertsTopics.MODE_HOSPITAL:
                         start(new HospitalMienFragment());
                         break;
@@ -591,7 +608,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
     public void bedSide(BedSideEvent event) {
         LogUtil.d(TAG, "bedCode:" + event.getCode());
         if (event.getCode() == 13) {
-            start(BedSideCardFragment.newInstance(HomeFragment.entity,true));
+            start(BedSideCardFragment.newInstance(HomeFragment.entity, true));
         } else {
             popToHome();
         }
@@ -607,23 +624,21 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
     public void timeTask(TimeTaskEvent event) {
         if (event.getCode() == 15) {
             CrontabService.getInstance().start();
-        }else {
+        } else {
             CrontabService.getInstance().cancleAlarm(this);
         }
     }
 
 
-
-
-    private void popToHome(){
+    private void popToHome() {
         try {
             List<Fragment> fragmentList = FragmentationMagician.getActiveFragments(this.getSupportFragmentManager());
-            for (Fragment fragment:fragmentList){
-                if("HomeFragment".equals(fragment.getClass().getSimpleName())){
+            for (Fragment fragment : fragmentList) {
+                if ("HomeFragment".equals(fragment.getClass().getSimpleName())) {
                     pop();
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -668,7 +683,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
             ivNet.setImageResource(R.mipmap.net_level_none);
 
         } else {
-            this.netType=netType;
+            this.netType = netType;
             ivWifi.setVisibility(View.GONE);
             ivNet.setVisibility(View.VISIBLE);
             tvNetType.setVisibility(View.VISIBLE);
@@ -678,16 +693,16 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
                 @Override
                 public void run() {
                     int netDbm = NetWorkUtil.getCurrentNetDBM(LauncherApplication.getContext());
-                    Message message=new Message();
-                    message.what=1;
-                    message.obj= netDbm;
+                    Message message = new Message();
+                    message.what = 1;
+                    message.obj = netDbm;
                     handler.sendMessage(message);
                 }
             }).run();
         }
     }
 
-    private void setNetIcon(String netType,int netDbm) {
+    private void setNetIcon(String netType, int netDbm) {
         if (netType.equals("4G")) {
             if (netDbm > -95) {
                 ivNet.setImageResource(R.mipmap.net_level_good);

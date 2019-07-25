@@ -296,6 +296,7 @@ public class VideoService {
      *  更新分类
      */
     private void setColumns(VideoColumnsDao dao){
+        LitePalDb.setZkysDb();
         dao.setColumnsId(dao.getId());
         dao.save();
     }
@@ -304,6 +305,7 @@ public class VideoService {
      *  更新标签分类
      */
     private void setTags(VideoTagsDao dao,int columnsId){
+        LitePalDb.setZkysDb();
         dao.setTagId(dao.getId());
         dao.setCoulmnsId(columnsId);
         dao.save();
@@ -313,6 +315,7 @@ public class VideoService {
      *  更新标签子分类
      */
     private void setTagsSub(VideoTagSubDao dao){
+        LitePalDb.setZkysDb();
         dao.setSubId(dao.getId());
         dao.save();
     }
