@@ -96,7 +96,7 @@ public class OrderFoodFragment extends BaseFragment<OrderFoodPresenter> implemen
     public void initData() {
         relTitlebar.setBackgroundColor(getResources().getColor(R.color.white));
         tvTitle.setText("点餐专区");
-        ivImg.setImageResource(R.mipmap.ic_home_item_order);
+        ivImg.setImageResource(R.mipmap.food_shop_logo);
         tvHosName.setText(ActiveUtils.getPadActiveInfo().getHospitalName());
 
         mPresenter.queryTab();

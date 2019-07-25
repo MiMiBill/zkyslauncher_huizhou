@@ -7,14 +7,93 @@
 
     <include layout="@layout/title_bar" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_order"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/px10"
-        android:padding="@dimen/px20">
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/px140"
+            android:layout_marginRight="@dimen/px140"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/px40"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px63">
+                <ImageView
+                    android:src="@mipmap/food_de_shop"
+                    android:layout_width="@dimen/px24"
+                    android:layout_height="@dimen/px24" />
+                <TextView
+                    android:id="@+id/tv_hos"
+                    android:textSize="@dimen/px22"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/px20"
+                    android:textColor="@color/color_585858"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_order"
+                android:layout_marginTop="@dimen/px1"
+                android:minHeight="@dimen/px500"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+            </android.support.v7.widget.RecyclerView>
+            <TextView
+                android:id="@+id/tv_totle"
+                android:text="111"
+                android:background="@color/white"
+                android:textSize="@dimen/px22"
+                android:gravity="right"
+                android:paddingRight="@dimen/px60"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:paddingRight="@dimen/px60"
+                android:layout_marginTop="@dimen/px1"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px159">
+                <TextView
+                    android:text="配送信息:"
+                    android:textSize="@dimen/px22"
+                    android:layout_marginTop="@dimen/px20"
+                    android:layout_marginLeft="@dimen/px40"
+                    android:textColor="@color/color_585858"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:gravity="right"
+                    android:layout_marginTop="@dimen/px20"
+                    android:layout_marginBottom="@dimen/px35"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:textSize="@dimen/px22"
+                        android:textColor="@color/color_585858"
+                        android:id="@+id/tv_name"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_height="0dp" />
+                    <TextView
+                        android:id="@+id/tv_address"
+                        android:textSize="@dimen/px22"
+                        android:textColor="@color/color_585858"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_height="0dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
-    </android.support.v7.widget.RecyclerView>
 
 
 </LinearLayout>

@@ -22,7 +22,7 @@ public class OrderDetailAdapter extends BaseQuickAdapter<OrderListBean.ItemsBean
 
         helper.setText(R.id.tv_name, item.getCommodity().getName());
         helper.setText(R.id.tv_price, "￥"+item.getCommodity().getPrice());
-        helper.setText(R.id.tv_count, "X"+item.getCount());
+        helper.setText(R.id.tv_count, "x"+item.getCount());
 
         GlideUtil.loadImg(item.getCommodity().getImages(),(ImageView)helper.getView(R.id.iv_img),R.mipmap.ic_video_load_default);
     }

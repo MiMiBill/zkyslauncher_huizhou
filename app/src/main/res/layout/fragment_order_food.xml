@@ -136,7 +136,7 @@
                 android:id="@+id/tv_total"
                 android:layout_marginLeft="@dimen/px112"
                 android:textColor="@color/white"
-                android:text="0"
+                android:text=""
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="@dimen/px16"
                 android:textSize="@dimen/px20"
