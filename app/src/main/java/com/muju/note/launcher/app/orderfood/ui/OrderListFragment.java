@@ -58,7 +58,7 @@ public class OrderListFragment extends BaseFragment<OrderListPresenter> implemen
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rvOrder.setLayoutManager(layoutManager);
-        rvOrder.addItemDecoration(new VerticalLineDecoration(DensityUtil.dip2px(getActivity(), 2), true));
+        rvOrder.addItemDecoration(new VerticalLineDecoration(DensityUtil.dip2px(getActivity(), 20), true));
         orderHisAdapter=new OrderHisAdapter(dataBeanList);
         rvOrder.setAdapter(orderHisAdapter);
         orderHisAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
