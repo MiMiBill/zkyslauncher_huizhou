@@ -64,4 +64,14 @@ public class UIUtils {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         LauncherApplication.getContext().startActivity(intent);
     }
+
+
+    /**
+     * 验证手机格式
+     */
+    public static boolean isMobile(String mobiles) {
+        String telRegex = "[1][3456789]\\d{9}";//
+        if (TextUtils.isEmpty(mobiles)) return false;
+        else return mobiles.matches(telRegex);
+    }
 }

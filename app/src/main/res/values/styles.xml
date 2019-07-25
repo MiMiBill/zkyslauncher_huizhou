@@ -106,4 +106,5 @@
         <item name="android:layout_height">68px</item>
         <item name="android:textSize">28px</item>
     </style>
+
 </resources>

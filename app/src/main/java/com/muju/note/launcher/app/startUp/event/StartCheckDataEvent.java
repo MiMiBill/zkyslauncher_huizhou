@@ -94,6 +94,7 @@ public class StartCheckDataEvent {
         HOME_MENU_REBOOT_HTTP_DATA_NULL,
         HOME_MENU_REBOOT_DB_START,
 
+        //百科百分比数据
         VIDEO_DATA_SAVE,
         VIDEO_DATA_SAVE_FAIL,
         ENCY_DATA_SAVE,
@@ -102,6 +103,19 @@ public class StartCheckDataEvent {
         ENCY_KS_DATA_SAVE_FAIL,
         DATA_SAVE_PROGRESS,
 
+        //点餐相关
+        FOOD_MENU_START,
+        FOOD_MENU_SUCCESS,
+        FOOD_MENU_HTTP_START,
+        FOOD_MENU_HTTP_FAIL,
+        FOOD_MENU_DB_START,
+        //点餐自启相关
+        FOOD_MENU_REBOOT_START,
+        FOOD_MENU_REBOOT_SUCCESS,
+        FOOD_MENU_REBOOT_HTTP_START,
+        FOOD_MENU_REBOOT_HTTP_FAIL,
+        FOOD_MENU_REBOOT_HTTP_DATA_NULL,
+        FOOD_MENU_REBOOT_DB_START,
     }
 
     private Status status;

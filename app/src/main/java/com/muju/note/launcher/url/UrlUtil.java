@@ -319,4 +319,30 @@ public class UrlUtil {
     public static String getBedList(){
         return getHost()+"/crontab/bedList";
     }
+
+
+    //点餐列表
+    public static String commodityAll(){
+        return getHost()+"/commodity/listAll";
+    }
+
+    //提交订单
+    public static String orderTableCreate(){
+        return getHost()+"/order/table/create";
+    }
+
+    //查询订单
+    public static String orderTableStatus(){
+        return getHost()+"/order/table/status";
+    }
+
+    //取消订单
+    public static String cancleTable(){
+        return getHost()+"/order/table/cancel";
+    }
+
+    //查询订单
+    public static String tableList(){
+        return getHost()+"/order/table/list";
+    }
 }

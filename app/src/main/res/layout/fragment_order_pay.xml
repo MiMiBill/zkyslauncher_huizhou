@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/main_layout"
+    android:background="@color/main_bg"
+    android:orientation="vertical">
+
+    <include layout="@layout/title_bar"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_marginTop="@dimen/px20"
+            android:layout_marginLeft="@dimen/px140"
+            android:layout_marginRight="@dimen/px140"
+            android:layout_marginBottom="@dimen/px20"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:id="@+id/lly_address"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/px40"
+                android:gravity="center_vertical"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px150">
+                <LinearLayout
+                    android:gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/px35">
+                    <ImageView
+                        android:src="@mipmap/order_address"
+                        android:layout_width="@dimen/px21"
+                        android:layout_height="@dimen/px23" />
+                    <TextView
+                        android:id="@+id/tv_address"
+                        android:layout_marginLeft="@dimen/px10"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/lly_phone"
+                    android:gravity="center_vertical"
+                    android:minHeight="@dimen/px35"
+                    android:layout_marginTop="@dimen/px20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:src="@mipmap/order_man"
+                        android:layout_width="@dimen/px21"
+                        android:layout_height="@dimen/px23" />
+                    <TextView
+                        android:id="@+id/tv_phone"
+                        android:text="添加地址"
+                        android:layout_marginLeft="@dimen/px10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <ImageView
+                        android:src="@mipmap/order_edit"
+                        android:layout_marginLeft="@dimen/px20"
+                        android:layout_width="@dimen/px28"
+                        android:layout_height="@dimen/px30" />
+                </LinearLayout>
+            </LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
+            <TextView
+                android:text="备注"
+                android:layout_marginTop="@dimen/px30"
+                android:textSize="@dimen/px22"
+                android:textColor="@color/color_585858"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/px50" />
+            <EditText
+                android:id="@+id/edt_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/px120"
+                android:padding="@dimen/px12"
+                android:background="@color/white"
+                android:hint="请输入口味偏好等要求"
+                android:inputType="textMultiLine"
+                android:gravity="left|top"/>
+
+            <LinearLayout
+                android:gravity="center_vertical"
+                android:layout_marginTop="@dimen/px20"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px70">
+                <TextView
+                    android:id="@+id/tv_price"
+                    android:textColor="@color/white"
+                    android:text="110"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/px40"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/px30"
+                    android:background="@color/black"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:id="@+id/tv_pay"
+                    android:gravity="center"
+                    android:text="去结算"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/px35"
+                    android:background="@color/color_FF633A"
+                    android:layout_width="@dimen/px212"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+
+
+
+</LinearLayout>

@@ -2,84 +2,149 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/main_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/main_bg"
-    android:orientation="vertical"
-    >
-    <include layout="@layout/title_bar"/>
-    <ScrollView
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px63">
+        <include layout="@layout/title_bar"/>
+        <TextView
+            android:id="@+id/tv_order"
+            android:text="订单记录"
+            android:gravity="center"
+            android:textColor="@color/black_gray1"
+            android:textSize="@dimen/px20"
+            android:layout_alignParentRight="true"
+            android:layout_width="@dimen/px200"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_margin="@dimen/px20"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px100">
+        <ImageView
+            android:id="@+id/iv_img"
+            android:layout_marginLeft="@dimen/px20"
+            android:layout_width="@dimen/px60"
+            android:layout_height="@dimen/px60" />
+        <TextView
+            android:id="@+id/tv_hos_name"
+            android:textSize="@dimen/px30"
+            android:layout_marginLeft="@dimen/px30"
+            android:textColor="@color/color_333333"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
-            android:id="@+id/ll_main"
-            android:layout_marginTop="41px"
-            android:paddingBottom="161px"
-            android:layout_marginLeft="20px"
-            android:layout_marginRight="20px"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <ImageView
-                android:layout_gravity="center_horizontal"
-                android:src="@mipmap/food_search"
-                android:layout_width="849px"
-                android:layout_height="112px" />
-            <ImageView
-                android:src="@mipmap/food_fl"
-                android:layout_width="match_parent"
-                android:layout_marginTop="40px"
-                android:layout_height="120px" />
-            <TextView
-                android:textSize="25px"
-                android:text="晚餐优选"
-                android:textColor="@color/color_585858"
-                android:layout_marginTop="39px"
-                android:layout_marginBottom="20px"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px65"
+            android:background="@color/white"
+            android:layout_marginLeft="@dimen/px20"
+            android:layout_marginRight="@dimen/px20"
+            >
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabLayout"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="@dimen/px65"
+                app:tabPaddingStart="@dimen/px30"
+                app:tabPaddingEnd="@dimen/px30"
+                app:tabIndicatorHeight="0px"
+                app:tabTextColor="@color/black"></android.support.design.widget.TabLayout>
+        </RelativeLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_marginTop="@dimen/px1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </android.support.v4.view.ViewPager>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_null"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:visibility="gone">
+            <ImageView
+                android:layout_width="@dimen/px380"
+                android:layout_height="@dimen/px268"
+                android:src="@mipmap/ic_hospital_mein_null"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="这里一片荒土啥都没有"
+                android:textSize="@dimen/px30"
+                android:layout_marginTop="@dimen/px19"
+                android:textColor="@color/yellow_gray"/>
+            <TextView
+                android:id="@+id/tv_null"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="去看看其他"
+                android:textSize="@dimen/px20"
+                android:textColor="@color/blue_gray"
+                android:layout_marginTop="@dimen/px17"/>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/lly_shop"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="@dimen/px500"
+            android:layout_marginBottom="@dimen/px65"
+            android:layout_height="@dimen/px84">
             <LinearLayout
+                android:layout_alignParentBottom="true"
                 android:layout_width="match_parent"
-                android:layout_height="517px">
-                <ImageView
-                    android:src="@mipmap/food_banana"
-                    android:layout_width="296px"
-                    android:layout_marginRight="19px"
+                android:layout_height="@dimen/px60">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/order_left_30_bg"
                     android:layout_height="match_parent" />
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:orientation="vertical"
-                    android:layout_height="match_parent">
-                    <ImageView
-                        android:src="@mipmap/food_nood"
-                        android:layout_width="match_parent"
-                        android:layout_height="248px" />
-                    <ImageView
-                        android:src="@mipmap/food_toufu"
-                        android:layout_marginTop="21px"
-                        android:layout_width="match_parent"
-                        android:layout_height="248px" />
-                </LinearLayout>
+                <TextView
+                    android:text="去结算"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:id="@+id/tv_pay"
+                    android:layout_width="@dimen/px143"
+                    android:background="@drawable/order_right_30_bg"
+                    android:layout_height="match_parent" />
             </LinearLayout>
             <ImageView
-                android:src="@mipmap/food_title"
-                android:layout_marginTop="39px"
-                android:layout_width="636px"
-                android:layout_height="26px" />
-            <ImageView
-                android:src="@mipmap/food_tj"
-                android:layout_marginTop="20px"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/px200" />
-            <ImageView
-                android:src="@mipmap/food_res"
-                android:layout_marginTop="20px"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/px200" />
-            <ImageView
-                android:src="@mipmap/food_co"
-                android:layout_marginTop="20px"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/px200" />
-        </LinearLayout>
-    </ScrollView>
+                android:id="@+id/iv_shop"
+                android:src="@mipmap/order_shop"
+                android:layout_width="@dimen/px71"
+                android:layout_height="@dimen/px62" />
+            <TextView
+                android:id="@+id/tv_total"
+                android:layout_marginLeft="@dimen/px112"
+                android:textColor="@color/white"
+                android:text="0"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="@dimen/px16"
+                android:textSize="@dimen/px20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+
 
 </LinearLayout>

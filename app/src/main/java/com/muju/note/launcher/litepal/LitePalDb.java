@@ -14,6 +14,8 @@ import com.muju.note.launcher.app.hostipal.db.InfomationDao;
 import com.muju.note.launcher.app.hostipal.db.MienInfoDao;
 import com.muju.note.launcher.app.hostipal.db.MissionInfoDao;
 import com.muju.note.launcher.app.msg.db.CustomMessageDao;
+import com.muju.note.launcher.app.orderfood.db.ComfoodDao;
+import com.muju.note.launcher.app.orderfood.db.CommodityDao;
 import com.muju.note.launcher.app.startUp.db.ActivitionDao;
 import com.muju.note.launcher.app.video.db.PayInfoDao;
 import com.muju.note.launcher.app.video.db.VideoColumnsDao;
@@ -32,8 +34,8 @@ import org.litepal.LitePalDB;
 
 public class LitePalDb {
 
-    public static final LitePalDB zkysDataDb=new LitePalDB("zkys-data",40);
-    public static final LitePalDB zkysDb=new LitePalDB("zkys",40);
+    public static final LitePalDB zkysDataDb=new LitePalDB("zkys-data",42);
+    public static final LitePalDB zkysDb=new LitePalDB("zkys",42);
 
     public static final String DBNAME_ZKYS_DATA="/sdcard/zkysdb/zkys-data.db";
     public static final String DBNAME_ZKYS="/sdcard/zkysdb/zkys.db";
@@ -94,6 +96,8 @@ public class LitePalDb {
         zkysDb.addClassName(ModelCountDao.class.getName());
         zkysDb.addClassName(PayInfoDao.class.getName());
         zkysDb.addClassName(CrontabDao.class.getName());
+        zkysDb.addClassName(CommodityDao.class.getName());
+        zkysDb.addClassName(ComfoodDao.class.getName());
         LitePal.use(zkysDb);
     }
 

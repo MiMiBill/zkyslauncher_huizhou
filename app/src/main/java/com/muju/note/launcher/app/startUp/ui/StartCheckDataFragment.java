@@ -17,6 +17,7 @@ import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.service.encyclope.EncyclopeService;
 import com.muju.note.launcher.service.homemenu.HomeMenuService;
+import com.muju.note.launcher.service.orderfood.OrderFoodService;
 import com.muju.note.launcher.util.rx.RxUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -317,8 +318,9 @@ public class StartCheckDataFragment extends BaseFragment {
                 break;
             case HOME_MENU_REBOOT_SUCCESS:
                 list.add("首页模块数据更新成功！");
-                getActivity().startActivity(new Intent(getActivity(), MainActivity.class));
-                getActivity().finish();
+//                getActivity().startActivity(new Intent(getActivity(), MainActivity.class));
+//                getActivity().finish();
+                OrderFoodService.getInstance().startfoodMenu();
                 break;
             case HOME_MENU_REBOOT_HTTP_FAIL:
                 list.add("首页模块后台数据获取失败！1分钟后重新更新");
@@ -327,6 +329,45 @@ public class StartCheckDataFragment extends BaseFragment {
             case HOME_MENU_REBOOT_HTTP_DATA_NULL:
                 list.add("首页模块后台数据获取为空！请稍后重试或联系管理人员检查");
                 break;
+            case FOOD_MENU_START:
+                list.add("正在初始化点餐数据，请稍候...");
+                break;
+            case FOOD_MENU_HTTP_START:
+                list.add("正在获取后台点餐数据，请稍候...");
+                break;
+            case FOOD_MENU_DB_START:
+                list.add("正在加载点餐数据，请稍候...");
+                break;
+            case FOOD_MENU_SUCCESS:
+                list.add("点餐数据初始化成功！");
+                OrderFoodService.getInstance().startRebootFoodMenu();
+                break;
+            case FOOD_MENU_REBOOT_START:
+                list.add("正在更新点餐数据，请稍候...");
+                break;
+            case FOOD_MENU_REBOOT_SUCCESS:
+                list.add("点餐数据更新成功，请稍候...");
+                getActivity().startActivity(new Intent(getActivity(), MainActivity.class));
+                getActivity().finish();
+                break;
+            case FOOD_MENU_REBOOT_HTTP_START:
+                list.add("正在获取后台点餐数据，请稍候...");
+                break;
+            case FOOD_MENU_REBOOT_DB_START:
+                list.add("正在加载点餐数据，请稍候...");
+                break;
+            case FOOD_MENU_HTTP_FAIL:
+                 list.add("点餐后台数据获取失败！1分钟后重新初始化");
+                 reFoodMenu(1);
+                break;
+            case FOOD_MENU_REBOOT_HTTP_FAIL:
+                list.add("点餐后台数据获取失败！1分钟后重新更新");
+                reRebootFoodMenu(1);
+                break;
+            case FOOD_MENU_REBOOT_HTTP_DATA_NULL:
+                list.add("点餐数据获取为空！请稍后重试或联系管理人员检查");
+                break;
+
         }
         adapter.notifyDataSetChanged();
         rvCheck.scrollToPosition(list.size() - 1);
@@ -444,6 +485,18 @@ public class StartCheckDataFragment extends BaseFragment {
                 });
     }
 
+    private void reFoodMenu(int min) {
+        RxUtil.closeDisposable(disposable);
+        disposable = Observable.interval(min, TimeUnit.MINUTES)
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        OrderFoodService.getInstance().startfoodMenu();
+                    }
+                });
+    }
+
+
     private void reRebootHomeMenu(int min) {
         RxUtil.closeDisposable(disposable);
         disposable = Observable.interval(min, TimeUnit.MINUTES)
@@ -451,6 +504,18 @@ public class StartCheckDataFragment extends BaseFragment {
                     @Override
                     public void accept(Long aLong) throws Exception {
                         HomeMenuService.getInstance().startRebootMenu();
+                    }
+                });
+    }
+
+
+    private void reRebootFoodMenu(int min) {
+        RxUtil.closeDisposable(disposable);
+        disposable = Observable.interval(min, TimeUnit.MINUTES)
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        OrderFoodService.getInstance().startRebootFoodMenu();
                     }
                 });
     }

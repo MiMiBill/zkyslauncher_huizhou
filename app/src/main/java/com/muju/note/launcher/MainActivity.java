@@ -46,7 +46,7 @@ import com.muju.note.launcher.app.insurance.InsureanceFragment;
 import com.muju.note.launcher.app.luckdraw.ui.LuckDrawFragment;
 import com.muju.note.launcher.app.msg.db.CustomMessageDao;
 import com.muju.note.launcher.app.msg.dialog.CustomMsgDialog;
-import com.muju.note.launcher.app.orderfood.OrderFoodFragment;
+import com.muju.note.launcher.app.orderfood.ui.OrderFoodFragment;
 import com.muju.note.launcher.app.publicui.AdvideoViewFragment;
 import com.muju.note.launcher.app.publicui.LargePicFragment;
 import com.muju.note.launcher.app.publicui.WebViewFragment;

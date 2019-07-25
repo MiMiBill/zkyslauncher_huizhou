@@ -19,6 +19,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.util.MultiTypeDelegate;
 import com.muju.note.launcher.R;
+import com.muju.note.launcher.app.home.ui.HomeFragment;
 import com.muju.note.launcher.app.satisfaction.response.SatisfactionDetailResponse;
 import com.muju.note.launcher.util.toast.FancyToast;
 
@@ -292,7 +293,12 @@ public class SatisfactionAdapter2 extends BaseQuickAdapter<SatisfactionDetailRes
             //@TODO 临时去掉
 //            LauncherApplication.getInstance().getPatient().getTabbId()
 //            jsonObject.put("hospitalizationId", LauncherApplication.getInstance().getPatient().getTabbId());
-            jsonObject.put("hospitalizationId", "0");
+            if(HomeFragment.entity==null){
+                jsonObject.put("hospitalizationId", "0");
+            }else {
+                jsonObject.put("hospitalizationId", HomeFragment.entity.getId());
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

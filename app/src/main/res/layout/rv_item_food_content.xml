@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/px245"
+    android:layout_marginBottom="@dimen/px35"
+    android:layout_marginRight="@dimen/px17"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:gravity="center_horizontal">
+
+    <ImageView
+        android:layout_marginTop="@dimen/px5"
+        android:id="@+id/iv_img"
+        android:layout_width="@dimen/px260"
+        android:layout_height="@dimen/px150"
+        android:src="@mipmap/ic_video_load_default"
+        android:scaleType="fitXY" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black1"
+        android:text="影视名称"
+        android:paddingLeft="@dimen/px10"
+        android:layout_marginTop="@dimen/px20"
+        android:textSize="@dimen/px22"
+        />
+
+    <LinearLayout
+        android:layout_marginTop="@dimen/px10"
+        android:layout_width="match_parent"
+        android:paddingLeft="@dimen/px10"
+        android:layout_height="@dimen/px30">
+        <TextView
+            android:id="@+id/tv_price"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:textColor="@color/color_FF633A"
+            android:text=""
+            android:textSize="@dimen/px20"
+            />
+        <LinearLayout
+            android:layout_width="@dimen/px100"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:layout_gravity="right|center_vertical">
+            <ImageView
+                android:id="@+id/right_dish_remove"
+                android:layout_width="@dimen/px28"
+                android:layout_height="@dimen/px28"
+                android:clickable="true"
+                android:src="@mipmap/food_delete" />
+            <TextView
+                android:id="@+id/right_dish_account"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text=""
+                android:textSize="@dimen/px20"
+                android:textColor="@color/black" />
+            <ImageView
+                android:id="@+id/right_dish_add"
+                android:layout_width="@dimen/px28"
+                android:layout_height="@dimen/px28"
+                android:clickable="true"
+                android:src="@mipmap/food_add" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

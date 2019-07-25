@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/px120"
+    android:background="@color/white"
+    android:id="@+id/lly_order"
+    >
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="@dimen/px20"
+        android:layout_marginTop="@dimen/px20"
+        android:layout_marginBottom="@dimen/px20"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="@dimen/px22"
+                android:textColor="@color/black1"
+                />
+            <TextView
+                android:id="@+id/tv_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:layout_marginLeft="@dimen/px30"
+                android:singleLine="true"
+                android:textSize="@dimen/px22"
+                android:textColor="@color/black1"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_hos"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text=""
+            android:textSize="@dimen/px22"
+            android:textColor="@color/black1"
+            />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tv_price"
+        android:layout_below="@id/iv_img"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text=""
+        android:layout_marginRight="@dimen/px60"
+        android:gravity="center"
+        android:textSize="@dimen/px22"
+        android:textColor="@color/color_FF633A"
+        />
+</LinearLayout>

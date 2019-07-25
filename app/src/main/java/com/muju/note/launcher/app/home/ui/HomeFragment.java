@@ -44,7 +44,7 @@ import com.muju.note.launcher.app.hostipal.ui.HospitalMienFragment;
 import com.muju.note.launcher.app.hostipal.ui.HospitalelServiceFragment;
 import com.muju.note.launcher.app.insurance.InsureanceFragment;
 import com.muju.note.launcher.app.msg.ui.MsgFragment;
-import com.muju.note.launcher.app.orderfood.OrderFoodFragment;
+import com.muju.note.launcher.app.orderfood.ui.OrderFoodFragment;
 import com.muju.note.launcher.app.setting.ui.GuideFragment;
 import com.muju.note.launcher.app.setting.ui.UserSettingFragment;
 import com.muju.note.launcher.app.setting.ui.VoiceFragment;
