@@ -15,5 +15,7 @@ public interface MainContract {
     interface Presenter extends IPresenter<View> {
 
         void getTaskList(int userId, int hospitalId, int depId);
+
+        void getUpdateArriveFlag(String pushId);
     }
 }

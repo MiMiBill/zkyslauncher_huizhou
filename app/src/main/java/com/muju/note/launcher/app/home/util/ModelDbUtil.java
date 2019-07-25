@@ -64,24 +64,35 @@ public class ModelDbUtil {
     }
 
     private void addCount(String tagName, String className, String date, long startTime, long endTime) {
-        ModelCountDao dao = new ModelCountDao();
-        dao.setDate(date);
-        dao.setDepId(ActiveUtils.getPadActiveInfo().getDeptId());
-        dao.setHosId(ActiveUtils.getPadActiveInfo().getHospitalId());
-        dao.setImei(MobileInfoUtil.getIMEI(LauncherApplication.getContext()));
-        dao.setModelName(className);
-        dao.setModelTag(tagName);
-        dao.setShowCount(1);
-        dao.setShowTime((endTime - startTime));
-        LitePalDb.setZkysDb();
-        dao.save();
+        try {
+            if(ActiveUtils.getPadActiveInfo()==null){
+                return;
+            }
+            ModelCountDao dao = new ModelCountDao();
+            dao.setDate(date);
+            dao.setDepId(ActiveUtils.getPadActiveInfo().getDeptId());
+            dao.setHosId(ActiveUtils.getPadActiveInfo().getHospitalId());
+            dao.setImei(MobileInfoUtil.getIMEI(LauncherApplication.getContext()));
+            dao.setModelName(className);
+            dao.setModelTag(tagName);
+            dao.setShowCount(1);
+            dao.setShowTime((endTime - startTime));
+            LitePalDb.setZkysDb();
+            dao.save();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void updateCount(ModelCountDao dao, long startTime, long endTime) {
-        dao.setShowCount(dao.getShowCount() + 1);
-        dao.setShowTime(dao.getShowTime() + (endTime - startTime));
-        LitePalDb.setZkysDb();
-        dao.update(dao.getId());
+        try {
+            dao.setShowCount(dao.getShowCount() + 1);
+            dao.setShowTime(dao.getShowTime() + (endTime - startTime));
+            LitePalDb.setZkysDb();
+            dao.update(dao.getId());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     /**

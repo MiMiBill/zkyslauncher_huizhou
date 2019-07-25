@@ -380,7 +380,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
      */
     private MissionPushDialog pushDialog;
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void pushCustomMsg(PushCustomMessageEntity entity) {
+    public void pushCustomMsg(final PushCustomMessageEntity entity) {
         LogUtil.d(TAG, "宣教推送ID：" + entity.getId());
         LitePalDb.setZkysDb();
         LitePal.where("missionid=?", entity.getId()).findFirstAsync(MissionInfoDao.class).listen(new FindCallback<MissionInfoDao>() {
@@ -394,12 +394,14 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
                     public void onClick(View v) {
                         if (v.getId() == R.id.btn_toMission) {
                             pushDialog.dismiss();
-                            toMission(missionInfoDao);
+                            toMission(missionInfoDao,entity.getPushId());
                         }
                     }
                 });
                 pushDialog.setCanceledOnTouchOutside(false);
                 pushDialog.show();
+
+                mPresenter.getUpdateArriveFlag(entity.getPushId());
             }
         });
     }
@@ -408,7 +410,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
      *  到宣教页面
      * @param missionInfoDao
      */
-    private void toMission(MissionInfoDao missionInfoDao) {
+    private void toMission(MissionInfoDao missionInfoDao,String pushId) {
         String type;
         if (TextUtils.isEmpty(missionInfoDao.getVideo())) {
             File file = new File(SdcardConfig.RESOURCE_FOLDER, missionInfoDao.getFrontCover().hashCode() + ".pdf");
@@ -417,7 +419,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
                 MissionService.getInstance().downMission();
                 return;
             }
-            start(HospitalMissionPdfFragment.newInstance(missionInfoDao.getFrontCover()));
+            start(HospitalMissionPdfFragment.newInstance(missionInfoDao.getFrontCover(),missionInfoDao.getMissionId(),missionInfoDao.getTitle(),pushId));
             type = "pdf";
         } else {
             File file = new File(SdcardConfig.RESOURCE_FOLDER, missionInfoDao.getVideo().hashCode() + ".mp4");
@@ -426,7 +428,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
                 MissionService.getInstance().downMission();
                 return;
             }
-            start(HospitalMissionVideoFragment.newInstance(missionInfoDao.getVideo()));
+            start(HospitalMissionVideoFragment.newInstance(missionInfoDao.getVideo(),missionInfoDao.getMissionId(),missionInfoDao.getTitle(),pushId));
             type = "video";
         }
 

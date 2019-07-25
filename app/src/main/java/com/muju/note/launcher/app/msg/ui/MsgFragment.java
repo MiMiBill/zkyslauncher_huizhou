@@ -79,7 +79,7 @@ public class MsgFragment extends BaseFragment<MsgPresenter> implements View.OnCl
                             MissionService.getInstance().downMission();
                             return;
                         }
-                        start(HospitalMissionPdfFragment.newInstance(dao.getUrl()));
+                        start(HospitalMissionPdfFragment.newInstance(dao.getUrl(),dao.getXjId(),dao.getTitle(),null));
                     } else if (dao.getType().equals("video")) {
                         File file = new File(SdcardConfig.RESOURCE_FOLDER, dao.getUrl().hashCode
                                 () + ".mp4");
@@ -88,7 +88,7 @@ public class MsgFragment extends BaseFragment<MsgPresenter> implements View.OnCl
                             MissionService.getInstance().downMission();
                             return;
                         }
-                        start(HospitalMissionVideoFragment.newInstance(dao.getUrl()));
+                        start(HospitalMissionVideoFragment.newInstance(dao.getUrl(),dao.getXjId(),dao.getTitle(),null));
                     } else {
                         start(WebViewFragment.newInstance(dao.getTitle(), dao.getUrl()));
                     }

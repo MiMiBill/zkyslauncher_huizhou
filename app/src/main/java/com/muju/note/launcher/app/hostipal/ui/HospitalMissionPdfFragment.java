@@ -1,6 +1,7 @@
 package com.muju.note.launcher.app.hostipal.ui;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,15 @@ import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
 import com.github.barteksc.pdfviewer.listener.OnPageErrorListener;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 import com.github.barteksc.pdfviewer.util.FitPolicy;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.model.Response;
 import com.muju.note.launcher.R;
+import com.muju.note.launcher.app.hostipal.util.MissionDbUtil;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
+import com.muju.note.launcher.okgo.BaseBean;
+import com.muju.note.launcher.okgo.JsonCallback;
+import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.sdcard.SdcardConfig;
 
 import java.io.File;
@@ -34,10 +41,21 @@ public class HospitalMissionPdfFragment extends BaseFragment implements OnPageCh
     LinearLayout llBack;
 
     public static final String MISSION_PDF_PATH = "mission_pdf_path";
+    public static final String MISSION_PDF_ID = "mission_pdf_id";
+    public static final String MISSION_PDF_NAME = "mission_pdf_name";
+    public static final String MISSION_PDF_PUSHID = "mission_pdf_push_id";
 
-    public static HospitalMissionPdfFragment newInstance(String path) {
+    private int missionId;
+    private String missionName;
+    private long startTime;
+    private String pushId;
+
+    public static HospitalMissionPdfFragment newInstance(String path,int missionId,String missionName,String pushId) {
         Bundle args = new Bundle();
         args.putString(MISSION_PDF_PATH, path);
+        args.putInt(MISSION_PDF_ID, missionId);
+        args.putString(MISSION_PDF_NAME, missionName);
+        args.putString(MISSION_PDF_PUSHID, pushId);
         HospitalMissionPdfFragment fragment = new HospitalMissionPdfFragment();
         fragment.setArguments(args);
         return fragment;
@@ -72,6 +90,15 @@ public class HospitalMissionPdfFragment extends BaseFragment implements OnPageCh
                 .onPageError(this)
                 .pageFitPolicy(FitPolicy.BOTH)
                 .load();
+
+        missionId=getArguments().getInt(MISSION_PDF_ID);
+        missionName=getArguments().getString(MISSION_PDF_NAME);
+        pushId=getArguments().getString(MISSION_PDF_PUSHID);
+        startTime=System.currentTimeMillis();
+
+        if(!TextUtils.isEmpty(pushId)){
+            getUpdateReadFlag(pushId);
+        }
     }
 
     @Override
@@ -97,5 +124,26 @@ public class HospitalMissionPdfFragment extends BaseFragment implements OnPageCh
     @Override
     public void onPageError(int page, Throwable t) {
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        MissionDbUtil.getInstance().addData(missionId,missionName,startTime,System.currentTimeMillis());
+    }
+
+
+    /**
+     *  修改为已读状态
+     * @param pushId
+     */
+    public void getUpdateReadFlag(String pushId) {
+        OkGo.<BaseBean<Void>>get(UrlUtil.getUpdateReadFlag()+pushId)
+                .execute(new JsonCallback<BaseBean<Void>>() {
+                    @Override
+                    public void onSuccess(Response<BaseBean<Void>> response) {
+
+                    }
+                });
     }
 }

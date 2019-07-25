@@ -345,4 +345,20 @@ public class UrlUtil {
     public static String tableList(){
         return getHost()+"/order/table/list";
     }
+
+    /**
+     *  修改宣教已到达状态
+     * @return
+     */
+    public static String getUpdateArriveFlag(){
+        return getHost()+"/pushTabb/updateArriveFlag/";
+    }
+
+    /**
+     *  修改宣教已读状态
+     * @return
+     */
+    public static String getUpdateReadFlag(){
+        return  getHost()+"/pushTabb/updateReadFlag/";
+    }
 }

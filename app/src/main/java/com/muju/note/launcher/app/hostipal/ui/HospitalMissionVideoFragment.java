@@ -1,11 +1,18 @@
 package com.muju.note.launcher.app.hostipal.ui;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.model.Response;
 import com.muju.note.launcher.R;
+import com.muju.note.launcher.app.hostipal.util.MissionDbUtil;
 import com.muju.note.launcher.base.BaseFragment;
+import com.muju.note.launcher.okgo.BaseBean;
+import com.muju.note.launcher.okgo.JsonCallback;
+import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.sdcard.SdcardConfig;
 import com.muju.note.launcher.util.system.SystemUtils;
 import com.muju.note.launcher.view.VideoPlayControlView;
@@ -22,10 +29,21 @@ public class HospitalMissionVideoFragment extends BaseFragment implements VideoP
     VideoPlayControlView videoView;
 
     public static final String MISSION_VIDEO_PATH = "mission_video_path";
+    public static final String MISSION_VIDEO_ID = "mission_video_id";
+    public static final String MISSION_VIDEO_NAME = "mission_video_name";
+    public static final String MISSION_VIDEO_PUSHID = "mission_video_push_id";
 
-    public static HospitalMissionVideoFragment newInstance(String path) {
+    private int missionId;
+    private String missionName;
+    private long startTime;
+    private String pushId;
+
+    public static HospitalMissionVideoFragment newInstance(String path,int missionId,String missionName,String pushId) {
         Bundle args = new Bundle();
         args.putString(MISSION_VIDEO_PATH, path);
+        args.putInt(MISSION_VIDEO_ID, missionId);
+        args.putString(MISSION_VIDEO_NAME, missionName);
+        args.putString(MISSION_VIDEO_PUSHID, pushId);
         HospitalMissionVideoFragment fragment = new HospitalMissionVideoFragment();
         fragment.setArguments(args);
         return fragment;
@@ -54,6 +72,15 @@ public class HospitalMissionVideoFragment extends BaseFragment implements VideoP
         }
         videoView.getVideoView().setVideoPath(file.getPath());
         videoView.getVideoView().start();
+
+        missionId=getArguments().getInt(MISSION_VIDEO_ID);
+        missionName=getArguments().getString(MISSION_VIDEO_NAME);
+        pushId=getArguments().getString(MISSION_VIDEO_PUSHID);
+        startTime=System.currentTimeMillis();
+
+        if(!TextUtils.isEmpty(pushId)){
+            getUpdateReadFlag(pushId);
+        }
     }
 
     @Override
@@ -95,5 +122,25 @@ public class HospitalMissionVideoFragment extends BaseFragment implements VideoP
             videoView.getVideoView().suspend();
             videoView.onDestroy();
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        MissionDbUtil.getInstance().addData(missionId,missionName,startTime,System.currentTimeMillis());
+    }
+
+    /**
+     *  修改为已读状态
+     * @param pushId
+     */
+    public void getUpdateReadFlag(String pushId) {
+        OkGo.<BaseBean<Void>>get(UrlUtil.getUpdateReadFlag()+pushId)
+                .execute(new JsonCallback<BaseBean<Void>>() {
+                    @Override
+                    public void onSuccess(Response<BaseBean<Void>> response) {
+
+                    }
+                });
     }
 }
