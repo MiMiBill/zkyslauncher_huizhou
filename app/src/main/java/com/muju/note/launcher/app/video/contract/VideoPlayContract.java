@@ -11,6 +11,7 @@ public interface VideoPlayContract {
         void verfycode(String response);
         void verfycodeError();
         void setPayPackageList(String data);
+        void setPayFail();
         void intervalSLOrder(String data);
     }
 

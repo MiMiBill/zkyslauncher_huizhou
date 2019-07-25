@@ -95,6 +95,7 @@ public class VideoPlayPresenter extends BasePresenter<VideoPlayContract.View> im
                             LogUtil.e("mView为空");
                             return;
                         }
+                        mView.setPayFail();
                     }
                 });
     }

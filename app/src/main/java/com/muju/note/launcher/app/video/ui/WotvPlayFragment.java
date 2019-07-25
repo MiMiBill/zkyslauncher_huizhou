@@ -877,6 +877,11 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
     }
 
     @Override
+    public void setPayFail() {
+        checkIsValid();
+    }
+
+    @Override
     public void intervalSLOrder(String data) {
         try {
             JSONObject jsonObject = new JSONObject(data);
