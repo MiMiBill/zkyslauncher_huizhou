@@ -7,66 +7,60 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.muju.note.launcher.R;
+import com.muju.note.launcher.util.toast.FancyToast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class HospitalServiceDialog extends Dialog {
 
-    @BindView(R.id.textView13)
-    TextView textView13;
-    @BindView(R.id.view9)
-    View view9;
-    @BindView(R.id.etNumber)
-    EditText etNumber;
-    @BindView(R.id.view10)
-    View view10;
-    @BindView(R.id.btnConfirm)
-    Button btnConfirm;
-    @BindView(R.id.ivClose)
-    ImageView ivClose;
-    @BindView(R.id.tvHint)
-    TextView tvHint;
-    private int type = 0;
-    private OnClickListener listener;
+    @BindView(R.id.iv_dissmiss)
+    ImageView ivDissmiss;
+    @BindView(R.id.et_num)
+    EditText etNum;
+    @BindView(R.id.btn_login)
+    Button btnLogin;
+    @BindView(R.id.rl_zxing)
+    RelativeLayout rlZxing;
 
-    public HospitalServiceDialog(Context context) {
-        super(context);
+    private View.OnClickListener listener;
+    private Context context;
 
+    public HospitalServiceDialog(Context context, int themeResId, View.OnClickListener listener) {
+        super(context, themeResId);
+        this.listener = listener;
+        this.context=context;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.his_service_login_layout);
+        setContentView(R.layout.dialog_hospital_service);
         ButterKnife.bind(this);
-    }
 
-
-    @OnClick({R.id.btnConfirm, R.id.ivClose})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.btnConfirm:
-                if (listener != null) {
-                    listener.onClick(etNumber.getText().toString().trim());
-                }
-                break;
-            case R.id.ivClose:
+        ivDissmiss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 dismiss();
-                break;
-        }
+            }
+        });
+
+        btnLogin.setOnClickListener(listener);
+
+        rlZxing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FancyToast.makeText(context,"功能暂未开通，敬请期待...", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
-
-    public interface OnClickListener {
-        void onClick(String pass);
-    }
-
-    public void setOnClickListener(OnClickListener listener) {
-        this.listener = listener;
+    public String getEtNum() {
+        return etNum.getText().toString();
     }
 }

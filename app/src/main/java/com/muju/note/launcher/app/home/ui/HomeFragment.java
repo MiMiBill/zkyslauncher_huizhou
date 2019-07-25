@@ -681,21 +681,24 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     }
 
 
-    //显示医疗服务弹窗
+    /**
+     *  医疗服务登录弹窗
+     */
     private void showServiceDialog() {
-        serviceDialog = new HospitalServiceDialog(getActivity());
-        serviceDialog.setOnClickListener(new HospitalServiceDialog.OnClickListener() {
+        serviceDialog=new HospitalServiceDialog(getActivity(), R.style.DialogFullscreen, new View.OnClickListener() {
             @Override
-            public void onClick(String pass) {
-                if (TextUtils.isEmpty(pass)) {
-                    showToast("请输入住院号");
-                    return;
-                }
-                if (pass.equals("456789123")) {
-                    serviceDialog.dismiss();
-                    start(new HospitalelServiceFragment());
-                } else {
-                    showToast("住院号不正确，请重新输入");
+            public void onClick(View v) {
+                if(v.getId()==R.id.btn_login){
+                    if (TextUtils.isEmpty(serviceDialog.getEtNum())) {
+                        showToast("请输入住院号");
+                        return;
+                    }
+                    if (serviceDialog.getEtNum().equals("456789123")) {
+                        serviceDialog.dismiss();
+                        start(new HospitalelServiceFragment());
+                    } else {
+                        showToast("住院号不正确，请重新输入");
+                    }
                 }
             }
         });

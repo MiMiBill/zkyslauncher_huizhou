@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/px635"
+    android:layout_height="@dimen/px378"
+    android:background="@mipmap/ic_dialog_hospital_service_bg">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="患者验证登录"
+        android:textColor="@color/white"
+        android:textSize="@dimen/px30"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/px32"
+        android:layout_marginRight="@dimen/px139"/>
+
+    <ImageView
+        android:id="@+id/iv_dissmiss"
+        android:layout_width="@dimen/px32"
+        android:layout_height="@dimen/px32"
+        android:src="@mipmap/ic_dialog_dissmiss"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/px40"
+        android:layout_marginRight="@dimen/px22"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="@dimen/px143">
+
+        <EditText
+            android:id="@+id/et_num"
+            android:layout_width="@dimen/px491"
+            android:layout_height="@dimen/px80"
+            android:background="@drawable/shape_button_bg_white4"
+            android:hint="请输入住院号"
+            android:textSize="@dimen/px30"
+            android:paddingLeft="@dimen/px15"
+            android:textColor="@color/black_gray"/>
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="@dimen/px230"
+            android:layout_height="@dimen/px45"
+            android:layout_marginTop="@dimen/px30"
+            android:background="@drawable/shape_button_bg_blue5"
+            android:text="登录"
+            android:textColor="@color/white"
+            android:textSize="@dimen/px22"/>
+        
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_zxing"
+        android:layout_width="@dimen/px84"
+        android:layout_height="@dimen/px84"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/px22"
+        android:layout_marginBottom="@dimen/px29"
+        android:layout_alignParentBottom="true">
+        <ImageView
+            android:layout_width="@dimen/px84"
+            android:layout_height="@dimen/px84"
+            android:src="@mipmap/ic_dialog_hospitla_service_zxing"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="扫码\n登录"
+            android:textSize="@dimen/px20"
+            android:layout_marginLeft="@dimen/px32"
+            android:layout_marginTop="@dimen/px30"
+            android:textStyle="bold"/>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
