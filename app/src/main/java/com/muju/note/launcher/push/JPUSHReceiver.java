@@ -47,6 +47,7 @@ import cn.jpush.android.api.JPushInterface;
  */
 public class JPUSHReceiver extends BroadcastReceiver {
     private static final String TAG = "JIGUANG-JPUSHReceiver";
+
     @Override
     public void onReceive(Context context, Intent intent) {
         try {
@@ -67,14 +68,14 @@ public class JPUSHReceiver extends BroadcastReceiver {
                 switch (jsonObject.optInt("alertType")) {
                     case 11:
                         int volumeRate = Integer.parseInt(bundle.getString(JPushInterface.EXTRA_MESSAGE));
-                        LogUtil.d("系统音量改变:%s ",volumeRate );
-                        int currentVolume=SystemUtils.getCurrentVolume(LauncherApplication.getInstance());
-                        int maxVolume=SystemUtils.getMaxVolume(LauncherApplication.getInstance());
-                        int systemRate=(int)(currentVolume*100D/maxVolume);
-                        if(volumeRate<systemRate){
+                        LogUtil.d("系统音量改变:%s ", volumeRate);
+                        int currentVolume = SystemUtils.getCurrentVolume(LauncherApplication.getInstance());
+                        int maxVolume = SystemUtils.getMaxVolume(LauncherApplication.getInstance());
+                        int systemRate = (int) (currentVolume * 100D / maxVolume);
+                        if (volumeRate < systemRate) {
                             //声音改变
                             SPUtil.putLong(SpTopics.PAD_CONFIG_VOLUME_RATE, volumeRate);
-                            SystemUtils.setVolume(LauncherApplication.getInstance(),volumeRate);
+                            SystemUtils.setVolume(LauncherApplication.getInstance(), volumeRate);
                         }
                         break;
                     case 201:
@@ -98,12 +99,12 @@ public class JPUSHReceiver extends BroadcastReceiver {
 //                                PayUtils.setPaied(payEntity);
 
                             LitePalDb.setZkysDb();
-                            PayInfoDao payInfoDao=new PayInfoDao();
+                            PayInfoDao payInfoDao = new PayInfoDao();
                             payInfoDao.setExpireTime(expire_time);
-                            DbHelper.insertToVipData(LitePalDb.DBNAME_ZKYS,payInfoDao);
+                            DbHelper.insertToVipData(LitePalDb.DBNAME_ZKYS, payInfoDao);
 
-                                EventBus.getDefault().post(new VideoEvent(VideoEvent.RESUME));
-                                EventBus.getDefault().post(new PayEvent( PayEntity.ORDER_TYPE_VIDEO));
+                            EventBus.getDefault().post(new VideoEvent(VideoEvent.RESUME));
+                            EventBus.getDefault().post(new PayEvent(PayEntity.ORDER_TYPE_VIDEO));
 //                            }
                             EventBus.getDefault().post(new ReturnBedEvent());
                         }
@@ -125,8 +126,8 @@ public class JPUSHReceiver extends BroadcastReceiver {
                         break;
                     case 10:
 ////                        if (LauncherApplication.getInstance().getPatient().getDisabled()) {//患者已入院
-                            FileUtils.playReplay(LauncherApplication.getInstance().getApplicationContext(), R.raw.messagetips);
-                            EventBus.getDefault().post(new GotoSatisfationEvent(bundle.getString(JPushInterface.EXTRA_MESSAGE)));
+                        FileUtils.playReplay(LauncherApplication.getInstance().getApplicationContext(), R.raw.messagetips);
+                        EventBus.getDefault().post(new GotoSatisfationEvent(bundle.getString(JPushInterface.EXTRA_MESSAGE)));
 //                            Intent msgIntent = new Intent(context, SatisfactionSurveyActivity.class);
 //                            msgIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                            msgIntent.putExtra(Constants.PAD_SURVEY_ID, bundle.getString(JPushInterface.EXTRA_MESSAGE));
@@ -215,24 +216,27 @@ public class JPUSHReceiver extends BroadcastReceiver {
     }
 
     /**
-     *  处理医院宣教推送
+     * 处理医院宣教推送
      */
-    private void pushCustomMessage(String id){
+    private void pushCustomMessage(String data) {
         try {
             FileUtils.playReplay(LauncherApplication.getInstance().getApplicationContext(), R.raw.messagetips);
-            EventBus.getDefault().post(new PushCustomMessageEntity(id));
-        }catch (Exception e){
+            JSONObject extraMsgObj = new JSONObject(data);
+            String missionId = extraMsgObj.getString("missionId");
+            String tabbId = extraMsgObj.getString("tabbId");
+            EventBus.getDefault().post(new PushCustomMessageEntity(missionId,tabbId));
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     /**
-     *  处理自定义推送消息
+     * 处理自定义推送消息
      */
-    private void pushAutoMsg(String data){
+    private void pushAutoMsg(String data) {
         try {
             EventBus.getDefault().post(new PushAutoMsgEntity(data));
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -55,6 +55,17 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
                 );
     }
 
+    @Override
+    public void getUpdateArriveFlag(String pushId) {
+        OkGo.<BaseBean<Void>>get(UrlUtil.getUpdateArriveFlag()+pushId)
+                .execute(new JsonCallback<BaseBean<Void>>() {
+                    @Override
+                    public void onSuccess(Response<BaseBean<Void>> response) {
+
+                    }
+                });
+    }
+
     /**
      * 更新标题栏时间
      */
@@ -90,6 +101,7 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
                     }
                 });
     }
+
 
 
     public void setOnTaskListener(TaskListener listener) {

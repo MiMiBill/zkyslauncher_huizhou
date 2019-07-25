@@ -78,7 +78,7 @@ public class HosPitalMissionFragment extends BaseFragment<HospitalMissionPresent
                         MissionService.getInstance().downMission();
                         return;
                     }
-                    start(HospitalMissionPdfFragment.newInstance(bean.getFrontCover()));
+                    start(HospitalMissionPdfFragment.newInstance(bean.getFrontCover(),bean.getMissionId(),bean.getTitle(),null));
                 } else {
                     File file = new File(SdcardConfig.RESOURCE_FOLDER, bean.getVideo().hashCode()
                             + ".mp4");
@@ -87,7 +87,7 @@ public class HosPitalMissionFragment extends BaseFragment<HospitalMissionPresent
                         MissionService.getInstance().downMission();
                         return;
                     }
-                    start(HospitalMissionVideoFragment.newInstance(bean.getVideo()));
+                    start(HospitalMissionVideoFragment.newInstance(bean.getVideo(),bean.getMissionId(),bean.getTitle(),null));
                 }
             }
         });
