@@ -193,6 +193,14 @@ public class UrlUtil {
         return getHost()+"/model/statistics/save";
     }
 
+    /**
+     *  上传宣教模块统计数据
+     * @return
+     */
+    public static String getUpMissionCountDb(){
+        return  getHost()+"/mission/statistics/save";
+    }
+
     //获取病人信息
     public static String getGetPaitentInfo() {
 //        return getHost() + "/hospitalBedTabb/list";

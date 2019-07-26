@@ -10,6 +10,7 @@ import com.muju.note.launcher.app.home.db.AdvertsCountDao;
 import com.muju.note.launcher.app.home.db.AdvertsInfoDao;
 import com.muju.note.launcher.app.home.db.ModelCountDao;
 import com.muju.note.launcher.app.home.db.ModelInfoDao;
+import com.muju.note.launcher.app.hostipal.db.MissionCountDao;
 import com.muju.note.launcher.app.video.db.VideoPlayerCountDao;
 import com.muju.note.launcher.app.video.db.VideoPlayerInfoDao;
 import com.muju.note.launcher.app.video.util.DbHelper;
@@ -162,6 +163,23 @@ public class UpLoadDataService {
         LitePalDb.setZkysDb();
         List<ModelCountDao> daoList=LitePal.findAll(ModelCountDao.class);
         OkGo.<BaseBean<Void>>post(UrlUtil.getUpModelCountDb())
+                .params("data", new Gson().toJson(daoList))
+                .execute(new JsonCallback<BaseBean<Void>>() {
+                    @Override
+                    public void onSuccess(Response<BaseBean<Void>> response) {
+                        LitePalDb.setZkysDb();
+                        LitePal.deleteAll(ModelCountDao.class);
+                    }
+                });
+    }
+
+    /**
+     *  上传
+     */
+    public void upLoadMissionCountDb(){
+        LitePalDb.setZkysDb();
+        List<MissionCountDao> daoList=LitePal.findAll(MissionCountDao.class);
+        OkGo.<BaseBean<Void>>post(UrlUtil.getUpMissionCountDb())
                 .params("data", new Gson().toJson(daoList))
                 .execute(new JsonCallback<BaseBean<Void>>() {
                     @Override
