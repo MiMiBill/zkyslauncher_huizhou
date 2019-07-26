@@ -545,7 +545,7 @@ public class DbHelper {
                     for (CrontabBean.DataBean bean : dataList) {
                         CrontabDao dao = new CrontabDao();
                         dao.setAddType(bean.getAddType());
-                        dao.setCrontabid(bean.getId());
+                        dao.setCrontabid(bean.getMissionId());
                         String fileType = bean.getFileType();
                         String fileAddr = bean.getFileAddr();
                         String startdate = bean.getStartDate();

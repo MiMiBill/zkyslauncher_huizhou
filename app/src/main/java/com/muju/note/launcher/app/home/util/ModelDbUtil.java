@@ -70,8 +70,10 @@ public class ModelDbUtil {
             }
             ModelCountDao dao = new ModelCountDao();
             dao.setDate(date);
-            dao.setDepId(ActiveUtils.getPadActiveInfo().getDeptId());
-            dao.setHosId(ActiveUtils.getPadActiveInfo().getHospitalId());
+            if(ActiveUtils.getPadActiveInfo()!=null){
+                dao.setDepId(ActiveUtils.getPadActiveInfo().getDeptId());
+                dao.setHosId(ActiveUtils.getPadActiveInfo().getHospitalId());
+            }
             dao.setImei(MobileInfoUtil.getIMEI(LauncherApplication.getContext()));
             dao.setModelName(className);
             dao.setModelTag(tagName);

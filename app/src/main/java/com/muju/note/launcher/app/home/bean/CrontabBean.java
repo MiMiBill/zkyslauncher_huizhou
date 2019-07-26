@@ -125,6 +125,15 @@ public class CrontabBean  {
         private String stopDate;
         private String userName;
         private String weeks;
+        private int missionId;
+
+        public int getMissionId() {
+            return missionId;
+        }
+
+        public void setMissionId(int missionId) {
+            this.missionId = missionId;
+        }
 
         public int getAddType() {
             return addType;

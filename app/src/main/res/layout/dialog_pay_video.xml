@@ -92,7 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <LinearLayout
-                android:layout_marginTop="@dimen/px15"
+                android:layout_marginTop="@dimen/px6"
                 android:layout_marginLeft="@dimen/px268"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -108,12 +108,12 @@
                     android:textSize="@dimen/px22"
                     android:textColor="@color/color_585858"
                     android:text="应付金额:"
-                    android:layout_marginLeft="@dimen/px150"
+                    android:layout_marginLeft="@dimen/px130"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
             <LinearLayout
-                android:layout_marginTop="@dimen/px15"
+                android:layout_marginTop="@dimen/px6"
                 android:layout_marginLeft="@dimen/px268"
                 android:layout_width="match_parent"
                 android:gravity="center_vertical"
@@ -460,10 +460,10 @@
             android:layout_height="match_parent" >
             <TextView
                 android:textColor="@color/black"
-                android:layout_marginTop="@dimen/px10"
-                android:layout_marginLeft="@dimen/px20"
-                android:textSize="@dimen/px25"
-                android:text="租赁床头柜送视频"
+                android:layout_marginTop="@dimen/px14"
+                android:layout_marginLeft="@dimen/px12"
+                android:textSize="@dimen/px20"
+                android:text="扫码陪护床，视频免费看"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
@@ -477,10 +477,10 @@
             android:layout_height="match_parent" >
             <TextView
                 android:textColor="@color/white"
-                android:layout_marginTop="@dimen/px10"
-                android:layout_marginLeft="@dimen/px14"
-                android:textSize="@dimen/px22"
-                android:text="做任务免费观看此影片"
+                android:layout_marginTop="@dimen/px14"
+                android:layout_marginLeft="@dimen/px12"
+                android:textSize="@dimen/px20"
+                android:text="关注公众号免费观看影片"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>

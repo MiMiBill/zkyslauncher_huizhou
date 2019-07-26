@@ -5,6 +5,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -142,7 +146,23 @@ public class NewVideoPayDialog extends Dialog {
             endTime=timeMillis+dataBean.getAmount()*60*60*24;
         }
         tvTime.setText("购买后到期的日期为"+DateUtil.formartTimeToDate(endTime));
-        tvPricePay.setText("应付金额:"+ dataBean.getPrice());
+
+        String price=dataBean.getPrice()+"";
+        setPrice(price);
+
+    }
+
+
+    //设置价格
+    private void setPrice(String price) {
+        String total="应付金额: ￥"+ price+"元";
+        SpannableStringBuilder sb = new SpannableStringBuilder(total);
+        sb.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.color_585858)), 0, 5,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        sb.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.color_FF3000)), 5,
+                total.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        sb.setSpan(new RelativeSizeSpan(1.4f), 5, total.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tvPricePay.setText(sb);
     }
 
     private void initRecyclerview() {
