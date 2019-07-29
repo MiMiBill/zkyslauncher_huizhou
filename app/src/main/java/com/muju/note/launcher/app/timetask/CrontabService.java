@@ -20,6 +20,7 @@ import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.Constants;
+import com.muju.note.launcher.util.log.LogFactory;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -67,8 +68,7 @@ public class CrontabService {
                                 JSONObject jsonObject = new JSONObject(response.body());
                                 if (jsonObject.optInt("code") == 200) {
                                     Gson gson = new Gson();
-                                    CrontabBean bean = gson.fromJson(response.body(), CrontabBean
-                                            .class);
+                                    CrontabBean bean = gson.fromJson(response.body(), CrontabBean.class);
                                     List<CrontabBean.DataBean> crontabBean = bean.getData();
                                     LitePalDb.setZkysDb();
                                     LitePal.deleteAll(CrontabDao.class);
@@ -109,6 +109,8 @@ public class CrontabService {
                         if (systemTime > stopTime) { //当前时间>停止时间
                             return;
                         }
+                        LogFactory.l().i("systemTime==="+systemTime);
+                        LogFactory.l().i("stopTime==="+stopTime);
                         addAlarmForOnce(LauncherApplication.getInstance(), startTime, dao
                                 .getCrontabid() + "", dao.getFileType(), dao.getFileAddr());
 //                        addAlarmForOnce(CrontabService.this,startTime,"47",dao.getFileType(),
@@ -204,7 +206,7 @@ public class CrontabService {
         intent.setClass(context, CrontabReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
-//        LogFactory.l().i("addAlarmForOnce===");
+        LogFactory.l().i("addAlarmForOnce==="+timeString);
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeString, pendingIntent);
     }
 
@@ -228,7 +230,7 @@ public class CrontabService {
         }
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//        LogFactory.l().i("addRepeatAlarm===");
+        LogFactory.l().i("addRepeatAlarm===");
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeString, duration, pendingIntent);
     }
 

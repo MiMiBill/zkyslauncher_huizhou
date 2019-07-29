@@ -389,17 +389,21 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
                 if (missionInfoDao == null) {
                     return;
                 }
-                pushDialog = new MissionPushDialog(MainActivity.this, R.style.DialogFullscreen, missionInfoDao.getImg(), missionInfoDao.getTitle(), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (v.getId() == R.id.btn_toMission) {
-                            pushDialog.dismiss();
-                            toMission(missionInfoDao,entity.getPushId());
+                if(entity.getPushType()==1){
+                    toMission(missionInfoDao,entity.getPushId());
+                }else {
+                    pushDialog = new MissionPushDialog(MainActivity.this, R.style.DialogFullscreen, missionInfoDao.getImg(), missionInfoDao.getTitle(), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (v.getId() == R.id.btn_toMission) {
+                                pushDialog.dismiss();
+                                toMission(missionInfoDao,entity.getPushId());
+                            }
                         }
-                    }
-                });
-                pushDialog.setCanceledOnTouchOutside(false);
-                pushDialog.show();
+                    });
+                    pushDialog.setCanceledOnTouchOutside(false);
+                    pushDialog.show();
+                }
 
                 mPresenter.getUpdateArriveFlag(entity.getPushId());
             }
@@ -625,6 +629,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void timeTask(TimeTaskEvent event) {
         if (event.getCode() == 15) {
+            CrontabService.getInstance().cancleAlarm(this);
             CrontabService.getInstance().start();
         } else {
             CrontabService.getInstance().cancleAlarm(this);
