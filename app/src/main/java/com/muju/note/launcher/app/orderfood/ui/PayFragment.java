@@ -229,9 +229,10 @@ public class PayFragment extends BaseFragment<PayPresenter> implements PayContra
         tvTime.setText(sb);
     }
 
+
     @Override
-    public void onSupportInvisible() {
-        super.onSupportInvisible();
+    public void onDestroy() {
+        super.onDestroy();
         RxUtil.closeDisposable(disposableSlPay);
         if (countDownTimer != null) {
             countDownTimer.cancel();
