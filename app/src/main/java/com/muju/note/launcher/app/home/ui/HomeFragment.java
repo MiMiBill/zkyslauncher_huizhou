@@ -437,11 +437,11 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         if (netType.equals("4G")) {
             if (netDbm > -95) {
                 ivNet.setImageResource(R.mipmap.net_level_good);
-            } else if (netDbm > -105) {
+            } else if (netDbm > -110) {
                 ivNet.setImageResource(R.mipmap.net_level_better);
-            } else if (netDbm > -115) {
-                ivNet.setImageResource(R.mipmap.net_level_normal);
             } else if (netDbm > -125) {
+                ivNet.setImageResource(R.mipmap.net_level_normal);
+            } else if (netDbm > -140) {
                 ivNet.setImageResource(R.mipmap.net_level_bad);
             } else {
                 ivNet.setImageResource(R.mipmap.net_level_none);
@@ -449,11 +449,11 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         } else {
             if (netDbm > -75) {
                 ivNet.setImageResource(R.mipmap.net_level_good);
-            } else if (netDbm > -85) {
+            } else if (netDbm > -90) {
                 ivNet.setImageResource(R.mipmap.net_level_better);
-            } else if (netDbm > -95) {
+            } else if (netDbm > -105) {
                 ivNet.setImageResource(R.mipmap.net_level_normal);
-            } else if (netDbm > -100) {
+            } else if (netDbm > -120) {
                 ivNet.setImageResource(R.mipmap.net_level_bad);
             } else {
                 ivNet.setImageResource(R.mipmap.net_level_none);
