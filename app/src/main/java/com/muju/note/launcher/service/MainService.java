@@ -13,6 +13,7 @@ import com.muju.note.launcher.service.heartbeat.HeartBeatService;
 import com.muju.note.launcher.service.location.LocationService;
 import com.muju.note.launcher.service.operation.OneMinuteDisposable;
 import com.muju.note.launcher.service.operation.SixHourDisposable;
+import com.muju.note.launcher.service.recordLog.RecordLogService;
 import com.muju.note.launcher.service.updateversion.UpdateVersionService;
 import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.util.log.LogUtil;
@@ -51,7 +52,6 @@ public class MainService extends Service {
      *  开机初始化操作
      */
     private void init(){
-
         // 1分钟心跳开始执行
         OneMinuteDisposable.getInstance().start();
 
@@ -67,6 +67,8 @@ public class MainService extends Service {
                         HeartBeatService.getInstance().uploadBootDate(1);
                         // 上传心跳信息
                         HeartBeatService.getInstance().start();
+                        //平板操作日志
+                        RecordLogService.getInstance().start();
                     }
                 });
 

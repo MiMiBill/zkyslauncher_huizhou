@@ -155,6 +155,13 @@ public class DateUtil {
     }
 
 
+    //时间戳格式化成时间
+    public static String formartNowTimeToDate(long time) {
+        String date= new SimpleDateFormat("yyyy-MM-dd").format(time);
+        return date;
+    }
+
+
     //获取倒计时
     public static String getTime(int tempTime) {
         if (tempTime > 0) {

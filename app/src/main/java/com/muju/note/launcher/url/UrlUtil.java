@@ -369,4 +369,13 @@ public class UrlUtil {
     public static String getUpdateReadFlag(){
         return  getHost()+"/pushTabb/updateReadFlag/";
     }
+
+
+    /**
+     *  平板操作日志
+     * @return
+     */
+    public static String recordLog(){
+        return  getHost()+"/padOperationLog/recordLog";
+    }
 }
