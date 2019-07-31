@@ -73,6 +73,7 @@ import com.muju.note.launcher.entity.PushAutoMsgEntity;
 import com.muju.note.launcher.entity.PushCustomMessageEntity;
 import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.service.MainService;
+import com.muju.note.launcher.service.recordLog.RecordLogService;
 import com.muju.note.launcher.topics.AdvertsTopics;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.Constants;
@@ -159,6 +160,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
     private String netType = "";
     private Disposable disposableProtection;
     private boolean isStartProtection = true;
+    private int clickCount=0;
+    private boolean isRecordLog=true;
     private static String TAG = "MainActivity";
     private Handler handler = new Handler() {
         @Override
@@ -341,7 +344,13 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
         try {
             switch (ev.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    ++clickCount;
                     startProtectionCountDown();
+                    if(clickCount>=6 && isRecordLog){
+                        isRecordLog=false;
+                        //平板操作日志
+                        RecordLogService.getInstance().start();
+                    }
                     break;
                 case MotionEvent.ACTION_MOVE:
                     break;
