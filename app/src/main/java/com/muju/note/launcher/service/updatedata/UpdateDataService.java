@@ -1,6 +1,7 @@
 package com.muju.note.launcher.service.updatedata;
 
 import com.muju.note.launcher.app.hostipal.service.MienService;
+import com.muju.note.launcher.app.hostipal.service.MissionService;
 import com.muju.note.launcher.app.video.service.VideoService;
 import com.muju.note.launcher.service.encyclope.EncyclopeService;
 import com.muju.note.launcher.topics.SpTopics;
@@ -69,7 +70,7 @@ public class UpdateDataService {
         VideoService.getInstance().getVideoTopInfo();
 
         // 更新科室宣教信息
-//        MissionService.getInstance().updateMission(1);
+        MissionService.getInstance().updateMission(1);
 
         // 更新医院风采信息
         MienService.getInstance().getMienInfo();

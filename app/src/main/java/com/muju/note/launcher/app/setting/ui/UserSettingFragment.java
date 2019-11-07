@@ -2,7 +2,6 @@ package com.muju.note.launcher.app.setting.ui;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
@@ -20,6 +19,7 @@ import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.startUp.ui.HideActivity;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
+import com.muju.note.launcher.service.updateversion.UpdateVersionService;
 import com.muju.note.launcher.url.UrlUtil;
 
 import butterknife.BindView;
@@ -69,8 +69,7 @@ public class UserSettingFragment extends BaseFragment {
     @Override
     public void initData() {
         tvTitle.setText("个人中心");
-        tvVersion.setText(String.format("宝屏V%s", TextUtils.equals(UrlUtil.getHost(), "http://test" +
-                ".pad.zgzkys.com") ? BuildConfig.VERSION_NAME + "beta" : BuildConfig.VERSION_NAME));
+        tvVersion.setText(String.format("安屏V%s", TextUtils.equals(UrlUtil.getHost(), "http://pad.test.zgzkys.com") ? BuildConfig.VERSION_NAME + "beta" : BuildConfig.VERSION_NAME));
 
         tvVersion.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -228,9 +227,24 @@ public class UserSettingFragment extends BaseFragment {
     }
 
 
-    @OnClick(R.id.ll_back)
-    public void onViewClicked() {
-        pop();
+    @OnClick({R.id.ll_back,R.id.btn_update_version})
+    public void onViewClicked(View view) {
+
+        switch (view.getId())
+        {
+            case R.id.ll_back:
+            {
+                pop();
+                break;
+            }
+            case R.id.btn_update_version:
+            {
+                // 查询更新
+                UpdateVersionService.getInstance().start();
+
+            }
+        }
+
     }
 
 }

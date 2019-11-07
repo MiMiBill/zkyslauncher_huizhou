@@ -96,7 +96,9 @@ import org.litepal.crud.callback.FindCallback;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -184,6 +186,12 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
 
     @Override
     public void initData() {
+
+        Set<String> tags = new HashSet<>();
+        tags.add("平板桌面");
+        JPushInterface.setTags(LauncherApplication.getContext(),2,tags);
+
+
         mPresenter.setOnTaskListener(this);
         if (!EventBus.getDefault().isRegistered(this)) {//加上判断
             EventBus.getDefault().register(this);
@@ -238,6 +246,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
 
         ivQrCode.setImageBitmap(QrCodeUtils.generateBitmap(MobileInfoUtil.getICCID
                 (getContext()) + "," + JPushInterface.getRegistrationID(getContext()), 200, 200));
+
+
     }
 
     @Override

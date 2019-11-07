@@ -5,10 +5,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.lzy.okgo.OkGo;
-import com.lzy.okgo.callback.FileCallback;
-import com.lzy.okgo.model.Progress;
 import com.lzy.okgo.model.Response;
-import com.lzy.okgo.request.base.Request;
 import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.litepal.LitePalDb;
@@ -18,16 +15,12 @@ import com.muju.note.launcher.service.audio.PlayerAudioService;
 import com.muju.note.launcher.service.db.PadConfigDao;
 import com.muju.note.launcher.service.db.PadConfigSubDao;
 import com.muju.note.launcher.service.download.DownLoadService;
-import com.muju.note.launcher.service.http.ServiceHttp;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.DateUtil;
 import com.muju.note.launcher.util.app.AppUtils;
-import com.muju.note.launcher.util.app.MobileInfoUtil;
-import com.muju.note.launcher.util.file.FileUtils;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.sdcard.SdcardConfig;
-import com.muju.note.launcher.util.sign.Signature;
 import com.muju.note.launcher.util.system.SystemUtils;
 
 import org.litepal.LitePal;

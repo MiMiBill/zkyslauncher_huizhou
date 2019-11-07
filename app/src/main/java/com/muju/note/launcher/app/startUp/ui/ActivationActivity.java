@@ -329,6 +329,7 @@ public class ActivationActivity extends BaseActivity<ActivationPresenter> implem
 
                             JPushInterface.setAlias(this, 2, dataBean.getBedId() + "pad"
                                     + dataBean.getActive());
+
                         }
                     } else {
                         //未激活

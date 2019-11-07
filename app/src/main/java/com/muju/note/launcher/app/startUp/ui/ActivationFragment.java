@@ -119,8 +119,7 @@ public class ActivationFragment extends BaseFragment<NewActivationPresenter> imp
 
     @Override
     public void bindFail() {
-        tvVersion.setText(String.format("版本:宝屏V%s", TextUtils.equals(UrlUtil.getHost(), "http://test" +
-                ".pad.zgzkys.com") ? BuildConfig.VERSION_NAME + "beta" : BuildConfig.VERSION_NAME));
+        tvVersion.setText(String.format("版本:安屏V%s", TextUtils.equals(UrlUtil.getHost(), "http://pad.test.zgzkys.com") ? BuildConfig.VERSION_NAME + "beta" : BuildConfig.VERSION_NAME));
         RxUtil.closeDisposable(disposableCheckActive);
         disposableCheckActive = Observable.interval(30, TimeUnit.SECONDS)
                 .take(1)

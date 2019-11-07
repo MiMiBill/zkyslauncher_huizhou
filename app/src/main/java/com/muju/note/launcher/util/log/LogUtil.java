@@ -1,12 +1,15 @@
 package com.muju.note.launcher.util.log;
 
 import com.orhanobut.logger.AndroidLogAdapter;
-import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
-import com.orhanobut.logger.PrettyFormatStrategy;
+
+import java.io.FileOutputStream;
 
 
 public class LogUtil {
+
+
+    private static FileOutputStream fileOutputStream ;
 
     private static boolean isDebug = true;
 
@@ -18,7 +21,12 @@ public class LogUtil {
 //                .tag("zkysLauncher")   //（可选）每个日志的全局标记。默认PRETTY_LOGGER
 //                .build();
         Logger.addLogAdapter(new AndroidLogAdapter());
+
+
+
     }
+
+
 
     public static void d(Object obj) {
         if (isDebug) {
@@ -39,6 +47,7 @@ public class LogUtil {
 
     public static void i(String tag,String msg,Object... obj) {
         if (isDebug) {
+
             Logger.t(tag).i(msg,obj);
         }
     }
