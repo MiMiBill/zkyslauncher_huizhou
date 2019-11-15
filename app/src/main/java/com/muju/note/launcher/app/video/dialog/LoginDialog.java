@@ -100,7 +100,7 @@ public class LoginDialog extends Dialog {
                     @Override
                     public void onSuccess(Response<BaseBean<UserBean>> response) {
                         if(response.body().getData()==null){
-                            handler.sendEmptyMessageDelayed(0x01,1000*3);
+                            handler.sendEmptyMessageDelayed(0x01,1000*2);
                             return;
                         }
                         UserUtil.setUserBean(response.body().getData());
@@ -112,7 +112,7 @@ public class LoginDialog extends Dialog {
                     public void onError(Response<BaseBean<UserBean>> response) {
                         super.onError(response);
 
-                        handler.sendEmptyMessageDelayed(0x01,1000*3);
+                        handler.sendEmptyMessageDelayed(0x01,1000*2);
                     }
                 });
     }

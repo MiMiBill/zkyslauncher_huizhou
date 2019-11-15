@@ -1,5 +1,8 @@
 package com.muju.note.launcher;
 
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
@@ -67,6 +70,8 @@ import com.muju.note.launcher.app.video.util.WoTvUtil;
 import com.muju.note.launcher.base.BaseActivity;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
+import com.muju.note.launcher.broadcast.ScreenOffAdminReceiver;
+import com.muju.note.launcher.callkey.event.CallKeyDownEvent;
 import com.muju.note.launcher.entity.AdvertWebEntity;
 import com.muju.note.launcher.entity.BedSideEvent;
 import com.muju.note.launcher.entity.PushAutoMsgEntity;
@@ -76,6 +81,7 @@ import com.muju.note.launcher.service.MainService;
 import com.muju.note.launcher.service.recordLog.RecordLogService;
 import com.muju.note.launcher.topics.AdvertsTopics;
 import com.muju.note.launcher.util.ActiveUtils;
+import com.muju.note.launcher.util.CallBtnShakeUtil;
 import com.muju.note.launcher.util.Constants;
 import com.muju.note.launcher.util.FormatUtils;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
@@ -86,6 +92,7 @@ import com.muju.note.launcher.util.qr.QrCodeUtils;
 import com.muju.note.launcher.util.rx.RxUtil;
 import com.muju.note.launcher.util.sdcard.SdcardConfig;
 import com.muju.note.launcher.util.sp.SPUtil;
+import com.muju.note.launcher.util.system.SystemUtils;
 import com.muju.note.launcher.view.EBDrawerLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -108,7 +115,7 @@ import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
-import me.yokeyword.fragmentation.SupportFragment;
+import me.yokeyword.fragmentation.ISupportFragment;
 
 public class MainActivity extends BaseActivity<MainPresenter> implements MainPresenter.TaskListener, MainContract.View {
 
@@ -191,7 +198,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
         tags.add("平板桌面");
         JPushInterface.setTags(LauncherApplication.getContext(),2,tags);
 
-
         mPresenter.setOnTaskListener(this);
         if (!EventBus.getDefault().isRegistered(this)) {//加上判断
             EventBus.getDefault().register(this);
@@ -246,6 +252,19 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
 
         ivQrCode.setImageBitmap(QrCodeUtils.generateBitmap(MobileInfoUtil.getICCID
                 (getContext()) + "," + JPushInterface.getRegistrationID(getContext()), 200, 200));
+
+
+        //弹出提示，获取开屏关屏权限
+        DevicePolicyManager dpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+        ComponentName componentName = new ComponentName(this, ScreenOffAdminReceiver.class);
+        boolean active = dpm.isAdminActive(componentName);
+        if (!active){
+            // http://developer.android.com/reference/android/app/admin/DeviceAdminReceiver.html
+            Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+            intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
+            intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "我自己的LockNow");
+            startActivityForResult(intent, 0);
+        }
 
 
     }
@@ -312,12 +331,15 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
      * 屏幕保护倒计时
      */
     private void protectionCountDown() {
-        long period = 3;
-        disposableProtection = Observable.interval(period, TimeUnit.MINUTES)
+        long period = 30;
+        disposableProtection = Observable.interval(period, TimeUnit.SECONDS)
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        start(new ProtectionProcessFragment(), SupportFragment.SINGLETASK);
+                        //惠州医院取消待机画面，直接进入锁屏界面
+//                        start(new ProtectionProcessFragment(), SupportFragment.SINGLETASK);
+                        LogUtil.d("30秒关屏定时器到了");
+                         SystemUtils.screenOff();
                     }
                 });
 
@@ -481,6 +503,44 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
         dialog.show();
     }
 
+
+    /**
+     * 呼叫实体键被按下
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onClickCallKey(CallKeyDownEvent callKeyDownEvent)
+    {
+
+        if (CallBtnShakeUtil.check())
+        {
+//            CallKeyService.start();//开启log监听
+            ISupportFragment baseFragment = getTopFragment();
+            LogUtil.d("onClickCallKey:"+ callKeyDownEvent.name + "   "+ baseFragment);
+            if (baseFragment instanceof ProtectionProcessFragment)  //如果已经进入屏幕保护状态，那么先取消掉
+            {
+                ProtectionProcessFragment protectionProcessFragment = (ProtectionProcessFragment)baseFragment;
+                protectionProcessFragment.unLock();
+            }
+
+
+            if (callKeyDownEvent.isTurnOn)
+            {
+                //判断当前是否黑屏，如果黑屏就要添加计时器，在没有动作后1分钟恢复黑屏
+                startProtectionCountDown();
+                SystemUtils.turnOnScreen();
+                LogUtil.d("onClickCallKey turnOnScreen");
+            }else {
+                SystemUtils.screenOff();
+                LogUtil.d("onClickCallKey screenOff");
+            }
+
+        }
+
+
+
+
+
+    }
 
     /**
      * 广告跳转

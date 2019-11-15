@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 
+import com.muju.note.launcher.callkey.service.CallKeyService;
 import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.okgo.OkGoUtil;
 import com.muju.note.launcher.util.carsh.CrashHandler;
@@ -51,6 +52,8 @@ public class LauncherApplication extends Application {
         // 初始化极光推送
         JPushInterface.init(this);
         JPushInterface.setDebugMode(true);
+
+        CallKeyService.start();
 
         // wotv初始化
 //                WoTvUtil.getInstance().initSDK(instance);

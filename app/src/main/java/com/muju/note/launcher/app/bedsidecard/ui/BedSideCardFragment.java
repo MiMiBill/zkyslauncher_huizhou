@@ -16,7 +16,6 @@ import com.muju.note.launcher.app.bedsidecard.presenter.BedsidePresenter;
 import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.app.home.event.OutHospitalEvent;
 import com.muju.note.launcher.app.home.event.PatientInfoEvent;
-import com.muju.note.launcher.app.video.event.VideoNoLockEvent;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.util.ActiveUtils;
@@ -138,7 +137,7 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
             EventBus.getDefault().register(this);
         }
         mPresenter.updateDate();
-        EventBus.getDefault().post(new VideoNoLockEvent(false));
+//        EventBus.getDefault().post(new VideoNoLockEvent(false));
     }
 
     @Override
@@ -146,7 +145,7 @@ public class BedSideCardFragment extends BaseFragment<BedsidePresenter> implemen
         super.onSupportInvisible();
         mPresenter.onDestroy();
         handler.removeMessages(1);
-        EventBus.getDefault().post(new VideoNoLockEvent(true));
+//        EventBus.getDefault().post(new VideoNoLockEvent(true));
     }
 
     @Override

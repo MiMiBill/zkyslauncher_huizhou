@@ -61,6 +61,7 @@ import com.muju.note.launcher.app.video.ui.WotvPlayFragment;
 import com.muju.note.launcher.app.video.util.WoTvUtil;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
+import com.muju.note.launcher.callkey.service.FileObserverService;
 import com.muju.note.launcher.service.homemenu.HomeMenuService;
 import com.muju.note.launcher.topics.AdvertsTopics;
 import com.muju.note.launcher.util.ActiveUtils;
@@ -276,6 +277,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 menuClick(homeMenuDaos.get(i));
             }
         });
+
+        FileObserverService.start();
     }
 
     /**
@@ -704,5 +707,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         });
         serviceDialog.show();
     }
+
+
 }
 

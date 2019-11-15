@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
@@ -32,6 +33,7 @@ import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.DateUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.qr.QrCodeUtils;
+import com.muju.note.launcher.util.toast.FancyToast;
 
 import org.json.JSONObject;
 import org.litepal.LitePal;
@@ -182,7 +184,6 @@ public class NewVideoPayDialog extends Dialog {
                         priceList.get(i).setCheck(false);
                     }
                 }
-
                 initPrice(position);
                 videoPriceAdapter.notifyPrice(priceList);
             }
@@ -208,6 +209,8 @@ public class NewVideoPayDialog extends Dialog {
                 break;
         }
     }
+
+
 
 
     //获取公众号type
@@ -284,7 +287,11 @@ public class NewVideoPayDialog extends Dialog {
                             tvGetCode.setText("关注后回复"+codeDao.getPubCode()+"获取验证码");
                         }
 
+                    }else {
+                        FancyToast.makeText(LauncherApplication.getContext(),"暂时没有可以做的任务", Toast.LENGTH_SHORT).show();
                     }
+                }else {
+                    FancyToast.makeText(LauncherApplication.getContext(),"暂时没有可以做的任务", Toast.LENGTH_SHORT).show();
                 }
             }
         });

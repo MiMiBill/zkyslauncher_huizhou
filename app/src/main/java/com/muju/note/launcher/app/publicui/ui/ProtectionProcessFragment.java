@@ -163,6 +163,12 @@ public class ProtectionProcessFragment extends BaseFragment<ProtectionPresenter>
         addBrightness();
     }
 
+    public void unLock()
+    {
+        addBrightness();
+        pop();
+    }
+
     /**
      * 查询广告列表
      */

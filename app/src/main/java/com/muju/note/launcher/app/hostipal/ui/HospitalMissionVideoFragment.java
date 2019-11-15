@@ -9,6 +9,7 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.model.Response;
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.hostipal.util.MissionDbUtil;
+import com.muju.note.launcher.app.video.event.VideoNoLockEvent;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.okgo.BaseBean;
 import com.muju.note.launcher.okgo.JsonCallback;
@@ -16,6 +17,8 @@ import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.sdcard.SdcardConfig;
 import com.muju.note.launcher.util.system.SystemUtils;
 import com.muju.note.launcher.view.VideoPlayControlView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 
@@ -91,6 +94,19 @@ public class HospitalMissionVideoFragment extends BaseFragment implements VideoP
     @Override
     public void showError(String msg) {
 
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        EventBus.getDefault().post(new VideoNoLockEvent(false));
+
+    }
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
+        EventBus.getDefault().post(new VideoNoLockEvent(true));
     }
 
     @Override

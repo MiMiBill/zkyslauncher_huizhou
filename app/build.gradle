@@ -10,8 +10,8 @@ android {
         applicationId "com.muju.note.launcher"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 91
-        versionName "1.9.1"
+        versionCode 92
+        versionName "1.9.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true
@@ -153,7 +153,6 @@ dependencies {
 
     // 文字转拼音
     implementation 'com.belerweb:pinyin4j:2.5.1'
-
 
     implementation 'com.tencent.bugly:crashreport:latest.release'  //腾讯bugly
 

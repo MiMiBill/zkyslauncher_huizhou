@@ -8,6 +8,7 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.model.Response;
 import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
 import com.muju.note.launcher.base.LauncherApplication;
+import com.muju.note.launcher.callkey.bean.CallKeyInfo;
 import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.okgo.BaseBean;
 import com.muju.note.launcher.okgo.JsonCallback;
@@ -155,8 +156,12 @@ public class ConfigService {
         if (TextUtils.isEmpty(type)) {
             return;
         }
-        boolean isLock = SystemUtils.isLock();
-        if (type.equals(OPEN_PAD)) {
+
+        boolean isLock = SystemUtils.isScreenOn();
+
+        //在晚上模式的时候，才去判断需不需要重启平板
+        if (type.equals(OPEN_PAD) && !CallKeyInfo.getsInstance().isDaytimeMode()) {
+            CallKeyInfo.getsInstance().setDaytimeMode(true);
             if (isLock) {
                 LogUtil.d(TAG, "当前处于开屏状态，无需在开屏");
             } else {
@@ -175,6 +180,7 @@ public class ConfigService {
             }
         }
         if (type.equals(CLOSE_PAD)) {
+            CallKeyInfo.getsInstance().setDaytimeMode(false);
             if (isLock) {
                 LogUtil.d(TAG, "当前处于开屏状态，锁屏");
                 Disposable di = Observable.timer(1, TimeUnit.SECONDS)

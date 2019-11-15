@@ -25,6 +25,7 @@ import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.log.LogFactory;
+import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.qr.QrCodeUtils;
 import com.muju.note.launcher.util.user.UserUtil;
 
@@ -167,6 +168,7 @@ public class UserFragment extends BaseFragment<UserPresenter> implements UserPre
                     String code = UrlUtil.getWxLogin() + MobileInfoUtil.getIMEI
                             (LauncherApplication.getContext());
 //                    LogFactory.l().i("code=="+code);
+                    LogUtil.d("code:" + code);
                     Bitmap bitmap = QrCodeUtils.generateOriginalBitmap(code, 468, 468);
                     Message msg = new Message();
                     msg.what = 0x03;
@@ -195,7 +197,7 @@ public class UserFragment extends BaseFragment<UserPresenter> implements UserPre
 
     @Override
     public void qeryNotLogin() {
-        handler.sendEmptyMessageDelayed(0x01, 1000 * 3);
+        handler.sendEmptyMessageDelayed(0x01, 1000 * 2);
     }
 
     @Override

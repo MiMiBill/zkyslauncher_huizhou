@@ -299,6 +299,13 @@
             </intent-filter>
         </receiver>
 
+        <!--呼叫按键广播-->
+        <receiver android:name=".broadcast.BtnCallPressedBroadcastReceiver">
+            <intent-filter>
+                <action android:name="zkys.btn.call.pressed"/>
+            </intent-filter>
+        </receiver>
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${JPUSH_PKGNAME}.fileProvider"
@@ -352,6 +359,7 @@
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="VdfrqzLf4xlxOkVgF89fO1qpyF3iGgCG" />
+        <service android:name=".callkey.service.FileObserverService"/>
         <!-- 百度定位 -->
         <service
             android:name="com.baidu.location.f"

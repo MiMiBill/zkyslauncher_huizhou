@@ -112,7 +112,7 @@ public class SystemUtils {
      *
      * @return
      */
-    public static boolean isLock() {
+    public static boolean isScreenOn() {
         PowerManager pm = (PowerManager) LauncherApplication.getContext().getSystemService(Context.POWER_SERVICE);
         boolean isScreenOn = pm.isScreenOn();//如果为true，则表示屏幕“亮”了，否则屏幕“暗”了。
         return isScreenOn;

@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.devbrackets.android.api.video.impl.VideoErrorInfo;
 import com.devbrackets.android.media.listener.OnVideoPreparedListener;
@@ -25,6 +26,7 @@ import com.muju.note.launcher.app.video.bean.VideoEvent;
 import com.muju.note.launcher.app.video.contract.VideoPlayContract;
 import com.muju.note.launcher.app.video.db.PayInfoDao;
 import com.muju.note.launcher.app.video.db.VideoHisDao;
+import com.muju.note.launcher.app.video.dialog.LoginDialog;
 import com.muju.note.launcher.app.video.dialog.NewVideoPayDialog;
 import com.muju.note.launcher.app.video.dialog.VideoOrImageDialog;
 import com.muju.note.launcher.app.video.dialog.WotvPlayErrorDialog;
@@ -39,14 +41,17 @@ import com.muju.note.launcher.app.video.util.DbHelper;
 import com.muju.note.launcher.app.video.util.WoTvUtil;
 import com.muju.note.launcher.app.video.util.wotv.ExpandVideoView2;
 import com.muju.note.launcher.base.BaseFragment;
+import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.service.config.ConfigService;
 import com.muju.note.launcher.topics.AdvertsTopics;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.DateUtil;
+import com.muju.note.launcher.util.UIUtils;
 import com.muju.note.launcher.util.adverts.AdvertsUtil;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
+import com.muju.note.launcher.util.toast.FancyToast;
 import com.muju.note.launcher.view.password.OnPasswordFinish;
 import com.muju.note.launcher.view.password.PopEnterPassword;
 import com.unicom.common.VideoSdkConfig;
@@ -122,6 +127,7 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
     private ActivePadInfo.DataBean activeInfo;
     private List<PriceBean.DataBean> priceList = new ArrayList<>();
     private NewVideoPayDialog newVideoPayDialog;
+    private LoginDialog loginDialog;
     private PopEnterPassword popEnterPassword;
 
     public void setHisDao(VideoHisDao videoHisDao) {
@@ -828,6 +834,16 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
                 isPaySuccess = true;
                 popEnterPassword.dismiss();
                 videoView.start();
+                try {
+                    //每次验证成功后就更新一下广告
+                    AdvertsUtil.getInstance().queryAdverts(UIUtils.fun(AdvertsTopics.CODE_HOME_LB,
+                            AdvertsTopics.CODE_HOME_DIALOG, AdvertsTopics.CODE_LOCK,
+                            AdvertsTopics.CODE_PUBLIC, AdvertsTopics.CODE_VERTICAL,
+                            AdvertsTopics.CODE_VIDEO_CORNER, AdvertsTopics.CODE_VIDEO_DIALOG,
+                            AdvertsTopics.CODE_RW), null, null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } else {
                 isPaySuccess = false;
                 showToast("验证码验证失败");
@@ -865,15 +881,68 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
                     }
                 }
                 if (secondObj.optInt("status") != 2 && secondObj.optInt("status") != 3) {
-                    showPayDialog();
+
+//                    if (UserUtil.getUserBean() != null)
+//                    {
+                        //用户已经登录微信，直接显示支付页面
+                        showPayDialog();
+//                    }else {
+//                        loginWeixin();
+//                    }
+
+
+
                 }
             }else {
-                showPayDialog();
+//                if (UserUtil.getUserBean() != null)
+//                {
+                    //用户已经登录微信，直接显示支付页面
+                    showPayDialog();
+//                }else {
+//                    loginWeixin();
+//                }
             }
         } catch (Exception e) {
             e.printStackTrace();
 
         }
+    }
+
+    /**
+     * 登录微信
+     */
+    private void loginWeixin(){
+        //暂停播放
+        if (videoView != null) {
+            videoView.pause();
+        }
+
+        if (videoOrImageDialog != null && videoOrImageDialog.isShowing()) {
+            videoOrImageDialog.dismiss();
+        }
+        FancyToast.makeText(LauncherApplication.getContext(),"请先登录微信", Toast.LENGTH_LONG).show();
+
+        loginDialog = new LoginDialog(getActivity(), R.style
+                .DialogFullscreen, new LoginDialog.OnLoginListener() {
+            @Override
+            public void onSuccess() {
+                LogUtil.d("微信登录成功");
+                loginDialog.dismiss();
+                FancyToast.makeText(LauncherApplication.getContext(),"微信登录成功！",Toast.LENGTH_LONG).show();
+                showPayDialog();
+            }
+
+            @Override
+            public void onFail() {
+                LogUtil.d("微信登录失败");
+                FancyToast.makeText(LauncherApplication.getContext(),"微信登录失败！",Toast.LENGTH_LONG).show();
+                pop();
+            }
+        });
+
+        loginDialog.setCanceledOnTouchOutside(false);
+        loginDialog.show();
+
     }
 
     @Override
