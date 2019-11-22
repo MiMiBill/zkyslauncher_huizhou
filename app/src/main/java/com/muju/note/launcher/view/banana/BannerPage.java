@@ -1,6 +1,6 @@
 package com.muju.note.launcher.view.banana;
 
-public class BannerPage {
+public class                  BannerPage {
     public String url;//图片/视频地址
     public String videourl;//图片/视频地址
     public int imgDelyed = 10000;//图片轮播延时时间

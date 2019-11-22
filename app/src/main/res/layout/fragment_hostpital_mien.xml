@@ -27,18 +27,19 @@
         android:id="@+id/wv_Mien"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"></WebView>
+            android:autoLink="phone"
+        android:layout_centerHorizontal="true"/>
 
     </LinearLayout>
 
     <include layout="@layout/title_bar"/>
 
     <LinearLayout
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_width="@dimen/px112"
         android:layout_height="@dimen/px500"
         android:orientation="vertical"
-        android:layout_marginTop="@dimen/px76">
+        android:layout_marginTop="@dimen/px180">
         <LinearLayout
             android:id="@+id/ll_type_title"
             android:layout_width="@dimen/px112"
