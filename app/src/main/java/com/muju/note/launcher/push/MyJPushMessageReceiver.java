@@ -19,7 +19,8 @@ public class MyJPushMessageReceiver extends JPushMessageReceiver {
 
     @Override
     public void onTagOperatorResult(Context context, JPushMessage jPushMessage) {
-        LogUtil.i(TAG,"onTagOperatorResult");
+        LogUtil.i(TAG,"onTagOperatorResult Alias:" + jPushMessage.getAlias());
+        LogUtil.i(TAG,"onTagOperatorResult tag:" + jPushMessage.getTags());
         TagAliasOperatorHelper.getInstance().onTagOperatorResult(context, jPushMessage);
         super.onTagOperatorResult(context, jPushMessage);
        /* if (jPushMessage.getTags().contains(Constant.JPUSH_TAG)) {
@@ -38,7 +39,8 @@ public class MyJPushMessageReceiver extends JPushMessageReceiver {
 
     @Override
     public void onAliasOperatorResult(Context context, JPushMessage jPushMessage) {
-        LogUtil.i(TAG,"onTagOperatorResult");
+        LogUtil.i(TAG,"onAliasOperatorResult Alias:" + jPushMessage.getAlias());
+        LogUtil.i(TAG,"onAliasOperatorResult tag:" + jPushMessage.getTags());
         TagAliasOperatorHelper.getInstance().onAliasOperatorResult(context, jPushMessage);
         super.onAliasOperatorResult(context, jPushMessage);
     }

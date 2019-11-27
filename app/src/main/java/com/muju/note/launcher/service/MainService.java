@@ -87,6 +87,8 @@ public class MainService extends Service {
                     .subscribe(new Consumer<Long>() {
                         @Override
                         public void accept(Long aLong) throws Exception {
+
+                            LogUtil.d("自启动10分钟内更新");
                             // 获取平板配置信息
                             ConfigService.getInstance().start();
                             // 获取定位信息

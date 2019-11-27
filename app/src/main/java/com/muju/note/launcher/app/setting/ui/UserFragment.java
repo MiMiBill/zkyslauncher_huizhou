@@ -16,20 +16,22 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.muju.note.launcher.R;
+import com.muju.note.launcher.app.adtask.event.UserInfoEvent;
 import com.muju.note.launcher.app.setting.event.GotoLuckEvent;
 import com.muju.note.launcher.app.setting.event.GotoSignEvent;
 import com.muju.note.launcher.app.setting.presenter.UserPresenter;
 import com.muju.note.launcher.app.video.bean.UserBean;
 import com.muju.note.launcher.base.BaseFragment;
-import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.url.UrlUtil;
-import com.muju.note.launcher.util.app.MobileInfoUtil;
+import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.qr.QrCodeUtils;
 import com.muju.note.launcher.util.user.UserUtil;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -67,7 +69,7 @@ public class UserFragment extends BaseFragment<UserPresenter> implements UserPre
             super.handleMessage(msg);
             switch (msg.what) {
                 case 0x01:
-                    mPresenter.startQueryUser();
+//                    mPresenter.startQueryUser();
                     break;
                 case 0x03:
                     if (ivMa != null)
@@ -97,8 +99,8 @@ public class UserFragment extends BaseFragment<UserPresenter> implements UserPre
         relLogin.setVisibility(View.VISIBLE);
         relNotLogin.setVisibility(View.GONE);
         try {
-            if (!TextUtils.isEmpty(UserUtil.getUserBean().getNickname())) {
-                tvName.setText(UserUtil.getUserBean().getNickname());
+            if (!TextUtils.isEmpty(UserUtil.getUserBean().getNickName())) {
+                tvName.setText(UserUtil.getUserBean().getNickName());
             }
             if (!TextUtils.isEmpty(UserUtil.getUserBean().getSex())) {
                 tvSex.setText(UserUtil.getUserBean().getSex());
@@ -109,8 +111,8 @@ public class UserFragment extends BaseFragment<UserPresenter> implements UserPre
             if (!TextUtils.isEmpty(UserUtil.getUserBean().getAddress())) {
                 tvAddress.setText(UserUtil.getUserBean().getAddress());
             }
-            if (!TextUtils.isEmpty(UserUtil.getUserBean().getAvater())) {
-                Glide.with(getActivity()).load(UserUtil.getUserBean().getAvater()).apply
+            if (!TextUtils.isEmpty(UserUtil.getUserBean().getImage())) {
+                Glide.with(getActivity()).load(UserUtil.getUserBean().getImage()).apply
                         (RequestOptions.bitmapTransform(new CircleCrop())).into(ivHead);
             }
         } catch (Exception e) {
@@ -119,9 +121,20 @@ public class UserFragment extends BaseFragment<UserPresenter> implements UserPre
     }
 
 
+    /**
+     * 屏幕是否计时状态
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(UserInfoEvent userInfoEvent) {
+        setUser();
+    }
+
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
+        EventBus.getDefault().register(this);
 //        LogFactory.l().i("onSupportVisible");
         showView();
     }
@@ -130,7 +143,8 @@ public class UserFragment extends BaseFragment<UserPresenter> implements UserPre
     public void onSupportInvisible() {
 //        LogFactory.l().i("onSupportInvisible");
         super.onSupportInvisible();
-        handler.removeMessages(0x01);
+        EventBus.getDefault().unregister(this);
+//        handler.removeMessages(0x01);
         handler.removeMessages(0x03);
     }
 
@@ -165,10 +179,9 @@ public class UserFragment extends BaseFragment<UserPresenter> implements UserPre
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    String code = UrlUtil.getWxLogin() + MobileInfoUtil.getIMEI
-                            (LauncherApplication.getContext());
+                    String code = UrlUtil.getWxLogin() +  ActiveUtils.getPadActiveInfo().getBedId();//MobileInfoUtil.getIMEI(LauncherApplication.getContext());
 //                    LogFactory.l().i("code=="+code);
-                    LogUtil.d("code:" + code);
+                    LogUtil.d("url:" + code);
                     Bitmap bitmap = QrCodeUtils.generateOriginalBitmap(code, 468, 468);
                     Message msg = new Message();
                     msg.what = 0x03;
@@ -178,14 +191,14 @@ public class UserFragment extends BaseFragment<UserPresenter> implements UserPre
             }).start();
             relLogin.setVisibility(View.GONE);
             relNotLogin.setVisibility(View.VISIBLE);
-            mPresenter.startQueryUser();
+//            mPresenter.startQueryUser();
         }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        handler.removeMessages(0x01);
+//        handler.removeMessages(0x01);
         handler.removeMessages(0x03);
         unbinder.unbind();
     }
@@ -197,7 +210,7 @@ public class UserFragment extends BaseFragment<UserPresenter> implements UserPre
 
     @Override
     public void qeryNotLogin() {
-        handler.sendEmptyMessageDelayed(0x01, 1000 * 2);
+//        handler.sendEmptyMessageDelayed(0x01, 1000 * 2);
     }
 
     @Override

@@ -1,12 +1,21 @@
 package com.muju.note.launcher.url;
 
 public class UrlUtil {
-//        public static final String HOST_DEFAULT = "http://pad.zgzkys.com";
-    public static final String HOST_DEFAULT = "http://pad.test.zgzkys.com";
+        public static final String HOST_DEFAULT = "http://pad.zgzkys.com";
+//    public static final String HOST_DEFAULT = "http://pad.test.zgzkys.com";
 //    public static final String HOST_DEFAULT = "http://192.168.1.200:8086";
+
+    //获取公众号任务广告 单独的接口地址
+    private static final String HOST_AD = "https://advert-api.battcn.com";
 
     public static String getHost() {
         return HOST_DEFAULT;
+    }
+
+
+    public static String getADHost()
+    {
+        return HOST_AD;
     }
 
     /**
@@ -131,6 +140,19 @@ public class UrlUtil {
         return getHost() + "/advert/getAdvertsByCodes";
     }
 
+
+    /**
+     * 获取公众号任务列表
+     * 新接口2019.11.23日加上 微信登录后每个人的任务不一样
+     * @return
+     */
+    public static String getWeiXinTasks(String hosp_id,String dept_id)
+    {
+        return getADHost() + "/advert/task_info_receives/" + hosp_id + "/"+ dept_id;
+    }
+
+
+
     /**
      * 医院宣教标记已读
      *
@@ -212,9 +234,19 @@ public class UrlUtil {
      *
      * @return
      */
+//    public static String getWxLogin() {
+//        return "http://advert.battcn.com/auth/users/pad/wx_scan/";
+//    }
     public static String getWxLogin() {
-        return getHost() + "/login/wxLogin/";
+        return HOST_AD + "/auth/users/pad/wx_scan/";
     }
+
+//    @Deprecated
+//    public static String getWxLogin() {
+//        return getHost() + "/login/wxLogin/";
+//    }
+
+
 
     /**
      * 获取用户信息

@@ -15,6 +15,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
+import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 import com.muju.note.launcher.app.dialog.AdvertsDialog;
 import com.muju.note.launcher.app.home.bean.AdverNewBean;
@@ -24,6 +25,7 @@ import com.muju.note.launcher.app.home.db.AdvertsInfoDao;
 import com.muju.note.launcher.app.home.event.DefaultCabinetEvent;
 import com.muju.note.launcher.app.home.event.DefaultVideoEvent;
 import com.muju.note.launcher.app.home.event.DefaultVideoLiveEvent;
+import com.muju.note.launcher.app.video.bean.WeiXinTask;
 import com.muju.note.launcher.app.video.dialog.OnAdDialogDismissListener;
 import com.muju.note.launcher.app.video.dialog.VideoOrImageDialog;
 import com.muju.note.launcher.app.video.util.DbHelper;
@@ -37,27 +39,85 @@ import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.log.LogFactory;
+import com.muju.note.launcher.util.log.LogUtil;
+import com.muju.note.launcher.util.user.UserUtil;
 import com.muju.note.launcher.view.banana.Banner;
 import com.muju.note.launcher.view.banana.BannerPage;
 import com.muju.note.launcher.view.banana.OnBannerListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.litepal.LitePal;
-
+import com.google.gson.Gson;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 public class AdvertsUtil {
 
     public static AdvertsUtil advertsUtil = null;
+
+    private WeiXinTask.WeiXinTaskData weiXinTaskData;
     private boolean isUserTouch=false;
     public static AdvertsUtil getInstance() {
         if (advertsUtil == null) {
             advertsUtil = new AdvertsUtil();
         }
         return advertsUtil;
+    }
+
+    public WeiXinTask.WeiXinTaskData getWeiXinTaskData() {
+        return weiXinTaskData;
+    }
+
+    //更新微信任务数据
+    public void updateWeiXinTask(String hospitalId, String deptId) {
+
+        String imei = MobileInfoUtil.getIMEI(LauncherApplication.getInstance());
+        Map<String,String> map = new HashMap<>();
+        map.put("imei",imei);
+        map.put("pushCode","" + ActiveUtils.getPadActiveInfo().getBedId());
+        String json = new Gson().toJson(map);
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody requestBody = RequestBody.create(mediaType,json);
+        OkGo.<String>post(UrlUtil.getWeiXinTasks(hospitalId,deptId))
+                .tag(this)
+                .removeAllHeaders()
+                .headers("authorization","Bearer " + UserUtil.getUserBean().getAccess_token())
+                .upRequestBody(requestBody)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+
+                        String body = response.body();
+                        WeiXinTask weiXinTask = new Gson().fromJson(body, WeiXinTask.class);
+                        if (weiXinTask != null && weiXinTask.isSuccessful())
+                        {
+                            WeiXinTask.WeiXinTaskData data =  weiXinTask.getData();
+                            if (data != null)
+                            {
+                                weiXinTaskData = data;
+                            }else {
+                                weiXinTaskData = null;
+                            }
+                        }else {
+                            weiXinTaskData = null;;
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        LogUtil.d(response.body());
+                    }
+                });
+
     }
 
     public static final int TAG_SHOWCOUNT = 0; // 展示次数

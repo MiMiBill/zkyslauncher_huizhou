@@ -5,6 +5,7 @@ import com.muju.note.launcher.app.hostipal.service.MissionService;
 import com.muju.note.launcher.app.video.service.VideoService;
 import com.muju.note.launcher.service.encyclope.EncyclopeService;
 import com.muju.note.launcher.topics.SpTopics;
+import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.sp.SPUtil;
 
 import java.util.Calendar;
@@ -45,6 +46,7 @@ public class UpdateDataService {
                     @Override
                     public void run() {
                         // 上传数据信息
+                        LogUtil.d("夜里10到7点之间的线程执行");
                         update();
                         SPUtil.putInt(SpTopics.SP_UPDATE_DATA_DAY,day);
                     }
@@ -77,6 +79,7 @@ public class UpdateDataService {
 
         //更新医疗百科信息
         EncyclopeService.getInstance().getLately();
+
 
     }
 

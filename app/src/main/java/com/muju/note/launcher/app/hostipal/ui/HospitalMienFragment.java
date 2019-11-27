@@ -80,6 +80,22 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
     }
 
     @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
+//解决退出页面web中还有声音的问题
+        wvMien.onPause();
+        wvMien.pauseTimers();
+//        wvMien.loadUrl("about:blank");
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        wvMien.resumeTimers();
+        wvMien.onResume();
+    }
+
+    @Override
     public void initData() {
         if (ActiveUtils.getPadActiveInfo() != null) {
             tvTitle.setText(ActiveUtils.getPadActiveInfo().getHospitalName());
@@ -117,6 +133,9 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
 
     }
 
+
+
+
     private void initWebview()
     {
 
@@ -135,9 +154,9 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
          */
         webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);//不使用缓存，只从网络获取数据.
 
-        //支持屏幕缩放
-        webSettings.setSupportZoom(true);
-        webSettings.setBuiltInZoomControls(true);
+        //不支持屏幕缩放
+        webSettings.setSupportZoom(false);
+        webSettings.setBuiltInZoomControls(false);
 
     }
 

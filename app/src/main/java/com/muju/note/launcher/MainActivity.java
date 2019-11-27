@@ -610,7 +610,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getTaskList(UserInfoEvent userInfo) {
-        int userId = userInfo.userBean.getId();
+        int userId = userInfo.userBean.getUserId();
         int hospitalId = activeInfo.getHospitalId();
         int depId = activeInfo.getDeptId();
         mPresenter.getTaskList(userId, hospitalId, depId);

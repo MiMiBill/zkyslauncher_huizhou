@@ -10,7 +10,7 @@ android {
         applicationId "com.muju.note.launcher"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 1192   //fata包前面加11
+        versionCode 1192   //fata包前面加11 惠州版本
         versionName "111.9.2"  //fata包 前面再加11
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -157,4 +157,7 @@ dependencies {
     implementation 'com.tencent.bugly:crashreport:latest.release'  //腾讯bugly
 
     implementation 'q.rorbin:VerticalTabLayout:1.2.5' //医疗服务tab
+
+    implementation 'com.github.limxing:Android-PromptDialog:1.1.3'
+
 }

@@ -23,6 +23,7 @@ import com.muju.note.launcher.app.video.bean.PayEntity;
 import com.muju.note.launcher.app.video.bean.PayEvent;
 import com.muju.note.launcher.app.video.bean.PriceBean;
 import com.muju.note.launcher.app.video.bean.VideoEvent;
+import com.muju.note.launcher.app.video.bean.WeiXinTask;
 import com.muju.note.launcher.app.video.contract.VideoPlayContract;
 import com.muju.note.launcher.app.video.db.PayInfoDao;
 import com.muju.note.launcher.app.video.db.VideoHisDao;
@@ -52,6 +53,8 @@ import com.muju.note.launcher.util.adverts.AdvertsUtil;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
 import com.muju.note.launcher.util.toast.FancyToast;
+import com.muju.note.launcher.util.toast.ToastUtil;
+import com.muju.note.launcher.util.user.UserUtil;
 import com.muju.note.launcher.view.password.OnPasswordFinish;
 import com.muju.note.launcher.view.password.PopEnterPassword;
 import com.unicom.common.VideoSdkConfig;
@@ -76,6 +79,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import me.leefeng.promptlibrary.PromptDialog;
 import pl.droidsonroids.gif.GifImageView;
 
 public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implements
@@ -129,6 +133,9 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
     private NewVideoPayDialog newVideoPayDialog;
     private LoginDialog loginDialog;
     private PopEnterPassword popEnterPassword;
+    private static WeiXinTask.WeiXinTaskData weiXinTaskData;
+    private  PromptDialog promptDialog;
+
 
     public void setHisDao(VideoHisDao videoHisDao) {
         this.videoHisDao = videoHisDao;
@@ -646,10 +653,17 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
 
 
 
+
+
     /**
      * 展示支付信息
      */
     private void showPayDialog() {
+
+        if (promptDialog == null)
+        {
+            promptDialog = new PromptDialog(getActivity());
+        }
         LitePalDb.setZkysDb();
         LitePal.deleteAll(PayInfoDao.class);
         //暂停播放
@@ -663,20 +677,20 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
         //开启轮询
         selectPayInterval();
 
-        LitePalDb.setZkysDb();
-        LitePal.where("taskType =?", "1").limit(1).findAsync(AdvertsCodeDao.class).listen(new FindMultiCallback<AdvertsCodeDao>() {
-            @Override
-            public void onFinish(List<AdvertsCodeDao> list) {
-                if (list != null && list.size() > 0) {
-                    AdvertsCodeDao codeDao = list.get(0);
-                    if (codeDao != null && (!codeDao.getTaskUrl().equals(""))) {
-                        dialogType = 0;
-                    } else {
-                        dialogType = 1;
-                    }
-                }
-            }
-        });
+//        LitePalDb.setZkysDb();
+//        LitePal.where("taskType =?", "1").limit(1).findAsync(AdvertsCodeDao.class).listen(new FindMultiCallback<AdvertsCodeDao>() {
+//            @Override
+//            public void onFinish(List<AdvertsCodeDao> list) {
+//                if (list != null && list.size() > 0) {
+//                    AdvertsCodeDao codeDao = list.get(0);
+//                    if (codeDao != null && (!codeDao.getTaskUrl().equals(""))) {
+//                        dialogType = 0;
+//                    } else {
+//                        dialogType = 1;
+//                    }
+//                }
+//            }
+//        });
         if (activeInfo != null) {
             mPresenter.getComboList(activeInfo.getHospitalId(), activeInfo.getDeptId());
         }
@@ -800,29 +814,102 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
                 PriceBean priceBean = gson.fromJson(data, PriceBean.class);
                 priceList = priceBean.getData();
 
-                newVideoPayDialog = new NewVideoPayDialog(getActivity(), R.style
-                        .DialogFullscreen, dialogType, priceList, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        switch (v.getId()) {
-                            case R.id.iv_close:
-                                pop();
-                                isShowDialog = false;
-                                newVideoPayDialog.dismiss();
-                                break;
-                            case R.id.btn_code:
-                                newVideoPayDialog.dismiss();
-                                showPassDialog();
-                                break;
+                //查询是否有微信任务
+                if (activeInfo != null)
+                {
+                    if (weiXinTaskData == null)
+                    {
+                        if (promptDialog == null)
+                        {
+                            promptDialog = new PromptDialog(getActivity());
                         }
+                        promptDialog.showLoading("正在加载...");
+
+                        mPresenter.getWeiXinTask("" + activeInfo.getHospitalId(),"" + activeInfo.getDeptId());
+                    }else {
+                        if (promptDialog != null)
+                        {
+                            promptDialog.dismiss();
+                        }
+
+                        showNewVideoPayDialog();
                     }
-                });
-                newVideoPayDialog.setCanceledOnTouchOutside(false);
-                newVideoPayDialog.show();
+                }
+
+
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void getComboListFail() {
+        promptDialog.dismiss();
+    }
+
+    /**
+     * 获取到了微信任务
+     * @param data
+     */
+    @Override
+    public void getWeiXinTask(WeiXinTask.WeiXinTaskData data) {
+        //显示支付界面
+        promptDialog.dismiss();
+        weiXinTaskData = data;
+        showNewVideoPayDialog();
+
+    }
+
+    @Override
+    public void getWeiXinTaskFail() {
+        promptDialog.dismiss();
+        showNewVideoPayDialog();
+    }
+
+
+    //显示支付界面
+    private void showNewVideoPayDialog()
+    {
+        newVideoPayDialog = new NewVideoPayDialog(getActivity(), R.style
+                .DialogFullscreen, weiXinTaskData, priceList, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.iv_close:
+                        pop();
+                        isShowDialog = false;
+                        newVideoPayDialog.dismiss();
+                        break;
+                    case R.id.btn_code:
+                        newVideoPayDialog.dismiss();
+                        showPassDialog();
+                        break;
+                }
+            }
+        }, new NewVideoPayDialog.IWeiXinTaskListener() {
+            @Override
+            public void onSuccess() {
+                LogUtil.d("任务已经完成");
+                FancyToast.makeText(LauncherApplication.getContext(),"任务已经完成",Toast.LENGTH_SHORT).show();
+                isPaySuccess = true;
+                newVideoPayDialog.dismiss();
+                videoView.start();
+                weiXinTaskData = null;
+
+            }
+
+            @Override
+            public void onFail() {
+                pop();
+                FancyToast.makeText(LauncherApplication.getContext(),"任务完成失败",Toast.LENGTH_SHORT).show();
+                LogUtil.d("任务完成失败");
+                newVideoPayDialog.dismiss();
+                isPaySuccess = false;
+            }
+        });
+        newVideoPayDialog.setCanceledOnTouchOutside(false);
+        newVideoPayDialog.show();
     }
 
     @Override
@@ -831,8 +918,8 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
             JSONObject jsonObject = new JSONObject(response);
             if (jsonObject.optInt("code") == 200) {
                 showToast("验证码验证成功");
-                isPaySuccess = true;
                 popEnterPassword.dismiss();
+                isPaySuccess = true;
                 videoView.start();
                 try {
                     //每次验证成功后就更新一下广告
@@ -882,25 +969,25 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
                 }
                 if (secondObj.optInt("status") != 2 && secondObj.optInt("status") != 3) {
 
-//                    if (UserUtil.getUserBean() != null)
-//                    {
+                    if (UserUtil.getUserBean() != null)
+                    {
                         //用户已经登录微信，直接显示支付页面
                         showPayDialog();
-//                    }else {
-//                        loginWeixin();
-//                    }
+                    }else {
+                        loginWeixin();
+                    }
 
 
 
                 }
             }else {
-//                if (UserUtil.getUserBean() != null)
-//                {
+                if (UserUtil.getUserBean() != null)
+                {
                     //用户已经登录微信，直接显示支付页面
                     showPayDialog();
-//                }else {
-//                    loginWeixin();
-//                }
+                }else {
+                    loginWeixin();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -930,6 +1017,12 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
                 loginDialog.dismiss();
                 FancyToast.makeText(LauncherApplication.getContext(),"微信登录成功！",Toast.LENGTH_LONG).show();
                 showPayDialog();
+                if (promptDialog == null)
+                {
+                    promptDialog = new PromptDialog(getActivity());
+                }
+                promptDialog.showLoading("正在加载...");
+
             }
 
             @Override
@@ -990,6 +1083,8 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
             e.printStackTrace();
         }
     }
+
+
 
 
     //输入验证码框

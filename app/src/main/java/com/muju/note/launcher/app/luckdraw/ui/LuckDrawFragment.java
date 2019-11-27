@@ -63,13 +63,13 @@ public class LuckDrawFragment extends BaseFragment<LuckPresenter> implements Luc
     public void initData() {
         EventBus.getDefault().register(this);
         if (UserUtil.getUserBean() != null) {
-            mPresenter.getPointList(UserUtil.getUserBean().getId());
+            mPresenter.getPointList(UserUtil.getUserBean().getUserId());
         }
 
         luckdrawView.setOnLuckStartListener(new LuckDrawView.OnStartListener() {
             @Override
             public void start() {
-                mPresenter.startLuck(UserUtil.getUserBean().getId());
+                mPresenter.startLuck(UserUtil.getUserBean().getUserId());
                 handler.sendEmptyMessageDelayed(1, 3000);
             }
         });
@@ -95,7 +95,7 @@ public class LuckDrawFragment extends BaseFragment<LuckPresenter> implements Luc
     //获取奖品列表个人信息
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(GetGiftListEvent event) {
-        mPresenter.getPointList(UserUtil.getUserBean().getId());
+        mPresenter.getPointList(UserUtil.getUserBean().getUserId());
     }
 
     @Override

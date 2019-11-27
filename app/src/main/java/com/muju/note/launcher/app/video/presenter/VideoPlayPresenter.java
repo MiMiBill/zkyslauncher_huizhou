@@ -3,12 +3,21 @@ package com.muju.note.launcher.app.video.presenter;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
+import com.muju.note.launcher.app.video.bean.WeiXinTask;
 import com.muju.note.launcher.app.video.contract.VideoPlayContract;
 import com.muju.note.launcher.base.BasePresenter;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.url.UrlUtil;
+import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.log.LogUtil;
+import com.muju.note.launcher.util.user.UserUtil;
+import com.google.gson.Gson;
+import java.util.HashMap;
+import java.util.Map;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 public class VideoPlayPresenter extends BasePresenter<VideoPlayContract.View> implements VideoPlayContract.Presenter {
     //查询套餐
@@ -34,6 +43,8 @@ public class VideoPlayPresenter extends BasePresenter<VideoPlayContract.View> im
                         if(mView==null){
                             LogUtil.e("mView为空");
                             return;
+                        }else {
+                            mView.getComboListFail();
                         }
                     }
                 });
@@ -54,7 +65,6 @@ public class VideoPlayPresenter extends BasePresenter<VideoPlayContract.View> im
                         }
                         mView.verfycode(response.body());
                     }
-
 
                     @Override
                     public void onError(Response<String> response) {
@@ -129,5 +139,110 @@ public class VideoPlayPresenter extends BasePresenter<VideoPlayContract.View> im
                         }
                     }
                 });
+    }
+
+    @Override
+    public void getWeiXinTask(String hospitalId, String deptId) {
+
+
+
+//        OkHttpClient okHttpClient = new OkHttpClient();
+//
+//        RequestBody body = new FormBody.Builder()
+//                .add("imei", imei)
+//                .add("pushCode", "" + ActiveUtils.getPadActiveInfo().getBedId())
+////                .add("format", "json")
+//                .build();
+//        Request request = new Request.Builder().url(UrlUtil.getWeiXinTasks(hospitalId,deptId))
+//                .post(body)
+//                .header("authorization","Bearer " + UserUtil.getUserBean().getAccessToken())
+//                .build();
+//
+//        okHttpClient.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                LogUtil.d(e.getMessage());
+//                if(mView==null){
+//                    LogUtil.e("mView为空");
+//                    return;
+//                }else {
+//                    mView.getWeiXinTaskFail();
+//                }
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, okhttp3.Response response) throws IOException {
+//                if(mView==null){
+//                    LogUtil.e("mView为空");
+//                    return;
+//                }
+//                String body = response.body().string();
+//                LogUtil.d("获取广告：" + body);
+//                WeiXinTask weiXinTask = new Gson().fromJson(body, WeiXinTask.class);
+//                if (weiXinTask != null && weiXinTask.isSuccessful())
+//                {
+//                    WeiXinTask.WeiXinTaskData data =  weiXinTask.getData();
+//                    if (data != null)
+//                    {
+//                        mView.getWeiXinTask(data);
+//                    }else {
+//                        mView.getWeiXinTaskFail();
+//                    }
+//                }else {
+//                    mView.getWeiXinTaskFail();
+//                }
+//            }
+//        });
+
+        String imei = MobileInfoUtil.getIMEI(LauncherApplication.getInstance());
+        Map<String,String> map = new HashMap<>();
+        map.put("imei",imei);
+        map.put("pushCode","" + ActiveUtils.getPadActiveInfo().getBedId());
+        String json = new Gson().toJson(map);
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody requestBody = RequestBody.create(mediaType,json);
+
+        OkGo.<String>post(UrlUtil.getWeiXinTasks(hospitalId,deptId))
+                .tag(this)
+                .removeAllHeaders()
+                .headers("authorization","Bearer " + UserUtil.getUserBean().getAccess_token())
+                .upRequestBody(requestBody)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }
+                        String body = response.body();
+                        WeiXinTask weiXinTask = new Gson().fromJson(body, WeiXinTask.class);
+                        if (weiXinTask != null && weiXinTask.isSuccessful())
+                        {
+                            WeiXinTask.WeiXinTaskData data =  weiXinTask.getData();
+                            if (data != null)
+                            {
+                                mView.getWeiXinTask(data);
+                            }else {
+                                mView.getWeiXinTaskFail();
+                            }
+                        }else {
+                            mView.getWeiXinTaskFail();
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        LogUtil.d(response.body());
+                        if(mView==null){
+                            LogUtil.e("mView为空");
+                            return;
+                        }else {
+                            mView.getWeiXinTaskFail();
+                        }
+                    }
+                });
+
     }
 }

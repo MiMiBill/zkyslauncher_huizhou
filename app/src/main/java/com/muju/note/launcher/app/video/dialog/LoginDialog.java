@@ -22,12 +22,15 @@ import com.muju.note.launcher.app.video.bean.UserBean;
 import com.muju.note.launcher.okgo.BaseBean;
 import com.muju.note.launcher.okgo.JsonCallback;
 import com.muju.note.launcher.url.UrlUtil;
+import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.qr.QrCodeUtils;
 import com.muju.note.launcher.util.user.UserUtil;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,6 +51,7 @@ public class LoginDialog extends Dialog {
 
     public LoginDialog(@NonNull Context context, int themeResId, OnLoginListener loginListener) {
         super(context, themeResId);
+
         this.loginListener=loginListener;
         this.context=context;
     }
@@ -56,6 +60,7 @@ public class LoginDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_wxlogin);
+        EventBus.getDefault().register(LoginDialog.this);
         ButterKnife.bind(this);
 
         ivDissmiss.setOnClickListener(new View.OnClickListener() {
@@ -69,8 +74,8 @@ public class LoginDialog extends Dialog {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String code=UrlUtil.getWxLogin()+ MobileInfoUtil.getIMEI(context);
-                LogUtil.d("code:%s", code);
+                String code=UrlUtil.getWxLogin() + ActiveUtils.getPadActiveInfo().getBedId();//+ MobileInfoUtil.getIMEI(context);
+                LogUtil.d("url:%s", code);
                 Bitmap bitmap=QrCodeUtils.generateOriginalBitmap(code, 418, 418);
                 Message msg=new Message();
                 msg.what=0x03;
@@ -79,18 +84,26 @@ public class LoginDialog extends Dialog {
             }
         }).start();
 
-        startQueryUser();
+//        startQueryUser();
         handler.sendEmptyMessageDelayed(0x02,1000*60);
 
         setOnDismissListener(new OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
+                EventBus.getDefault().unregister(LoginDialog.this);
                 OkGo.getInstance().cancelTag(UrlUtil.getUserInfo()+MobileInfoUtil.getIMEI(context));
-                handler.removeMessages(0x01);
+//                handler.removeMessages(0x01);
                 handler.removeMessages(0x02);
                 handler=null;
             }
         });
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(UserInfoEvent userInfoEvent) {
+        LogUtil.d("LoginDialog 收到登录信息");
+        loginListener.onSuccess();
     }
 
     private void startQueryUser(){
@@ -112,7 +125,7 @@ public class LoginDialog extends Dialog {
                     public void onError(Response<BaseBean<UserBean>> response) {
                         super.onError(response);
 
-                        handler.sendEmptyMessageDelayed(0x01,1000*2);
+//                        handler.sendEmptyMessageDelayed(0x01,1000*2);
                     }
                 });
     }
@@ -123,7 +136,7 @@ public class LoginDialog extends Dialog {
             super.handleMessage(msg);
             switch (msg.what){
                 case 0x01:
-                    startQueryUser();
+//                    startQueryUser();
                     break;
 
                 case 0x02:

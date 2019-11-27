@@ -90,6 +90,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment imp
     public void onPause() {
         super.onPause();
         mDelegate.onPause();
+
     }
 
     @Override

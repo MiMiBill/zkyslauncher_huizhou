@@ -3,6 +3,8 @@ package com.muju.note.launcher.app.video.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
@@ -27,6 +29,8 @@ import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
 import com.muju.note.launcher.app.video.adapter.VideoPriceAdapter;
 import com.muju.note.launcher.app.video.bean.PayBean;
 import com.muju.note.launcher.app.video.bean.PriceBean;
+import com.muju.note.launcher.app.video.bean.WeiXinTask;
+import com.muju.note.launcher.app.video.event.WeiXinTaskDone;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.url.UrlUtil;
@@ -35,6 +39,9 @@ import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.qr.QrCodeUtils;
 import com.muju.note.launcher.util.toast.FancyToast;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 import org.litepal.LitePal;
 import org.litepal.crud.callback.FindMultiCallback;
@@ -93,7 +100,8 @@ public class NewVideoPayDialog extends Dialog {
     TextView tvPricePay;
     @BindView(R.id.rel_dialog)
     RelativeLayout relDialog;
-    private int type = 0;
+   // private int type = 0;
+    private WeiXinTask.WeiXinTaskData weiXinTaskData;
     private Context context;
     private int selectIndexId=-1;
     private int selectPosition=0;
@@ -101,13 +109,43 @@ public class NewVideoPayDialog extends Dialog {
     private View.OnClickListener listener;
     private List<PriceBean.DataBean> priceList=new ArrayList<>();
     private VideoPriceAdapter videoPriceAdapter;
+    private IWeiXinTaskListener iWeiXinTaskListener;
 
-    public NewVideoPayDialog(Context context, int themeResId, int type,List<PriceBean.DataBean> priceList,View.OnClickListener listener) {
+    private Handler handler = new Handler()
+    {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            if (iWeiXinTaskListener != null)
+            {
+                iWeiXinTaskListener.onFail();
+            }
+
+        }
+    };
+
+
+    public interface IWeiXinTaskListener{
+        void onSuccess();
+        void onFail();
+    }
+
+//    public NewVideoPayDialog(Context context, int themeResId, int type,List<PriceBean.DataBean> priceList,View.OnClickListener listener) {
+//        super(context, themeResId);
+//        this.type = type;
+//        this.context = context;
+//        this.priceList=priceList;
+//        this.listener=listener;
+//    }
+
+        public NewVideoPayDialog(Context context, int themeResId, WeiXinTask.WeiXinTaskData weiXinTaskData, List<PriceBean.DataBean> priceList, View.OnClickListener listener,IWeiXinTaskListener weiXinTaskListener) {
         super(context, themeResId);
-        this.type = type;
+        this.weiXinTaskData = weiXinTaskData;
         this.context = context;
         this.priceList=priceList;
         this.listener=listener;
+        this.iWeiXinTaskListener = weiXinTaskListener;
     }
 
     @Override
@@ -115,6 +153,7 @@ public class NewVideoPayDialog extends Dialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_pay_video);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         if(priceList.size()>0){
             initRecyclerview();
             initPrice(0);
@@ -122,20 +161,43 @@ public class NewVideoPayDialog extends Dialog {
             payByXcx();
         }
 
-
         ivClose.setOnClickListener(listener);
         btnCode.setOnClickListener(listener);
     }
 
+    //接收推送，微信公众号任务已经完成
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onWeiXinTaskDone(WeiXinTaskDone weiXinTaskDone)
+    {
+        if (iWeiXinTaskListener != null)
+        {
+            iWeiXinTaskListener.onSuccess();
+        }
+
+    }
+
+
+
+    @Override
+    public void dismiss() {
+        EventBus.getDefault().unregister(this);
+        handler.removeCallbacksAndMessages(null);
+        super.dismiss();
+    }
 
     private void initPrice(int position) {
         llyPayXcx.setVisibility(View.GONE);
         llyPayTask.setVisibility(View.GONE);
         llyPayWechat.setVisibility(View.GONE);
         llyPayRent.setVisibility(View.VISIBLE);
-        if(type==0){
-            llyTask.setVisibility(View.VISIBLE);
-        }
+//        if(type==0){//0  标识公众号有任务
+//            llyTask.setVisibility(View.VISIBLE);
+//        }
+         if (weiXinTaskData != null)
+         {
+             llyTask.setVisibility(View.VISIBLE);
+         }
+
         llyCabinet.setVisibility(View.VISIBLE);
         PriceBean.DataBean dataBean = priceList.get(position);
         selectIndexId=dataBean.getId();
@@ -192,6 +254,7 @@ public class NewVideoPayDialog extends Dialog {
 
 
 
+
     @OnClick({R.id.btn_pay,R.id.lly_cabinet,R.id.lly_task,R.id.lly_change})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -202,7 +265,8 @@ public class NewVideoPayDialog extends Dialog {
                 payByXcx();
                 break;
             case R.id.lly_task:
-                getWxType();
+//                getWxType();//老接口没有用
+                 doWinXinTask();
                 break;
             case R.id.lly_change:
                 changePayType();
@@ -210,10 +274,36 @@ public class NewVideoPayDialog extends Dialog {
         }
     }
 
+    /**
+     * 用接口的数据
+     */
+    private void doWinXinTask() {
 
+        //5分钟内不完整任务，那么失败
+        handler.sendEmptyMessageDelayed(1,2 * 60 * 1000);
+        final int type = 0;
+        llyPayWechat.setVisibility(View.GONE);
+        llyPayRent.setVisibility(View.GONE);
+        llyCabinet.setVisibility(View.GONE);
+        llyTask.setVisibility(View.GONE);
+        llyPayXcx.setVisibility(View.GONE);
+        ivType.setImageResource(R.mipmap.pay_iv_task);
+        llyPayTask.setVisibility(View.VISIBLE);
+        if(type==1){
+            llyTaskCode.setVisibility(View.VISIBLE);
+            llyTaskCodeUser.setVisibility(View.GONE);
+        }else {
+            llyTaskCode.setVisibility(View.GONE);
+            llyTaskCodeUser.setVisibility(View.VISIBLE);
+        }
+        Glide.with(context).load(weiXinTaskData.getTaskUrl()).into(ivCode);
+        tvGetCode.setText("公众号内回复"+weiXinTaskData.getCode());
+
+    }
 
 
     //获取公众号type
+    @Deprecated
     private void getWxType() {
         OkGo.<String>get(UrlUtil.getWxType())
                 .tag(UrlUtil.getWxType())
@@ -257,6 +347,7 @@ public class NewVideoPayDialog extends Dialog {
 
 
     //做任务
+    @Deprecated
     private void doTaskVideo(final int type) {
         llyPayWechat.setVisibility(View.GONE);
         llyPayRent.setVisibility(View.GONE);

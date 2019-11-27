@@ -44,7 +44,7 @@ public class AdvideoViewFragment extends BaseFragment<PublicPresenter> implement
             switch (msg.what) {
                 case 1:
                     if (isTask)
-                        mPresenter.doTask(UserUtil.getUserBean().getId(), advertId);
+                        mPresenter.doTask(UserUtil.getUserBean().getUserId(), advertId);
                     break;
             }
         }

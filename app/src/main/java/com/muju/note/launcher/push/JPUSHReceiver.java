@@ -8,13 +8,17 @@ import android.text.TextUtils;
 
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.Cabinet.event.ReturnBedEvent;
+import com.muju.note.launcher.app.adtask.event.UserInfoEvent;
 import com.muju.note.launcher.app.home.event.PatientEvent;
 import com.muju.note.launcher.app.satisfaction.event.GotoSatisfationEvent;
 import com.muju.note.launcher.app.timetask.event.TimeTaskEvent;
 import com.muju.note.launcher.app.video.bean.PayEntity;
 import com.muju.note.launcher.app.video.bean.PayEvent;
+import com.muju.note.launcher.app.video.bean.UserBean;
 import com.muju.note.launcher.app.video.bean.VideoEvent;
+import com.muju.note.launcher.app.video.bean.WeiXinTask;
 import com.muju.note.launcher.app.video.db.PayInfoDao;
+import com.muju.note.launcher.app.video.event.WeiXinTaskDone;
 import com.muju.note.launcher.app.video.util.DbHelper;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.entity.BedSideEvent;
@@ -36,6 +40,9 @@ import org.litepal.LitePal;
 import java.util.Iterator;
 
 import cn.jpush.android.api.JPushInterface;
+
+import com.google.gson.Gson;
+import com.muju.note.launcher.util.user.UserUtil;
 
 
 /**
@@ -148,6 +155,13 @@ public class JPUSHReceiver extends BroadcastReceiver {
                     case 16: // 取消定时事件
                         EventBus.getDefault().post(new TimeTaskEvent(15));
                         break;
+                    case 999: // 取消定时事件
+//                        EventBus.getDefault().post(new TimeTaskEvent(15));
+//                        String data = jsonObject.getString("data");
+//                        UserBean userBean = new Gson().fromJson(data, UserBean.class);
+//                        UserUtil.setUserBean(userBean);
+//                        EventBus.getDefault().post(new UserInfoEvent(userBean));
+                        break;
                 }
                 //processCustomMessage(context, bundle);
 
@@ -156,6 +170,25 @@ public class JPUSHReceiver extends BroadcastReceiver {
                 int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
                 LogUtil.d("[JPUSHReceiver] 接收到推送下来的通知的ID: " + notifactionId);
 
+
+                String body = bundle.getString("cn.jpush.android.ALERT");
+                LogUtil.d("[JPUSHReceiver] 通知消息: " + body);
+                if (!TextUtils.isEmpty(body)){
+                    JSONObject jsonObject = new JSONObject(body);
+                    int  alertType =  jsonObject.getInt("alertType");
+                    LogUtil.d("[JPUSHReceiver] alertType: " + alertType);
+                    if (alertType == 999)
+                    {
+                        String data = jsonObject.getString("data");
+                        UserBean userBean = new Gson().fromJson(data, UserBean.class);
+                        UserUtil.setUserBean(userBean);
+                        EventBus.getDefault().post(new UserInfoEvent(userBean));
+                    }else if (alertType == 888)
+                    {
+                        EventBus.getDefault().post(new WeiXinTaskDone());
+                    }
+                }
+//
             } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
                 LogUtil.d("[JPUSHReceiver] 用户点击打开了通知");
                 //打开自定义的Activity

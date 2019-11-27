@@ -17,7 +17,7 @@ public class PrisePresenter extends BasePresenter<PriseContract.View> implements
     public void useReward(int typeId, int count) {
         OkGo.<BaseBean<PriseBean>>post(UrlUtil.useReward())
                 .tag(this)
-                .params("userId", UserUtil.getUserBean().getId())
+                .params("userId", UserUtil.getUserBean().getUserId())
                 .params("typeId", typeId)
                 .params("count", count)
                 .execute(new JsonCallback<BaseBean<PriseBean>>() {

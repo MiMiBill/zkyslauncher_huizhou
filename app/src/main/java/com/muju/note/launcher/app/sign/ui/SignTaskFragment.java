@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.adtask.TaskListBean;
-import com.muju.note.launcher.app.publicAdress.ui.PublicNumFragment;
 import com.muju.note.launcher.app.publicui.AdvideoViewFragment;
 import com.muju.note.launcher.app.sign.bean.TaskBean;
 import com.muju.note.launcher.app.sign.contract.SignContract;
@@ -109,7 +108,7 @@ public class SignTaskFragment extends BaseFragment<SignPresenter> implements Sig
             case R.id.tv_sign:
                 setTask();
                 if (signBean != null) {
-                    mPresenter.doTask(UserUtil.getUserBean().getId(), signBean.getId());
+                    mPresenter.doTask(UserUtil.getUserBean().getUserId(), signBean.getId());
                 }
                 break;
             case R.id.iv_video:
