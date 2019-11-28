@@ -93,6 +93,11 @@ public class ConfigService {
                                         subDao.save();
                                     }
                                 }
+                                try {
+                                    ConfigService.getInstance().playConfig();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
                         });
 
