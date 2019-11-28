@@ -17,7 +17,7 @@ public class BtnCallPressedBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         LogUtil.d(TAG,"Call按键广播：" + intent.getAction());
 
-        if (CallKeyInfo.getsInstance().isDaytimeMode())
+        if (CallKeyInfo.getsInstance().isDaytimeMode() && CallKeyInfo.getsInstance().isEnableSwitchScreen())
         {
             EventBus.getDefault().post(new CallKeyDownEvent(false,"Call按键，来自广播"));
         }

@@ -77,6 +77,12 @@ public class MainService extends Service {
     private void initByReboot(){
         boolean rebootPhone = SPUtil.getBoolean(SpTopics.SP_REBOOT);
         LogUtil.d(TAG,"自启动状态："+rebootPhone);
+
+        try {
+            ConfigService.getInstance().playConfig();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if(rebootPhone){
             // 自启动状态，不做操作
         }else {

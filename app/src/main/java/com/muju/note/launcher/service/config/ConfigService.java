@@ -2,6 +2,7 @@ package com.muju.note.launcher.service.config;
 
 
 import android.content.Intent;
+import android.security.keystore.KeyInfo;
 import android.text.TextUtils;
 
 import com.lzy.okgo.OkGo;
@@ -133,6 +134,10 @@ public class ConfigService {
 
                             case "freeTime":
                                 setVideoPayTime(dao);
+                                break;
+                            case "enableSwitchScreen":
+                                CallKeyInfo.getsInstance().setEnableSwitchScreen(true);
+                                LogUtil.d("使能了按键开关屏功能");
                                 break;
                         }
                     }

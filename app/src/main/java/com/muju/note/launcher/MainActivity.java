@@ -71,6 +71,7 @@ import com.muju.note.launcher.base.BaseActivity;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.broadcast.ScreenOffAdminReceiver;
+import com.muju.note.launcher.callkey.bean.CallKeyInfo;
 import com.muju.note.launcher.callkey.event.CallKeyDownEvent;
 import com.muju.note.launcher.entity.AdvertWebEntity;
 import com.muju.note.launcher.entity.BedSideEvent;
@@ -116,6 +117,7 @@ import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import me.yokeyword.fragmentation.ISupportFragment;
+import me.yokeyword.fragmentation.SupportFragment;
 
 public class MainActivity extends BaseActivity<MainPresenter> implements MainPresenter.TaskListener, MainContract.View {
 
@@ -337,9 +339,14 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
                     @Override
                     public void accept(Long aLong) throws Exception {
                         //惠州医院取消待机画面，直接进入锁屏界面
-//                        start(new ProtectionProcessFragment(), SupportFragment.SINGLETASK);
                         LogUtil.d("30秒关屏定时器到了");
-                         SystemUtils.screenOff();
+                        if (CallKeyInfo.getsInstance().isEnableSwitchScreen())
+                        {
+                            SystemUtils.screenOff();
+                        }else {
+                            start(new ProtectionProcessFragment(), SupportFragment.SINGLETASK);
+                        }
+
                     }
                 });
 
