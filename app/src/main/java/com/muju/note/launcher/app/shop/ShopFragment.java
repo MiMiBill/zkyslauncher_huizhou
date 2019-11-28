@@ -1,9 +1,6 @@
 package com.muju.note.launcher.app.shop;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -14,9 +11,7 @@ import com.muju.note.launcher.app.publicui.NullFragment;
 import com.muju.note.launcher.base.BaseFragment;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 public class ShopFragment extends BaseFragment {
     @BindView(R.id.tv_title)

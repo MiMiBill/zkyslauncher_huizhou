@@ -19,6 +19,7 @@ import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.Cabinet.ui.CabinetFragment;
 import com.muju.note.launcher.app.activeApp.entity.ActivePadInfo;
 import com.muju.note.launcher.app.bedsidecard.ui.BedSideCardFragment;
+import com.muju.note.launcher.app.carerWorker.CarerWorkerFragment;
 import com.muju.note.launcher.app.clide.ui.ClideFragment;
 import com.muju.note.launcher.app.dialog.AdvertsDialog;
 import com.muju.note.launcher.app.finance.FinanceFragment;
@@ -48,6 +49,7 @@ import com.muju.note.launcher.app.orderfood.ui.OrderFoodFragment;
 import com.muju.note.launcher.app.setting.ui.GuideFragment;
 import com.muju.note.launcher.app.setting.ui.UserSettingFragment;
 import com.muju.note.launcher.app.setting.ui.VoiceFragment;
+
 import com.muju.note.launcher.app.shop.ShopFragment;
 import com.muju.note.launcher.app.timetask.CrontabService;
 import com.muju.note.launcher.app.video.bean.PayEntity;
@@ -226,9 +228,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         rvMenu.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(), 6));
         rvMenu.setAdapter(menuAdapter);
         rvMenu.setHasFixedSize(true);
-        rvMenu.setNestedScrollingEnabled(false);
+        rvMenu.setNestedScrollingEnabled(true);
         mPresenter.getMenu();
-
         // 加载首页历史记录
         videoHisDaos = new ArrayList<>();
         homeHisVideoAdapter = new HomeHisVideoAdapter(R.layout.rv_item_home_his_video,
@@ -679,6 +680,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 break;
             case "医疗":
                 showServiceDialog();
+                break;
+            case "护工":
+                start(new CarerWorkerFragment());
                 break;
         }
     }
