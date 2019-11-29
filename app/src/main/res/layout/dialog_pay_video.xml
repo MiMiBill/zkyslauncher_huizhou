@@ -13,7 +13,7 @@
         android:gravity="center"
         android:layout_height="@dimen/px420">
         <LinearLayout
-            android:visibility="gone"
+            android:visibility="visible"
             android:id="@+id/lly_pay_rent"
             android:orientation="vertical"
             android:background="@color/white"
@@ -21,7 +21,7 @@
             android:layout_height="@dimen/px370">
             <LinearLayout
                 android:orientation="horizontal"
-                android:layout_marginTop="@dimen/px108"
+                android:layout_marginTop="@dimen/px45"
                 android:layout_marginLeft="@dimen/px61"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/px50">
@@ -112,10 +112,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
+
+           <RelativeLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content">
+
+               <Button
+                   android:id="@+id/btn_pay"
+                   android:textSize="@dimen/px18"
+                   android:textColor="@color/white"
+                   android:text="确认支付"
+                   android:layout_centerInParent="true"
+                   android:gravity="center"
+                   android:background="#40291C"
+                   android:layout_width="@dimen/px120"
+                   android:layout_height="@dimen/px45" />
+           </RelativeLayout>
             <LinearLayout
                 android:layout_marginTop="@dimen/px6"
-                android:layout_marginLeft="@dimen/px268"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
                 android:gravity="center_vertical"
                 android:layout_height="@dimen/px56">
                 <ImageView
@@ -128,15 +144,7 @@
                     android:text="我已阅读并同意服务协议"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-                <Button
-                    android:id="@+id/btn_pay"
-                    android:textSize="@dimen/px18"
-                    android:textColor="@color/white"
-                    android:text="确认支付"
-                    android:background="#40291C"
-                    android:layout_marginLeft="@dimen/px12"
-                    android:layout_width="@dimen/px120"
-                    android:layout_height="@dimen/px45" />
+
             </LinearLayout>
         </LinearLayout>
         <LinearLayout

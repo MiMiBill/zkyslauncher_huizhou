@@ -60,6 +60,7 @@ public class CarerWorkerFragment extends BaseFragment {
 
         WebSettings webSettings = wvCarerWorker.getSettings();
         webSettings.setJavaScriptEnabled(true);//允许使用js
+        webSettings.setDomStorageEnabled(true);
 
         /**
          * LOAD_CACHE_ONLY: 不使用网络，只读取本地缓存数据
@@ -73,17 +74,17 @@ public class CarerWorkerFragment extends BaseFragment {
         webSettings.setSupportZoom(false);
         webSettings.setBuiltInZoomControls(false);
       //  wvCarerWorker.loadUrl("http://zk-hugong.battcn.com/index.html?hospId=4&deptId=2");
-        String carerWorker = "http://zk-hugong.battcn.com/index.html?" +
+        String carerWorker = "http://zk-hugong-prod.battcn.com/index.html?" +
                 "hospId="+ActiveUtils.getPadActiveInfo().getHospitalId() +
                 "&deptId=" + ActiveUtils.getPadActiveInfo().getDeptId()+
                 "&bedNo=" + ActiveUtils.getPadActiveInfo().getBedNumber()+
                 "&hospName=" + ActiveUtils.getPadActiveInfo().getHospitalName()+
                 "&deptName=" + ActiveUtils.getPadActiveInfo().getDeptName()+
-                "&imei=" + ActiveUtils.getPadActiveInfo().getCode();
+                "&imei=" + ActiveUtils.getPadActiveInfo().getCode() +
+                 "&timestamp=" + System.currentTimeMillis();
         wvCarerWorker.loadUrl(carerWorker);
         LogUtil.d("carerWorker:" + carerWorker);
     }
-
 
 
     //WebViewClient主要帮助WebView处理各种通知、请求事件

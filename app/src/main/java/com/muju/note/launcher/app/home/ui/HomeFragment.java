@@ -228,7 +228,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         rvMenu.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(), 6));
         rvMenu.setAdapter(menuAdapter);
         rvMenu.setHasFixedSize(true);
-        rvMenu.setNestedScrollingEnabled(true);
+        rvMenu.setNestedScrollingEnabled(false);
         mPresenter.getMenu();
         // 加载首页历史记录
         videoHisDaos = new ArrayList<>();

@@ -28,6 +28,7 @@ import com.muju.note.launcher.app.home.event.DefaultVideoLiveEvent;
 import com.muju.note.launcher.app.video.bean.WeiXinTask;
 import com.muju.note.launcher.app.video.dialog.OnAdDialogDismissListener;
 import com.muju.note.launcher.app.video.dialog.VideoOrImageDialog;
+import com.muju.note.launcher.app.video.event.WeiXinTaskEvent;
 import com.muju.note.launcher.app.video.util.DbHelper;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.entity.AdvertWebEntity;
@@ -63,6 +64,9 @@ public class AdvertsUtil {
     public static AdvertsUtil advertsUtil = null;
 
     private WeiXinTask.WeiXinTaskData weiXinTaskData;
+
+    private boolean isNoWeiXinTaskData = false;
+
     private boolean isUserTouch=false;
     public static AdvertsUtil getInstance() {
         if (advertsUtil == null) {
@@ -75,8 +79,20 @@ public class AdvertsUtil {
         return weiXinTaskData;
     }
 
+    public void setWeiXinTaskData(WeiXinTask.WeiXinTaskData weiXinTaskData) {
+        this.weiXinTaskData = weiXinTaskData;
+    }
+
+    public  boolean isIsNoWeiXinTaskData() {
+        return isNoWeiXinTaskData;
+    }
+
+    public  void setIsNoWeiXinTaskData(boolean isNoWeiXinTaskData) {
+        this.isNoWeiXinTaskData = isNoWeiXinTaskData;
+    }
+
     //更新微信任务数据
-    public void updateWeiXinTask(String hospitalId, String deptId) {
+    public void getWeiXinTask(String hospitalId, String deptId) {
 
         String imei = MobileInfoUtil.getIMEI(LauncherApplication.getInstance());
         Map<String,String> map = new HashMap<>();
@@ -85,6 +101,7 @@ public class AdvertsUtil {
         String json = new Gson().toJson(map);
         MediaType mediaType = MediaType.parse("application/json");
         RequestBody requestBody = RequestBody.create(mediaType,json);
+
         OkGo.<String>post(UrlUtil.getWeiXinTasks(hospitalId,deptId))
                 .tag(this)
                 .removeAllHeaders()
@@ -99,22 +116,18 @@ public class AdvertsUtil {
                         if (weiXinTask != null && weiXinTask.isSuccessful())
                         {
                             WeiXinTask.WeiXinTaskData data =  weiXinTask.getData();
-                            if (data != null)
-                            {
-                                weiXinTaskData = data;
-                            }else {
-                                weiXinTaskData = null;
-                            }
+                            EventBus.getDefault().post(new WeiXinTaskEvent(data));
                         }else {
-                            weiXinTaskData = null;;
+                            EventBus.getDefault().post(new WeiXinTaskEvent());
                         }
 
-                    }
 
+                    }
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
                         LogUtil.d(response.body());
+                        EventBus.getDefault().post(new WeiXinTaskEvent());
                     }
                 });
 

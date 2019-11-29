@@ -814,27 +814,28 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
                 PriceBean priceBean = gson.fromJson(data, PriceBean.class);
                 priceList = priceBean.getData();
 
+                showNewVideoPayDialog();
                 //查询是否有微信任务
-                if (activeInfo != null)
-                {
-                    if (weiXinTaskData == null)
-                    {
-                        if (promptDialog == null)
-                        {
-                            promptDialog = new PromptDialog(getActivity());
-                        }
-                        promptDialog.showLoading("正在加载...");
-
-                        mPresenter.getWeiXinTask("" + activeInfo.getHospitalId(),"" + activeInfo.getDeptId());
-                    }else {
-                        if (promptDialog != null)
-                        {
-                            promptDialog.dismiss();
-                        }
-
-                        showNewVideoPayDialog();
-                    }
-                }
+//                if (activeInfo != null)
+//                {
+//                    if (weiXinTaskData == null)
+//                    {
+//                        if (promptDialog == null)
+//                        {
+//                            promptDialog = new PromptDialog(getActivity());
+//                        }
+//                        promptDialog.showLoading("正在加载...");
+//
+//                        mPresenter.getWeiXinTask("" + activeInfo.getHospitalId(),"" + activeInfo.getDeptId());
+//                    }else {
+//                        if (promptDialog != null)
+//                        {
+//                            promptDialog.dismiss();
+//                        }
+//
+//
+//                    }
+//                }
 
 
             }
@@ -969,25 +970,27 @@ public class WotvPlayFragment extends BaseFragment<VideoPlayPresenter> implement
                 }
                 if (secondObj.optInt("status") != 2 && secondObj.optInt("status") != 3) {
 
-                    if (UserUtil.getUserBean() != null)
-                    {
                         //用户已经登录微信，直接显示支付页面
                         showPayDialog();
-                    }else {
-                        loginWeixin();
-                    }
+//                    if (UserUtil.getUserBean() != null)
+//                    {
+//                        //用户已经登录微信，直接显示支付页面
+//                        showPayDialog();
+//                    }else {
+//                        loginWeixin();
+//                    }
 
 
 
                 }
             }else {
-                if (UserUtil.getUserBean() != null)
-                {
-                    //用户已经登录微信，直接显示支付页面
+//                if (UserUtil.getUserBean() != null)
+//                {
+//                    //用户已经登录微信，直接显示支付页面
                     showPayDialog();
-                }else {
-                    loginWeixin();
-                }
+//                }else {
+//                    loginWeixin();
+//                }
             }
         } catch (Exception e) {
             e.printStackTrace();

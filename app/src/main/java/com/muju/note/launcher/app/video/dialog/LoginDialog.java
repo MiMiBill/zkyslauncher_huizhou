@@ -37,8 +37,7 @@ import butterknife.ButterKnife;
 
 public class LoginDialog extends Dialog {
 
-    @BindView(R.id.tvTitle)
-    TextView tvTitle;
+
     @BindView(R.id.rel_dismiss)
     RelativeLayout ivDissmiss;
     @BindView(R.id.iv_login_code)

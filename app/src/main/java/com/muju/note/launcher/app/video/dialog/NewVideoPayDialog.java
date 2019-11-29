@@ -1,5 +1,6 @@
 package com.muju.note.launcher.app.video.dialog;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -31,13 +32,18 @@ import com.muju.note.launcher.app.video.bean.PayBean;
 import com.muju.note.launcher.app.video.bean.PriceBean;
 import com.muju.note.launcher.app.video.bean.WeiXinTask;
 import com.muju.note.launcher.app.video.event.WeiXinTaskDone;
+import com.muju.note.launcher.app.video.event.WeiXinTaskEvent;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.url.UrlUtil;
+import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.DateUtil;
+import com.muju.note.launcher.util.adverts.AdvertsUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
+import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.qr.QrCodeUtils;
 import com.muju.note.launcher.util.toast.FancyToast;
+import com.muju.note.launcher.util.user.UserUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -52,6 +58,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.leefeng.promptlibrary.PromptDialog;
+
 //支付页面
 public class NewVideoPayDialog extends Dialog {
     @BindView(R.id.recyclerview)
@@ -101,8 +109,8 @@ public class NewVideoPayDialog extends Dialog {
     @BindView(R.id.rel_dialog)
     RelativeLayout relDialog;
    // private int type = 0;
-    private WeiXinTask.WeiXinTaskData weiXinTaskData;
-    private Context context;
+
+    private Activity context;
     private int selectIndexId=-1;
     private int selectPosition=0;
     private double payPrice=0.0;
@@ -110,7 +118,8 @@ public class NewVideoPayDialog extends Dialog {
     private List<PriceBean.DataBean> priceList=new ArrayList<>();
     private VideoPriceAdapter videoPriceAdapter;
     private IWeiXinTaskListener iWeiXinTaskListener;
-
+    private LoginDialog loginDialog;
+    private  PromptDialog promptDialog;
     private Handler handler = new Handler()
     {
         @Override
@@ -139,13 +148,13 @@ public class NewVideoPayDialog extends Dialog {
 //        this.listener=listener;
 //    }
 
-        public NewVideoPayDialog(Context context, int themeResId, WeiXinTask.WeiXinTaskData weiXinTaskData, List<PriceBean.DataBean> priceList, View.OnClickListener listener,IWeiXinTaskListener weiXinTaskListener) {
+        public NewVideoPayDialog(Activity context, int themeResId, WeiXinTask.WeiXinTaskData weiXinTaskData, List<PriceBean.DataBean> priceList, View.OnClickListener listener,IWeiXinTaskListener weiXinTaskListener) {
         super(context, themeResId);
-        this.weiXinTaskData = weiXinTaskData;
         this.context = context;
         this.priceList=priceList;
         this.listener=listener;
         this.iWeiXinTaskListener = weiXinTaskListener;
+        this.promptDialog = new PromptDialog(context);
     }
 
     @Override
@@ -171,11 +180,11 @@ public class NewVideoPayDialog extends Dialog {
     {
         if (iWeiXinTaskListener != null)
         {
+            AdvertsUtil.getInstance().setWeiXinTaskData(null);
             iWeiXinTaskListener.onSuccess();
         }
 
     }
-
 
 
     @Override
@@ -193,10 +202,10 @@ public class NewVideoPayDialog extends Dialog {
 //        if(type==0){//0  标识公众号有任务
 //            llyTask.setVisibility(View.VISIBLE);
 //        }
-         if (weiXinTaskData != null)
-         {
+//         if (weiXinTaskData != null)
+//         {
              llyTask.setVisibility(View.VISIBLE);
-         }
+//         }
 
         llyCabinet.setVisibility(View.VISIBLE);
         PriceBean.DataBean dataBean = priceList.get(position);
@@ -266,7 +275,24 @@ public class NewVideoPayDialog extends Dialog {
                 break;
             case R.id.lly_task:
 //                getWxType();//老接口没有用
-                 doWinXinTask();
+
+                 if (UserUtil.getUserBean() == null)
+                 {
+                     //用户已经登录微信，直接显示支付页面
+                     loginWeixin();
+                 }else {
+                     if (AdvertsUtil.getInstance().getWeiXinTaskData() == null)
+                     {
+                         if (AdvertsUtil.getInstance().isIsNoWeiXinTaskData())
+                         {
+                             FancyToast.makeText(LauncherApplication.getContext(),"目前没有可以做的任务！",Toast.LENGTH_SHORT).show();
+                         }else {
+                             AdvertsUtil.getInstance().getWeiXinTask("" + ActiveUtils.getPadActiveInfo().getHospitalId(),"" + ActiveUtils.getPadActiveInfo().getDeptId());
+                         }
+                     }else {
+                         doWinXinTask();
+                     }
+                 }
                 break;
             case R.id.lly_change:
                 changePayType();
@@ -274,11 +300,60 @@ public class NewVideoPayDialog extends Dialog {
         }
     }
 
+
+    /**
+     * 登录微信
+     */
+    private void loginWeixin(){
+
+        FancyToast.makeText(LauncherApplication.getContext(),"请先登录微信", Toast.LENGTH_LONG).show();
+
+        loginDialog = new LoginDialog(getContext(), R.style
+                .DialogFullscreen, new LoginDialog.OnLoginListener() {
+            @Override
+            public void onSuccess() {
+                LogUtil.d("微信登录成功");
+                loginDialog.dismiss();
+                FancyToast.makeText(LauncherApplication.getContext(),"微信登录成功！",Toast.LENGTH_LONG).show();
+                AdvertsUtil.getInstance().getWeiXinTask("" + ActiveUtils.getPadActiveInfo().getHospitalId(),"" + ActiveUtils.getPadActiveInfo().getDeptId());
+                promptDialog.showLoading("正在加载...");
+
+
+            }
+
+            @Override
+            public void onFail() {
+                LogUtil.d("微信登录失败");
+                promptDialog.dismiss();
+                FancyToast.makeText(LauncherApplication.getContext(),"微信登录失败！",Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+        loginDialog.setCanceledOnTouchOutside(false);
+        loginDialog.show();
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void winXinTaskEvent(WeiXinTaskEvent weiXinTaskEvent)
+    {
+        promptDialog.dismiss();
+        AdvertsUtil.getInstance().setWeiXinTaskData(weiXinTaskEvent.weiXinTaskData);
+        AdvertsUtil.getInstance().setIsNoWeiXinTaskData(AdvertsUtil.getInstance().getWeiXinTaskData() == null);
+        doWinXinTask();
+    }
+
     /**
      * 用接口的数据
      */
     private void doWinXinTask() {
 
+        if (AdvertsUtil.getInstance().getWeiXinTaskData() == null)
+        {
+            FancyToast.makeText(LauncherApplication.getContext(),"目前没有可以做的任务！",Toast.LENGTH_SHORT).show();
+            return;
+        }
         //5分钟内不完整任务，那么失败
         handler.sendEmptyMessageDelayed(1,2 * 60 * 1000);
         final int type = 0;
@@ -296,8 +371,8 @@ public class NewVideoPayDialog extends Dialog {
             llyTaskCode.setVisibility(View.GONE);
             llyTaskCodeUser.setVisibility(View.VISIBLE);
         }
-        Glide.with(context).load(weiXinTaskData.getTaskUrl()).into(ivCode);
-        tvGetCode.setText("公众号内回复"+weiXinTaskData.getCode());
+        Glide.with(context).load(AdvertsUtil.getInstance().getWeiXinTaskData().getTaskUrl()).into(ivCode);
+        tvGetCode.setText("公众号内回复"+AdvertsUtil.getInstance().getWeiXinTaskData().getCode());
 
     }
 

@@ -31,7 +31,7 @@ public class VideoPriceAdapter extends BaseQuickAdapter<PriceBean.DataBean, Vide
     protected void convert(VideoPriceAdapter.PriceViewHolder helper, PriceBean.DataBean item) {
         if (item.isCheck()) {
             helper.tvPrice.setBackgroundResource(R.drawable.pay_price_5_select_bg);
-            helper.tvPrice.setTextColor(context.getResources().getColor(R.color.white));
+            helper.tvPrice.setTextColor(context.getResources().getColor(R.color.black_gray_333));
         } else {
             helper.tvPrice.setBackgroundResource(R.drawable.pay_price_5_bg);
             helper.tvPrice.setTextColor(context.getResources().getColor(R.color.black));

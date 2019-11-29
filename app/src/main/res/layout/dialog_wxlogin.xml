@@ -1,44 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="400px"
-    android:layout_height="400px"
-    android:background="@mipmap/login_bg">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000">
 
-    <LinearLayout
-        android:id="@+id/llPayCode"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <RelativeLayout
-            android:id="@+id/rel_dismiss"
-            android:layout_gravity="right"
-            android:layout_width="@dimen/px48"
-            android:layout_height="@dimen/px48">
-            <ImageView
-                android:id="@+id/iv_dissmiss"
-                android:layout_width="@dimen/px26"
-                android:layout_height="@dimen/px26"
-                android:layout_marginTop="@dimen/px10"
-                android:layout_marginRight="@dimen/px10"
-                android:src="@mipmap/icon_login_close" />
-        </RelativeLayout>
-        <TextView
-            android:id="@+id/tvTitle"
-            android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="请用微信扫码登录"
-            android:textColor="#155069"
-            android:textSize="24px"
-            android:textStyle="bold" />
+
+    <RelativeLayout
+        android:id="@+id/rl_top"
+        android:background="@mipmap/wei_xin_login_dialog"
+        android:layout_width="@dimen/px700"
+        android:layout_marginTop="@dimen/px125"
+        android:layout_height="@dimen/px420">
 
         <ImageView
             android:id="@+id/iv_login_code"
             android:layout_width="260px"
             android:layout_height="260px"
             android:layout_gravity="center"
+            android:layout_centerInParent="true"
             android:layout_marginTop="@dimen/px20"
             android:layout_marginBottom="50px" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_type"
+        android:src="@mipmap/wei_xin_login_dialog_top"
+        android:layout_width="@dimen/px430"
+        android:layout_height="@dimen/px200" />
+    <LinearLayout
+        android:id="@+id/llPayCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@id/rl_top"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/rel_dismiss"
+            android:layout_gravity="right"
+            android:layout_width="@dimen/px48"
+            android:layout_height="@dimen/px48">
+
+            <ImageView
+                android:id="@+id/iv_dissmiss"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/px10"
+                android:layout_marginRight="@dimen/px10"
+                android:src="@mipmap/wei_xin_login_dialog_top_close" />
+        </RelativeLayout>
+
+
     </LinearLayout>
 
 </RelativeLayout>
