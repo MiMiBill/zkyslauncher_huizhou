@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>确认预约</title>
+
+    <link rel="stylesheet" href="assetes/fontAwesome/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" href="assetes/download/font_5khi39ovopo/iconfont.css"> -->
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/appointment.css">
+
+    <script src="./assetes/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="./assetes/artTemplate/template-native.js"></script>
+    <script src="./js/appointment.js"></script>
+</head>
+
+<body>
+    <div id="w">
+        <header>
+            <!-- <div class="back">
+                <span class="iconfont icon-fanhui"></span>
+                <span class="fanhui">返回</span>
+            </div> -->
+
+            <h1>确认预约</h1>
+        </header>
+
+        <form action="">
+            <div class="top">
+                <ul class="w">
+                    <li>
+                        <span>护理类型</span><u>*</u>
+                        <select name="nursingType" onChange="select" id="select">
+                            <script type="text/template" id="temp">
+                            <% for(var i=0;i< data.length;i++){ %>
+
+                            <option value="<%= data[i].id %>"><%= data[i].value %></option>
+                            <% } %>
+                        </script>
+
+                        </select>
+                    </li>
+                    <li>联系方式<u>*</u>
+                        <input type="tel" name="mobilePhone" placeholder="请输入电话号码" id="phone">
+
+                    </li>
+                </ul>
+            </div>
+
+            <div class="middle">
+                <ul class="w">
+                    <!-- <li>
+                        <span>被护理人姓名<u>*</u></span>
+                        <span style="float:right"><input type="text" placeholder="请输入姓名"></span>
+                    </li>
+                    <li>性别<u>*</u>
+                        <span style="float: right;">
+                            <input name="sex" type="radio" value="" />男</label>
+                            <input name="sex" type="radio" value="" />女</label>
+                        </span>
+                    </li>
+                    <li>年龄
+                        <span style="float:right">
+                            <input type="text" placeholder="请输入年龄">
+                        </span>
+                    </li>
+                    <li>身高
+                        <span style="float:right">
+                            <input type="text" placeholder="请输入身高（cm）">
+                        </span>
+                    </li>
+                    <li>体重
+                        <span style="float:right">
+                            <input type="text" placeholder="请输入体重（kg）">
+                        </span>
+                    </li>
+                    <li class="onself">自理能力<u>*</u>
+                        <span>
+                            <i class="skyblue">自理</i>
+                            <i>半自理</i>
+                            <i>不能自理</i>
+                        </span>
+                    </li> -->
+                    <li class="remark">备注
+                        <p>
+                            <textarea type="text" name="remark" placeholder="被护理人情况说明"></textarea>
+                        </p>
+                    </li>
+                </ul>
+
+            </div>
+
+            <!-- <div class="address">
+                <ul class="w">
+                    <li>服务地址<u>*</u>
+                        <span>
+                            <input name="address" type="radio" value="" />居家 </label>
+                            <input name="address" type="radio" value="" />医院 </label>
+                        </span>
+                    </li>
+                    <li>详情地址<u>*</u>
+                        <span>
+                            <input type="text" placeholder="请输入详细地址">
+                        </span>
+                    </li>
+
+                </ul>
+            </div> -->
+        </form>
+
+        <p id="make">提交预约</p>
+    </div>
+
+</body>
+
+</html>

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -48,20 +49,66 @@ public class CarerWorkerFragment extends BaseFragment {
         relTitlebar.setBackgroundColor(getResources().getColor(R.color.white));
         tvTitle.setText("护工预约");
         initWebview();
-
+//        String url = "http://zk-hugong.battcn.com/index.html?hospId=25&deptId=57&bedNo=123&hospName=%E4%B8%8A%E6%B5%B7%E7%AC%AC%E4%B9%9D%E4%BA%BA%E6%B0%91%E5%8C%BB%E9%99%A2&deptName=%E6%B5%8B%E8%AF%95%E7%A7%91&imei=353769223605675";
+//        LogUtil.d("localUrl:" + localUrl);
+//        LogUtil.d("carerWorker:" + carerWorker);
+//        wvCarerWorker.loadUrl(url);
     }
 
+//    private void initWebview(){
+//
+//
+//        wvCarerWorker.addJavascriptInterface(this,"android");//添加js监听 这样html就能调用客户端
+//        wvCarerWorker.setWebChromeClient(webChromeClient);
+//        wvCarerWorker.setWebViewClient(webViewClient);
+//
+//        WebSettings webSettings = wvCarerWorker.getSettings();
+//        webSettings.setJavaScriptEnabled(true);//允许使用js
+//        webSettings.setDomStorageEnabled(true);
+//
+//        /**
+//         * LOAD_CACHE_ONLY: 不使用网络，只读取本地缓存数据
+//         * LOAD_DEFAULT: （默认）根据cache-control决定是否从网络上取数据。
+//         * LOAD_NO_CACHE: 不使用缓存，只从网络获取数据.
+//         * LOAD_CACHE_ELSE_NETWORK，只要本地有，无论是否过期，或者no-cache，都使用缓存中的数据。
+//         */
+//        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);//不使用缓存，只从网络获取数据.
+//        //设置自适应屏幕，两者合用
+//        webSettings.setUseWideViewPort(true); //将图片调整到适合webview的大小
+//        webSettings.setLoadWithOverviewMode(true); // 缩放至屏幕的大小
+//
+//
+//        webSettings.setAllowFileAccess(true); //设置可以访问文件
+//        webSettings.setDomStorageEnabled(true);
+//        webSettings.setAppCacheMaxSize(1024 * 1024 * 8);
+//        webSettings.setJavaScriptCanOpenWindowsAutomatically(true); //支持通过JS打开新窗口
+//        webSettings.setLoadsImagesAutomatically(true); //支持自动加载图片
+//        webSettings.setDefaultTextEncodingName("utf-8");//设置编码格式
+//
+//        //添加与js交互事件 ，js 调用 android（日志2）
+//        //wvCarerWorker.addJavascriptInterface(new CarerWorkerFragment.InJavaScriptInterface(), "java_obj");
+//        //不支持屏幕缩放
+//        webSettings.setSupportZoom(false);
+//        webSettings.setBuiltInZoomControls(false);
+//
+//
+//
+//    }
     private void initWebview()
     {
 
+        wvCarerWorker.resumeTimers();//必须加上，不然不能网络请求
+        wvCarerWorker.onResume();
         wvCarerWorker.addJavascriptInterface(this,"android");//添加js监听 这样html就能调用客户端
         wvCarerWorker.setWebChromeClient(webChromeClient);
         wvCarerWorker.setWebViewClient(webViewClient);
-
+        wvCarerWorker.clearCache(true);
         WebSettings webSettings = wvCarerWorker.getSettings();
         webSettings.setJavaScriptEnabled(true);//允许使用js
         webSettings.setDomStorageEnabled(true);
 
+        getActivity().deleteDatabase("webview.db");
+        getActivity().deleteDatabase("webviewCache.db");
         /**
          * LOAD_CACHE_ONLY: 不使用网络，只读取本地缓存数据
          * LOAD_DEFAULT: （默认）根据cache-control决定是否从网络上取数据。
@@ -69,11 +116,27 @@ public class CarerWorkerFragment extends BaseFragment {
          * LOAD_CACHE_ELSE_NETWORK，只要本地有，无论是否过期，或者no-cache，都使用缓存中的数据。
          */
         webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);//不使用缓存，只从网络获取数据.
+        //设置自适应屏幕，两者合用
+        webSettings.setUseWideViewPort(true); //将图片调整到适合webview的大小
+        webSettings.setLoadWithOverviewMode(true); // 缩放至屏幕的大小
 
+
+        webSettings.setAllowFileAccess(true); //设置可以访问文件
+        webSettings.setDomStorageEnabled(true);
+//        webSettings.setAppCacheMaxSize(1024 * 1024 * 8);
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true); //支持通过JS打开新窗口
+        webSettings.setLoadsImagesAutomatically(true); //支持自动加载图片
+        webSettings.setDefaultTextEncodingName("utf-8");//设置编码格式
+
+        //添加与js交互事件 ，js 调用 android（日志2）
+        wvCarerWorker.addJavascriptInterface(new InJavaScriptLocalObj(), "java_obj");
         //不支持屏幕缩放
         webSettings.setSupportZoom(false);
         webSettings.setBuiltInZoomControls(false);
       //  wvCarerWorker.loadUrl("http://zk-hugong.battcn.com/index.html?hospId=4&deptId=2");
+
+
+
         String carerWorker = "http://zk-hugong-prod.battcn.com/index.html?" +
                 "hospId="+ActiveUtils.getPadActiveInfo().getHospitalId() +
                 "&deptId=" + ActiveUtils.getPadActiveInfo().getDeptId()+
@@ -81,9 +144,74 @@ public class CarerWorkerFragment extends BaseFragment {
                 "&hospName=" + ActiveUtils.getPadActiveInfo().getHospitalName()+
                 "&deptName=" + ActiveUtils.getPadActiveInfo().getDeptName()+
                 "&imei=" + ActiveUtils.getPadActiveInfo().getCode() +
-                 "&timestamp=" + System.currentTimeMillis();
-        wvCarerWorker.loadUrl(carerWorker);
+                "&timestamp=" + System.currentTimeMillis();
+
+        String localUrl = "file:///android_asset/nurseWork/index.html?" +
+                "hospId="+ActiveUtils.getPadActiveInfo().getHospitalId() +
+                "&deptId=" + ActiveUtils.getPadActiveInfo().getDeptId()+
+                "&bedNo=" + ActiveUtils.getPadActiveInfo().getBedNumber()+
+                "&hospName=" + ActiveUtils.getPadActiveInfo().getHospitalName()+
+                "&deptName=" + ActiveUtils.getPadActiveInfo().getDeptName()+
+                "&imei=" + ActiveUtils.getPadActiveInfo().getCode() +
+                "&timestamp=" + System.currentTimeMillis();
+         wvCarerWorker.loadUrl(carerWorker);
+//        wvCarerWorker.loadUrl(localUrl);
+        LogUtil.d("localUrl:" + localUrl);
         LogUtil.d("carerWorker:" + carerWorker);
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+
+        wvCarerWorker.resumeTimers();
+        wvCarerWorker.onResume();
+
+        String carerWorker = "http://zk-hugong-prod.battcn.com/index.html?" +
+                "hospId="+ActiveUtils.getPadActiveInfo().getHospitalId() +
+                "&deptId=" + ActiveUtils.getPadActiveInfo().getDeptId()+
+                "&bedNo=" + ActiveUtils.getPadActiveInfo().getBedNumber()+
+                "&hospName=" + ActiveUtils.getPadActiveInfo().getHospitalName()+
+                "&deptName=" + ActiveUtils.getPadActiveInfo().getDeptName()+
+                "&imei=" + ActiveUtils.getPadActiveInfo().getCode() +
+                "&timestamp=" + System.currentTimeMillis();
+
+        String localUrl = "file:///android_asset/nurseWork/index.html?" +
+                "hospId="+ActiveUtils.getPadActiveInfo().getHospitalId() +
+                "&deptId=" + ActiveUtils.getPadActiveInfo().getDeptId()+
+                "&bedNo=" + ActiveUtils.getPadActiveInfo().getBedNumber()+
+                "&hospName=" + ActiveUtils.getPadActiveInfo().getHospitalName()+
+                "&deptName=" + ActiveUtils.getPadActiveInfo().getDeptName()+
+                "&imei=" + ActiveUtils.getPadActiveInfo().getCode() +
+                "&timestamp=" + System.currentTimeMillis();
+        // wvCarerWorker.loadUrl(carerWorker);
+//        wvCarerWorker.loadUrl(localUrl);
+        LogUtil.d("localUrl:" + localUrl);
+        LogUtil.d("carerWorker:" + carerWorker);
+
+    }
+
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
+
+        wvCarerWorker.onPause();
+        wvCarerWorker.pauseTimers();
+    }
+
+    public class InJavaScriptLocalObj
+    {
+        @JavascriptInterface
+        public void showSource(String content) {
+            LogUtil.e("web --content",content);
+           // wvCarerWorker.loadDataWithBaseURL(null, content, "text/html", "UTF-8", null);
+        }
+
+        @JavascriptInterface
+        public void showDescription(String content) {
+            LogUtil.e("web --title",content);
+        }
     }
 
 
@@ -92,6 +220,11 @@ public class CarerWorkerFragment extends BaseFragment {
         @Override
         public void onPageFinished(WebView view, String url) {//页面加载完成
             //progressBar.setVisibility(View.GONE);
+            view.loadUrl("javascript:window.java_obj.showSource(document.getElementsByTagName('html')[0].innerHTML);");
+
+            // 获取解析<meta name="share-description"content="获取到的值">
+            view.loadUrl("javascript:window.java_obj.showDescription(document.querySelector('meta[name=\"share-description\"]').getAttribute('content'));");
+
         }
 
         @Override
@@ -146,6 +279,7 @@ public class CarerWorkerFragment extends BaseFragment {
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
             //progressBar.setProgress(newProgress);
+            LogUtil.d("护工:加载进度：" + newProgress);
         }
     };
 
@@ -160,9 +294,44 @@ public class CarerWorkerFragment extends BaseFragment {
     }
 
 
-    @OnClick(R.id.ll_back)
-    public void onViewClicked() {
-        pop();
+    @OnClick({R.id.ll_back,R.id.tv_title})
+    public void onViewClicked(View view) {
+
+        switch (view.getId())
+        {
+            case R.id.ll_back:
+            {
+                pop();
+                break;
+            }
+            case R.id.tv_title:
+            {
+                String carerWorker = "http://zk-hugong-prod.battcn.com/index.html?" +
+                        "hospId="+ActiveUtils.getPadActiveInfo().getHospitalId() +
+                        "&deptId=" + ActiveUtils.getPadActiveInfo().getDeptId()+
+                        "&bedNo=" + ActiveUtils.getPadActiveInfo().getBedNumber()+
+                        "&hospName=" + ActiveUtils.getPadActiveInfo().getHospitalName()+
+                        "&deptName=" + ActiveUtils.getPadActiveInfo().getDeptName()+
+                        "&imei=" + ActiveUtils.getPadActiveInfo().getCode() +
+                        "&timestamp=" + System.currentTimeMillis();
+
+                String localUrl = "file:///android_asset/nurseWork/index.html?" +
+                        "hospId="+ActiveUtils.getPadActiveInfo().getHospitalId() +
+                        "&deptId=" + ActiveUtils.getPadActiveInfo().getDeptId()+
+                        "&bedNo=" + ActiveUtils.getPadActiveInfo().getBedNumber()+
+                        "&hospName=" + ActiveUtils.getPadActiveInfo().getHospitalName()+
+                        "&deptName=" + ActiveUtils.getPadActiveInfo().getDeptName()+
+                        "&imei=" + ActiveUtils.getPadActiveInfo().getCode() +
+                        "&timestamp=" + System.currentTimeMillis();
+//                 wvCarerWorker.loadUrl(carerWorker);
+//                wvCarerWorker.loadUrl(localUrl);
+                String url = "http://zk-hugong.battcn.com/index.html?hospId=25&deptId=57&bedNo=123&hospName=%E4%B8%8A%E6%B5%B7%E7%AC%AC%E4%B9%9D%E4%BA%BA%E6%B0%91%E5%8C%BB%E9%99%A2&deptName=%E6%B5%8B%E8%AF%95%E7%A7%91&imei=353769223605675";
+                LogUtil.d("localUrl:" + localUrl);
+                LogUtil.d("carerWorker:" + carerWorker);
+                wvCarerWorker.loadUrl(url);
+                break;
+            }
+        }
     }
 
 }

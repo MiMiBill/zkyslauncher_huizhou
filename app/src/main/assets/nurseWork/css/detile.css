@@ -1,0 +1,155 @@
+.body {
+    margin: 0% auto;
+    padding-bottom: 43px;
+    width: 100%;
+    height: 100%;
+    margin-top: 2px;
+    background-color: #fff;
+}
+h3 {
+    margin: 20px auto;
+    font-size: 20px;
+}
+.type_area{
+    padding-left: 50px;
+    width: 910px;
+    height: 100%;
+}
+.type_area span {
+     float: left;
+     font-size: 20px;
+
+}
+.type_area .name .img {
+    display: block;
+    width: 116px;
+    height: 116px;
+    background-color: pink;
+}
+.name {
+    padding-top: 3%;
+}
+.name h2 {
+    margin-top: 0%;
+    font-size: 28px;
+}
+.name .img {
+    width: 116px;
+    height: 116px;
+    border-radius: 58px;
+    overflow: hidden;
+}
+.name img {
+    width: 100%;
+    height: 100%;
+}
+.info {
+    margin-left: 31px;
+    vertical-align: middle;
+    
+}
+.name .info .serve {
+    padding-bottom:  8%;
+}
+
+.block span i:nth-child(1) {
+    /* width: 30px;
+    height: 30px; */
+    padding: 1px 4px;
+    text-align: center;
+    line-height: 30px;
+    background-color: #E86B6B;
+    color: #fff;
+    font-size: 20px;
+    border-radius: 5px;
+}
+.block span i {
+    margin-right: 12px;
+}
+.name .info p span {
+    margin-right: 30px;
+}
+.name .info p b {
+    color: #38B4E8;
+    font-weight: normal;
+
+}
+
+/* 基本信息 */
+.infomation {
+    margin: 32px auto 20px auto;
+    font-weight: 200;
+    font-size: 20px;
+}
+.infomation .b,
+.infomation .b p b {
+    font-weight: 500;
+}
+.infomation .b {
+    width: 100px;
+    height: 64px;
+    line-height: 64px;
+    font-weight: 500;
+
+}
+.infomation .b span {
+    padding-right: 30px;
+}
+.infomation p {
+ font-weight: 500;
+
+}
+.infomation p b {
+    font-weight: normal;
+}
+
+.experience ul,
+.user h2 {
+    padding-right: 10%;
+
+
+}
+.experience ul li,
+.user ul li {
+    float: left;
+    padding: 9px;
+    margin: 0 34px 20px 0;
+    border-radius: 5px;
+    background-color: #F0F0F0;
+}
+h2 {
+    margin: 20px auto;
+}
+
+.certificate span {
+    float: left;
+    margin-right: 38px;
+}
+.certificate p {
+    font-weight: 500;
+    text-align: center;
+    margin-top: 15px;
+    font-size: 20px;
+}
+.certificate img {
+    width: 288px;
+    height: 176px;
+    overflow: hidden;
+    border: 1px solid #707070;
+    box-sizing: border-box;
+}
+.body #make {
+    margin: 0% auto;
+    margin-top: 52px;
+    width: 30%;
+    height: 10%;
+    line-height: 88px;
+    background-color: #38B4E8;
+    border-radius: 8px;
+    font-size: 30px;
+    color: #fff;
+    text-align: center;
+    cursor: pointer;
+}
+
+

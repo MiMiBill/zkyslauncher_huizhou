@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>护工聘请</title>
+
+    <link rel="stylesheet" href="assetes/fontAwesome/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" href="assetes/download/font_5khi39ovopo/iconfont.css"> -->
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/index.css">
+
+    <script src="./assetes/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="./assetes/artTemplate/template-native.js"></script>
+    <script src="js/index.js"></script>
+</head>
+
+<body>
+    <div id="w">
+        <header>
+            <!-- <div>
+                <span class="iconfont icon-fanhui"></span>
+                <span class="fanhui">返回</span>
+            </div> -->
+
+            <h1>护工聘请</h1>
+        </header>
+        <div class="sort">
+            <p>按护龄排序 <i class="fa fa-chevron-up" aria-hidden="true" id="sortIcon"></i></p>
+        </div>
+
+        <div class="card">
+            <ul id="list-unstyled">
+                <script type="text/template" id="temp">
+                    <% for(var i=0;i < data.length;i++){ %>
+                    <li onclick="findDetail(<%= data[i].id %>,<%= data[i].familyCount %>,'<%= data[i].praiseRate%>')">
+                        <div class="img"><img src="<%= data[i].image %>" alt=""></div>
+                        <div class="info">
+                            <h3><%= data[i].nickName %></h3>
+                            <p class="b">
+                                <% if(data[i].sex==1){ %>
+                                <span>男</span>
+                                <% } %>
+                                
+                                <% if(data[i].sex==2){ %>
+                                    <span>女</span>
+                                <% } %>                              
+
+                                <span><%= data[i].age %>岁</span>
+                                <span><%= data[i].address %></span>
+                                <span><b><%= data[i].workingYears %>年</b>护龄</span>
+                            </p>
+                            <p>用心服务过<b><%= data[i].familyCount %></b>个家庭
+                                <span><b><%= data[i].praiseRate %></b>好评</span>
+                            </p>
+                        </div>
+                        <div class="experience clearfix">
+                            <span>护理经验：</span>
+                            <% for(var j=0;j < data[i].nursingExperience.length;j++){ %>
+                                <% if(j<=5) { %>
+                                <b><%= data[i].nursingExperience[j].tagName %></b>
+                                <% } %>
+
+                            <% } %>
+                           
+                        </div>
+                    </li>
+                    <% } %>
+                </script>
+
+                <!-- <li>
+                    <div class="img"><img src="./assetes/images/2.png" alt=""></div>
+                    <div class="info">
+                        <h3>陈海容</h3>
+                        <b class="b">
+                            <span>女</span>
+                        <span>41</span>
+                        <span>河南人</span>
+                        <span><b>7年</b>护龄</span>
+                        </b>
+                        <p>用心服务过<b>18</b>个家庭
+                            <span><b>100%</b>好评</span>
+                        </p>
+                    </div>
+
+                    <div class="experience clearfix">
+                        <span>护理经验：</span>
+
+                        <b>指立血糖测量</b>
+                        <b>胰岛素笔使用</b>
+                    </div>
+                </li>
+                <li>
+                    <div class="img"><img src="./assetes/images/3.png" alt=""></div>
+                    <div class="info">
+                        <h3>于爱红</h3>
+                        <b class="b">
+                            <span>女</span>
+                        <span>45</span>
+                        <span>湖北人</span>
+                        <span><b>6年</b>护龄</span>
+                        </b>
+                        <p>用心服务过<b>27</b>个家庭
+                            <span><b>98%</b>好评</span>
+                        </p>
+                    </div>
+
+                    <div class="experience clearfix">
+                        <span>护理经验：</span>
+
+                        <b>压疮预防护理</b>
+                        <b>胰岛素笔使用</b>
+
+                    </div>
+                </li>
+                <li>
+                    <div class="img"><img src="./assetes/images/4.png" alt=""></div>
+                    <div class="info">
+                        <h3>庄勇强</h3>
+                        <b class="b">
+                            <span>男</span>
+                        <span>50岁</span>
+                        <span>江苏人</span>
+                        <span><b>5年</b>护龄</span>
+                        </b>
+                        <p>用心服务过<b>23</b>个家庭
+                            <span><b>95%</b>好评</span>
+                        </p>
+                    </div>
+
+                    <div class="experience clearfix">
+                        <span>护理经验：</span>
+
+                        <b>指立血糖测量</b>
+                        <b>胰岛素笔使用</b>
+
+                    </div>
+                </li> -->
+            </ul>
+        </div>
+
+    </div>
+</body>
+
+</html>

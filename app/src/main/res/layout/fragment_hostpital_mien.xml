@@ -24,11 +24,11 @@
         android:padding="@dimen/px10">
 
         <WebView
-        android:id="@+id/wv_Mien"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-            android:autoLink="phone"
-        android:layout_centerHorizontal="true"/>
+            android:id="@+id/wv_Mien"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:autoLink="web|phone"
+            android:layout_centerHorizontal="true"/>
 
     </LinearLayout>
 

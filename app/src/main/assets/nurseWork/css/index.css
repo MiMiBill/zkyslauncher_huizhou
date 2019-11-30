@@ -1,0 +1,127 @@
+/* @media screen and (max-width: 1200px) {
+    body {
+        background-color:lightblue;
+    }
+} */
+
+u {
+    text-decoration: none;    
+}
+strong {
+    background-color: #38B4E8;
+}
+h3{
+    font-size: 24px;
+}
+.sort {
+    width: 100%;
+    height: 68px;
+    margin-top: 2px;
+    background-color: #fff;
+}
+.sort p {
+    float: right;
+    margin-right: 50px;
+    height: 68px;
+    line-height: 68px;
+    font-size: 22px;
+}
+#sortIcon {
+    transition: all .6s;
+}
+
+/* 卡片 */
+.card {
+    width: 100%;
+    margin-top: 19px;
+    box-sizing: content-box;
+}
+.card ul {
+    /* width: 100%; */
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+}
+.card ul li:first-child {
+    margin-right: 1%;
+}
+.card ul li {
+    width: 100%;
+    height: 100%;
+    background-color:#fff;
+    border-radius: 10px;
+    flex: 50%;
+}
+
+.card .img {
+    float: left;
+    width: 116px;
+    height: 116px;
+    border-radius: 58px;
+    margin: 6% 3% auto 5%;
+    overflow: hidden;
+	background-size: cover;
+}
+.card ul li img {
+    width: 100%;
+    height: 100%;
+}
+.info .b {
+    display: block;
+    height: 62px;
+    line-height: 62px;
+    font-weight: normal;
+    font-size: 18px;
+    
+}
+.info {
+    margin-top: 26px;
+    font-size: 18px;
+}
+.info span {
+    margin: 2% 0% 1% auto;
+}
+.info p b,
+.info .b b{
+    color: #38B4E8;
+    font-weight: normal;
+   
+}
+.info p span {
+    margin-left: 1%;
+}
+
+
+/* 经验 */
+.experience {
+    width: 87%;
+    border-top: 2px solid #E0E0E0;
+    margin: 0% auto;
+    margin-top: 3%;
+    padding-bottom: 3%;
+    padding-right: 3%;
+    box-sizing: border-box;
+}
+.experience span {
+    line-height: 70px;
+    font-size: 20px;
+    margin-right: 18px;
+    
+}
+.experience b {
+    width: 137px;
+    height: 38px;
+    border: 1px solid #38B4E8;
+    text-align: center;
+    line-height: 38px;
+    font-size: 16px;
+    color: #38B4E8;
+    font-weight: normal;
+    padding: 5px;
+    border-radius: 5px;
+    margin-right: 3%;
+}
+
+
+

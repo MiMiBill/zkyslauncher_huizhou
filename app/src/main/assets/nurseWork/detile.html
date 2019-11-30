@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    <title>护工详情</title>
+
+    <link rel="stylesheet" href="assetes/fontAwesome/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" href="assetes/download/font_5khi39ovopo/iconfont.css"> -->
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/detile.css">
+
+
+    <script src="./assetes/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="./assetes/artTemplate/template-native.js"></script>
+    <script src="./js/detile.js"></script>
+</head>
+
+<body>
+    <div id="w">
+        <header>
+            <!-- <div class="back">
+                <span class="iconfont icon-fanhui"></span>
+                <span class="fanhui">返回</span>
+            </div> -->
+
+            <h1>护工详情</h1>
+        </header>
+    </div>
+
+    <div class="body">
+        <div class="type_area">
+            <script type="text/template" id="temp">
+                <!-- <% { %> -->
+                    <div class="name clearfix">
+                        <span class="img"><img src="<%= data.image %>" alt=""></span>
+                        <span class="info">
+                            <h2><%= data.nickName %></h2>
+                            <p class="serve">
+                                <span>用心服务过<b><%= data.familyCount %></b>个家庭</span>
+                                <span><b><%= data.praiseRate %></b>好评</span>
+                                <span><b><%= data.workingYears %>年</b>护龄</span>
+                            </p>
+                            <p class="block">
+                                <% for(var i=0;i < data.userCertificates.length;i++){ %>
+                                <span>
+                                    <i><%= data.userCertificates[i].name.substring(data.userCertificates[i].name.length-1) %></i>
+                                    <%= data.userCertificates[i].name %>
+                                </span>
+                                <% } %>
+                            </p>
+                        </span>
+                    </div>
+
+
+                    <div class="infomation">
+                        <h3>基本信息</h3>
+                        <b class="b clearfix">
+                            <span><%= data.sex %></span>
+                            <span><%= data.age %>岁</span>
+                            <span><%= data.address %></span>
+                            <span><%= data.nation %></span>
+                            <span><%= data.education %></span>
+                        </b>
+                        <p>身份证号码：<b><%= data.idCard %></b></p>
+                    </div>
+
+                    <div class="experience clearfix">
+                        <h3>护理经验</h3>
+                        <ul>
+                            <% for(var i=0;i < data.nursingExperience.length;i++){ %>
+                            <li><%= data.nursingExperience[i].tagName %></li>
+                            <% } %>  
+                            
+                        </ul>
+                    </div>
+
+                    <div class="user clearfix">
+                        <h3>用户印象</h3>
+                        <ul>
+                            <% for(var i=0;i < data.customerReviews.length;i++){ %>
+                            <li><%= data.customerReviews[i].tagName %></li>
+                            <% } %>                            
+
+                        </ul>
+                    </div>
+
+                    <div class="certificate clearfix">
+                        <h3>证书资质</h3>
+                        <% for(var i=0;i < data.userCertificates.length;i++){ %>
+                        <span>                            
+                                <img src="<%= data.userCertificates[i].certificate %>" alt="">
+                                <p><%= data.userCertificates[i].name %><p>
+    
+                            </span>
+                        <% } %>
+                    </div>
+                 <!-- <% } %> -->
+            </script>
+        </div>
+
+        <p id="make">立即预约</p>
+    </div>
+
+</body>
+
+</html>

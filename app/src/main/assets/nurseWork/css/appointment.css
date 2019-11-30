@@ -1,0 +1,124 @@
+.w {
+    width: 100%;
+    height: 100%;
+    margin: 0% auto;
+}
+li {
+    padding-left: 8px;
+}
+.skyblue {
+    background-color: #38B4E8 !important;
+    color: #fff;
+
+}
+input {
+    border: 0;  
+    outline: none;
+    background-color: rgba(0, 0, 0, 0);
+    float: right;
+    height: 90px;
+    font-size: 18px;
+
+}
+.top {
+    margin-top: 2px;
+    background-color: #fff;
+    padding: 0% 5%;
+}
+.top ul li:last-child {
+    border-bottom: none;
+}
+.top ul li select {
+    margin-top: 20px;
+    float: right;
+    font-size: 22px;
+    border-style: none;
+    color: #333;
+    outline-style: none;
+    height: 30pt;
+    line-height: 30px;
+}
+
+.middle {
+    margin-top: 20pt;
+    background-color: #fff;
+    padding: 0% 5%;
+}
+.top ul li,
+.middle ul li,
+.address ul li {
+    height: 100%;
+    border-bottom: 2px solid #E0E0E0;
+    line-height: 88px;
+    font-size: 24px;
+    /* padding-right: 10%; */
+
+}
+.middle ul li {
+    padding-right: 10%;
+}
+.middle ul .remark textarea {
+    width: 100%;
+    height: 163pt;
+    background-color: #F5F5F5;
+    border-radius: 10pt;
+    border: none;
+    font-size: 20px;
+    color: #333;
+    padding-left: 5%;
+    padding-top: 20pt;
+    margin-bottom: 37pt;
+    word-break: break-all;
+    outline-style: none;
+
+}
+.middle .onself span {
+    margin-left: 770pt;
+}
+.middle .onself span i {
+    margin-left: 20pt;
+    width: 80pt;
+    height: 38pt;
+    border-radius: 5pt;
+    background-color: #F0F0F0;
+    padding: 11pt 9pt;
+    font-size: 12pt;
+    
+}
+.middle ul li:last-child {
+    border-bottom: none !important;
+
+}
+
+.address {
+    margin-top: 20px;
+    background-color: #fff;
+}
+.address ul li span {
+    float: right;
+}
+.top ul li span input {
+    margin-right: 15pt;
+    margin-left: 20pt;
+    color: #333333;
+    font-size: 16pt;
+
+}
+.address ul li:last-child {
+    border-bottom: none;
+
+}
+#make {
+    margin: 0% auto;
+    margin-top: 52px;
+    width: 30%;
+    height: 10%;
+    line-height: 88px;
+    background-color: #38B4E8;
+    border-radius: 8px;
+    font-size: 30px;
+    color: #fff;
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: 46px;
+}

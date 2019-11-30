@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.muju.note.launcher.R;
+import com.muju.note.launcher.app.carerWorker.CarerWorkerFragment;
 import com.muju.note.launcher.app.hostipal.adapter.HospitalMienAdapter;
 import com.muju.note.launcher.app.hostipal.contract.HospitalMienContract;
 import com.muju.note.launcher.app.hostipal.db.MienInfoDao;
@@ -26,6 +27,7 @@ import com.muju.note.launcher.app.hostipal.presenter.HospitalMienPresenter;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.util.ActiveUtils;
+import com.muju.note.launcher.util.log.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +65,7 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
 
     private int prePosition = 0;
 
+
     private HospitalMienAdapter hospitalMienAdapter;
     private List<MienInfoDao> list;
 
@@ -97,12 +100,12 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
 
     @Override
     public void initData() {
-        if (ActiveUtils.getPadActiveInfo() != null) {
-            tvTitle.setText(ActiveUtils.getPadActiveInfo().getHospitalName());
-        }
 
         initWebview();
 
+        if (ActiveUtils.getPadActiveInfo() != null) {
+            tvTitle.setText(ActiveUtils.getPadActiveInfo().getHospitalName());
+        }
         list = new ArrayList<>();
         hospitalMienAdapter = new HospitalMienAdapter(R.layout.rv_item_hospital_mien_type, list);
         recyclerView.setLayoutManager(new LinearLayoutManager(LauncherApplication.getContext(),
@@ -130,7 +133,6 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
         // 查询医院风采数据
         mPresenter.queryMien();
 
-
     }
 
 
@@ -138,13 +140,14 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
 
     private void initWebview()
     {
-
         wvMien.addJavascriptInterface(this,"android");//添加js监听 这样html就能调用客户端
         wvMien.setWebChromeClient(webChromeClient);
         wvMien.setWebViewClient(webViewClient);
-
+        wvMien.resumeTimers();
+        wvMien.onResume();
         WebSettings webSettings = wvMien.getSettings();
         webSettings.setJavaScriptEnabled(true);//允许使用js
+        webSettings.setDomStorageEnabled(true);
 
         /**
          * LOAD_CACHE_ONLY: 不使用网络，只读取本地缓存数据
@@ -153,18 +156,58 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
          * LOAD_CACHE_ELSE_NETWORK，只要本地有，无论是否过期，或者no-cache，都使用缓存中的数据。
          */
         webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);//不使用缓存，只从网络获取数据.
+        //设置自适应屏幕，两者合用
+        webSettings.setUseWideViewPort(true); //将图片调整到适合webview的大小
+        webSettings.setLoadWithOverviewMode(true); // 缩放至屏幕的大小
 
+
+        webSettings.setAllowFileAccess(true); //设置可以访问文件
+        webSettings.setDomStorageEnabled(true);
+        webSettings.setAppCacheMaxSize(1024 * 1024 * 8);
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true); //支持通过JS打开新窗口
+        webSettings.setLoadsImagesAutomatically(true); //支持自动加载图片
+        webSettings.setDefaultTextEncodingName("utf-8");//设置编码格式
+
+        //添加与js交互事件 ，js 调用 android（日志2）
+        //wvCarerWorker.addJavascriptInterface(new CarerWorkerFragment.InJavaScriptInterface(), "java_obj");
         //不支持屏幕缩放
         webSettings.setSupportZoom(false);
         webSettings.setBuiltInZoomControls(false);
 
     }
+//    private void initWebview()
+//    {
+//
+//        wvMien.addJavascriptInterface(this,"android");//添加js监听 这样html就能调用客户端
+//        wvMien.setWebChromeClient(webChromeClient);
+//        wvMien.setWebViewClient(webViewClient);
+//
+//        WebSettings webSettings = wvMien.getSettings();
+//        webSettings.setJavaScriptEnabled(true);//允许使用js
+//        webSettings.setDomStorageEnabled(true);
+//
+//        /**
+//         * LOAD_CACHE_ONLY: 不使用网络，只读取本地缓存数据
+//         * LOAD_DEFAULT: （默认）根据cache-control决定是否从网络上取数据。
+//         * LOAD_NO_CACHE: 不使用缓存，只从网络获取数据.
+//         * LOAD_CACHE_ELSE_NETWORK，只要本地有，无论是否过期，或者no-cache，都使用缓存中的数据。
+//         */
+//        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);//不使用缓存，只从网络获取数据.
+//
+//        //不支持屏幕缩放
+//        webSettings.setSupportZoom(false);
+//        webSettings.setBuiltInZoomControls(false);
+//
+//    }
 
     //WebViewClient主要帮助WebView处理各种通知、请求事件
     private WebViewClient webViewClient = new WebViewClient(){
         @Override
         public void onPageFinished(WebView view, String url) {//页面加载完成
             //progressBar.setVisibility(View.GONE);
+            // 获取页面内容
+
+
         }
 
         @Override
@@ -179,7 +222,9 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
 //                Toast.makeText(MainActivity.this,"国内不能访问google,拦截该url",Toast.LENGTH_LONG).show();
 //                return true;//表示我已经处理过了
 //            }
-            return super.shouldOverrideUrlLoading(view, url);
+            wvMien.loadUrl(url);
+            return true;
+            //return super.shouldOverrideUrlLoading(view, url);
         }
 
     };
@@ -223,6 +268,7 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
             //progressBar.setProgress(newProgress);
+            LogUtil.d("医院风采进度：" + newProgress);
         }
     };
 
