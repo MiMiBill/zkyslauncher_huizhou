@@ -10,8 +10,8 @@ android {
         applicationId "com.muju.note.launcher"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 94   //fata包前面加11 惠州版本  该版本添加了广告，添加后台控制息屏是普通版本，添加了护工，默认是所有医院
-        versionName "1.9.4"  //fata包 前面再加11
+        versionCode 1194   //fata包前面加11 惠州版本  该版本添加了广告，添加后台控制息屏是普通版本，添加了护工，默认是所有医院
+        versionName "111.9.4"  //fata包 前面再加11
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true

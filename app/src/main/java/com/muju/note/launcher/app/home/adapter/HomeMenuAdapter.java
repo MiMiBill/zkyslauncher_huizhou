@@ -254,9 +254,10 @@ public class HomeMenuAdapter extends BaseQuickAdapter<HomeMenuDao, BaseViewHolde
                 } else {
                     baseViewHolder.setText(R.id.tv_menu, dao.getName());
                 }
+                break;
             case "护工":
                 if (TextUtils.isEmpty(dao.getIcon())) {
-                    img.setImageResource(R.mipmap.care_worker);
+                    img.setImageResource(R.mipmap.icon_care_worker);
                 } else {
                     GlideUtil.loadImg(dao.getIcon(), img, R.mipmap.ic_video_load_default);
                 }
