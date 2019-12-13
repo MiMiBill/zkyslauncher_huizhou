@@ -214,7 +214,7 @@ public class VideoService {
     public void getUpdateVideo(){
         HttpParams params=new HttpParams();
         params.put("timeStamp",SPUtil.getLong(SpTopics.SP_VIDEO_UPDATE_TIME));
-//        params.put("timeStamp","1574866817");
+//        params.put("timeStamp","-1");
         OkGo.<BaseBean<List<VideoInfoDao>>>post(UrlUtil.getVideoUpdate())
                 .params(params)
                 .execute(new JsonCallback<BaseBean<List<VideoInfoDao>>>() {
