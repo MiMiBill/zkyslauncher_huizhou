@@ -24,7 +24,6 @@ import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
-import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.sp.SPUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -214,7 +213,7 @@ public class VideoService {
     public void getUpdateVideo(){
         HttpParams params=new HttpParams();
         params.put("timeStamp",SPUtil.getLong(SpTopics.SP_VIDEO_UPDATE_TIME));
-
+//        params.put("timeStamp","1574866817");
         OkGo.<BaseBean<List<VideoInfoDao>>>post(UrlUtil.getVideoUpdate())
                 .params(params)
                 .execute(new JsonCallback<BaseBean<List<VideoInfoDao>>>() {
