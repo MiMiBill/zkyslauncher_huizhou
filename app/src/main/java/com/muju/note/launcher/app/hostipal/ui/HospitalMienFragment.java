@@ -3,7 +3,6 @@ package com.muju.note.launcher.app.hostipal.ui;
 import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -21,29 +20,19 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.carerWorker.CarerWorkerFragment;
-import com.muju.note.launcher.app.healthy.adapter.HealthyAdapter;
 import com.muju.note.launcher.app.hostipal.adapter.HospitalMienAdapter;
-import com.muju.note.launcher.app.hostipal.adapter.HostipalMienVideoAdapter;
 import com.muju.note.launcher.app.hostipal.contract.HospitalMienContract;
 import com.muju.note.launcher.app.hostipal.db.MienInfoDao;
 import com.muju.note.launcher.app.hostipal.presenter.HospitalMienPresenter;
-import com.muju.note.launcher.app.video.db.VideoHisDao;
-import com.muju.note.launcher.app.video.db.VideoInfoDao;
-import com.muju.note.launcher.app.video.ui.WotvPlayFragment;
-import com.muju.note.launcher.app.video.util.WoTvUtil;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.log.LogUtil;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.unicom.common.VideoSdkConfig;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import me.leefeng.promptlibrary.PromptDialog;
-import me.yokeyword.fragmentation.ISupportFragment;
 
 
 /**
@@ -73,24 +62,13 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
     TextView tvTitle;
     @BindView(R.id.rel_titlebar)
     RelativeLayout relTitlebar;
-    @BindView(R.id.rv_Mien)
-    RecyclerView rvMien;
-//    @BindView(R.id.smartRefresh)
-//    SmartRefreshLayout smartRefresh;
-    @BindView(R.id.ll_hostipal_mien_video)
-    LinearLayout llHostipalMienVideoContainer;
-    private List<VideoInfoDao> videoInfoDaos;
 
-    //医院风采里的视频
-    private HostipalMienVideoAdapter hostipalMienVideoAdapter;
-    private int pageNum = 1;
     private int prePosition = 0;
-    private MienInfoDao mienVideoInfoDao;
+
 
     private HospitalMienAdapter hospitalMienAdapter;
     private List<MienInfoDao> list;
-    private static  String sVideoMienTitle ;
-    private PromptDialog promptDialog;
+
 
     public static HospitalMienFragment newInstance() {
         Bundle args = new Bundle();
@@ -107,7 +85,7 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
-        //解决退出页面web中还有声音的问题
+//解决退出页面web中还有声音的问题
         wvMien.onPause();
         wvMien.pauseTimers();
 //        wvMien.loadUrl("about:blank");
@@ -122,12 +100,8 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
 
     @Override
     public void initData() {
-        sVideoMienTitle = "宣传视频";
-        mienVideoInfoDao = new MienInfoDao();
-        mienVideoInfoDao.setTitle(sVideoMienTitle);
-        llHostipalMienVideoContainer.setVisibility(View.INVISIBLE);
+
         initWebview();
-        initVideoRecyclerView();
 
         if (ActiveUtils.getPadActiveInfo() != null) {
             tvTitle.setText(ActiveUtils.getPadActiveInfo().getHospitalName());
@@ -143,79 +117,24 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
 
                 prePosition = position;
+
                 llNull.setVisibility(View.GONE);
                 llTypeTitle.setSelected(false);
                 hospitalMienAdapter.setPos(position);
                 hospitalMienAdapter.notifyDataSetChanged();
-
-
-                if (sVideoMienTitle.equalsIgnoreCase(list.get(position).getTitle())){
-                    llHostipalMienVideoContainer.setVisibility(View.VISIBLE);
-//                    rvMien.setVisibility(View.INVISIBLE);
-                    hostipalMienVideoAdapter.notifyDataSetChanged();
-
-                }else {
-                    llHostipalMienVideoContainer.setVisibility(View.GONE);
-//                    rvMien.setVisibility(View.VISIBLE);
-                    setWvMien(list.get(position).getIntroduction());
-                }
-
+                setWvMien(list.get(position).getIntroduction());
             }
         });
 
         llTypeTitle.setOnClickListener(this);
         llBack.setOnClickListener(this);
         tvNull.setOnClickListener(this);
-        promptDialog = new PromptDialog(getActivity());
-        promptDialog.showLoading("正在加载...");
+
         // 查询医院风采数据
         mPresenter.queryMien();
 
-
     }
 
-    private void initVideoRecyclerView() {
-        videoInfoDaos = new ArrayList<>();
-        hostipalMienVideoAdapter = new HostipalMienVideoAdapter(R.layout.rv_item_hospital_mien_video, videoInfoDaos);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(LauncherApplication.getContext(), 3);
-        gridLayoutManager.offsetChildrenHorizontal(20);
-        rvMien.setLayoutManager(gridLayoutManager);
-        rvMien.setAdapter(hostipalMienVideoAdapter);
-
-        hostipalMienVideoAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-                toPlay(videoInfoDaos.get(i));
-            }
-        });
-    }
-
-
-    /**
-     * 跳转播放
-     *
-     * @param infoDao
-     */
-    private void toPlay(VideoInfoDao infoDao) {
-        if (!VideoSdkConfig.getInstance().getUser().isLogined()) {
-            WoTvUtil.getInstance().login();
-            showToast("登入视频中，请稍后");
-            return;
-        }
-
-        VideoHisDao hisDao = new VideoHisDao();
-        hisDao.setCid(infoDao.getCid());
-        hisDao.setCustomTag(infoDao.getCustomTag());
-        hisDao.setDescription(infoDao.getDescription());
-        hisDao.setImgUrl(infoDao.getImgUrl());
-        hisDao.setName(infoDao.getName());
-        hisDao.setVideoId(infoDao.getVideoId());
-        hisDao.setVideoType(infoDao.getVideoType());
-        hisDao.setScreenUrl(infoDao.getScreenUrl());
-        WotvPlayFragment wotvPlayFragment = new WotvPlayFragment();
-        wotvPlayFragment.setHisDao(hisDao);
-        start(wotvPlayFragment, ISupportFragment.SINGLETASK);
-    }
 
 
 
@@ -371,41 +290,11 @@ public class HospitalMienFragment extends BaseFragment<HospitalMienPresenter> im
         this.list.addAll(list);
         hospitalMienAdapter.notifyDataSetChanged();
         setWvMien(this.list.get(0).getIntroduction());
-        mPresenter.getHospitalMienVideo("" + ActiveUtils.getPadActiveInfo().getHospitalId() +"/医院风采",pageNum);
     }
 
     @Override
     public void getMienNull() {
-//        llNull.setVisibility(View.VISIBLE);
-        mPresenter.getHospitalMienVideo("" + ActiveUtils.getPadActiveInfo().getHospitalId() +"/医院风采",pageNum);
-    }
-
-
-    //获取医院风采视频
-    @Override
-    public void getHospitalMienVideoSuccess(List<VideoInfoDao> list) {
-        promptDialog.dismiss();
-        if (pageNum == 1) {
-            videoInfoDaos.clear();
-            if (!this.list.contains(mienVideoInfoDao))
-            {
-                this.list.add(mienVideoInfoDao);
-                hospitalMienAdapter.notifyDataSetChanged();
-            }
-        }
-//        smartRefresh.finishRefresh();
-        hostipalMienVideoAdapter.loadMoreComplete();
-        videoInfoDaos.addAll(list);
-        hostipalMienVideoAdapter.notifyDataSetChanged();
-    }
-    //获取医院风采视频为空
-    @Override
-    public void getHospitalMienVideoNull() {
-        promptDialog.dismiss();
-        if (list.size() <= 0)
-        {
-            llNull.setVisibility(View.VISIBLE);
-        }
+        llNull.setVisibility(View.VISIBLE);
     }
 
     @Override

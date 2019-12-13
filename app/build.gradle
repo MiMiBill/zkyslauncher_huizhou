@@ -11,8 +11,12 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1194   //fata包前面加11 惠州版本  该版本添加了广告，添加后台控制息屏是普通版本，添加了护工，默认是所有医院
+<<<<<<< HEAD
 //        versionName "111.9.4"  //fata包 前面再加11
         versionName "111.9.4_beta"  //fata包 前面再加11
+=======
+        versionName "111.9.4"  //fata包 前面再加11
+>>>>>>> parent of f67944c... 111.9.5 正式版本
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true

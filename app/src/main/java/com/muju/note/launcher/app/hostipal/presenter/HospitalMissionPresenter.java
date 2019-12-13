@@ -3,7 +3,6 @@ package com.muju.note.launcher.app.hostipal.presenter;
 
 import com.muju.note.launcher.app.hostipal.contract.HospitalMissionContract;
 import com.muju.note.launcher.app.hostipal.db.MissionInfoDao;
-import com.muju.note.launcher.app.video.db.VideoInfoDao;
 import com.muju.note.launcher.base.BasePresenter;
 import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.util.log.LogUtil;
@@ -34,32 +33,6 @@ public class HospitalMissionPresenter extends BasePresenter<HospitalMissionContr
                     return;
                 }
                 mView.getMission(list);
-            }
-        });
-    }
-
-    @Override
-    public void getMissionVideo(String name, int pageNum) {
-        LitePalDb.setZkysDb();
-//        String sql = "customTag like '%" + name + "%' or keywords like '%" + name + "%' or name like '%" + name + "%'" +
-//                " and status = 1 order by number desc,onwayTime desc,editTime desc,updateTime desc";
-//        LogUtil.d("医院风采视频SQL："  + sql);
-
-        String sql = "customTag = '" + name +
-                "' and status = 1 order by number desc,onwayTime desc,editTime desc,updateTime desc";
-        LogUtil.d("医院宣教视频SQL："  + sql);
-        LitePal.where(sql).findAsync(VideoInfoDao.class).listen(new FindMultiCallback<VideoInfoDao>() {
-            @Override
-            public void onFinish(List<VideoInfoDao> list) {
-                if (mView == null) {
-                    LogUtil.e("mView为空");
-                    return;
-                }
-                if (list == null || list.size() <= 0) {
-                    mView.getMissionVideoNull();
-                    return;
-                }
-                mView.getMissionVideoSuccess(list);
             }
         });
     }
