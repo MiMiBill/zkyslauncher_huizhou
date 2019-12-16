@@ -81,13 +81,11 @@ public class MainService extends Service {
 
         // 获取平板配置信息，因为需要自动息屏的功能，所以开机就先去获取，这样就能快速的体检到开关屏功能了
         ConfigService.getInstance().start();
-
         if(rebootPhone){
             // 自启动状态，不做操作
         }else {
             // 查询更新
             UpdateVersionService.getInstance().start();
-
             // 非自启动状态，10分钟内初始化操作
             Observable.timer((long) (Math.random() * 600), TimeUnit.SECONDS)
                     .subscribe(new Consumer<Long>() {
