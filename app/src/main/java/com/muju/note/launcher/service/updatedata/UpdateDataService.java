@@ -64,6 +64,7 @@ public class UpdateDataService {
 
     public void update(){
 
+        LogUtil.d("数据正在更新...");
         // 更新影视列表信息
         VideoService.getInstance().getUpdateVideo();
         // 更新影视分类信息

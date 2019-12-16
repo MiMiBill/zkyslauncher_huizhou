@@ -7,7 +7,8 @@ import org.litepal.LitePal;
 import org.litepal.crud.LitePalSupport;
 
 public class VideoInfoDao extends LitePalSupport implements MultiItemEntity {
-
+//    String sql = "customTag like '%" + name + "%' or keywords like '%" + name + "%' or name like '%" + name + "%'" +
+//            " and status = 1 order by number desc,onwayTime desc,editTime desc,updateTime desc";
     private int id;
     private int serialVersionUID;
     private int videoId;
