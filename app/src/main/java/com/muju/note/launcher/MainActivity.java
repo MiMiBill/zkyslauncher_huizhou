@@ -64,6 +64,7 @@ import com.muju.note.launcher.app.sign.ui.SignTaskFragment;
 import com.muju.note.launcher.app.timetask.CrontabService;
 import com.muju.note.launcher.app.timetask.event.TimeTaskEvent;
 import com.muju.note.launcher.app.video.event.VideoNoLockEvent;
+import com.muju.note.launcher.app.video.service.VideoService;
 import com.muju.note.launcher.app.video.ui.VideoFragment;
 import com.muju.note.launcher.app.video.ui.WoTvVideoLineFragment;
 import com.muju.note.launcher.app.video.util.WoTvUtil;

@@ -1,6 +1,7 @@
 package com.muju.note.launcher.app.hostipal.adapter;
 
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -20,8 +21,35 @@ public class MissionAdapter extends BaseQuickAdapter<MissionInfoDao, BaseViewHol
 
     @Override
     protected void convert(BaseViewHolder helper, MissionInfoDao item) {
-        GlideUtil.loadImg(item.getImg(), (ImageView) helper.getView(R.id.iv_img), R.mipmap.ic_video_load_default);
-        helper.setText(R.id.tv_name, item.getTitle());
-        helper.setText(R.id.tv_date, item.getUpdateTime());
+
+        //
+        if (!TextUtils.isEmpty(item.getName()))
+        {
+            helper.setText(R.id.tv_name, item.getName());
+        }
+        if (!TextUtils.isEmpty(item.getTitle()))
+        {
+            helper.setText(R.id.tv_name, item.getTitle());
+        }
+        //
+        if (!TextUtils.isEmpty(item.getImg()))
+        {
+            GlideUtil.loadImg(item.getImg(), (ImageView) helper.getView(R.id.iv_img), R.mipmap.ic_video_load_default);;
+        }
+
+        if (!TextUtils.isEmpty(item.getImgUrl()))
+        {
+            GlideUtil.loadImg(item.getImgUrl(), (ImageView) helper.getView(R.id.iv_img), R.mipmap.ic_video_load_default);
+        }
+        //
+        helper.setText(R.id.tv_date, "");
+        if (!TextUtils.isEmpty(item.getUpdateTime()))
+        {
+            helper.setText(R.id.tv_date, item.getUpdateTime());
+        }
+        if (!TextUtils.isEmpty(item.getCreateTime()))
+        {
+            helper.setText(R.id.tv_date, item.getCreateTime());
+        }
     }
 }
