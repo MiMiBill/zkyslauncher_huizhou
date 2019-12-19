@@ -4,6 +4,8 @@ def getProductName() {
     return "launcher"
 }
 
+
+//广告普通完整版本
 android {
     compileSdkVersion 28
     defaultConfig {

@@ -16,6 +16,8 @@ public class VideoDownLoadBean {
     private String tableName;
     private int count;
 
+
+
     public int getCount() {
         return count;
     }
