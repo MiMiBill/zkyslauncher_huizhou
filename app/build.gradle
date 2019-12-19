@@ -4,6 +4,7 @@ def getProductName() {
     return "launcher"
 }
 
+//更新了视频的获取方式，之前是下载db，现在是下载json文件
 android {
     compileSdkVersion 28
     defaultConfig {
