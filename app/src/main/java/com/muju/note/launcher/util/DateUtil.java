@@ -2,6 +2,7 @@ package com.muju.note.launcher.util;
 
 import android.text.TextUtils;
 
+import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -52,6 +53,18 @@ public class DateUtil {
         SimpleDateFormat format = new SimpleDateFormat(s);
         Date d = new Date(System.currentTimeMillis());
         return format.format(d);
+    }
+
+    public static long dateStr2Long(String  dStr)
+    {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            Date d = df.parse(dStr);
+            return d.getTime();
+        } catch (ParseException pe) {
+            System.out.println(pe.getMessage());
+            return -999;
+        }
     }
 
     /**
@@ -139,7 +152,7 @@ public class DateUtil {
     }
 
 
-    //时间格式化成时间戳
+    //时间格式化成时间戳  2019-12-19 03:21:17
     public static long formartTime(String formartTime) {
         long time = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse(formartTime, new
                 ParsePosition(0)).getTime() / 1000;

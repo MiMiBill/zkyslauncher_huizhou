@@ -1,11 +1,15 @@
 package com.muju.note.launcher.app.video.service;
 
+import android.content.ContentValues;
+
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.FileCallback;
+import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.HttpParams;
 import com.lzy.okgo.model.Progress;
 import com.lzy.okgo.model.Response;
 import com.muju.note.launcher.app.startUp.event.StartCheckDataEvent;
+import com.muju.note.launcher.app.video.bean.UpdateVideoBean;
 import com.muju.note.launcher.app.video.bean.VideoDownLoadBean;
 import com.muju.note.launcher.app.video.db.VideoColumnsDao;
 import com.muju.note.launcher.app.video.db.VideoHisDao;
@@ -23,13 +27,16 @@ import com.muju.note.launcher.okgo.JsonCallback;
 import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.ActiveUtils;
+import com.muju.note.launcher.util.DateUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
+import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.sp.SPUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.litepal.LitePal;
 import org.litepal.crud.callback.CountCallback;
 import org.litepal.crud.callback.FindCallback;
+import org.litepal.crud.callback.FindMultiCallback;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -39,6 +46,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import com.google.gson.Gson;
 
 public class VideoService {
 
@@ -135,29 +143,71 @@ public class VideoService {
     }
 
 
+//    /**
+//     *  查询视频本地化信息
+//     */
+//    public void queryVideo(){
+//        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_HTTP_START));
+//        OkGo.<BaseBean<VideoDownLoadBean>>get(UrlUtil.getVideoDownLoadUrl())
+//                .execute(new JsonCallback<BaseBean<VideoDownLoadBean>>() {
+//                    @Override
+//                    public void onSuccess(Response<BaseBean<VideoDownLoadBean>> response) {
+//                        try{
+//                            if(response.body().getData()==null){
+//                                EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_HTTP_DATA_NULL));
+//                                return;
+//                            }
+//                            downVideoDb(response.body().getData().getPath(),response.body().getData().getTableName(),response.body().getData().getCount(),response.body().getData().getCreateDate());
+//                        }catch (Exception e){
+//                            e.printStackTrace();
+//                            EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_CARSH,e));
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onError(Response<BaseBean<VideoDownLoadBean>> response) {
+//                        super.onError(response);
+//                        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_HTTP_FAIL));
+//                    }
+//                });
+//    }
+
+
     /**
      *  查询视频本地化信息
      */
     public void queryVideo(){
         EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_HTTP_START));
-        OkGo.<BaseBean<VideoDownLoadBean>>get(UrlUtil.getVideoDownLoadUrl())
-                .execute(new JsonCallback<BaseBean<VideoDownLoadBean>>() {
+        OkGo.<String>get(UrlUtil.getVideoDownLoadUrlNew())
+                .execute(new StringCallback() {
                     @Override
-                    public void onSuccess(Response<BaseBean<VideoDownLoadBean>> response) {
-                        try{
-                            if(response.body().getData()==null){
-                                EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_HTTP_DATA_NULL));
-                                return;
+                    public void onSuccess(Response<String> response) {
+
+                        String body = response.body();
+                       com.google.gson.Gson gson =  new  com.google.gson.Gson();
+
+                        VideoDownLoadBean videoDownLoadBean = gson.fromJson(body, VideoDownLoadBean.class);
+                        if (videoDownLoadBean.isSuccessful())
+                        {
+                            try{
+                                if(videoDownLoadBean.getData()==null){
+                                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_HTTP_DATA_NULL));
+                                    return;
+                                }
+                                long time = DateUtil.formartTime(videoDownLoadBean.getData().getCreateTime());
+                                downVideoDb(videoDownLoadBean.getData().getUrl(),videoDownLoadBean.getData().getTableName(),videoDownLoadBean.getData().getCount(),time);
+                            }catch (Exception e){
+                                e.printStackTrace();
+                                EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_CARSH,e));
                             }
-                            downVideoDb(response.body().getData().getPath(),response.body().getData().getTableName(),response.body().getData().getCount(),response.body().getData().getCreateDate());
-                        }catch (Exception e){
-                            e.printStackTrace();
-                            EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_CARSH,e));
+                        }else {
+                            EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_HTTP_FAIL));
                         }
+
                     }
 
                     @Override
-                    public void onError(Response<BaseBean<VideoDownLoadBean>> response) {
+                    public void onError(Response<String> response) {
                         super.onError(response);
                         EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_HTTP_FAIL));
                     }
@@ -172,7 +222,7 @@ public class VideoService {
     private void downVideoDb(String url, final String tableName, final int count, final long crateTime){
         EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_DOWNLOAD_START));
         OkGo.<File>get(url)
-                .execute(new FileCallback("/sdcard/zkysdb/","video.db") {
+                .execute(new FileCallback("/sdcard/zkysdb/","video.7z") {
                     @Override
                     public void onSuccess(Response<File> response) {
                         insertVideoDb(response.body().getPath(),tableName,count,crateTime);
@@ -207,33 +257,110 @@ public class VideoService {
         }
     }
 
+//    /**
+//     *  获取影视更新的内容
+//     */
+//    public void getUpdateVideo(){
+//        HttpParams params=new HttpParams();
+//        params.put("timeStamp",SPUtil.getLong(SpTopics.SP_VIDEO_UPDATE_TIME));
+//        OkGo.<BaseBean<List<VideoInfoDao>>>post(UrlUtil.getVideoUpdate())
+//                .params(params)
+//                .execute(new JsonCallback<BaseBean<List<VideoInfoDao>>>() {
+//                    @Override
+//                    public void onSuccess(final Response<BaseBean<List<VideoInfoDao>>> response) {
+//                        ExecutorService service=Executors.newSingleThreadExecutor();
+//                        service.execute(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                               for (VideoInfoDao dao:response.body().getData()){
+//                                   LitePalDb.setZkysDb();
+//                                   VideoInfoDao videoInfoDao=LitePal.where("cid = ?",dao.getCid()+"").findFirst(VideoInfoDao.class);
+//                                   if(videoInfoDao==null){
+//                                       dao.setVideoId(dao.getId());
+//                                       dao.save();
+//                                   }else {
+//                                       LitePal.delete(VideoInfoDao.class,videoInfoDao.getId());
+//                                       dao.setVideoId(dao.getId());
+//                                       dao.save();
+//                                   }
+//                               }
+//                                SPUtil.putLong(SpTopics.SP_VIDEO_UPDATE_TIME,(System.currentTimeMillis()/1000));
+//                            }
+//                        });
+//                    }
+//                });
+//
+//    }
+
+
     /**
      *  获取影视更新的内容
      */
     public void getUpdateVideo(){
-        HttpParams params=new HttpParams();
-        params.put("timeStamp",SPUtil.getLong(SpTopics.SP_VIDEO_UPDATE_TIME));
-        OkGo.<BaseBean<List<VideoInfoDao>>>post(UrlUtil.getVideoUpdate())
-                .params(params)
-                .execute(new JsonCallback<BaseBean<List<VideoInfoDao>>>() {
+//        String sql  = "SELECT max(updateTime) FROM video";
+        LitePalDb.setZkysDb();
+        String  timestamp = LitePal.max(VideoInfoDao.class, "updateTime", String.class);
+//         long time = DateUtil.dateStr2Long(timestamp);
+//        long time = timestamp.getTime();
+        LogUtil.d("timestamp：" + timestamp);
+        OkGo.<String>get(UrlUtil.getVideoUpdateNew("" + timestamp))
+                .tag(this)
+                .execute(new StringCallback() {
                     @Override
-                    public void onSuccess(final Response<BaseBean<List<VideoInfoDao>>> response) {
+                    public void onSuccess(final Response<String> response) {
                         ExecutorService service=Executors.newSingleThreadExecutor();
                         service.execute(new Runnable() {
                             @Override
                             public void run() {
-                               for (VideoInfoDao dao:response.body().getData()){
-                                   LitePalDb.setZkysDb();
-                                   VideoInfoDao videoInfoDao=LitePal.where("cid = ?",dao.getCid()+"").findFirst(VideoInfoDao.class);
-                                   if(videoInfoDao==null){
-                                       dao.setVideoId(dao.getId());
-                                       dao.save();
-                                   }else {
-                                       LitePal.delete(VideoInfoDao.class,videoInfoDao.getId());
-                                       dao.setVideoId(dao.getId());
-                                       dao.save();
-                                   }
-                               }
+                                String body = response.body();
+                                com.google.gson.Gson gson =  new  com.google.gson.Gson();
+                                UpdateVideoBean updateVideoBean = gson.fromJson(body, UpdateVideoBean.class);
+                                if (updateVideoBean.isSuccessful())
+                                {
+                                    if (updateVideoBean.getData() != null){
+                                        LitePalDb.setZkysDb();
+                                        for (int id : updateVideoBean.getData().getStopVideoIds())
+                                        {
+                                            LitePal.deleteAll(VideoInfoDao.class, "videoId = ?","" + id );
+//                                            LitePal.delete(VideoInfoDao.class,id);
+                                        }
+
+
+                                        LitePalDb.setZkysDb();
+                                        for (VideoInfoDao videoInfoDao : updateVideoBean.getData().getVideos())
+                                        {
+                                            String updateTime = videoInfoDao.getUpdateTime();
+                                            long time = DateUtil.dateStr2Long(updateTime);
+                                            if (-999 != time)
+                                            {
+                                                videoInfoDao.setUpdateTime("" + time);
+                                            }
+//                                            videoInfoDao.setVideoId(videoInfoDao.getId());
+//                                            videoInfoDao.save();
+
+                                           VideoInfoDao OldvideoInfoDao = LitePal.where("cid = ?",videoInfoDao.getCid()+"").findFirst(VideoInfoDao.class);
+                                           if(OldvideoInfoDao != null){
+                                               LitePal.deleteAll(VideoInfoDao.class, "videoId = ?","" + OldvideoInfoDao.getVideoId() );
+                                           }
+                                            videoInfoDao.setVideoId(videoInfoDao.getId());
+                                            videoInfoDao.save();
+                                        }
+                                    }
+
+                                }
+
+//                                for (VideoInfoDao dao:response.body().getData()){
+//                                    LitePalDb.setZkysDb();
+//                                    VideoInfoDao videoInfoDao=LitePal.where("cid = ?",dao.getCid()+"").findFirst(VideoInfoDao.class);
+//                                    if(videoInfoDao==null){
+//                                        dao.setVideoId(dao.getId());
+//                                        dao.save();
+//                                    }else {
+//                                        LitePal.delete(VideoInfoDao.class,videoInfoDao.getId());
+//                                        dao.setVideoId(dao.getId());
+//                                        dao.save();
+//                                    }
+//                                }
                                 SPUtil.putLong(SpTopics.SP_VIDEO_UPDATE_TIME,(System.currentTimeMillis()/1000));
                             }
                         });

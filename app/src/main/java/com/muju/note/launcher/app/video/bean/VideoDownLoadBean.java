@@ -2,57 +2,145 @@ package com.muju.note.launcher.app.video.bean;
 
 public class VideoDownLoadBean {
 
-
     /**
-     * path : http://qiniupaddb.zgzkys.com/video_1558022400.db
-     * id : 10
-     * createDate : 1557992897000
-     * tableName : video
+     {
+     "successful": true,
+     "messageId": 200,
+     "message": "操作成功!",
+     "timestamp": 1576727053902,
+     "data": {
+     "id": 4,
+     "url": "http://qiniupaddb.zgzkys.com/201912191120.7z",
+     "tableName": "video",
+     "remark": "影视资源",
+     "count": 29545,
+     "version": 1,
+     "createTime": "2019-12-19 03:21:17"
+     }
+     }
      */
+    private String message;
+    private String messageId;
+    private String timestamp;
+    private boolean successful;
+    private VideoDownLoadBean.VideoDownLoadData data;
 
-    private String path;
-    private int id;
-    private long createDate;
-    private String tableName;
-    private int count;
 
-    public int getCount() {
-        return count;
+    public String getMessage() {
+        return message;
     }
 
-    public void setCount(int count) {
-        this.count = count;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public String getPath() {
-        return path;
+    public String getMessageId() {
+        return messageId;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
     }
 
-    public int getId() {
-        return id;
+    public String getTimestamp() {
+        return timestamp;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 
-    public long getCreateDate() {
-        return createDate;
+    public boolean isSuccessful() {
+        return successful;
     }
 
-    public void setCreateDate(long createDate) {
-        this.createDate = createDate;
+    public void setSuccessful(boolean successful) {
+        this.successful = successful;
     }
 
-    public String getTableName() {
-        return tableName;
+    public VideoDownLoadData getData() {
+        return data;
     }
 
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
+    public void setData(VideoDownLoadData data) {
+        this.data = data;
     }
+
+    public static class  VideoDownLoadData{
+
+//        "id": 4,
+//                "url": "http://qiniupaddb.zgzkys.com/201912191120.7z",
+//                "tableName": "video",
+//                "remark": "影视资源",
+//                "count": 29545,
+//                "version": 1,
+//                "createTime": "2019-12-19 03:21:17"
+
+        private int  id;
+        private String url;
+        private String tableName;
+        private String remark;
+        private int count;
+        private String version;
+        private String createTime;
+
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
+        public String getTableName() {
+            return tableName;
+        }
+
+        public void setTableName(String tableName) {
+            this.tableName = tableName;
+        }
+
+        public String getRemark() {
+            return remark;
+        }
+
+        public void setRemark(String remark) {
+            this.remark = remark;
+        }
+
+        public int getCount() {
+            return count;
+        }
+
+        public void setCount(int count) {
+            this.count = count;
+        }
+
+        public String getVersion() {
+            return version;
+        }
+
+        public void setVersion(String version) {
+            this.version = version;
+        }
+
+        public String getCreateTime() {
+            return createTime;
+        }
+
+        public void setCreateTime(String createTime) {
+            this.createTime = createTime;
+        }
+    }
+
+
 }

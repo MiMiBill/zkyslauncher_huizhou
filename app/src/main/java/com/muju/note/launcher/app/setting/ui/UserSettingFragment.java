@@ -69,8 +69,10 @@ public class UserSettingFragment extends BaseFragment {
     @Override
     public void initData() {
         tvTitle.setText("个人中心");
-        tvVersion.setText(String.format("安屏V%s", TextUtils.equals(UrlUtil.getHost(), "http://pad.test.zgzkys.com") ? BuildConfig.VERSION_NAME + "beta" : BuildConfig.VERSION_NAME));
 
+//        String versionName = String.format("安屏V%s", TextUtils.equals(UrlUtil.getHost(), "http://pad.test.zgzkys.com") ? BuildConfig.VERSION_NAME + "beta" : BuildConfig.VERSION_NAME);
+        String versionName = String.format("安屏V%s", TextUtils.equals(UrlUtil.getHost(), "http://pad.test.zgzkys.com") ? BuildConfig.VERSION_NAME : BuildConfig.VERSION_NAME);
+        tvVersion.setText(versionName);
         tvVersion.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {

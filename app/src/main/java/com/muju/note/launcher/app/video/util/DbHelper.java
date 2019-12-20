@@ -4,6 +4,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.google.gson.reflect.TypeToken;
+import com.hzy.lib7z.IExtractCallback;
+import com.hzy.lib7z.Z7Extractor;
 import com.muju.note.launcher.app.home.bean.AdverNewBean;
 import com.muju.note.launcher.app.home.bean.AdvertsBean;
 import com.muju.note.launcher.app.home.bean.CrontabBean;
@@ -22,6 +25,7 @@ import com.muju.note.launcher.litepal.UpAdvertInfoDao;
 import com.muju.note.launcher.litepal.UpVideoInfoDao;
 import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.util.Constants;
+import com.muju.note.launcher.util.file.FileIOUtils;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.sp.SPUtil;
 
@@ -29,6 +33,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.litepal.LitePal;
 import org.litepal.crud.callback.SaveCallback;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -38,6 +44,7 @@ import java.util.concurrent.Executors;
 public class DbHelper {
 
     public static final String TAG = "DbHelper";
+    private static String voideJsonFilePath = "";
 
     public static SQLiteDatabase getDataBase(String dbPath) throws Exception {
         SQLiteDatabase sqLiteDatabase = SQLiteDatabase.openDatabase(dbPath, null, 0);
@@ -50,6 +57,98 @@ public class DbHelper {
         return cursor;
     }
 
+//    /**
+//     * 插入影视数据
+//     *
+//     * @param dbPath
+//     * @param tableName
+//     */
+//    public static void insertToVideo(final String dbPath, final String tableName, final int
+//            count, final long createTime) throws Exception {
+//        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status
+//                .VIDEO_INFO_DB_START));
+//        final int[] num = {0};
+//        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status
+//                .VIDEO_INFO_DB_PROGRESS, num[0] + "/" + count));
+//        ExecutorService service = Executors.newSingleThreadExecutor();
+//        service.execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    LitePal.deleteAll(VideoInfoDao.class);
+//                    final SQLiteDatabase database = getDataBase(dbPath);
+//                    ArrayList<VideoInfoDao> videoInfoDaos = new ArrayList<>();
+//                    final Cursor cursor = database.query(tableName, null, null, null, null, null,
+//                            null);
+//                    while (cursor.moveToNext()) {
+//                        num[0]++;
+//                        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent
+//                                .Status.VIDEO_INFO_DB_PROGRESS, num[0] + "/" + count));
+//                        VideoInfoDao dao = new VideoInfoDao();
+//                        dao.setSerialVersionUID(cursor.getInt(cursor.getColumnIndex
+//                                ("serialVersionUID")));
+//                        dao.setVideoId(cursor.getInt(cursor.getColumnIndex("id")));
+//                        dao.setCid(cursor.getString(cursor.getColumnIndex("cid")));
+//                        dao.setName(cursor.getString(cursor.getColumnIndex("name")));
+//                        dao.setDescription(cursor.getString(cursor.getColumnIndex("description")));
+//                        dao.setDirector(cursor.getString(cursor.getColumnIndex("director")));
+//                        dao.setImgUrl(cursor.getString(cursor.getColumnIndex("imgUrl")));
+//                        dao.setRegion(cursor.getString(cursor.getColumnIndex("region")));
+//                        dao.setScreenUrl(cursor.getString(cursor.getColumnIndex("screenUrl")));
+//                        dao.setKeywords(cursor.getString(cursor.getColumnIndex("keywords")));
+//                        dao.setActor(cursor.getString(cursor.getColumnIndex("actor")));
+//                        dao.setDuration(cursor.getInt(cursor.getColumnIndex("duration")));
+//                        dao.setEditTime(cursor.getString(cursor.getColumnIndex("editTime")));
+//                        dao.setOnwayTime(cursor.getString(cursor.getColumnIndex("onwayTime")));
+//                        dao.setVideoType(cursor.getInt(cursor.getColumnIndex("videoType")));
+//                        dao.setWatchCount(cursor.getInt(cursor.getColumnIndex("watchCount")));
+//                        dao.setStatus(cursor.getInt(cursor.getColumnIndex("status")));
+//                        dao.setFee(cursor.getInt(cursor.getColumnIndex("fee")));
+//                        dao.setCreateTime(cursor.getString(cursor.getColumnIndex("createTime")));
+//                        dao.setCustomTag(cursor.getString(cursor.getColumnIndex("customTag")));
+//                        dao.setIsRecommend(cursor.getInt(cursor.getColumnIndex("isRecommend")));
+//                        dao.setIsClassify(cursor.getInt(cursor.getColumnIndex("isClassify")));
+//                        dao.setIsNew(cursor.getInt(cursor.getColumnIndex("isNew")));
+//                        dao.setUpdateTime(cursor.getString(cursor.getColumnIndex("updateTime")));
+//                        dao.setSource(cursor.getInt(cursor.getColumnIndex("source")));
+//                        dao.setColumnId(cursor.getInt(cursor.getColumnIndex("columnId")));
+//                        dao.setColumnName(cursor.getString(cursor.getColumnIndex("columnName")));
+//                        dao.setScore(cursor.getString(cursor.getColumnIndex("score")));
+//                        dao.setTid(cursor.getString(cursor.getColumnIndex("tid")));
+//                        dao.setNumber(cursor.getInt(cursor.getColumnIndex("number")));
+//                        dao.setLogoUrl(cursor.getString(cursor.getColumnIndex("logoUrl")));
+//                        dao.setTypeId(cursor.getString(cursor.getColumnIndex("typeId")));
+////                        dao.saveDb(dao);
+//                        videoInfoDaos.add(dao);
+//                    }
+//                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status
+//                            .VIDEO_DATA_SAVE));
+//                    LitePal.saveAllAsync(videoInfoDaos).listen(new SaveCallback() {
+//                        @Override
+//                        public void onFinish(boolean success) {
+//                            if (success) {
+//                                SPUtil.putLong(SpTopics.SP_VIDEO_UPDATE_TIME, (createTime / 1000));
+//                                LogUtil.i(TAG, "数据插入结束时间：" + System.currentTimeMillis());
+//                                EventBus.getDefault().post(new StartCheckDataEvent
+//                                        (StartCheckDataEvent.Status.VIDEO_INFO_SUCCESS));
+//                            } else {
+//                                EventBus.getDefault().post(new StartCheckDataEvent
+//                                        (StartCheckDataEvent.Status.VIDEO_DATA_SAVE_FAIL));
+//                            }
+//                            cursor.close();
+//                            database.close();
+//                        }
+//                    });
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status
+//                            .VIDEO_INFO_CARSH, e));
+//                }
+//            }
+//        });
+//    }
+
+
     /**
      * 插入影视数据
      *
@@ -58,89 +157,152 @@ public class DbHelper {
      */
     public static void insertToVideo(final String dbPath, final String tableName, final int
             count, final long createTime) throws Exception {
+
+        //解压voide.7z
         EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status
                 .VIDEO_INFO_DB_START));
-        final int[] num = {0};
-        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status
-                .VIDEO_INFO_DB_PROGRESS, num[0] + "/" + count));
-        ExecutorService service = Executors.newSingleThreadExecutor();
-        service.execute(new Runnable() {
+        final String voideJsonFileDir = dbPath.replace(".7z","") + "dir";
+        Z7Extractor.extractFile(dbPath, voideJsonFileDir, new IExtractCallback() {
             @Override
-            public void run() {
-                try {
-                    LitePal.deleteAll(VideoInfoDao.class);
-                    final SQLiteDatabase database = getDataBase(dbPath);
-                    ArrayList<VideoInfoDao> videoInfoDaos = new ArrayList<>();
-                    final Cursor cursor = database.query(tableName, null, null, null, null, null,
-                            null);
-                    while (cursor.moveToNext()) {
-                        num[0]++;
-                        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent
-                                .Status.VIDEO_INFO_DB_PROGRESS, num[0] + "/" + count));
-                        VideoInfoDao dao = new VideoInfoDao();
-                        dao.setSerialVersionUID(cursor.getInt(cursor.getColumnIndex
-                                ("serialVersionUID")));
-                        dao.setVideoId(cursor.getInt(cursor.getColumnIndex("id")));
-                        dao.setCid(cursor.getString(cursor.getColumnIndex("cid")));
-                        dao.setName(cursor.getString(cursor.getColumnIndex("name")));
-                        dao.setDescription(cursor.getString(cursor.getColumnIndex("description")));
-                        dao.setDirector(cursor.getString(cursor.getColumnIndex("director")));
-                        dao.setImgUrl(cursor.getString(cursor.getColumnIndex("imgUrl")));
-                        dao.setRegion(cursor.getString(cursor.getColumnIndex("region")));
-                        dao.setScreenUrl(cursor.getString(cursor.getColumnIndex("screenUrl")));
-                        dao.setKeywords(cursor.getString(cursor.getColumnIndex("keywords")));
-                        dao.setActor(cursor.getString(cursor.getColumnIndex("actor")));
-                        dao.setDuration(cursor.getInt(cursor.getColumnIndex("duration")));
-                        dao.setEditTime(cursor.getString(cursor.getColumnIndex("editTime")));
-                        dao.setOnwayTime(cursor.getString(cursor.getColumnIndex("onwayTime")));
-                        dao.setVideoType(cursor.getInt(cursor.getColumnIndex("videoType")));
-                        dao.setWatchCount(cursor.getInt(cursor.getColumnIndex("watchCount")));
-                        dao.setStatus(cursor.getInt(cursor.getColumnIndex("status")));
-                        dao.setFee(cursor.getInt(cursor.getColumnIndex("fee")));
-                        dao.setCreateTime(cursor.getString(cursor.getColumnIndex("createTime")));
-                        dao.setCustomTag(cursor.getString(cursor.getColumnIndex("customTag")));
-                        dao.setIsRecommend(cursor.getInt(cursor.getColumnIndex("isRecommend")));
-                        dao.setIsClassify(cursor.getInt(cursor.getColumnIndex("isClassify")));
-                        dao.setIsNew(cursor.getInt(cursor.getColumnIndex("isNew")));
-                        dao.setUpdateTime(cursor.getString(cursor.getColumnIndex("updateTime")));
-                        dao.setSource(cursor.getInt(cursor.getColumnIndex("source")));
-                        dao.setColumnId(cursor.getInt(cursor.getColumnIndex("columnId")));
-                        dao.setColumnName(cursor.getString(cursor.getColumnIndex("columnName")));
-                        dao.setScore(cursor.getString(cursor.getColumnIndex("score")));
-                        dao.setTid(cursor.getString(cursor.getColumnIndex("tid")));
-                        dao.setNumber(cursor.getInt(cursor.getColumnIndex("number")));
-                        dao.setLogoUrl(cursor.getString(cursor.getColumnIndex("logoUrl")));
-                        dao.setTypeId(cursor.getString(cursor.getColumnIndex("typeId")));
-//                        dao.saveDb(dao);
-                        videoInfoDaos.add(dao);
-                    }
-                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status
-                            .VIDEO_DATA_SAVE));
-                    LitePal.saveAllAsync(videoInfoDaos).listen(new SaveCallback() {
-                        @Override
-                        public void onFinish(boolean success) {
-                            if (success) {
-                                SPUtil.putLong(SpTopics.SP_VIDEO_UPDATE_TIME, (createTime / 1000));
-                                LogUtil.i(TAG, "数据插入结束时间：" + System.currentTimeMillis());
-                                EventBus.getDefault().post(new StartCheckDataEvent
-                                        (StartCheckDataEvent.Status.VIDEO_INFO_SUCCESS));
-                            } else {
-                                EventBus.getDefault().post(new StartCheckDataEvent
-                                        (StartCheckDataEvent.Status.VIDEO_DATA_SAVE_FAIL));
-                            }
-                            cursor.close();
-                            database.close();
-                        }
-                    });
-                } catch (Exception e) {
+            public void onStart() {
+                LogUtil.d("开始解压");
+            }
+
+            @Override
+            public void onGetFileNum(int fileNum) {
+                LogUtil.d("解压onGetFileNum :" + fileNum);
+            }
+
+            @Override
+            public void onProgress(String name, long size) {
+                LogUtil.d("解压文件名：" + name + " size:" + size);
+                voideJsonFilePath = voideJsonFileDir + File.separator +name;
+            }
+
+            @Override
+            public void onError(int errorCode, String message) {
+                LogUtil.d("解压错误：" + errorCode + " msg:" + message);
+            }
+
+            @Override
+            public void onSucceed() {
+                LogUtil.d("解压成功");
+
+                com.google.gson.Gson gson = new com.google.gson.Gson();
+                String videoJson =  FileIOUtils.readFile2String(voideJsonFilePath);
+
+                try{
+                    File file = new File(voideJsonFilePath);
+                    file.delete();
+                }catch (Exception e)
+                {
                     e.printStackTrace();
-                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status
-                            .VIDEO_INFO_CARSH, e));
                 }
+
+                final List<VideoInfoDao> videoInfoDaoList = gson.fromJson(videoJson,new TypeToken<List<VideoInfoDao>>(){}.getType());
+
+                final int[] num = {0};
+                for (VideoInfoDao videoInfoDao:videoInfoDaoList)
+                {
+                    num[0]++;
+                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status
+                            .VIDEO_INFO_DB_PROGRESS, num[0] + "/" + count));
+                    videoInfoDao.setVideoId(videoInfoDao.getId());
+                }
+
+                ExecutorService service = Executors.newSingleThreadExecutor();
+                service.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            LitePalDb.setZkysDb();
+                            LitePal.deleteAll(VideoInfoDao.class);
+                            EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent
+                                    .Status.VIDEO_INFO_DB_PROGRESS, videoInfoDaoList.size() + "/" + count));
+//                            for (VideoInfoDao videoInfoDao : videoInfoDaoList)
+//                            {
+//                                num[0]++;
+//                                EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent
+//                                        .Status.VIDEO_INFO_DB_PROGRESS, num[0] + "/" + count));
+//                            }
+//                            final SQLiteDatabase database = getDataBase(dbPath);
+//                            ArrayList<VideoInfoDao> videoInfoDaos = new ArrayList<>();
+//                            final Cursor cursor = database.query(tableName, null, null, null, null, null,
+//                                    null);
+//                            while (cursor.moveToNext()) {
+//                                num[0]++;
+//                                EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent
+//                                        .Status.VIDEO_INFO_DB_PROGRESS, num[0] + "/" + count));
+//                                VideoInfoDao dao = new VideoInfoDao();
+//                                dao.setSerialVersionUID(cursor.getInt(cursor.getColumnIndex
+//                                        ("serialVersionUID")));
+//                                dao.setVideoId(cursor.getInt(cursor.getColumnIndex("id")));
+//                                dao.setCid(cursor.getString(cursor.getColumnIndex("cid")));
+//                                dao.setName(cursor.getString(cursor.getColumnIndex("name")));
+//                                dao.setDescription(cursor.getString(cursor.getColumnIndex("description")));
+//                                dao.setDirector(cursor.getString(cursor.getColumnIndex("director")));
+//                                dao.setImgUrl(cursor.getString(cursor.getColumnIndex("imgUrl")));
+//                                dao.setRegion(cursor.getString(cursor.getColumnIndex("region")));
+//                                dao.setScreenUrl(cursor.getString(cursor.getColumnIndex("screenUrl")));
+//                                dao.setKeywords(cursor.getString(cursor.getColumnIndex("keywords")));
+//                                dao.setActor(cursor.getString(cursor.getColumnIndex("actor")));
+//                                dao.setDuration(cursor.getInt(cursor.getColumnIndex("duration")));
+//                                dao.setEditTime(cursor.getString(cursor.getColumnIndex("editTime")));
+//                                dao.setOnwayTime(cursor.getString(cursor.getColumnIndex("onwayTime")));
+//                                dao.setVideoType(cursor.getInt(cursor.getColumnIndex("videoType")));
+//                                dao.setWatchCount(cursor.getInt(cursor.getColumnIndex("watchCount")));
+//                                dao.setStatus(cursor.getInt(cursor.getColumnIndex("status")));
+//                                dao.setFee(cursor.getInt(cursor.getColumnIndex("fee")));
+//                                dao.setCreateTime(cursor.getString(cursor.getColumnIndex("createTime")));
+//                                dao.setCustomTag(cursor.getString(cursor.getColumnIndex("customTag")));
+//                                dao.setIsRecommend(cursor.getInt(cursor.getColumnIndex("isRecommend")));
+//                                dao.setIsClassify(cursor.getInt(cursor.getColumnIndex("isClassify")));
+//                                dao.setIsNew(cursor.getInt(cursor.getColumnIndex("isNew")));
+//                                dao.setUpdateTime(cursor.getString(cursor.getColumnIndex("updateTime")));
+//                                dao.setSource(cursor.getInt(cursor.getColumnIndex("source")));
+//                                dao.setColumnId(cursor.getInt(cursor.getColumnIndex("columnId")));
+//                                dao.setColumnName(cursor.getString(cursor.getColumnIndex("columnName")));
+//                                dao.setScore(cursor.getString(cursor.getColumnIndex("score")));
+//                                dao.setTid(cursor.getString(cursor.getColumnIndex("tid")));
+//                                dao.setNumber(cursor.getInt(cursor.getColumnIndex("number")));
+//                                dao.setLogoUrl(cursor.getString(cursor.getColumnIndex("logoUrl")));
+//                                dao.setTypeId(cursor.getString(cursor.getColumnIndex("typeId")));
+////                        dao.saveDb(dao);
+//                                videoInfoDaos.add(dao);
+//                            }
+                            EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status
+                                    .VIDEO_DATA_SAVE));
+                            LitePal.saveAllAsync(videoInfoDaoList).listen(new SaveCallback() {
+                                @Override
+                                public void onFinish(boolean success) {
+                                    if (success) {
+                                        SPUtil.putLong(SpTopics.SP_VIDEO_UPDATE_TIME, (createTime / 1000));
+                                        LogUtil.i(TAG, "数据插入结束时间：" + System.currentTimeMillis());
+                                        EventBus.getDefault().post(new StartCheckDataEvent
+                                                (StartCheckDataEvent.Status.VIDEO_INFO_SUCCESS));
+                                    } else {
+                                        EventBus.getDefault().post(new StartCheckDataEvent
+                                                (StartCheckDataEvent.Status.VIDEO_DATA_SAVE_FAIL));
+                                    }
+//                                    cursor.close();
+//                                    database.close();
+                                }
+                            });
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status
+                                    .VIDEO_INFO_CARSH, e));
+                        }
+                    }
+                });
+
+
+
             }
         });
-    }
 
+
+    }
     /**
      * 插入广告详情数据
      *

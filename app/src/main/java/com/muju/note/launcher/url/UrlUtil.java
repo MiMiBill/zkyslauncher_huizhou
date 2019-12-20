@@ -1,12 +1,30 @@
 package com.muju.note.launcher.url;
 
+
 public class UrlUtil {
-        public static final String HOST_DEFAULT = "http://pad.zgzkys.com";
-//    public static final String HOST_DEFAULT = "http://pad.test.zgzkys.com";
+
+    public static enum Enum_VERSION{
+        Production,  //生产环境
+        Development, //开发环境
+        Test        //测试环境
+    }
+
+    public static Enum_VERSION currentVersion = Enum_VERSION.Test;
+
+//        public static final String HOST_DEFAULT = "http://pad.zgzkys.com";
+    public static final String HOST_DEFAULT = "http://pad.test.zgzkys.com";
 //    public static final String HOST_DEFAULT = "http://192.168.1.200:8086";
 
     //获取公众号任务广告 单独的接口地址
-    private static final String HOST_AD = "https://advert-api.battcn.com";
+    private static final String HOST_AD = "https://advert-api.battcn.com";//广告正式地址
+
+    private static final String VIDEO_HOST = "http://test.advert.zgzkys.com";//视频资源测试服务地址
+
+    //获取影视资源的host
+    private static final String getVideoSourceHost()
+    {
+        return VIDEO_HOST;
+    }
 
     public static String getHost() {
         return HOST_DEFAULT;
@@ -41,6 +59,17 @@ public class UrlUtil {
      *
      * @return
      */
+    public static String getVideoDownLoadUrlNew() {
+        return getVideoSourceHost() + "/device/pad_videos/total_quantity";
+    }
+
+    /**
+     * 获取视频本地化信息
+     *
+     * @return
+     * @deprecated 之前是下载db文件，现在是下载json文件
+     */
+    @Deprecated
     public static String getVideoDownLoadUrl() {
         return getHost() + "/video/downloadUrl";
     }
@@ -50,9 +79,20 @@ public class UrlUtil {
      *
      * @return
      */
+    @Deprecated
     public static String getVideoUpdate() {
         return getHost() + "/video/getLately";
     }
+
+    /**
+     * 获取每日影视更新列表
+     *
+     * @return
+     */
+    public static String getVideoUpdateNew(String timestamp) {
+        return getVideoSourceHost() + "/device/pad_videos/" + timestamp +"/lately";
+    }
+
 
     /**
      * 获取影视类型及所有标签
