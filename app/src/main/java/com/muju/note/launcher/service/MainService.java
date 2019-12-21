@@ -81,8 +81,6 @@ public class MainService extends Service {
 
         // 获取平板配置信息，因为需要自动息屏的功能，所以开机就先去获取，这样就能快速的体检到开关屏功能了
         ConfigService.getInstance().start();
-
-        VideoService.getInstance().getUpdateVideo();
         if(rebootPhone){
             // 自启动状态，不做操作
         }else {
@@ -100,18 +98,14 @@ public class MainService extends Service {
                             ConfigService.getInstance().start();
                             // 获取定位信息
                             LocationService.getInstance().start();
-
                             //检查医院风采数据
                             MienService.getInstance().getMienInfo();
-
                             // 检查影视数据
                             VideoService.getInstance().getVideoTopInfo();
                             VideoService.getInstance().getUpdateVideo();
                             VideoService.getInstance().getVideoCloumns();
-
                             //医疗百科科室
                             EncyclopeService.getInstance().getLately();
-
                             // 检查医院宣教数据
                             MissionService.getInstance().updateMission(1);
                         }
