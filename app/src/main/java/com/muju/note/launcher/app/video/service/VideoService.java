@@ -41,6 +41,7 @@ import org.litepal.crud.callback.FindMultiCallback;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -307,6 +308,7 @@ public class VideoService {
          {
              timestamp = "" + time;
              List<VideoInfoDao> list = LitePal.findAll(VideoInfoDao.class);
+             List<VideoInfoDao> listSave = new ArrayList<>();
              for (VideoInfoDao videoInfoDao : list)
              {
                  if (!TextUtils.isEmpty(videoInfoDao.getUpdateTime()))
@@ -315,10 +317,12 @@ public class VideoService {
                      if (updateTime != -999)
                      {
                          videoInfoDao.setUpdateTime("" + updateTime);
-                         videoInfoDao.save();
+                         listSave.add(videoInfoDao);
+//                         videoInfoDao.save();
                      }
                  }
              }
+             LitePal.saveAll(listSave);
          }
          if (TextUtils.isEmpty(timestamp))
          {

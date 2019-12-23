@@ -13,7 +13,7 @@ public class UrlUtil {
 
         public static final String HOST_DEFAULT = "http://pad.zgzkys.com";
 //    public static final String HOST_DEFAULT = "http://pad.test.zgzkys.com";
-//    public static final String HOST_DEFAULT = "http://192.168.1.200:8086";
+//    public static final String HOSTDEFAULT = "http://192.168.1.200:8086";
 
     //获取公众号任务广告 单独的接口地址
     private static final String HOST_AD = "https://advert-api.battcn.com";//广告正式地址
