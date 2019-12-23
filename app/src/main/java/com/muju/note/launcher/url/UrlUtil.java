@@ -11,15 +11,15 @@ public class UrlUtil {
 
     public static Enum_VERSION currentVersion = Enum_VERSION.Test;
 
-//        public static final String HOST_DEFAULT = "http://pad.zgzkys.com";
-    public static final String HOST_DEFAULT = "http://pad.test.zgzkys.com";
+        public static final String HOST_DEFAULT = "http://pad.zgzkys.com";
+//    public static final String HOST_DEFAULT = "http://pad.test.zgzkys.com";
 //    public static final String HOST_DEFAULT = "http://192.168.1.200:8086";
 
     //获取公众号任务广告 单独的接口地址
     private static final String HOST_AD = "https://advert-api.battcn.com";//广告正式地址
 
-    private static final String VIDEO_HOST = "http://test.advert.zgzkys.com";//视频资源测试服务地址
-
+//    private static final String VIDEO_HOST = "http://test.advert.zgzkys.com";//视频资源测试服务地址
+    private static final String VIDEO_HOST = "http://new.cloud.zgzkys.com";//视频资源正式服务地址
     //获取影视资源的host
     private static final String getVideoSourceHost()
     {

@@ -1,6 +1,7 @@
 package com.muju.note.launcher.app.video.service;
 
 import android.content.ContentValues;
+import android.text.TextUtils;
 
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.FileCallback;
@@ -300,9 +301,30 @@ public class VideoService {
 //        String sql  = "SELECT max(updateTime) FROM video";
         LitePalDb.setZkysDb();
         String  timestamp = LitePal.max(VideoInfoDao.class, "updateTime", String.class);
-//         long time = DateUtil.dateStr2Long(timestamp);
-//        long time = timestamp.getTime();
-        LogUtil.d("timestamp：" + timestamp);
+        LogUtil.d("timestamp1：" + timestamp);
+         long time = DateUtil.dateStr2Long(timestamp);
+         if (time != -999)
+         {
+             timestamp = "" + time;
+             List<VideoInfoDao> list = LitePal.findAll(VideoInfoDao.class);
+             for (VideoInfoDao videoInfoDao : list)
+             {
+                 if (!TextUtils.isEmpty(videoInfoDao.getUpdateTime()))
+                 {
+                     long updateTime = DateUtil.dateStr2Long(videoInfoDao.getUpdateTime());
+                     if (updateTime != -999)
+                     {
+                         videoInfoDao.setUpdateTime("" + updateTime);
+                         videoInfoDao.save();
+                     }
+                 }
+             }
+         }
+         if (TextUtils.isEmpty(timestamp))
+         {
+             timestamp = "1";
+         }
+        LogUtil.d("timestamp2：" + timestamp);
         OkGo.<String>get(UrlUtil.getVideoUpdateNew("" + timestamp))
                 .tag(this)
                 .execute(new StringCallback() {

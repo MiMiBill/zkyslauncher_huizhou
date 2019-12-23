@@ -317,6 +317,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
         CrontabService.getInstance().cancleAlarm(this); //取消定时事件
         llNoPatient.setVisibility(View.VISIBLE);
         llHavePaitent.setVisibility(View.GONE);
+
     }
 
 
