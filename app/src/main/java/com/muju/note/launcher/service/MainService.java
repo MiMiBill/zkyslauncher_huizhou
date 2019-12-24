@@ -93,7 +93,7 @@ public class MainService extends Service {
                         @Override
                         public void accept(Long aLong) throws Exception {
 
-                            LogUtil.d("自启动10分钟内更新");
+                            LogUtil.d("自启动30s内更新:" + Thread.currentThread());
                             // 获取平板配置信息
                             ConfigService.getInstance().start();
                             // 获取定位信息

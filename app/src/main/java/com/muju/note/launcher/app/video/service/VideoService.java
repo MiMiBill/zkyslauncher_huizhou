@@ -299,81 +299,88 @@ public class VideoService {
      *  获取影视更新的内容
      */
     public void getUpdateVideo(){
-//        String sql  = "SELECT max(updateTime) FROM video";
-        LitePalDb.setZkysDb();
-        String  timestamp = LitePal.max(VideoInfoDao.class, "updateTime", String.class);
-        LogUtil.d("timestamp1：" + timestamp);
-         long time = DateUtil.dateStr2Long(timestamp);
-         if (time != -999)
-         {
-             timestamp = "" + time;
-             List<VideoInfoDao> list = LitePal.findAll(VideoInfoDao.class);
-             List<VideoInfoDao> listSave = new ArrayList<>();
-             for (VideoInfoDao videoInfoDao : list)
-             {
-                 if (!TextUtils.isEmpty(videoInfoDao.getUpdateTime()))
-                 {
-                     long updateTime = DateUtil.dateStr2Long(videoInfoDao.getUpdateTime());
-                     if (updateTime != -999)
-                     {
-                         videoInfoDao.setUpdateTime("" + updateTime);
-                         listSave.add(videoInfoDao);
-//                         videoInfoDao.save();
-                     }
-                 }
-             }
-             LitePal.saveAll(listSave);
-         }
-         if (TextUtils.isEmpty(timestamp))
-         {
-             timestamp = "1";
-         }
-        LogUtil.d("timestamp2：" + timestamp);
-        OkGo.<String>get(UrlUtil.getVideoUpdateNew("" + timestamp))
-                .tag(this)
-                .execute(new StringCallback() {
-                    @Override
-                    public void onSuccess(final Response<String> response) {
-                        ExecutorService service=Executors.newSingleThreadExecutor();
-                        service.execute(new Runnable() {
+
+//        ExecutorService service=Executors.newSingleThreadExecutor();
+//        service.execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                List<VideoInfoDao> list = LitePal.findAll(VideoInfoDao.class);
+//                List<VideoInfoDao> listSave = new ArrayList<>();
+//                for (VideoInfoDao videoInfoDao : list)
+//                {
+//                    if (!TextUtils.isEmpty(videoInfoDao.getUpdateTime()))
+//                    {
+//                        long updateTime = DateUtil.dateStr2Long(videoInfoDao.getUpdateTime());
+//                        if (updateTime != -999)
+//                        {
+//                            videoInfoDao.setUpdateTime("" + updateTime);
+//                            listSave.add(videoInfoDao);
+////                         videoInfoDao.save();
+//                        }
+//                    }
+//                }
+//                LitePal.saveAll(listSave);
+
+        ExecutorService service=Executors.newSingleThreadExecutor();
+        service.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                LitePalDb.setZkysDb();
+                String  timestamp = LitePal.max(VideoInfoDao.class, "updateTime", String.class);
+                LogUtil.d("timestamp1：" + timestamp);
+                long time = DateUtil.dateStr2Long(timestamp);
+                if (time != -999)
+                {
+                    timestamp = "" + time;
+                }
+                if (TextUtils.isEmpty(timestamp))
+                {
+                    timestamp = "1";
+                }
+                LogUtil.d("timestamp2：" + timestamp);
+                OkGo.<String>get(UrlUtil.getVideoUpdateNew("" + timestamp))
+                        .tag(this)
+                        .execute(new StringCallback() {
                             @Override
-                            public void run() {
-                                String body = response.body();
-                                com.google.gson.Gson gson =  new  com.google.gson.Gson();
-                                UpdateVideoBean updateVideoBean = gson.fromJson(body, UpdateVideoBean.class);
-                                if (updateVideoBean.isSuccessful())
-                                {
-                                    if (updateVideoBean.getData() != null){
-                                        LitePalDb.setZkysDb();
-                                        for (int id : updateVideoBean.getData().getStopVideoIds())
+                            public void onSuccess(final Response<String> response) {
+                                ExecutorService service=Executors.newSingleThreadExecutor();
+                                service.execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        String body = response.body();
+                                        com.google.gson.Gson gson =  new  com.google.gson.Gson();
+                                        UpdateVideoBean updateVideoBean = gson.fromJson(body, UpdateVideoBean.class);
+                                        if (updateVideoBean.isSuccessful())
                                         {
-                                            LitePal.deleteAll(VideoInfoDao.class, "videoId = ?","" + id );
+                                            if (updateVideoBean.getData() != null){
+                                                LitePalDb.setZkysDb();
+                                                for (int id : updateVideoBean.getData().getStopVideoIds())
+                                                {
+                                                    LitePal.deleteAll(VideoInfoDao.class, "videoId = ?","" + id );
 //                                            LitePal.delete(VideoInfoDao.class,id);
-                                        }
+                                                }
 
+                                                LitePalDb.setZkysDb();
+                                                for (VideoInfoDao videoInfoDao : updateVideoBean.getData().getVideos())
+                                                {
+//                                                    String updateTime = videoInfoDao.getUpdateTime();
+//                                                    long time = DateUtil.dateStr2Long(updateTime);
+//                                                    if (-999 != time)
+//                                                    {
+//                                                        videoInfoDao.setUpdateTime("" + time);
+//                                                    }
 
-                                        LitePalDb.setZkysDb();
-                                        for (VideoInfoDao videoInfoDao : updateVideoBean.getData().getVideos())
-                                        {
-                                            String updateTime = videoInfoDao.getUpdateTime();
-                                            long time = DateUtil.dateStr2Long(updateTime);
-                                            if (-999 != time)
-                                            {
-                                                videoInfoDao.setUpdateTime("" + time);
+                                                    VideoInfoDao OldvideoInfoDao = LitePal.where("cid = ?",videoInfoDao.getCid()+"").findFirst(VideoInfoDao.class);
+                                                    if(OldvideoInfoDao != null){
+                                                        LitePal.deleteAll(VideoInfoDao.class, "videoId = ?","" + OldvideoInfoDao.getVideoId() );
+                                                    }
+                                                    videoInfoDao.setVideoId(videoInfoDao.getId());
+                                                    videoInfoDao.save();
+                                                }
                                             }
-//                                            videoInfoDao.setVideoId(videoInfoDao.getId());
-//                                            videoInfoDao.save();
 
-                                           VideoInfoDao OldvideoInfoDao = LitePal.where("cid = ?",videoInfoDao.getCid()+"").findFirst(VideoInfoDao.class);
-                                           if(OldvideoInfoDao != null){
-                                               LitePal.deleteAll(VideoInfoDao.class, "videoId = ?","" + OldvideoInfoDao.getVideoId() );
-                                           }
-                                            videoInfoDao.setVideoId(videoInfoDao.getId());
-                                            videoInfoDao.save();
                                         }
-                                    }
-
-                                }
 
 //                                for (VideoInfoDao dao:response.body().getData()){
 //                                    LitePalDb.setZkysDb();
@@ -387,11 +394,18 @@ public class VideoService {
 //                                        dao.save();
 //                                    }
 //                                }
-                                SPUtil.putLong(SpTopics.SP_VIDEO_UPDATE_TIME,(System.currentTimeMillis()/1000));
+                                        SPUtil.putLong(SpTopics.SP_VIDEO_UPDATE_TIME,(System.currentTimeMillis()/1000));
+                                    }
+                                });
                             }
                         });
-                    }
-                });
+
+
+
+            }
+        });
+
+
 
     }
 

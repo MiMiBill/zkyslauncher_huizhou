@@ -3,6 +3,7 @@ package com.muju.note.launcher.app.video.util;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 
 import com.google.gson.reflect.TypeToken;
 import com.hzy.lib7z.IExtractCallback;
@@ -25,6 +26,7 @@ import com.muju.note.launcher.litepal.UpAdvertInfoDao;
 import com.muju.note.launcher.litepal.UpVideoInfoDao;
 import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.util.Constants;
+import com.muju.note.launcher.util.DateUtil;
 import com.muju.note.launcher.util.file.FileIOUtils;
 import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.sp.SPUtil;
@@ -188,33 +190,40 @@ public class DbHelper {
             public void onSucceed() {
                 LogUtil.d("解压成功");
 
-                com.google.gson.Gson gson = new com.google.gson.Gson();
-                String videoJson =  FileIOUtils.readFile2String(voideJsonFilePath);
 
-                try{
-                    File file = new File(voideJsonFilePath);
-                    file.delete();
-                }catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
 
-                final List<VideoInfoDao> videoInfoDaoList = gson.fromJson(videoJson,new TypeToken<List<VideoInfoDao>>(){}.getType());
-
-                final int[] num = {0};
-                for (VideoInfoDao videoInfoDao:videoInfoDaoList)
-                {
-                    num[0]++;
-                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status
-                            .VIDEO_INFO_DB_PROGRESS, num[0] + "/" + count));
-                    videoInfoDao.setVideoId(videoInfoDao.getId());
-                }
 
                 ExecutorService service = Executors.newSingleThreadExecutor();
                 service.execute(new Runnable() {
                     @Override
                     public void run() {
                         try {
+                            String videoJson =  FileIOUtils.readFile2String(voideJsonFilePath);
+                            try{
+                                File file = new File(voideJsonFilePath);
+                                file.delete();
+                            }catch (Exception e)
+                            {
+                                e.printStackTrace();
+                            }
+                            com.google.gson.Gson gson = new com.google.gson.Gson();
+                            final List<VideoInfoDao> videoInfoDaoList = gson.fromJson(videoJson,new TypeToken<List<VideoInfoDao>>(){}.getType());
+
+                            final int[] num = {0};
+                            for (VideoInfoDao videoInfoDao:videoInfoDaoList)
+                            {
+                                num[0]++;
+                                EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status
+                                        .VIDEO_INFO_DB_PROGRESS, num[0] + "/" + count));
+                                videoInfoDao.setVideoId(videoInfoDao.getId());
+
+                                String updateTime = DateUtil.formartTimeToDate(videoInfoDao.getUpdateTime());
+                                LogUtil.d("updateTime:" + updateTime);
+                                if (!TextUtils.isEmpty(updateTime))
+                                {
+                                    videoInfoDao.setUpdateTime(updateTime);
+                                }
+                            }
                             LitePalDb.setZkysDb();
                             LitePal.deleteAll(VideoInfoDao.class);
                             EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent

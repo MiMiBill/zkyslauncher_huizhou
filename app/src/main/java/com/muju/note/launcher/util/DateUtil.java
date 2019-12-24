@@ -167,6 +167,25 @@ public class DateUtil {
         return date.substring(0,4)+"年"+date.substring(5,7)+"月"+date.substring(8,10)+"日"+date.substring(11,16);
     }
 
+    //时间戳格式化成时间
+    public static String formartTimeToDate(String timeStr) {
+        try{
+            long time = Long.parseLong(timeStr);
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time);
+        }catch (Exception e)
+        {
+            return null;
+        }
+
+    }
+
+//    rowid	id	actor	cid	columnid	columnname	createtime	customtag	description	director	duration	edittime	fee	imgurl	isclassify	isnew	isrecommend	itemtype	keywords	logourl	name	number	onwaytime	region	score	screenurl	serialversionuid	source	status	tid	typeid	updatetime	videoid	videotype	watchcount
+//8	8	托尼·贾/林家栋/古天乐	1257208	0	大片	2019-05-09 13:27:02	动作,罪案,杀破狼·贪狼,2017,内地,港台	该片讲述了警察李忠志远赴泰国寻找女儿，不料卷入了政治黑暗纷争的故事。	叶伟信	6060	20190715230704	0	http://image.wotv.17wo.cn/service/newvideoimg/1d609654-125d-458b-a2e7-a0aeb6f0e998.jpg	1	1	0	2	动作/罪案/杀破狼·贪狼		杀破狼·贪狼	0	2017	内地/港台		http://image.wotv.17wo.cn/service/newvideoimg/95a65a5f-b5e5-4f89-b488-0ed730e03d73.jpg	1	1	1		10000100000000090000000000003094	1563522374000	1982	3	15371
+
+
+
+
+
 
     //时间戳格式化成时间
     public static String formartNowTimeToDate(long time) {
