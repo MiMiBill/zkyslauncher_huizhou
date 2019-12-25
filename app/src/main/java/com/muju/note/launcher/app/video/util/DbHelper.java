@@ -218,7 +218,7 @@ public class DbHelper {
                                 videoInfoDao.setVideoId(videoInfoDao.getId());
 
                                 String updateTime = DateUtil.formartTimeToDate(videoInfoDao.getUpdateTime());
-                                LogUtil.d("updateTime:" + updateTime);
+//                                LogUtil.d("updateTime:" + updateTime);
                                 if (!TextUtils.isEmpty(updateTime))
                                 {
                                     videoInfoDao.setUpdateTime(updateTime);

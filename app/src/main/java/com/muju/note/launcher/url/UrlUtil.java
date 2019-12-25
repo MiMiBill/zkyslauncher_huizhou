@@ -93,6 +93,15 @@ public class UrlUtil {
         return getVideoSourceHost() + "/device/pad_videos/" + timestamp +"/lately";
     }
 
+    /**
+     * 获取增量更新内容的长度
+     *
+     * @return
+     */
+    public static String getVideoUpdateCountNew(String timestamp) {
+        return getVideoSourceHost() + "/device/pad_videos/" + timestamp +"/count_lately";
+    }
+
 
     /**
      * 获取影视类型及所有标签

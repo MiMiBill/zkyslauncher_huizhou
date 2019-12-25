@@ -9,8 +9,11 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.HttpParams;
 import com.lzy.okgo.model.Progress;
 import com.lzy.okgo.model.Response;
+import com.muju.note.launcher.app.hostipal.service.MienService;
+import com.muju.note.launcher.app.hostipal.service.MissionService;
 import com.muju.note.launcher.app.startUp.event.StartCheckDataEvent;
 import com.muju.note.launcher.app.video.bean.UpdateVideoBean;
+import com.muju.note.launcher.app.video.bean.UpdateVideoCountBean;
 import com.muju.note.launcher.app.video.bean.VideoDownLoadBean;
 import com.muju.note.launcher.app.video.db.VideoColumnsDao;
 import com.muju.note.launcher.app.video.db.VideoHisDao;
@@ -25,6 +28,9 @@ import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.litepal.UpVideoInfoDao;
 import com.muju.note.launcher.okgo.BaseBean;
 import com.muju.note.launcher.okgo.JsonCallback;
+import com.muju.note.launcher.service.config.ConfigService;
+import com.muju.note.launcher.service.encyclope.EncyclopeService;
+import com.muju.note.launcher.service.location.LocationService;
 import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.ActiveUtils;
@@ -48,7 +54,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 import com.google.gson.Gson;
+
+import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
 
 public class VideoService {
 
@@ -131,17 +142,72 @@ public class VideoService {
      *  加载影视分类，并界面展示
      */
     public void startVideoInfo(){
-        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_START));
-        LitePal.countAsync(VideoInfoDao.class).listen(new CountCallback() {
-            @Override
-            public void onFinish(int count) {
-                if(count<10000){
-                    queryVideo();
-                }else {
-                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_SUCCESS));
-                }
-            }
-        });
+
+        int count = LitePal.count(VideoInfoDao.class);
+        LogUtil.d("startVideoInfo count：" + count);
+
+        String  timestamp = LitePal.max(VideoInfoDao.class, "updateTime", String.class);
+        LogUtil.d("startVideoInfo timestamp：" + timestamp);
+        final long preTime = DateUtil.dateStr2Long(timestamp);
+        if (preTime == -999)
+        {
+            //时间转换不成功，说明之前没有时间戳，直接全量更新
+            queryVideo();
+            return;
+        }
+        //查询增量更新可能用到的长度
+        OkGo.<String>get(UrlUtil.getVideoUpdateCountNew("" + preTime))
+                .tag(this)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(final Response<String> response) {
+                        String body = response.body();
+                        com.google.gson.Gson gson =  new  com.google.gson.Gson();
+                        UpdateVideoCountBean updateVideoBean = gson.fromJson(body, UpdateVideoCountBean.class);
+                        if (updateVideoBean.isSuccessful())
+                        {
+                           long size =  updateVideoBean.getData();
+                            LogUtil.d("startVideoInfo size：" + size);
+                           if (size > 8000)
+                           {
+                               LogUtil.d("startVideoInfo 开始全量更新");
+                               //如果增量更新数据大于8000条，那么直接全量下载
+                               queryVideo();
+                           }else {
+                               EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_SUCCESS));
+                           }
+                        }else {
+                            EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_HTTP_FAIL));
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_HTTP_FAIL));
+                    }
+                });
+
+
+//        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_START));
+//        LitePal.countAsync(VideoInfoDao.class).listen(new CountCallback() {
+//            @Override
+//            public void onFinish(int count) {
+//
+//                long diffTime = 0;
+//                if (preTime != -999)
+//                {
+//                    diffTime = System.currentTimeMillis() - preTime;
+//                }
+//                LogUtil.d("时间差：" + diffTime);
+//                if(count<10000 || diffTime > 1000 * 60 * 60 * 24 * 15 ){ //15天未更新
+//                    queryVideo();
+//                }else {
+//                    EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_SUCCESS));
+//                }
+//            }
+//        });
     }
 
 
@@ -299,7 +365,7 @@ public class VideoService {
      *  获取影视更新的内容
      */
     public void getUpdateVideo(){
-
+        LogUtil.d("getUpdateVideo 开始增量更新");
 //        ExecutorService service=Executors.newSingleThreadExecutor();
 //        service.execute(new Runnable() {
 //            @Override
@@ -325,10 +391,10 @@ public class VideoService {
         service.execute(new Runnable() {
             @Override
             public void run() {
-
                 LitePalDb.setZkysDb();
                 String  timestamp = LitePal.max(VideoInfoDao.class, "updateTime", String.class);
                 LogUtil.d("timestamp1：" + timestamp);
+//                timestamp = "2019-10-13 15:37:09";
                 long time = DateUtil.dateStr2Long(timestamp);
                 if (time != -999)
                 {
@@ -348,6 +414,7 @@ public class VideoService {
                                 service.execute(new Runnable() {
                                     @Override
                                     public void run() {
+                                        long  preTime = System.currentTimeMillis();
                                         String body = response.body();
                                         com.google.gson.Gson gson =  new  com.google.gson.Gson();
                                         UpdateVideoBean updateVideoBean = gson.fromJson(body, UpdateVideoBean.class);
@@ -358,26 +425,47 @@ public class VideoService {
                                                 for (int id : updateVideoBean.getData().getStopVideoIds())
                                                 {
                                                     LitePal.deleteAll(VideoInfoDao.class, "videoId = ?","" + id );
-//                                            LitePal.delete(VideoInfoDao.class,id);
                                                 }
 
                                                 LitePalDb.setZkysDb();
+                                                ArrayList<VideoInfoDao> willSaveList = new ArrayList<>();
+                                                int count = 0;
                                                 for (VideoInfoDao videoInfoDao : updateVideoBean.getData().getVideos())
                                                 {
-//                                                    String updateTime = videoInfoDao.getUpdateTime();
-//                                                    long time = DateUtil.dateStr2Long(updateTime);
-//                                                    if (-999 != time)
-//                                                    {
-//                                                        videoInfoDao.setUpdateTime("" + time);
-//                                                    }
 
                                                     VideoInfoDao OldvideoInfoDao = LitePal.where("cid = ?",videoInfoDao.getCid()+"").findFirst(VideoInfoDao.class);
                                                     if(OldvideoInfoDao != null){
                                                         LitePal.deleteAll(VideoInfoDao.class, "videoId = ?","" + OldvideoInfoDao.getVideoId() );
                                                     }
                                                     videoInfoDao.setVideoId(videoInfoDao.getId());
-                                                    videoInfoDao.save();
+                                                    willSaveList.add(videoInfoDao);
+
+                                                    count ++;
+                                                    if (count >= 2000) //一次只取2000条
+                                                    {
+                                                        break;
+                                                    }
                                                 }
+                                                LitePal.saveAll(willSaveList);
+                                                LogUtil.d("getUpdateVideo 保存耗时：" + (System.currentTimeMillis() - preTime));
+                                                if (updateVideoBean.getData().getVideos().size() >= 2000)
+                                                {
+                                                    LogUtil.d("getUpdateVideo 开启3分钟定时器");
+                                                    //如果获得的条数大于等于2000条，那么3分钟后再去更新新内容
+                                                    Observable.timer((long) (3), TimeUnit.MINUTES) //
+                                                            .subscribe(new Consumer<Long>() {
+                                                                @Override
+                                                                public void accept(Long aLong) throws Exception {
+                                                                    LogUtil.d("getUpdateVideo 3分钟定时器到了");
+                                                                    getUpdateVideo();
+                                                                }
+                                                            });
+                                                }else {
+                                                    LogUtil.d("getUpdateVideo 更新结束");
+                                                }
+
+                                            }
+
                                             }
 
                                         }
@@ -394,8 +482,7 @@ public class VideoService {
 //                                        dao.save();
 //                                    }
 //                                }
-                                        SPUtil.putLong(SpTopics.SP_VIDEO_UPDATE_TIME,(System.currentTimeMillis()/1000));
-                                    }
+
                                 });
                             }
                         });

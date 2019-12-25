@@ -57,6 +57,11 @@ public class DateUtil {
 
     public static long dateStr2Long(String  dStr)
     {
+        if (TextUtils.isEmpty(dStr))
+        {
+            return -999;
+        }
+
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             Date d = df.parse(dStr);
