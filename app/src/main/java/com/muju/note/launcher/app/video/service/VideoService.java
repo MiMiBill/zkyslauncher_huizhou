@@ -24,6 +24,7 @@ import com.muju.note.launcher.app.video.db.VideoTagSubDao;
 import com.muju.note.launcher.app.video.db.VideoTagsDao;
 import com.muju.note.launcher.app.video.util.DbHelper;
 import com.muju.note.launcher.base.LauncherApplication;
+import com.muju.note.launcher.event.UpdateVideoInfoEvent;
 import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.litepal.UpVideoInfoDao;
 import com.muju.note.launcher.okgo.BaseBean;
@@ -44,6 +45,7 @@ import org.litepal.LitePal;
 import org.litepal.crud.callback.CountCallback;
 import org.litepal.crud.callback.FindCallback;
 import org.litepal.crud.callback.FindMultiCallback;
+import org.litepal.crud.callback.SaveCallback;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -361,6 +363,10 @@ public class VideoService {
 //    }
 
 
+     final static int MAX_SIZE = 1000;  //分页更新，每次接收来自后台的最大数量
+    static int tryCount = 0;//重试几次
+    final static int  MAX_TRY_COUNT = 5; //最多尝试次数
+
     /**
      *  获取影视更新的内容
      */
@@ -387,88 +393,154 @@ public class VideoService {
 //                }
 //                LitePal.saveAll(listSave);
 
-        ExecutorService service=Executors.newSingleThreadExecutor();
-        service.execute(new Runnable() {
+
+
+
+        new Thread(){
             @Override
             public void run() {
-                LitePalDb.setZkysDb();
-                String  timestamp = LitePal.max(VideoInfoDao.class, "updateTime", String.class);
-                LogUtil.d("timestamp1：" + timestamp);
-//                timestamp = "2019-10-13 15:37:09";
-                long time = DateUtil.dateStr2Long(timestamp);
-                if (time != -999)
-                {
-                    timestamp = "" + time;
-                }
-                if (TextUtils.isEmpty(timestamp))
-                {
-                    timestamp = "1";
-                }
-                LogUtil.d("timestamp2：" + timestamp);
-                OkGo.<String>get(UrlUtil.getVideoUpdateNew("" + timestamp))
-                        .tag(this)
-                        .execute(new StringCallback() {
-                            @Override
-                            public void onSuccess(final Response<String> response) {
-                                ExecutorService service=Executors.newSingleThreadExecutor();
-                                service.execute(new Runnable() {
+                super.run();
+                tryCount ++;
+                EventBus.getDefault().post(new UpdateVideoInfoEvent(true));
+//                ExecutorService service=Executors.newSingleThreadExecutor();
+//                service.execute(new Runnable() {
+//                    @Override
+//                    public void run() {
+                        LogUtil.d("getUpdateVideo 线程:" +  Thread.currentThread() );
+                        LitePalDb.setZkysDb();
+                        String  timestamp = LitePal.max(VideoInfoDao.class, "updateTime", String.class);
+                        LogUtil.d("timestamp1：" + timestamp);
+                        long time = DateUtil.dateStr2Long(timestamp);
+                        if (time != -999)
+                        {
+                            timestamp = "" + time;
+                        }
+                        if (TextUtils.isEmpty(timestamp))
+                        {
+                            timestamp = "1";
+                        }
+                        LogUtil.d("timestamp2：" + timestamp);
+                        OkGo.<String>get(UrlUtil.getVideoUpdateNew("" + timestamp))
+                                .tag(this)
+                                .execute(new StringCallback() {
+
                                     @Override
-                                    public void run() {
-                                        long  preTime = System.currentTimeMillis();
-                                        String body = response.body();
-                                        com.google.gson.Gson gson =  new  com.google.gson.Gson();
-                                        UpdateVideoBean updateVideoBean = gson.fromJson(body, UpdateVideoBean.class);
-                                        if (updateVideoBean.isSuccessful())
+                                    public void onError(Response<String> response) {
+                                        super.onError(response);
+                                        if (tryCount > MAX_TRY_COUNT)
                                         {
-                                            if (updateVideoBean.getData() != null){
-                                                LitePalDb.setZkysDb();
-                                                for (int id : updateVideoBean.getData().getStopVideoIds())
-                                                {
-                                                    LitePal.deleteAll(VideoInfoDao.class, "videoId = ?","" + id );
-                                                }
-
-                                                LitePalDb.setZkysDb();
-                                                ArrayList<VideoInfoDao> willSaveList = new ArrayList<>();
-                                                int count = 0;
-                                                for (VideoInfoDao videoInfoDao : updateVideoBean.getData().getVideos())
-                                                {
-
-                                                    VideoInfoDao OldvideoInfoDao = LitePal.where("cid = ?",videoInfoDao.getCid()+"").findFirst(VideoInfoDao.class);
-                                                    if(OldvideoInfoDao != null){
-                                                        LitePal.deleteAll(VideoInfoDao.class, "videoId = ?","" + OldvideoInfoDao.getVideoId() );
-                                                    }
-                                                    videoInfoDao.setVideoId(videoInfoDao.getId());
-                                                    willSaveList.add(videoInfoDao);
-
-                                                    count ++;
-                                                    if (count >= 2000) //一次只取2000条
-                                                    {
-                                                        break;
-                                                    }
-                                                }
-                                                LitePal.saveAll(willSaveList);
-                                                LogUtil.d("getUpdateVideo 保存耗时：" + (System.currentTimeMillis() - preTime));
-                                                if (updateVideoBean.getData().getVideos().size() >= 2000)
-                                                {
-                                                    LogUtil.d("getUpdateVideo 开启3分钟定时器");
-                                                    //如果获得的条数大于等于2000条，那么3分钟后再去更新新内容
-                                                    Observable.timer((long) (3), TimeUnit.MINUTES) //
-                                                            .subscribe(new Consumer<Long>() {
-                                                                @Override
-                                                                public void accept(Long aLong) throws Exception {
-                                                                    LogUtil.d("getUpdateVideo 3分钟定时器到了");
-                                                                    getUpdateVideo();
-                                                                }
-                                                            });
-                                                }else {
-                                                    LogUtil.d("getUpdateVideo 更新结束");
-                                                }
-
-                                            }
-
-                                            }
+                                            tryCount = 0;
+                                            EventBus.getDefault().post(new UpdateVideoInfoEvent(false,"数据更新失败，请检查网络 \n 或者尝试重启"));
+                                            return;
 
                                         }
+                                        EventBus.getDefault().post(new UpdateVideoInfoEvent(false));
+                                        LogUtil.d("getUpdateVideo 开启3分钟定时器");
+                                        //如果获得的条数大于等于2000条，那么3分钟后再去更新新内容
+                                        Observable.timer((long) (3), TimeUnit.MINUTES) //
+                                                .subscribe(new Consumer<Long>() {
+                                                    @Override
+                                                    public void accept(Long aLong) throws Exception {
+                                                        LogUtil.d("getUpdateVideo 3分钟定时器到了");
+                                                        getUpdateVideo();
+                                                    }
+                                                });
+                                    }
+
+                                    @Override
+                                    public void onSuccess(final Response<String> response) {
+                                        ExecutorService service=Executors.newSingleThreadExecutor();
+                                        service.execute(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                final long  preTime = System.currentTimeMillis();
+                                                String body = response.body();
+                                                com.google.gson.Gson gson =  new  com.google.gson.Gson();
+                                                final UpdateVideoBean updateVideoBean = gson.fromJson(body, UpdateVideoBean.class);
+                                                if (updateVideoBean.isSuccessful())
+                                                {
+                                                    if (updateVideoBean.getData() != null){
+                                                        LitePalDb.setZkysDb();
+                                                        for (int id : updateVideoBean.getData().getStopVideoIds())
+                                                        {
+                                                            LitePal.deleteAll(VideoInfoDao.class, "videoId = ?","" + id );
+                                                        }
+
+                                                        LitePalDb.setZkysDb();
+                                                        ArrayList<VideoInfoDao> willSaveList = new ArrayList<>();
+                                                        int count = 0;
+                                                        for (VideoInfoDao videoInfoDao : updateVideoBean.getData().getVideos())
+                                                        {
+                                                            VideoInfoDao OldvideoInfoDao = LitePal.where("cid = ?",videoInfoDao.getCid()+"").findFirst(VideoInfoDao.class);
+                                                            if(OldvideoInfoDao != null){
+                                                                LitePal.deleteAll(VideoInfoDao.class, "videoId = ?","" + OldvideoInfoDao.getVideoId() );
+                                                            }
+                                                            videoInfoDao.setVideoId(videoInfoDao.getId());
+                                                            willSaveList.add(videoInfoDao);
+
+                                                            count ++;
+                                                            if (count >= MAX_SIZE) //一次只取2000条
+                                                            {
+                                                                break;
+                                                            }
+                                                        }
+                                                        LitePal.saveAllAsync(willSaveList).listen(new SaveCallback() {
+                                                            @Override
+                                                            public void onFinish(boolean success) {
+
+                                                                if (success)
+                                                                {
+                                                                    tryCount = 0;
+                                                                    EventBus.getDefault().post(new UpdateVideoInfoEvent(false));
+                                                                    LogUtil.d("getUpdateVideo 保存耗时：" + (System.currentTimeMillis() - preTime));
+                                                                    if (updateVideoBean.getData().getVideos().size() >= MAX_SIZE)
+                                                                    {
+                                                                        LogUtil.d("getUpdateVideo 开启3分钟定时器");
+                                                                        //如果获得的条数大于等于2000条，那么3分钟后再去更新新内容
+                                                                        Observable.timer((long) (3), TimeUnit.MINUTES) //
+                                                                                .subscribe(new Consumer<Long>() {
+                                                                                    @Override
+                                                                                    public void accept(Long aLong) throws Exception {
+                                                                                        LogUtil.d("getUpdateVideo 3分钟定时器到了");
+                                                                                        getUpdateVideo();
+                                                                                    }
+                                                                                });
+                                                                    }else {
+                                                                        LogUtil.d("getUpdateVideo 更新结束");
+                                                                    }
+
+                                                                }else {
+                                                                    if (tryCount > MAX_TRY_COUNT)
+                                                                    {
+                                                                        tryCount = 0;
+                                                                        EventBus.getDefault().post(new UpdateVideoInfoEvent(false,"数据更新失败，请检查网络 \n 或者尝试重启"));
+                                                                        return;
+
+                                                                    }
+                                                                    EventBus.getDefault().post(new UpdateVideoInfoEvent(false));
+                                                                    LogUtil.d("getUpdateVideo 开启3分钟定时器");
+                                                                    //如果获得的条数大于等于2000条，那么3分钟后再去更新新内容
+                                                                    Observable.timer((long) (3), TimeUnit.MINUTES) //
+                                                                            .subscribe(new Consumer<Long>() {
+                                                                                @Override
+                                                                                public void accept(Long aLong) throws Exception {
+                                                                                    LogUtil.d("getUpdateVideo 3分钟定时器到了");
+                                                                                    getUpdateVideo();
+                                                                                }
+                                                                            });
+
+
+                                                                }
+
+                                                            }
+                                                        });
+
+
+                                                    }
+
+                                                }
+
+                                            }
 
 //                                for (VideoInfoDao dao:response.body().getData()){
 //                                    LitePalDb.setZkysDb();
@@ -483,14 +555,20 @@ public class VideoService {
 //                                    }
 //                                }
 
+                                        });
+                                    }
                                 });
-                            }
-                        });
+
+
+
+//                    }
+//                });
+
 
 
 
             }
-        });
+        }.start();
 
 
 

@@ -81,28 +81,31 @@ public class MainService extends Service {
 
         // 获取平板配置信息，因为需要自动息屏的功能，所以开机就先去获取，这样就能快速的体检到开关屏功能了
         ConfigService.getInstance().start();
+
         if(rebootPhone){
             // 自启动状态，不做操作
         }else {
             // 查询更新
             UpdateVersionService.getInstance().start();
 
+            //新增影视详情
+            VideoService.getInstance().getUpdateVideo();
             // 非自启动状态，10分钟内初始化操作,现在修改为30秒
-            Observable.timer((long) (30), TimeUnit.SECONDS)
+            Observable.timer((long) (10), TimeUnit.MINUTES)
                     .subscribe(new Consumer<Long>() {
                         @Override
                         public void accept(Long aLong) throws Exception {
 
-                            LogUtil.d("自启动30s内更新:" + Thread.currentThread());
+                            LogUtil.d("手动启动10分钟后更新:" + Thread.currentThread());
                             // 获取平板配置信息
-                            ConfigService.getInstance().start();
+//                            ConfigService.getInstance().start();
                             // 获取定位信息
                             LocationService.getInstance().start();
                             //检查医院风采数据
                             MienService.getInstance().getMienInfo();
                             // 检查影视数据
                             VideoService.getInstance().getVideoTopInfo();
-                            VideoService.getInstance().getUpdateVideo();
+//                            VideoService.getInstance().getUpdateVideo();
                             VideoService.getInstance().getVideoCloumns();
                             //医疗百科科室
                             EncyclopeService.getInstance().getLately();

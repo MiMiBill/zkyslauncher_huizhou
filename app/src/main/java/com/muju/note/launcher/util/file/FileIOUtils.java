@@ -489,6 +489,41 @@ public final class FileIOUtils {
         return readFile2String(file, null);
     }
 
+
+    /**
+     * 读取JSON文件
+     *
+     * @param file        文件
+     * @return 字符串
+     */
+    public static String readVideoJsonFile2String(String filePath)
+    {
+        File file = FileUtils.getFileByPath(filePath);
+        if (!FileUtils.isFileExists(file)) return null;
+        BufferedReader reader = null;
+        try {
+            StringBuilder sb = new StringBuilder();
+            String charsetName = null;
+            if (isSpace(charsetName)) {
+                reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+            } else {
+                reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), charsetName));
+            }
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+            // delete the last line separator
+            return sb.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            CloseUtils.closeIO(reader);
+        }
+
+    }
+
     /**
      * 读取文件到字符串中
      *

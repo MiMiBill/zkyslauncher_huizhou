@@ -78,6 +78,7 @@ import com.muju.note.launcher.entity.AdvertWebEntity;
 import com.muju.note.launcher.entity.BedSideEvent;
 import com.muju.note.launcher.entity.PushAutoMsgEntity;
 import com.muju.note.launcher.entity.PushCustomMessageEntity;
+import com.muju.note.launcher.event.UpdateVideoInfoEvent;
 import com.muju.note.launcher.litepal.LitePalDb;
 import com.muju.note.launcher.service.MainService;
 import com.muju.note.launcher.service.recordLog.RecordLogService;
@@ -117,6 +118,7 @@ import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import me.leefeng.promptlibrary.PromptDialog;
 import me.yokeyword.fragmentation.ISupportFragment;
 import me.yokeyword.fragmentation.SupportFragment;
 
@@ -174,6 +176,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
     private boolean isStartProtection = true;
     private int clickCount=0;
     private boolean isRecordLog=true;
+    private PromptDialog promptDialog;
     private static String TAG = "MainActivity";
     private Handler handler = new Handler() {
         @Override
@@ -196,7 +199,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
 
     @Override
     public void initData() {
-
+        promptDialog = new PromptDialog(this);
         Set<String> tags = new HashSet<>();
         tags.add("平板桌面");
         JPushInterface.setTags(LauncherApplication.getContext(),2,tags);
@@ -289,6 +292,23 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
         outHospital();
     }
 
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateVideoInfoEvent(UpdateVideoInfoEvent updateVideoInfoEvent)
+    {
+
+        if (updateVideoInfoEvent.isStart)
+        {
+            promptDialog.showLoading("视频太多了，正在努力加载中，请稍等一下...");
+        }else {
+            if (!TextUtils.isEmpty(updateVideoInfoEvent.msg))
+            {
+                promptDialog.showError(updateVideoInfoEvent.msg);
+            }else {
+                promptDialog.dismiss();
+            }
+        }
+    }
 
     private void setPatientInfo(PatientResponse.DataBean entity) {
         PatientResponse.DataBean bean = PatientUtil.getInstance().getPatientData();

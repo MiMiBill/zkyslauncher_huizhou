@@ -198,7 +198,10 @@ public class DbHelper {
                     @Override
                     public void run() {
                         try {
-                            String videoJson =  FileIOUtils.readFile2String(voideJsonFilePath);
+                            long  preTime  = System.currentTimeMillis();
+//                            String videoJson =  FileIOUtils.readFile2String(voideJsonFilePath);
+                            String videoJson =  FileIOUtils.readVideoJsonFile2String(voideJsonFilePath);
+                            LogUtil.d("JSON转换耗时间：" + (System.currentTimeMillis() + preTime));
                             try{
                                 File file = new File(voideJsonFilePath);
                                 file.delete();
