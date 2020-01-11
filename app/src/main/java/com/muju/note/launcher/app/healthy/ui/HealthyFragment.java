@@ -107,10 +107,10 @@ public class HealthyFragment extends BaseFragment<HealthyPresenter> implements V
         if (pageNum == 1) {
             videoInfoDaos.clear();
         }
-        smartRefresh.finishRefresh();
-        healthyAdapter.loadMoreComplete();
         videoInfoDaos.addAll(list);
         healthyAdapter.notifyDataSetChanged();
+        smartRefresh.finishRefresh();
+        healthyAdapter.loadMoreComplete();
     }
 
     @Override

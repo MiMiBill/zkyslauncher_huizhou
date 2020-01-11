@@ -9,14 +9,22 @@ import com.muju.note.launcher.okgo.BaseBean;
 import com.muju.note.launcher.okgo.JsonCallback;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.ActiveUtils;
+import com.muju.note.launcher.util.log.LogUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.litepal.LitePal;
 import org.litepal.crud.callback.CountCallback;
+import org.litepal.crud.callback.SaveCallback;
 
+import java.io.PipedReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
 
 
 /**
@@ -33,17 +41,6 @@ public class MienService {
         return mienService;
     }
 
-    public void start() {
-        LitePalDb.setZkysDb();
-        LitePal.countAsync(MienInfoDao.class).listen(new CountCallback() {
-            @Override
-            public void onFinish(int count) {
-                if (count <= 0) {
-                    getMienInfo();
-                }
-            }
-        });
-    }
 
     /**
      * 检查本地是否有医院风采数据
@@ -92,6 +89,76 @@ public class MienService {
                     public void onError(Response<BaseBean<List<MienInfoDao>>> response) {
                         super.onError(response);
                         EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_MIEN_HTTP_FAIL));
+                    }
+                });
+    }
+
+
+    private final  static int MAX_TRY_TIMES = 5;
+    private int tryTimes = 0;
+    /**
+     * 更新失败后继续重试，共重试5次
+     */
+    public void getMienInfoTryTimes()
+    {
+        tryTimes ++;
+        if (tryTimes > MAX_TRY_TIMES)  //最多重试5次
+        {
+            tryTimes = 0;
+            return;
+        }
+        OkGo.<BaseBean<List<MienInfoDao>>>get(String.format(UrlUtil.getHospitalInfo(), ActiveUtils.getPadActiveInfo().getHospitalId()))
+                .execute(new JsonCallback<BaseBean<List<MienInfoDao>>>() {
+                    @Override
+                    public void onSuccess(final Response<BaseBean<List<MienInfoDao>>> response) {
+                        ExecutorService service = Executors.newSingleThreadExecutor();
+                        service.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                LitePalDb.setZkysDb();
+                                LitePal.deleteAll(MienInfoDao.class);
+
+                                ArrayList<MienInfoDao> arrayList = new ArrayList<>();
+                                for (MienInfoDao dao : response.body().getData()) {
+                                    dao.setMienId(dao.getId());
+                                    arrayList.add(dao);
+                                }
+                                LitePal.saveAllAsync(arrayList).listen(new SaveCallback() {
+                                    @Override
+                                    public void onFinish(boolean success) {
+                                        if (success)
+                                        {
+                                            tryTimes = 0;
+                                        }else {
+                                            //保存失败那么3分钟后再去重试
+                                            Observable.timer((long) (3), TimeUnit.MINUTES) //
+                                                    .subscribe(new Consumer<Long>() {
+                                                        @Override
+                                                        public void accept(Long aLong) throws Exception {
+                                                            LogUtil.d("getMienInfoTryTimes 3分钟定时器到了");
+                                                            getMienInfoTryTimes();
+                                                        }
+                                                    });
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(Response<BaseBean<List<MienInfoDao>>> response) {
+                        super.onError(response);
+                        //保存失败那么3分钟后再去重试
+                        Observable.timer((long) (3), TimeUnit.MINUTES) //
+                                .subscribe(new Consumer<Long>() {
+                                    @Override
+                                    public void accept(Long aLong) throws Exception {
+                                        LogUtil.d("getMienInfoTryTimes 3分钟定时器到了");
+                                        getMienInfoTryTimes();
+                                    }
+                                });
+
                     }
                 });
     }

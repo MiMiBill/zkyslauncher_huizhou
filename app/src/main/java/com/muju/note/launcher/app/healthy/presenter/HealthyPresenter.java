@@ -13,11 +13,15 @@ import java.util.List;
 
 public class HealthyPresenter extends BasePresenter<HealthyContract.View> implements HealthyContract.Presenter {
     @Override
-    public void getHealthy(String name, int pageNum) {
+    public void getHealthy(String name,final int pageNum) {
         LitePalDb.setZkysDb();
         String sql = "customTag like '%" + name + "%' or keywords like '%" + name + "%' or name like '%" + name + "%'" +
                 " and status = 1 order by number desc,onwayTime desc,editTime desc,updateTime desc";
-        LitePal.where(sql).findAsync(VideoInfoDao.class).listen(new FindMultiCallback<VideoInfoDao>() {
+        final int size = 20;
+
+        final int count = LitePal.where(sql).count(VideoInfoDao.class);
+
+        LitePal.limit(size).offset((pageNum - 1) * size).where(sql).findAsync(VideoInfoDao.class).listen(new FindMultiCallback<VideoInfoDao>() {
             @Override
             public void onFinish(List<VideoInfoDao> list) {
                 if (mView == null) {
@@ -29,6 +33,14 @@ public class HealthyPresenter extends BasePresenter<HealthyContract.View> implem
                     return;
                 }
                 mView.getHealthySuccess(list);
+
+                if (((pageNum - 1) * size + list.size() ) >= count)
+                {
+                    if (mView != null)
+                    {
+                        mView.getHealthyEnd();
+                    }
+                }
             }
         });
     }

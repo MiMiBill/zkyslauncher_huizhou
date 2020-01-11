@@ -102,7 +102,7 @@ public class MainService extends Service {
                             // 获取定位信息
                             LocationService.getInstance().start();
                             //检查医院风采数据
-                            MienService.getInstance().getMienInfo();
+                            MienService.getInstance().getMienInfoTryTimes();
                             // 检查影视数据
                             VideoService.getInstance().getVideoTopInfo();
 //                            VideoService.getInstance().getUpdateVideo();

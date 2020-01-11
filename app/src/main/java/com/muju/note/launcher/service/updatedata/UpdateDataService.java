@@ -76,7 +76,7 @@ public class UpdateDataService {
         MissionService.getInstance().updateMission(1);
 
         // 更新医院风采信息
-        MienService.getInstance().getMienInfo();
+        MienService.getInstance().getMienInfoTryTimes();
 
         //更新医疗百科信息
         EncyclopeService.getInstance().getLately();

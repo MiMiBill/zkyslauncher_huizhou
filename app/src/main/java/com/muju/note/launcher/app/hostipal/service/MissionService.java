@@ -40,18 +40,6 @@ public class MissionService {
         return missionService;
     }
 
-    public void start() {
-        LitePalDb.setZkysDb();
-        LitePal.countAsync(MissionInfoDao.class).listen(new CountCallback() {
-            @Override
-            public void onFinish(int count) {
-                if (count <= 0) {
-                    updateMission(1);
-                }
-            }
-        });
-    }
-
     public void startMiss() {
         EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_MISS_START));
         LitePalDb.setZkysDb();
