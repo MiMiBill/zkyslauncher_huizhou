@@ -25,15 +25,15 @@ public class VolumeBroadcastReceiver extends BroadcastReceiver {
         //媒体音量改变才通知
         if (VOLUME_CHANGED_ACTION.equals(intent.getAction())
                 && (intent.getIntExtra(EXTRA_VOLUME_STREAM_TYPE, -1) == AudioManager.STREAM_MUSIC)) {
-            int current = SystemUtils.getCurrentVolume(context);
-            long rateVolume = SPUtil.getLong(SpTopics.PAD_CONFIG_VOLUME_RATE);
-            rateVolume = rateVolume == -1 ? 60 : rateVolume;
-            int volume = (int) (SystemUtils.getMaxVolume(context) / 100D * rateVolume);
-//            LogFactory.l().i("rateVolume==="+rateVolume+"===current==="+ current+"===volume==="+volume);
-            if (current > volume) {
-                SystemUtils.setVolume(context, (int) rateVolume);
-            }
-            EventBus.getDefault().post(new VolumeEvent());
+//            int current = SystemUtils.getCurrentVolume(context);
+//            long rateVolume = SPUtil.getLong(SpTopics.PAD_CONFIG_VOLUME_RATE);
+//            rateVolume = rateVolume == -1 ? 60 : rateVolume;
+//            int volume = (int) (SystemUtils.getMaxVolume(context) / 100D * rateVolume);
+////            LogFactory.l().i("rateVolume==="+rateVolume+"===current==="+ current+"===volume==="+volume);
+//            if (current > volume) {
+//                SystemUtils.setVolume(context, (int) rateVolume);
+//            }
+//            EventBus.getDefault().post(new VolumeEvent());
         }
     }
 }

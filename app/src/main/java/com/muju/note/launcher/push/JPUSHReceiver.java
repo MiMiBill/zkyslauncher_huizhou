@@ -74,16 +74,35 @@ public class JPUSHReceiver extends BroadcastReceiver {
                 JSONObject jsonObject = new JSONObject(bundle.getString(JPushInterface.EXTRA_EXTRA));
                 switch (jsonObject.optInt("alertType")) {
                     case 11:
+//                        int volumeRate = Integer.parseInt(bundle.getString(JPushInterface.EXTRA_MESSAGE));
+//                        LogUtil.d("系统音量改变:%s ", volumeRate);
+//                        int currentVolume = SystemUtils.getCurrentVolume(LauncherApplication.getInstance());
+//                        int maxVolume = SystemUtils.getMaxVolume(LauncherApplication.getInstance());
+//                        int systemRate = (int) (currentVolume * 100D / maxVolume);
+//                        if (volumeRate < systemRate) {
+//                            //声音改变
+//                            SPUtil.putLong(SpTopics.PAD_CONFIG_VOLUME_RATE, volumeRate);
+//                            SystemUtils.setVolume(LauncherApplication.getInstance(), volumeRate);
+//                        }
                         int volumeRate = Integer.parseInt(bundle.getString(JPushInterface.EXTRA_MESSAGE));
                         LogUtil.d("系统音量改变:%s ", volumeRate);
-                        int currentVolume = SystemUtils.getCurrentVolume(LauncherApplication.getInstance());
-                        int maxVolume = SystemUtils.getMaxVolume(LauncherApplication.getInstance());
-                        int systemRate = (int) (currentVolume * 100D / maxVolume);
-                        if (volumeRate < systemRate) {
+//                        int currentVolume = SystemUtils.getCurrentVolume(LauncherApplication.getInstance());
+//                        int maxVolume = SystemUtils.getMaxVolume(LauncherApplication.getInstance());
+//                        int systemRate = (int) (currentVolume * 100D / maxVolume);
+//                        if (volumeRate < systemRate) {
+
+                        if (volumeRate < 0)
+                        {
+                            volumeRate = 0;
+                        }
+                        if (volumeRate > 100)
+                        {
+                            volumeRate = 100;
+                        }
                             //声音改变
                             SPUtil.putLong(SpTopics.PAD_CONFIG_VOLUME_RATE, volumeRate);
                             SystemUtils.setVolume(LauncherApplication.getInstance(), volumeRate);
-                        }
+//                        }
                         break;
                     case 201:
                         FileUtils.playReplay(LauncherApplication.getInstance().getApplicationContext(), R.raw.messagetips);

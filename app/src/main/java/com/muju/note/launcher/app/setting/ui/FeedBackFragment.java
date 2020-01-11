@@ -110,6 +110,7 @@ public class FeedBackFragment extends BaseFragment<FeedBackPresenter> implements
         JsonObject jsonObject = (JsonObject) new JsonParser().parse(data);
         if (jsonObject.get("code").getAsInt() == 200) {
             Toast.makeText(LauncherApplication.getContext(), "提交成功", Toast.LENGTH_SHORT).show();
+            activityFeedbackContent.setText("");
         } else {
             postFail();
         }

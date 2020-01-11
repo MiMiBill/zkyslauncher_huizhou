@@ -145,6 +145,7 @@ public class VideoService {
      */
     public void startVideoInfo(){
 
+        EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.VIDEO_INFO_START));
         int count = LitePal.count(VideoInfoDao.class);
         LogUtil.d("startVideoInfo count：" + count);
 
@@ -372,29 +373,6 @@ public class VideoService {
      */
     public void getUpdateVideo(){
         LogUtil.d("getUpdateVideo 开始增量更新");
-//        ExecutorService service=Executors.newSingleThreadExecutor();
-//        service.execute(new Runnable() {
-//            @Override
-//            public void run() {
-//                List<VideoInfoDao> list = LitePal.findAll(VideoInfoDao.class);
-//                List<VideoInfoDao> listSave = new ArrayList<>();
-//                for (VideoInfoDao videoInfoDao : list)
-//                {
-//                    if (!TextUtils.isEmpty(videoInfoDao.getUpdateTime()))
-//                    {
-//                        long updateTime = DateUtil.dateStr2Long(videoInfoDao.getUpdateTime());
-//                        if (updateTime != -999)
-//                        {
-//                            videoInfoDao.setUpdateTime("" + updateTime);
-//                            listSave.add(videoInfoDao);
-////                         videoInfoDao.save();
-//                        }
-//                    }
-//                }
-//                LitePal.saveAll(listSave);
-
-
-
 
         new Thread(){
             @Override
@@ -402,10 +380,6 @@ public class VideoService {
                 super.run();
                 tryCount ++;
                 EventBus.getDefault().post(new UpdateVideoInfoEvent(true));
-//                ExecutorService service=Executors.newSingleThreadExecutor();
-//                service.execute(new Runnable() {
-//                    @Override
-//                    public void run() {
                         LogUtil.d("getUpdateVideo 线程:" +  Thread.currentThread() );
                         LitePalDb.setZkysDb();
                         String  timestamp = LitePal.max(VideoInfoDao.class, "updateTime", String.class);
@@ -479,11 +453,12 @@ public class VideoService {
                                                             willSaveList.add(videoInfoDao);
 
                                                             count ++;
-                                                            if (count >= MAX_SIZE) //一次只取2000条
+                                                            if (count >= MAX_SIZE) //一次只取1000条
                                                             {
                                                                 break;
                                                             }
                                                         }
+
                                                         LitePal.saveAllAsync(willSaveList).listen(new SaveCallback() {
                                                             @Override
                                                             public void onFinish(boolean success) {
@@ -542,29 +517,10 @@ public class VideoService {
 
                                             }
 
-//                                for (VideoInfoDao dao:response.body().getData()){
-//                                    LitePalDb.setZkysDb();
-//                                    VideoInfoDao videoInfoDao=LitePal.where("cid = ?",dao.getCid()+"").findFirst(VideoInfoDao.class);
-//                                    if(videoInfoDao==null){
-//                                        dao.setVideoId(dao.getId());
-//                                        dao.save();
-//                                    }else {
-//                                        LitePal.delete(VideoInfoDao.class,videoInfoDao.getId());
-//                                        dao.setVideoId(dao.getId());
-//                                        dao.save();
-//                                    }
-//                                }
 
                                         });
                                     }
                                 });
-
-
-
-//                    }
-//                });
-
-
 
 
             }

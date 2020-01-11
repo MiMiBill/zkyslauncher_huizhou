@@ -211,13 +211,13 @@ public class DbHelper {
                             }
                             com.google.gson.Gson gson = new com.google.gson.Gson();
                             final List<VideoInfoDao> videoInfoDaoList = gson.fromJson(videoJson,new TypeToken<List<VideoInfoDao>>(){}.getType());
-
+                            int  listCount = videoInfoDaoList.size();
                             final int[] num = {0};
                             for (VideoInfoDao videoInfoDao:videoInfoDaoList)
                             {
                                 num[0]++;
                                 EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status
-                                        .VIDEO_INFO_DB_PROGRESS, num[0] + "/" + count));
+                                        .VIDEO_INFO_DB_PROGRESS, num[0] + "/" + listCount));
                                 videoInfoDao.setVideoId(videoInfoDao.getId());
 
                                 String updateTime = DateUtil.formartTimeToDate(videoInfoDao.getUpdateTime());
@@ -230,7 +230,7 @@ public class DbHelper {
                             LitePalDb.setZkysDb();
                             LitePal.deleteAll(VideoInfoDao.class);
                             EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent
-                                    .Status.VIDEO_INFO_DB_PROGRESS, videoInfoDaoList.size() + "/" + count));
+                                    .Status.VIDEO_INFO_DB_PROGRESS, videoInfoDaoList.size() + "/" + listCount));
 //                            for (VideoInfoDao videoInfoDao : videoInfoDaoList)
 //                            {
 //                                num[0]++;

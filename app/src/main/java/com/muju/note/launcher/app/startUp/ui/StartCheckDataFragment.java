@@ -18,6 +18,7 @@ import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.service.encyclope.EncyclopeService;
 import com.muju.note.launcher.service.homemenu.HomeMenuService;
 import com.muju.note.launcher.service.orderfood.OrderFoodService;
+import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.rx.RxUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -391,10 +392,13 @@ public class StartCheckDataFragment extends BaseFragment {
      */
     private void reStartColumn(int min) {
         RxUtil.closeDisposable(disposable);
-        disposable = Observable.interval(min, TimeUnit.MINUTES)
+        disposable = Observable.timer(min, TimeUnit.MINUTES)
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
+
+                        LogUtil.d("=======reStartColumn=====");
+
                         VideoService.getInstance().startColumns();
                     }
                 });
@@ -407,10 +411,11 @@ public class StartCheckDataFragment extends BaseFragment {
      */
     private void reStartVideoTop(int min) {
         RxUtil.closeDisposable(disposable);
-        disposable = Observable.interval(min, TimeUnit.MINUTES)
+        disposable = Observable.timer(min, TimeUnit.MINUTES)
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
+                        LogUtil.d("=======reStartVideoTop=====");
                         VideoService.getInstance().startVideoTop();
                     }
                 });
@@ -423,10 +428,12 @@ public class StartCheckDataFragment extends BaseFragment {
      */
     private void reStartVideoInfo(int min) {
         RxUtil.closeDisposable(disposable);
-        disposable = Observable.interval(min, TimeUnit.MINUTES)
+        disposable = Observable.timer(min, TimeUnit.MINUTES)
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
+
+                        LogUtil.d("=======reStartVideoInfo=====");
                         VideoService.getInstance().startVideoInfo();
                     }
                 });
@@ -437,10 +444,12 @@ public class StartCheckDataFragment extends BaseFragment {
      */
     private void reStartMien(int min) {
         RxUtil.closeDisposable(disposable);
-        disposable = Observable.interval(min, TimeUnit.MINUTES)
+        disposable = Observable.timer(min, TimeUnit.MINUTES)
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
+
+                        LogUtil.d("=======reStartMien=====");
                         MienService.getInstance().startMien();
                     }
                 });
@@ -454,10 +463,12 @@ public class StartCheckDataFragment extends BaseFragment {
      */
     private void reStartEncy(int min) {
         RxUtil.closeDisposable(disposable);
-        disposable = Observable.interval(min, TimeUnit.MINUTES)
+        disposable = Observable.timer(min, TimeUnit.MINUTES)
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
+
+                        LogUtil.d("=======reStartEncy=====");
                         EncyclopeService.getInstance().startEncy();
                     }
                 });
@@ -465,10 +476,12 @@ public class StartCheckDataFragment extends BaseFragment {
 
     private void reStartMiss(int min) {
         RxUtil.closeDisposable(disposable);
-        disposable = Observable.interval(min, TimeUnit.MINUTES)
+        disposable = Observable.timer(min, TimeUnit.MINUTES)
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
+
+                        LogUtil.d("=======reStartMiss=====");
                         MissionService.getInstance().startMiss();
                     }
                 });
@@ -476,10 +489,11 @@ public class StartCheckDataFragment extends BaseFragment {
 
     private void reHomeMenu(int min) {
         RxUtil.closeDisposable(disposable);
-        disposable = Observable.interval(min, TimeUnit.MINUTES)
+        disposable = Observable.timer(min, TimeUnit.MINUTES)
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
+                        LogUtil.d("=======reHomeMenu=====");
                         HomeMenuService.getInstance().startMenu();
                     }
                 });
@@ -487,10 +501,12 @@ public class StartCheckDataFragment extends BaseFragment {
 
     private void reFoodMenu(int min) {
         RxUtil.closeDisposable(disposable);
-        disposable = Observable.interval(min, TimeUnit.MINUTES)
+        disposable = Observable.timer(min, TimeUnit.MINUTES)
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
+
+                        LogUtil.d("=======reFoodMenu=====");
                         OrderFoodService.getInstance().startfoodMenu();
                     }
                 });
@@ -499,10 +515,11 @@ public class StartCheckDataFragment extends BaseFragment {
 
     private void reRebootHomeMenu(int min) {
         RxUtil.closeDisposable(disposable);
-        disposable = Observable.interval(min, TimeUnit.MINUTES)
+        disposable = Observable.timer(min, TimeUnit.MINUTES)
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
+                        LogUtil.d("=======reRebootHomeMenu=====");
                         HomeMenuService.getInstance().startRebootMenu();
                     }
                 });
@@ -511,10 +528,12 @@ public class StartCheckDataFragment extends BaseFragment {
 
     private void reRebootFoodMenu(int min) {
         RxUtil.closeDisposable(disposable);
-        disposable = Observable.interval(min, TimeUnit.MINUTES)
+        disposable = Observable.timer(min, TimeUnit.MINUTES)
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
+
+                        LogUtil.d("=======reRebootFoodMenu=====");
                         OrderFoodService.getInstance().startRebootFoodMenu();
                     }
                 });

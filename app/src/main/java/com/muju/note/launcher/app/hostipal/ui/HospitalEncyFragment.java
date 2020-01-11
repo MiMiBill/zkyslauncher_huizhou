@@ -175,6 +175,12 @@ public class HospitalEncyFragment extends BaseFragment<EncyPresenter> implements
     public void getInfo(List<InfoDao> infoDaoList) {
         infoBeans.clear();
         infoBeans.addAll(infoDaoList);
+        if (infoDaoList != null && infoDaoList.size() > 0)
+        {
+            InfoDao infoDao = infoDaoList.get(0);
+            infoDao.setCheck(true);
+        }
+
         departmentAdapter.setNewData(infoDaoList);
     }
 
@@ -243,6 +249,7 @@ public class HospitalEncyFragment extends BaseFragment<EncyPresenter> implements
                         infoBean.setCheck(false);
                     }
                 }
+                departmentAdapter.notifyDataSetChanged();
                 pageNum = 0;
                 type = 0;
                 itenId = infoBeans.get(position).getColumnId();

@@ -14,6 +14,7 @@ import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
 import com.muju.note.launcher.topics.SpTopics;
 import com.muju.note.launcher.util.BrightnessUtils;
+import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.util.system.SystemUtils;
 import com.muju.note.launcher.view.light.RectProgress;
@@ -66,10 +67,14 @@ public class VoiceFragment extends BaseFragment {
         EventBus.getDefault().register(this);
         rectProgressLight.setMax(255);
         maxVoice = SPUtil.getLong(SpTopics.PAD_CONFIG_VOLUME_RATE);
-        rectProgressVoice.setMax(SystemUtils.getMaxVolume(LauncherApplication.getContext()));
-        int currentVolume = SystemUtils.getCurrentVolume(LauncherApplication.getContext());
+
+//        rectProgressVoice.setMax(SystemUtils.getMaxVolume(LauncherApplication.getContext()));
+        rectProgressVoice.setMax(100);
+        int currentVolume = (int )(SystemUtils.getCurrentVolume(LauncherApplication.getContext()) * 100.0 / SystemUtils.getMaxVolume(LauncherApplication.getContext())) ;
+        int screenBrightness = BrightnessUtils.getScreenBrightness(getActivity());
+        LogUtil.d("屏幕亮度：" + screenBrightness);
         rectProgressVoice.setProgress(currentVolume);
-        rectProgressLight.setProgress(BrightnessUtils.getScreenBrightness(getActivity()));
+        rectProgressLight.setProgress(screenBrightness);
         rectProgressLight.setChangedListener(new RectProgress.OnProgressChangedListener() {
             @Override
             public void onProgressChanged(int currentValue, int percent) {
@@ -82,10 +87,12 @@ public class VoiceFragment extends BaseFragment {
         rectProgressVoice.setOnActionUpListener(new RectProgress.OnActionUpListener() {
             @Override
             public void onActionUp() {
-                int currentVolume = SystemUtils.getCurrentVolume(getContext());
-//                LogFactory.l().i("VolumeEvent==="+currentVolume);
-                rectProgressVoice.setProgress(currentVolume);
+//                int currentVolume = SystemUtils.getCurrentVolume(getContext());
+//                LogUtil.d("currentVolume:" + currentVolume);
+//                rectProgressVoice.setProgress(currentVolume);
+                LogUtil.d("voicePercent:" + voicePercent);
                 SystemUtils.setVolume(getContext(), voicePercent);
+                rectProgressVoice.setProgress(voicePercent);
                 if (isRelease) {
                     //在raw下的资源
                     mediaPlayer = MediaPlayer.create(LauncherApplication.getContext(), R.raw
@@ -129,7 +136,8 @@ public class VoiceFragment extends BaseFragment {
             if (percent > maxVoice && maxVoice > 0) {
                 percent = (int) maxVoice;
             }
-            voicePercent = percent;
+            voicePercent = currentValue;
+            LogUtil.d("voicePercent:" + voicePercent + " currentValue:" + currentValue);
         }
     };
 

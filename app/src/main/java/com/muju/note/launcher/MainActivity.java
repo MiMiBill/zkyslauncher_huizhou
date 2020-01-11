@@ -87,6 +87,7 @@ import com.muju.note.launcher.util.ActiveUtils;
 import com.muju.note.launcher.util.CallBtnShakeUtil;
 import com.muju.note.launcher.util.Constants;
 import com.muju.note.launcher.util.FormatUtils;
+import com.muju.note.launcher.util.SoftKeyboardUtil;
 import com.muju.note.launcher.util.app.MobileInfoUtil;
 import com.muju.note.launcher.util.log.LogFactory;
 import com.muju.note.launcher.util.log.LogUtil;
@@ -361,6 +362,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
                     @Override
                     public void accept(Long aLong) throws Exception {
                         //惠州医院取消待机画面，直接进入锁屏界面
+                        //关闭键盘
+                        SoftKeyboardUtil.hideSoftKeyboard(MainActivity.this);
                         LogUtil.d("30秒关屏定时器到了");
                         if (CallKeyInfo.getsInstance().isEnableSwitchScreen())
                         {

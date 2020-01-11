@@ -22,6 +22,7 @@ import com.muju.note.launcher.okgo.BaseBean;
 import com.muju.note.launcher.okgo.JsonCallback;
 import com.muju.note.launcher.url.UrlUtil;
 import com.muju.note.launcher.util.Constants;
+import com.muju.note.launcher.util.log.LogUtil;
 import com.muju.note.launcher.util.sp.SPUtil;
 import com.muju.note.launcher.util.zip.ZipUtils;
 
@@ -73,10 +74,13 @@ public class EncyclopeService {
     public void startEncy() {
         EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_START));
         LitePalDb.setZkysDb();
+
+        final int infoDaoCount = LitePal.count(InfoDao.class);
+        LogUtil.d("医疗百科目录size：" + infoDaoCount);
         LitePal.countAsync(InfomationDao.class).listen(new CountCallback() {
             @Override
             public void onFinish(int count) {
-                if (count <= 10000) {
+                if (count <= 10000 || infoDaoCount < 20) {  // 目录小于20条，百科数据小于10000条都会让它重新加载
                     getDownLoadUrl();
                 }else {
                     EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_ENCY_SUCCESS));
