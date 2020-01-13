@@ -430,6 +430,13 @@
             </intent-filter>
         </receiver>
 
+
+        <receiver android:name=".broadcast.PowerKeyDownBroadcastReceiver">
+            <intent-filter>
+                <action android:name="gpt_short_press_power_action" />
+            </intent-filter>
+        </receiver>
+
         <!-- User defined. 用户自定义的广播接收器 -->
         <!-- Required SDK核心功能 -->
         <activity
