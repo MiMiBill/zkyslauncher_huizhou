@@ -1,6 +1,8 @@
 package com.muju.note.launcher.app.home.ui;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
@@ -8,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -93,6 +96,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -120,38 +124,38 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     Banner banner;
     @BindView(R.id.videoview)
     VideoView videoview;
-    @BindView(R.id.tv_bed_num)
-    TextView tvBedNum;
-    @BindView(R.id.tv_name)
-    TextView tvName;
-    @BindView(R.id.tv_sex)
-    TextView tvSex;
-    @BindView(R.id.tv_age)
-    TextView tvAge;
-    @BindView(R.id.tv_hos)
-    TextView tvHos;
-    @BindView(R.id.tv_dep)
-    TextView tvDep;
-    @BindView(R.id.tv_hos_doctor)
-    TextView tvHosDoctor;
-    @BindView(R.id.tv_hos_nurse)
-    TextView tvHosNurse;
-    @BindView(R.id.tv_hos_time)
-    TextView tvHosTime;
-    @BindView(R.id.tv_hl)
-    TextView tvHl;
-    @BindView(R.id.tv_food)
-    TextView tvFood;
-    @BindView(R.id.lly_have_paitent)
-    LinearLayout llyHavePaitent;
-    @BindView(R.id.tv_no_hos_info)
-    TextView tvNoHosInfo;
-    @BindView(R.id.ivPersonQrCode)
-    ImageView ivPersonQrCode;
-    @BindView(R.id.lly_no_patient)
-    LinearLayout llyNoPatient;
-    @BindView(R.id.rv_menu)
-    RecyclerView rvMenu;
+//    @BindView(R.id.tv_bed_num)
+//    TextView tvBedNum;
+//    @BindView(R.id.tv_name)
+//    TextView tvName;
+//    @BindView(R.id.tv_sex)
+//    TextView tvSex;
+//    @BindView(R.id.tv_age)
+//    TextView tvAge;
+//    @BindView(R.id.tv_hos)
+//    TextView tvHos;
+//    @BindView(R.id.tv_dep)
+//    TextView tvDep;
+//    @BindView(R.id.tv_hos_doctor)
+//    TextView tvHosDoctor;
+//    @BindView(R.id.tv_hos_nurse)
+//    TextView tvHosNurse;
+//    @BindView(R.id.tv_hos_time)
+//    TextView tvHosTime;
+//    @BindView(R.id.tv_hl)
+//    TextView tvHl;
+//    @BindView(R.id.tv_food)
+//    TextView tvFood;
+//    @BindView(R.id.lly_have_paitent)
+//    LinearLayout llyHavePaitent;
+//    @BindView(R.id.tv_no_hos_info)
+//    TextView tvNoHosInfo;
+//    @BindView(R.id.ivPersonQrCode)
+//    ImageView ivPersonQrCode;
+//    @BindView(R.id.lly_no_patient)
+//    LinearLayout llyNoPatient;
+//    @BindView(R.id.rv_menu)
+//    RecyclerView rvMenu;
     @BindView(R.id.rv_his_video)
     RecyclerView rvHisVideo;
     @BindView(R.id.ll_his_video_null)
@@ -160,14 +164,14 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     ImageView ivImg;
     @BindView(R.id.rv_video_top)
     RecyclerView rvVideoTop;
-    @BindView(R.id.ll_top_video_null)
-    LinearLayout llTopVideoNull;
+//    @BindView(R.id.ll_top_video_null)
+//    LinearLayout llTopVideoNull;
     @BindView(R.id.tv_card)
     TextView tvCard;
     @BindView(R.id.rel_card)
     RelativeLayout relCard;
-    @BindView(R.id.iv_bed_card)
-    ImageView ivBedCard;
+//    @BindView(R.id.iv_bed_card)
+//    ImageView ivBedCar
     private List<HomeMenuDao> homeMenuDaos;
     private HomeMenuAdapter menuAdapter;
     private ActivePadInfo.DataBean activeInfo;
@@ -180,6 +184,16 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     private AdvertsDialog dialog;
     private HospitalServiceDialog serviceDialog;
     private String netType = "";
+
+
+    @BindView(R.id.btn_hospital_about)
+    Button btnHospitalAbout;
+    @BindView(R.id.btn_movie_about)
+    Button btnMovieAbout;
+    @BindView(R.id.btn_shopping_about)
+    Button btnShoppingAbout;
+
+    private int selectIndex = 0;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -215,20 +229,19 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         activeInfo = ActiveUtils.getPadActiveInfo();
         initBanner();
         saveRegisterId();
-
         if (activeInfo != null) {
             mPresenter.getPatientData(String.valueOf(activeInfo.getBedId()), getActivity());
         }
         relCard.setOnClickListener(this);
-        ivBedCard.setOnClickListener(this);
+//        ivBedCard.setOnClickListener(this);
 
         // 加载首页菜单模块
         homeMenuDaos = new ArrayList<>();
         menuAdapter = new HomeMenuAdapter(R.layout.rv_item_home_menu, homeMenuDaos);
-        rvMenu.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(), 6));
-        rvMenu.setAdapter(menuAdapter);
-        rvMenu.setHasFixedSize(true);
-        rvMenu.setNestedScrollingEnabled(false);
+//        rvMenu.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(), 6));
+//        rvMenu.setAdapter(menuAdapter);
+//        rvMenu.setHasFixedSize(true);
+//        rvMenu.setNestedScrollingEnabled(false);
         mPresenter.getMenu();
         // 加载首页历史记录
         videoHisDaos = new ArrayList<>();
@@ -280,7 +293,67 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         });
 
         FileObserverService.start();
+
+        //默认选择影视tab
+        defaultSelect();
     }
+
+
+    @OnClick({R.id.btn_shopping_about,
+            R.id.btn_movie_about,
+            R.id.btn_hospital_about
+        })
+    public void onTabSelect(Button btn)
+    {
+        clearStates();
+        btn.getPaint().setFakeBoldText(true);
+        btn.setBackgroundResource(R.mipmap.tab_select_bg);
+        btn.setTextSize(36);
+
+        switch (btn.getId())
+        {
+            case R.id.btn_movie_about:
+            {
+                selectIndex = 0;
+                break;
+            }
+            case R.id.btn_hospital_about:
+            {
+                selectIndex = 1;
+                break;
+            }
+            case R.id.btn_shopping_about:
+            {
+                selectIndex = 2;
+                break;
+            }
+        }
+    }
+
+
+    private void defaultSelect()
+    {
+        selectIndex = 0;
+        btnMovieAbout.getPaint().setFakeBoldText(true);
+        btnMovieAbout.setBackgroundResource(R.mipmap.tab_select_bg);
+        btnMovieAbout.setTextSize(36);
+    }
+
+    private void clearStates()
+    {
+        setDefaultStates(btnHospitalAbout);
+        setDefaultStates(btnMovieAbout);
+        setDefaultStates(btnShoppingAbout);
+
+    }
+
+    private void setDefaultStates(Button button)
+    {
+        button.getPaint().setFakeBoldText(false);
+        button.setTextSize(30);
+        button.setBackgroundColor(Color.TRANSPARENT);
+    }
+
 
     /**
      * 跳转播放
@@ -471,19 +544,19 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         LogFactory.l().i("设置病人信息");
         this.entity = entity;
         EventBus.getDefault().post(new PatientInfoEvent(entity));
-        llyNoPatient.setVisibility(View.GONE);
-        llyHavePaitent.setVisibility(View.VISIBLE);
-        tvName.setText(entity.getUserName());
-        tvAge.setText(entity.getAge() + "岁");
-        tvSex.setText(entity.getSex() == 1 ? "男" : "女");
-        tvHosDoctor.setText(entity.getChargeDoctor());
-        tvHosTime.setText(FormatUtils.FormatDateUtil.parseLong(Long.parseLong(entity.getCreateTime())));
-        tvBedNum.setText(activeInfo.getBedNumber());
-        tvHos.setText(activeInfo.getHospitalName());
-        tvFood.setText(entity.getDietCategory());
-        tvHl.setText(entity.getNursingLevel());
-        tvDep.setText(activeInfo.getDeptName());
-        tvHosNurse.setText(entity.getChargeNurse());
+//        llyNoPatient.setVisibility(View.GONE);
+//        llyHavePaitent.setVisibility(View.VISIBLE);
+//        tvName.setText(entity.getUserName());
+//        tvAge.setText(entity.getAge() + "岁");
+//        tvSex.setText(entity.getSex() == 1 ? "男" : "女");
+//        tvHosDoctor.setText(entity.getChargeDoctor());
+//        tvHosTime.setText(FormatUtils.FormatDateUtil.parseLong(Long.parseLong(entity.getCreateTime())));
+//        tvBedNum.setText(activeInfo.getBedNumber());
+//        tvHos.setText(activeInfo.getHospitalName());
+//        tvFood.setText(entity.getDietCategory());
+//        tvHl.setText(entity.getNursingLevel());
+//        tvDep.setText(activeInfo.getDeptName());
+//        tvHosNurse.setText(entity.getChargeNurse());
         //获取定时任务列表
         CrontabService.getInstance().start();
     }
@@ -493,12 +566,12 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     public void notPatientInfo() {
         this.entity = null;
         EventBus.getDefault().post(new OutHospitalEvent());
-        tvNoHosInfo.setText(activeInfo.getHospitalName() + "-" + activeInfo.getDeptName() + "-" +
-                activeInfo.getBedNumber() + "床");
-        ivPersonQrCode.setImageBitmap(QrCodeUtils.generateBitmap(MobileInfoUtil.getICCID
-                (getContext()) + "," + JPushInterface.getRegistrationID(getContext()), 200, 200));
-        llyNoPatient.setVisibility(View.VISIBLE);
-        llyHavePaitent.setVisibility(View.GONE);
+//        tvNoHosInfo.setText(activeInfo.getHospitalName() + "-" + activeInfo.getDeptName() + "-" +
+//                activeInfo.getBedNumber() + "床");
+//        ivPersonQrCode.setImageBitmap(QrCodeUtils.generateBitmap(MobileInfoUtil.getICCID
+//                (getContext()) + "," + JPushInterface.getRegistrationID(getContext()), 200, 200));
+//        llyNoPatient.setVisibility(View.VISIBLE);
+//        llyHavePaitent.setVisibility(View.GONE);
     }
 
     @Override
@@ -517,7 +590,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void getVideoTopSuccess(List<VideoInfoDao> list) {
-        llTopVideoNull.setVisibility(View.GONE);
+//        llTopVideoNull.setVisibility(View.GONE);
         videoInfoDaos.clear();
         videoInfoDaos.addAll(list);
         homeTopVideoAdapter.notifyDataSetChanged();
@@ -525,7 +598,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void getVideoTopNull() {
-        llTopVideoNull.setVisibility(View.VISIBLE);
+//        llTopVideoNull.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -619,9 +692,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             case R.id.rel_card: // 侧边栏
                 EventBus.getDefault().post(new DrawOutEvent());
                 break;
-            case R.id.iv_bed_card:
-                start(BedSideCardFragment.newInstance(HomeFragment.entity, false));
-                break;
+//            case R.id.iv_bed_card:
+//                start(BedSideCardFragment.newInstance(HomeFragment.entity, false));
+//                break;
         }
     }
 
