@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="@dimen/px190"
-    android:orientation="horizontal">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/x250"
+    android:layout_height="@dimen/y230"
+   >
 
-    <LinearLayout
-        android:id="@+id/ll_hostipal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerInParent="true">
+
 
         <ImageView
             android:id="@+id/iv_menu"
-            android:layout_width="@dimen/px100"
-            android:layout_height="@dimen/px100"
-            android:src="@mipmap/ic_home_item_hositpal" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@mipmap/ic_home_item_video" />
 
         <TextView
             android:id="@+id/tv_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/px10"
-            android:text="医院介绍"
-            android:textColor="@color/black_gray"
+            android:text="海量影视"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/px36"
+            android:textColor="#ffffff"
             android:layout_gravity="center_horizontal"
-            android:textSize="@dimen/px25" />
-    </LinearLayout>
+            android:textSize="20sp" />
+
 
 </RelativeLayout>

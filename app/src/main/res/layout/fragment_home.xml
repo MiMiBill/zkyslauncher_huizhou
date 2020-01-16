@@ -104,7 +104,6 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#f00"
                 android:orientation="vertical">
 
                 <TextView
@@ -127,18 +126,6 @@
                     android:layout_marginLeft="@dimen/px80"
                     android:layout_marginTop="@dimen/px10">
 
-
-                    <Button
-                        android:id="@+id/btn_hospital_about"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@mipmap/tab_select_bg"
-                        android:padding="23px"
-                        android:text="医院康复"
-                        android:textColor="#ffffff"
-                        android:textSize="36sp"
-                        android:textStyle="bold" />
-
                     <Button
                         android:id="@+id/btn_movie_about"
                         android:layout_width="wrap_content"
@@ -148,6 +135,19 @@
                         android:text="影视娱乐"
                         android:textColor="#ffffff"
                         android:textSize="30sp" />
+
+                    <Button
+                        android:id="@+id/btn_hospital_about"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparent_bg"
+                        android:padding="23px"
+                        android:text="医院康复"
+                        android:textColor="#ffffff"
+                        android:textSize="30sp"
+                        android:textStyle="normal" />
+
+
 
                     <Button
                         android:id="@+id/btn_shopping_about"
@@ -183,7 +183,7 @@
 
                             <com.muju.note.launcher.view.banana.Banner
                                 android:id="@+id/banner"
-                                android:layout_width="@dimen/px909"
+                                android:layout_width="match_parent"
                                 android:layout_height="match_parent" />
 
                             <VideoView
@@ -196,7 +196,9 @@
                         </RelativeLayout>
 
                         <android.support.v7.widget.RecyclerView
-                            android:id="@+id/rl_hospital_menu"
+                            android:id="@+id/rv_movie_menu"
+                            android:background="#f00"
+                            android:layout_marginLeft="@dimen/x54"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"/>
                     </LinearLayout>

@@ -193,6 +193,17 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     @BindView(R.id.btn_shopping_about)
     Button btnShoppingAbout;
 
+    @BindView(R.id.rv_movie_menu)
+    RecyclerView rvMovieMenu; //影视娱乐相关的菜单
+
+    //影视娱乐相关的菜单
+    private List<HomeMenuDao> rvMovieMenuDaos = new ArrayList<>();
+    //医院相关的菜单
+    private List<HomeMenuDao> rvHospitalMenuDaos = new ArrayList<>();
+    //购物相关的菜单
+    private List<HomeMenuDao> rvShoppingMenuDaos = new ArrayList<>();
+
+
     private int selectIndex = 0;
     private Handler handler = new Handler() {
         @Override
@@ -236,13 +247,14 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 //        ivBedCard.setOnClickListener(this);
 
         // 加载首页菜单模块
-        homeMenuDaos = new ArrayList<>();
-        menuAdapter = new HomeMenuAdapter(R.layout.rv_item_home_menu, homeMenuDaos);
+
+//        menuAdapter = new HomeMenuAdapter(R.layout.rv_item_home_menu, homeMenuDaos);
 //        rvMenu.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(), 6));
 //        rvMenu.setAdapter(menuAdapter);
 //        rvMenu.setHasFixedSize(true);
 //        rvMenu.setNestedScrollingEnabled(false);
-        mPresenter.getMenu();
+//        homeMenuDaos = new ArrayList<>();
+//        mPresenter.getMenu();
         // 加载首页历史记录
         videoHisDaos = new ArrayList<>();
         homeHisVideoAdapter = new HomeHisVideoAdapter(R.layout.rv_item_home_his_video,
@@ -285,17 +297,32 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             }
         });
 
+
+
+        FileObserverService.start();
+
+        //默认选择影视tab
+        defaultSelect();
+        initRvMovieMenu();
+
         menuAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
                 menuClick(homeMenuDaos.get(i));
             }
         });
+    }
 
-        FileObserverService.start();
 
-        //默认选择影视tab
-        defaultSelect();
+    //初始化影视娱乐的菜单
+    private void initRvMovieMenu()
+    {
+        homeMenuDaos = new ArrayList<>();
+        menuAdapter = new HomeMenuAdapter(R.layout.rv_item_home_menu, homeMenuDaos);
+        rvMovieMenu.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(), 6));
+        rvMovieMenu.setAdapter(menuAdapter);
+        rvMovieMenu.setHasFixedSize(true);
+        rvMovieMenu.setNestedScrollingEnabled(false);
     }
 
 
@@ -627,6 +654,42 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         homeMenuDaos.clear();
         homeMenuDaos.addAll(list);
         menuAdapter.notifyDataSetChanged();
+
+//         "风采":
+//         "设置":
+
+        for (HomeMenuDao homeMenuDao : list)
+        {
+            if (    homeMenuDao.getTab().equalsIgnoreCase("影视") ||
+                    homeMenuDao.getTab().equalsIgnoreCase("直播") ||
+                    homeMenuDao.getTab().equalsIgnoreCase("游戏") ||
+                    homeMenuDao.getTab().equalsIgnoreCase("儿童")
+            ){
+                rvMovieMenuDaos.add(homeMenuDao);
+            }
+
+            if (    homeMenuDao.getTab().equalsIgnoreCase("宣教") ||
+                    homeMenuDao.getTab().equalsIgnoreCase("百科") ||
+                    homeMenuDao.getTab().equalsIgnoreCase("健康") ||
+                    homeMenuDao.getTab().equalsIgnoreCase("医疗") ||
+                    homeMenuDao.getTab().equalsIgnoreCase("柜子") ||
+                    homeMenuDao.getTab().equalsIgnoreCase("新手") ||
+                    homeMenuDao.getTab().equalsIgnoreCase("用户") ||
+                    homeMenuDao.getTab().equalsIgnoreCase("通知") ||
+                    homeMenuDao.getTab().equalsIgnoreCase("金融") ||
+                    homeMenuDao.getTab().equalsIgnoreCase("保险") ||
+                    homeMenuDao.getTab().equalsIgnoreCase("护工")
+            ){
+                rvHospitalMenuDaos.add(homeMenuDao);
+            }
+
+            if (    homeMenuDao.getTab().equalsIgnoreCase("购物") ||
+                    homeMenuDao.getTab().equalsIgnoreCase("点餐")
+            ){
+                rvShoppingMenuDaos.add(homeMenuDao);
+            }
+        }
+
     }
 
     @Override
