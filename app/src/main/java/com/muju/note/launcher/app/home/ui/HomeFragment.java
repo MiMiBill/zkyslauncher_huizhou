@@ -11,9 +11,11 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -35,6 +37,7 @@ import com.muju.note.launcher.app.home.bean.PatientResponse;
 import com.muju.note.launcher.app.home.contract.HomeContract;
 import com.muju.note.launcher.app.home.db.AdvertsCodeDao;
 import com.muju.note.launcher.app.home.db.HomeMenuDao;
+import com.muju.note.launcher.app.home.decoration.MyMarginDecoration;
 import com.muju.note.launcher.app.home.dialog.HospitalServiceDialog;
 import com.muju.note.launcher.app.home.event.DrawOutEvent;
 import com.muju.note.launcher.app.home.event.GetAdvertEvent;
@@ -170,6 +173,10 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     TextView tvCard;
     @BindView(R.id.rel_card)
     RelativeLayout relCard;
+
+    @BindView(R.id.rl_banner_container)
+    RelativeLayout rlBannerContainer;
+
 //    @BindView(R.id.iv_bed_card)
 //    ImageView ivBedCar
     private List<HomeMenuDao> homeMenuDaos;
@@ -195,6 +202,21 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @BindView(R.id.rv_movie_menu)
     RecyclerView rvMovieMenu; //影视娱乐相关的菜单
+    @BindView(R.id.hs_container)
+    HorizontalScrollView hsContainer;
+    @BindView(R.id.btn_setting)
+    Button btnSetting;
+    @BindView(R.id.rl_hospital_mien_container)
+    RelativeLayout rlHospitalMienContainer;
+    @BindView(R.id.iv_hospital_mien_icon)
+    ImageView ivHospitalMienIcon;
+    @BindView(R.id.tv_hospital_mien_name)
+    TextView tvHospitalMienName;
+
+    private boolean isHasHospitalMien =  false;//是否有医院风采模块
+
+
+    private MyMarginDecoration myMarginDecoration;
 
     //影视娱乐相关的菜单
     private List<HomeMenuDao> rvMovieMenuDaos = new ArrayList<>();
@@ -237,6 +259,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         if (!EventBus.getDefault().isRegistered(this)) {//加上判断
             EventBus.getDefault().register(this);
         }
+
         activeInfo = ActiveUtils.getPadActiveInfo();
         initBanner();
         saveRegisterId();
@@ -303,7 +326,49 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
         //默认选择影视tab
         defaultSelect();
-        initRvMovieMenu();
+        initMovieModel();
+
+    }
+
+
+
+    //初始化影视娱乐模块
+    private void initMovieModel()
+    {
+
+
+        rlBannerContainer.setVisibility(View.VISIBLE);
+        rlHospitalMienContainer.setVisibility(View.GONE);
+
+        //设置菜单
+        if (homeMenuDaos == null)
+        {
+            homeMenuDaos = new ArrayList<>();
+            menuAdapter = new HomeMenuAdapter(R.layout.rv_item_home_menu, homeMenuDaos);
+        }
+
+        homeMenuDaos.clear();
+        homeMenuDaos.addAll(rvMovieMenuDaos);
+        int size = homeMenuDaos.size();
+        if (size == 0)
+        {
+            rvMovieMenu.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(), 6));
+        }else {
+            int rowNum = (size % 2 == 0) ? ( size/2 ): (size/2 + 1);
+            rvMovieMenu.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(), rowNum));
+        }
+
+
+        rvMovieMenu.setAdapter(menuAdapter);
+        rvMovieMenu.setHasFixedSize(true);
+        rvMovieMenu.setNestedScrollingEnabled(false);
+
+        if (myMarginDecoration != null)
+        {
+            rvMovieMenu.removeItemDecoration(myMarginDecoration);
+        }
+        myMarginDecoration = new MyMarginDecoration(getContext());
+        rvMovieMenu.addItemDecoration(myMarginDecoration);
 
         menuAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -311,18 +376,108 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 menuClick(homeMenuDaos.get(i));
             }
         });
+
+
+        menuAdapter.notifyDataSetChanged();
+
     }
 
-
-    //初始化影视娱乐的菜单
-    private void initRvMovieMenu()
+    //初始医疗相关模块
+    private void initHospitalModel()
     {
-        homeMenuDaos = new ArrayList<>();
-        menuAdapter = new HomeMenuAdapter(R.layout.rv_item_home_menu, homeMenuDaos);
-        rvMovieMenu.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(), 6));
+        rlBannerContainer.setVisibility(View.GONE);
+
+
+        if (homeMenuDaos == null)
+        {
+            homeMenuDaos = new ArrayList<>();
+            menuAdapter = new HomeMenuAdapter(R.layout.rv_item_home_menu, homeMenuDaos);
+        }
+        homeMenuDaos.clear();
+        homeMenuDaos.addAll(rvHospitalMenuDaos);
+        int size = homeMenuDaos.size();
+
+        if (size == 0)
+        {
+            rvMovieMenu.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(), 6));
+        }else {
+            int rowNum = (size % 2 == 0) ? ( size/2 ): (size/2 + 1);
+            rvMovieMenu.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(), rowNum));
+        }
+
         rvMovieMenu.setAdapter(menuAdapter);
         rvMovieMenu.setHasFixedSize(true);
         rvMovieMenu.setNestedScrollingEnabled(false);
+
+        if (isHasHospitalMien)
+        {
+            rlHospitalMienContainer.setVisibility(View.VISIBLE);
+        }else {
+            rlHospitalMienContainer.setVisibility(View.GONE);
+        }
+
+        if (myMarginDecoration != null)
+        {
+            rvMovieMenu.removeItemDecoration(myMarginDecoration);
+        }
+        myMarginDecoration = new MyMarginDecoration(getContext());
+        rvMovieMenu.addItemDecoration(myMarginDecoration);
+
+        menuAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
+                menuClick(homeMenuDaos.get(i));
+            }
+        });
+
+
+        menuAdapter.notifyDataSetChanged();
+
+    }
+
+    //初始点餐购物模块
+    private void initShoppingModel()
+    {
+        rlBannerContainer.setVisibility(View.GONE);
+        rlHospitalMienContainer.setVisibility(View.GONE);
+        if (homeMenuDaos == null)
+        {
+            homeMenuDaos = new ArrayList<>();
+            menuAdapter = new HomeMenuAdapter(R.layout.rv_item_home_menu, homeMenuDaos);
+        }
+        homeMenuDaos.clear();
+        homeMenuDaos.addAll(rvShoppingMenuDaos);
+        int size = homeMenuDaos.size();
+
+        if (size == 0)
+        {
+            rvMovieMenu.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(), 6));
+        }else {
+            int rowNum = (size % 2 == 0) ? ( size/2 ): (size/2 + 1);
+            rvMovieMenu.setLayoutManager(new GridLayoutManager(LauncherApplication.getContext(), rowNum));
+        }
+
+        rvMovieMenu.setAdapter(menuAdapter);
+        rvMovieMenu.setHasFixedSize(true);
+        rvMovieMenu.setNestedScrollingEnabled(false);
+
+        if (myMarginDecoration != null)
+        {
+            rvMovieMenu.removeItemDecoration(myMarginDecoration);
+        }
+        myMarginDecoration = new MyMarginDecoration(getContext());
+        rvMovieMenu.addItemDecoration(myMarginDecoration);
+
+        menuAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
+                menuClick(homeMenuDaos.get(i));
+            }
+        });
+
+
+        menuAdapter.notifyDataSetChanged();
+
     }
 
 
@@ -335,35 +490,52 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         clearStates();
         btn.getPaint().setFakeBoldText(true);
         btn.setBackgroundResource(R.mipmap.tab_select_bg);
-        btn.setTextSize(36);
+        btn.setTextSize(30);
 
         switch (btn.getId())
         {
             case R.id.btn_movie_about:
             {
                 selectIndex = 0;
+                initMovieModel();
+
                 break;
             }
             case R.id.btn_hospital_about:
             {
                 selectIndex = 1;
+                initHospitalModel();
                 break;
             }
             case R.id.btn_shopping_about:
             {
                 selectIndex = 2;
+                initShoppingModel();
                 break;
             }
         }
     }
 
+    @OnClick({R.id.btn_setting})
+    public void onModelClick(View view)
+    {
+        switch (view.getId())
+        {
+            case R.id.btn_setting:
+            {
+                start(VoiceFragment.newInstance(1));
+                break;
+            }
+
+        }
+    }
 
     private void defaultSelect()
     {
         selectIndex = 0;
         btnMovieAbout.getPaint().setFakeBoldText(true);
         btnMovieAbout.setBackgroundResource(R.mipmap.tab_select_bg);
-        btnMovieAbout.setTextSize(36);
+        btnMovieAbout.setTextSize(30);
     }
 
     private void clearStates()
@@ -377,7 +549,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     private void setDefaultStates(Button button)
     {
         button.getPaint().setFakeBoldText(false);
-        button.setTextSize(30);
+        button.setTextSize(26);
         button.setBackgroundColor(Color.TRANSPARENT);
     }
 
@@ -460,6 +632,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
+        hsContainer.scrollTo(0,0);
         mPresenter.updateDate();
         mPresenter.getTopVideo();
         mPresenter.getVideoHis();
@@ -651,16 +824,16 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     public void getMenuSuccess(List<HomeMenuDao> list) {
-        homeMenuDaos.clear();
-        homeMenuDaos.addAll(list);
-        menuAdapter.notifyDataSetChanged();
 
 //         "风采":
 //         "设置":
+        btnSetting.setVisibility(View.GONE);
+        isHasHospitalMien = false;
 
         for (HomeMenuDao homeMenuDao : list)
         {
-            if (    homeMenuDao.getTab().equalsIgnoreCase("影视") ||
+            if (
+                    homeMenuDao.getTab().equalsIgnoreCase("影视") ||
                     homeMenuDao.getTab().equalsIgnoreCase("直播") ||
                     homeMenuDao.getTab().equalsIgnoreCase("游戏") ||
                     homeMenuDao.getTab().equalsIgnoreCase("儿童")
@@ -688,7 +861,31 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             ){
                 rvShoppingMenuDaos.add(homeMenuDao);
             }
+
+            if (homeMenuDao.getTab().equalsIgnoreCase("设置"))
+            {
+                btnSetting.setVisibility(View.VISIBLE);
+            }
+
+            if (homeMenuDao.getTab().equalsIgnoreCase("风采"))
+            {
+                isHasHospitalMien = true;
+                if (TextUtils.isEmpty(homeMenuDao.getIcon())) {
+                    ivHospitalMienIcon.setImageResource(R.mipmap.ic_home_item_hositpal);
+                } else {
+                    GlideUtil.loadImg(homeMenuDao.getIcon(), ivHospitalMienIcon, R.mipmap.ic_video_load_default);
+                }
+                if (TextUtils.isEmpty(homeMenuDao.getName())) {
+                    tvHospitalMienName.setText("医院风采");
+                } else {
+                    tvHospitalMienName.setText(homeMenuDao.getName());
+                }
+            }
+
+
         }
+        initMovieModel();
+
 
     }
 

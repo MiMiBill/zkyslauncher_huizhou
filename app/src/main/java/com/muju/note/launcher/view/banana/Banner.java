@@ -21,9 +21,12 @@ import android.widget.LinearLayout;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.devbrackets.android.image.glide.GlideRoundTransform;
 import com.muju.note.launcher.R;
 
 import java.util.ArrayList;
@@ -338,8 +341,14 @@ public class Banner extends LinearLayout {
                 ViewGroup.LayoutParams.MATCH_PARENT,//ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
         lp.gravity = Gravity.CENTER;
-        RequestOptions options = new RequestOptions();
-        options.centerCrop();
+//        RequestOptions options = new RequestOptions();
+//        options.centerCrop();
+
+        RequestOptions options = new RequestOptions()
+                .centerCrop()
+                .priority(Priority.HIGH) //优先级
+//                .diskCacheStrategy(DiskCacheStrategy.NONE) //缓存
+                .transform(new GlideRoundTransform(12)); //圆角
         //数据大于一条，才可以循环
         if (dataList.size() > 1) {
             autoCurrIndex = 1;

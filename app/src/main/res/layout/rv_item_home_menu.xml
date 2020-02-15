@@ -2,10 +2,9 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/x250"
-    android:layout_height="@dimen/y230"
+    android:layout_height="@dimen/y220"
+    android:background="@color/transparent_bg"
    >
-
-
 
         <ImageView
             android:id="@+id/iv_menu"

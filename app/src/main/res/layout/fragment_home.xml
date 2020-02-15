@@ -114,7 +114,7 @@
                     android:layout_marginTop="@dimen/px20"
                     android:text="上海第九人民医院"
                     android:textColor="#ffffff"
-                    android:textSize="40sp"
+                    android:textSize="30sp"
                     android:textStyle="bold" />
 
 
@@ -131,7 +131,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/transparent_bg"
-                        android:padding="23px"
+                        android:padding="20px"
                         android:text="影视娱乐"
                         android:textColor="#ffffff"
                         android:textSize="30sp" />
@@ -141,7 +141,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/transparent_bg"
-                        android:padding="23px"
+                        android:padding="20px"
                         android:text="医院康复"
                         android:textColor="#ffffff"
                         android:textSize="30sp"
@@ -154,7 +154,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/transparent_bg"
-                        android:padding="23px"
+                        android:padding="20px"
                         android:text="点餐购物"
                         android:textColor="#ffffff"
                         android:textSize="30sp" />
@@ -169,6 +169,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/y460"
                     android:layout_below="@id/ll_tab_container"
+                    android:scrollbars="none"
                     android:layout_marginLeft="@dimen/px60"
                     android:layout_marginTop="@dimen/px20">
 
@@ -178,7 +179,9 @@
                         android:orientation="horizontal">
 
                         <RelativeLayout
+                            android:id="@+id/rl_banner_container"
                             android:layout_width="800px"
+                            android:layout_marginRight="@dimen/x54"
                             android:layout_height="match_parent">
 
                             <com.muju.note.launcher.view.banana.Banner
@@ -195,10 +198,36 @@
                                 android:visibility="gone" />
                         </RelativeLayout>
 
+                        <RelativeLayout
+                            android:id="@+id/rl_hospital_mien_container"
+                            android:layout_width="@dimen/x350"
+                            android:clickable="true"
+                            android:layout_marginRight="@dimen/px5"
+                            android:layout_height="match_parent">
+                            <ImageView
+                                android:id="@+id/iv_hospital_mien_icon"
+                                android:background="@mipmap/ic_home_item_hositpal"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"/>
+
+                            <TextView
+                                android:id="@+id/tv_hospital_mien_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/px10"
+                                android:text="医院风采"
+                                android:layout_alignParentBottom="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="@dimen/y153"
+                                android:textColor="#ffffff"
+                                android:layout_gravity="center_horizontal"
+                                android:textSize="20sp"/>
+                        </RelativeLayout>
+
                         <android.support.v7.widget.RecyclerView
                             android:id="@+id/rv_movie_menu"
-                            android:background="#f00"
-                            android:layout_marginLeft="@dimen/x54"
+                            android:background="@color/transparent_bg"
+                            android:layout_marginRight="@dimen/x54"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"/>
                     </LinearLayout>
@@ -246,7 +275,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/px20"
                             android:layout_marginTop="@dimen/px22"
-                            android:layout_marginRight="@dimen/px20"></android.support.v7.widget.RecyclerView>
+                            android:layout_marginRight="@dimen/px20"/>
 
                         <LinearLayout
                             android:id="@+id/ll_his_video_null"
@@ -320,7 +349,7 @@
                             <android.support.v7.widget.RecyclerView
                                 android:id="@+id/rv_video_top"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+                                android:layout_height="wrap_content"/>
                         </LinearLayout>
 
                     </HorizontalScrollView>
