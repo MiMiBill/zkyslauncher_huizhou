@@ -212,7 +212,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     ImageView ivHospitalMienIcon;
     @BindView(R.id.tv_hospital_mien_name)
     TextView tvHospitalMienName;
-
+    @BindView(R.id.tv_middle_time)
+    TextView tvMiddleTime;//中间的时间显示
     private boolean isHasHospitalMien =  false;//是否有医院风采模块
 
 
@@ -336,7 +337,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     private void initMovieModel()
     {
 
-
+        hsContainer.scrollTo(0,0);
         rlBannerContainer.setVisibility(View.VISIBLE);
         rlHospitalMienContainer.setVisibility(View.GONE);
 
@@ -386,7 +387,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     private void initHospitalModel()
     {
         rlBannerContainer.setVisibility(View.GONE);
-
+        hsContainer.scrollTo(0,0);
 
         if (homeMenuDaos == null)
         {
@@ -409,6 +410,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         rvMovieMenu.setHasFixedSize(true);
         rvMovieMenu.setNestedScrollingEnabled(false);
 
+        //医院风采模块是否显示
         if (isHasHospitalMien)
         {
             rlHospitalMienContainer.setVisibility(View.VISIBLE);
@@ -440,6 +442,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     {
         rlBannerContainer.setVisibility(View.GONE);
         rlHospitalMienContainer.setVisibility(View.GONE);
+        hsContainer.scrollTo(0,0);
         if (homeMenuDaos == null)
         {
             homeMenuDaos = new ArrayList<>();
@@ -664,6 +667,11 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     public void getDate(String date, String time, String week, String net, String netType) {
         tvDate.setText(date);
         tvTime.setText(time);
+        if (!TextUtils.isEmpty(time))
+        {
+            String middleTime =  time.substring(0,time.lastIndexOf(":"));
+            tvMiddleTime.setText(middleTime);
+        }
         tvWeek.setText(week);
         tvNet.setText(net);
         if (netType.equals("WIFI")) {

@@ -18,6 +18,8 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.SlidingDrawer;
 import android.widget.TextView;
 
 import com.muju.note.launcher.app.Cabinet.ui.CabinetFragment;
@@ -159,10 +161,10 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
     TextView tvNurseLeven;
     @BindView(R.id.tv_dietCategory)
     TextView tvDietCategory;
-    @BindView(R.id.drawlayout)
-    EBDrawerLayout drawlayout;
+//    @BindView(R.id.drawlayout)
+//    EBDrawerLayout drawlayout;
     @BindView(R.id.ll_have_paitent)
-    LinearLayout llHavePaitent;
+    RelativeLayout llHavePaitent;
     @BindView(R.id.tv_hos_dept_name)
     TextView tvHosDeptName;
     @BindView(R.id.iv_qr_code)
@@ -171,6 +173,14 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
     LinearLayout llNoPatient;
     @BindView(R.id.lly_draw)
     LinearLayout llDraw;
+    @BindView(R.id.sd_slidingdrawer)
+    SlidingDrawer slidingDrawer;
+    @BindView(R.id.tv_slidingdrawer_name)
+    TextView tvSlidingdrawerName;
+    @BindView(R.id.ll_slidingdrawer_bar)
+    LinearLayout llSlidingdrawerBar;
+
+
     private ActivePadInfo.DataBean activeInfo;
     private String netType = "";
     private Disposable disposableProtection;
@@ -232,28 +242,49 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
 
         startProtectionCountDown();
 
-        drawlayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+
+
+        slidingDrawer.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
             @Override
-            public void onDrawerSlide(@NonNull View view, float v) {
-
-
-            }
-
-            @Override
-            public void onDrawerOpened(@NonNull View view) {
+            public void onDrawerOpened() {
                 mPresenter.updateDate();
-            }
-
-            @Override
-            public void onDrawerClosed(@NonNull View view) {
-                mPresenter.onDestroy();
-            }
-
-            @Override
-            public void onDrawerStateChanged(int i) {
+                tvSlidingdrawerName.setText("收   起");
+//                llSlidingdrawerBar.getLayoutParams().width = 70;
 
             }
         });
+
+        slidingDrawer.setOnDrawerCloseListener(new SlidingDrawer.OnDrawerCloseListener() {
+            @Override
+            public void onDrawerClosed() {
+                tvSlidingdrawerName.setText("展   开");
+                mPresenter.onDestroy();
+//                llSlidingdrawerBar.getLayoutParams().width = 10;
+            }
+        });
+
+//        drawlayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+//            @Override
+//            public void onDrawerSlide(@NonNull View view, float v) {
+//
+//
+//            }
+//
+//            @Override
+//            public void onDrawerOpened(@NonNull View view) {
+//                mPresenter.updateDate();
+//            }
+//
+//            @Override
+//            public void onDrawerClosed(@NonNull View view) {
+//                mPresenter.onDestroy();
+//            }
+//
+//            @Override
+//            public void onDrawerStateChanged(int i) {
+//
+//            }
+//        });
 
         tvHosDeptName.setText(activeInfo.getHospitalName() + "-" + activeInfo.getDeptName() + "-" + activeInfo.getBedNumber() + "床");
 
@@ -320,11 +351,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
         tvBedNum.setText(activeInfo.getBedNumber());
         tvUserName.setText(bean.getUserName());
         tvAge.setText(bean.getAge() + "岁");
-        tvHosName.setText("医院：" + activeInfo.getHospitalName());
-        tvDeptName.setText("科室：" + activeInfo.getDeptName());
+        tvHosName.setText("" + activeInfo.getHospitalName());
+        tvDeptName.setText("" + activeInfo.getDeptName());
         tvDoctorName.setText("主治医师：" + bean.getChargeDoctor());
         tvNurseName.setText("责任护士：" + bean.getChargeNurse());
-        tvDate.setText("日期：" + FormatUtils.FormatDateUtil.parseLong(Long.parseLong(entity.getCreateTime())));
+        tvDate.setText("日        期：" + FormatUtils.FormatDateUtil.parseLong(Long.parseLong(entity.getCreateTime())));
         tvNurseLeven.setText("护理等级：" + bean.getNursingLevel());
         tvDietCategory.setText("饮食种类：" + bean.getDietCategory());
         tvSex.setText(bean.getSex() == 1 ? "男" : "女");
@@ -711,9 +742,14 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void drawOut(DrawOutEvent event) {
-        if (!drawlayout.isDrawerOpen(GravityCompat.END)) {
-            drawlayout.openDrawer(GravityCompat.END);
+
+        if (!slidingDrawer.isOpened())
+        {
+            slidingDrawer.open();
         }
+//        if (!drawlayout.isDrawerOpen(GravityCompat.END)) {
+//            drawlayout.openDrawer(GravityCompat.END);
+//        }
     }
 
     /**

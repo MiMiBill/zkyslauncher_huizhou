@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.muju.note.launcher.view.EBDrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="horizontal"
     tools:context=".MainActivity">
 
     <FrameLayout
@@ -12,17 +13,53 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"></FrameLayout>
 
+
+    <SlidingDrawer
+        android:id="@+id/sd_slidingdrawer"
+        android:layout_width="@dimen/x410"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:content="@id/lly_draw"
+        android:handle="@id/ll_slidingdrawer_bar"
+        android:orientation="horizontal"
+        >
+
+        <!--设置引导按钮-->
+        <LinearLayout
+            android:id="@+id/ll_slidingdrawer_bar"
+            android:layout_marginTop="@dimen/y100"
+            android:layout_marginBottom="@dimen/y100"
+            android:layout_width="@dimen/px30"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:gravity="center"
+            android:background="@mipmap/icon_drawer_bar"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_slidingdrawer_name"
+                android:text="展   开"
+                android:ems="1"
+                android:gravity="center"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textAlignment="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
     <LinearLayout
         android:id="@+id/lly_draw"
         android:clickable="true"
-        android:layout_width="@dimen/px400"
+        android:layout_width="@dimen/px380"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@mipmap/icon_bed_card_bg"
         android:layout_gravity="end"
         android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
+            android:background="@color/white"
             android:layout_height="@dimen/px39">
 
             <TextView
@@ -85,149 +122,257 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/main_bg">
+            android:background="@color/transparent_bg"
+            >
 
-            <LinearLayout
+
+            <RelativeLayout
                 android:id="@+id/ll_have_paitent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:orientation="vertical">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/px110"
-                    android:background="@color/blue_gray1"
-                    android:orientation="horizontal">
+                android:layout_centerHorizontal="true"
+                android:layout_width="@dimen/x310"
+                android:background="@color/transparent_bg"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:id="@+id/rl_top_bed_info"
+                    android:layout_width="@dimen/x400"
+                    android:background="@mipmap/icon_bed_card_top_bg"
+                    android:layout_height="@dimen/y450">
+                    <TextView
+                        android:id="@+id/tv_hos_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="上海人民医院"
+                        android:textSize="@dimen/px26"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:layout_marginTop="@dimen/px36"
+                        android:layout_marginLeft="@dimen/px21"/>
+
+                    <ImageView
+                        android:id="@+id/iv_hospital_image"
+                        android:layout_marginTop="@dimen/y18"
+                        android:layout_centerHorizontal="true"
+                        android:background="@mipmap/icon_hospital_image"
+                        android:layout_below="@id/tv_hos_name"
+                        android:layout_width="@dimen/x240"
+                        android:layout_height="@dimen/y160"/>
+
                     <TextView
                         android:id="@+id/tv_bed_num"
+                        android:layout_marginTop="@dimen/y94"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="20"
+                        android:paddingTop="5px"
+                        android:paddingBottom="5px"
+                        android:layout_below="@id/iv_hospital_image"
+                        android:text="888888"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/px50"
-                        android:textStyle="bold"
-                        android:layout_marginLeft="@dimen/px20"
+                        android:textSize="@dimen/px26"
+                        android:textStyle="normal"
+                        android:layout_marginLeft="@dimen/px23"
                         android:layout_gravity="center_vertical"/>
                     <TextView
+                        android:layout_toRightOf="@id/tv_bed_num"
+                        android:layout_alignTop="@id/tv_bed_num"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="床"
-                        android:textSize="@dimen/px22"
+                        android:paddingTop="5px"
+                        android:paddingBottom="5px"
+                        android:textSize="@dimen/px26"
                         android:textColor="@color/white"
-                        android:layout_marginLeft="@dimen/px8"
-                        android:layout_marginTop="@dimen/px48"/>
-                    <View
-                        android:layout_width="1px"
-                        android:layout_height="@dimen/px58"
-                        android:background="@color/white"
-                        android:layout_marginLeft="@dimen/px19"
-                        android:layout_gravity="center_vertical"></View>
-                    <LinearLayout
+                        />
+
+
+                    <TextView
+                        android:id="@+id/tv_dept_name"
+                        android:background="@drawable/bed_card_department_bg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:orientation="vertical"
-                        android:layout_marginLeft="@dimen/px20">
+                        android:layout_alignParentRight="true"
+                        android:layout_alignTop="@id/tv_bed_num"
+                        android:paddingTop="5px"
+                        android:paddingBottom="5px"
+                        android:paddingLeft="@dimen/px20"
+                        android:text="外科-骨折"
+                        android:textSize="@dimen/px26"
+                        android:textColor="@color/white"
+                        />
+
+
+                    <LinearLayout
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="@dimen/y15"
+                        android:layout_marginLeft="@dimen/x24"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
                         <TextView
                             android:id="@+id/tv_user_name"
+                            android:text="王麻子"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="@dimen/px25"
+                            android:textSize="@dimen/px32"
                             android:textColor="@color/white"
                             android:textStyle="bold"/>
-                        <LinearLayout
+
+                        <TextView
+                            android:id="@+id/tv_sex"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            >
-                            <TextView
-                                android:id="@+id/tv_sex"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="@dimen/px22"
-                                android:textColor="@color/white"
-                                />
-                            <TextView
-                                android:id="@+id/tv_age"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="@dimen/px22"
-                                android:textColor="@color/white"
-                                android:layout_marginLeft="@dimen/px15"
-                               />
-                        </LinearLayout>
+                            android:text="男"
+                            android:layout_marginLeft="@dimen/px20"
+                            android:textSize="@dimen/px32"
+                            android:textColor="@color/white"
+                            android:textStyle="bold"
+                            />
+                        <TextView
+                            android:id="@+id/tv_age"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/px20"
+                            android:text="40"
+                            android:textSize="@dimen/px32"
+                            android:textColor="@color/white"
+                            android:textStyle="bold"
+                            />
+
+
                     </LinearLayout>
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_1"
+                    android:layout_width="match_parent"
+                    android:background="@mipmap/icon_bed_card_1_bg"
+                    android:layout_below="@id/rl_top_bed_info"
+                    android:layout_marginTop="@dimen/y8"
+                    android:gravity="center_vertical"
+                    android:layout_height="@dimen/y48">
+
+                    <ImageView
+                        android:background="@mipmap/icon_bed_card_in_time"
+                        android:layout_marginLeft="@dimen/px25"
+                        android:layout_width="@dimen/px25"
+                        android:layout_height="@dimen/px20"/>
+                    <TextView
+                        android:id="@+id/tv_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|left"
+                        android:layout_marginLeft="@dimen/px21"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/px24"
+                        android:text="也是好事四十"
+                        />
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tv_hos_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="医院："
-                    android:textSize="@dimen/px22"
-                    android:textColor="@color/black_gray"
-                    android:layout_marginTop="@dimen/px20"
-                    android:layout_marginLeft="@dimen/px21"/>
-                <TextView
-                    android:id="@+id/tv_dept_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="科室："
-                    android:textSize="@dimen/px22"
-                    android:textColor="@color/black_gray"
-                    android:layout_marginTop="@dimen/px10"
-                    android:layout_marginLeft="@dimen/px21"/>
-                <TextView
-                    android:id="@+id/tv_doctor_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="主治医师："
-                    android:textSize="@dimen/px22"
-                    android:textColor="@color/black_gray"
-                    android:layout_marginTop="@dimen/px10"
-                    android:layout_marginLeft="@dimen/px21"/>
-                <TextView
-                    android:id="@+id/tv_nurse_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="责任护士："
-                    android:textSize="@dimen/px22"
-                    android:textColor="@color/black_gray"
-                    android:layout_marginTop="@dimen/px10"
-                    android:layout_marginLeft="@dimen/px21"/>
-                <TextView
-                    android:id="@+id/tv_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="时间："
-                    android:textSize="@dimen/px22"
-                    android:textColor="@color/black_gray"
-                    android:layout_marginTop="@dimen/px10"
-                    android:layout_marginLeft="@dimen/px21"/>
-                <TextView
-                    android:id="@+id/tv_nurse_leven"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="护理等级："
-                    android:textSize="@dimen/px22"
-                    android:textColor="@color/black_gray"
-                    android:layout_marginTop="@dimen/px10"
-                    android:layout_marginLeft="@dimen/px21"/>
-                <TextView
-                    android:id="@+id/tv_dietCategory"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="饮食种类："
-                    android:textSize="@dimen/px22"
-                    android:textColor="@color/black_gray"
-                    android:layout_marginTop="@dimen/px10"
-                    android:layout_marginLeft="@dimen/px21"/>
-
-                <View
+                <LinearLayout
+                    android:id="@+id/ll_2"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/px30"></View>
+                    android:background="@mipmap/icon_bed_card_2_bg"
+                    android:layout_below="@id/ll_1"
+                    android:layout_marginTop="@dimen/y8"
+                    android:gravity="center_vertical"
+                    android:layout_height="@dimen/y48">
 
-            </LinearLayout>
+                    <ImageView
+                        android:background="@mipmap/icon_bed_card_in_time"
+                        android:layout_marginLeft="@dimen/px25"
+                        android:layout_width="@dimen/px25"
+                        android:layout_height="@dimen/px20"/>
+                    <TextView
+                        android:id="@+id/tv_doctor_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|left"
+                        android:layout_marginLeft="@dimen/px21"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/px24"
+                        android:text="也是好事四十"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_3"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/bed_card_bottom_bg_1"
+                    android:layout_below="@id/ll_2"
+                    android:layout_marginTop="@dimen/y8"
+                    android:gravity="center_vertical"
+                    android:layout_height="@dimen/y48">
+
+                    <ImageView
+                        android:background="@mipmap/icon_bed_card_in_time"
+                        android:layout_marginLeft="@dimen/px25"
+                        android:layout_width="@dimen/px25"
+                        android:layout_height="@dimen/px20"/>
+                    <TextView
+                        android:id="@+id/tv_nurse_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|left"
+                        android:layout_marginLeft="@dimen/px21"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/px24"
+                        android:text="也是好事四十"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_4"
+                    android:layout_width="match_parent"
+                    android:background="@mipmap/icon_bed_card_3_bg"
+                    android:layout_below="@id/ll_3"
+                    android:layout_marginTop="@dimen/y8"
+                    android:gravity="center_vertical"
+                    android:layout_height="@dimen/y48">
+
+                    <ImageView
+                        android:background="@mipmap/icon_bed_card_in_time"
+                        android:layout_marginLeft="@dimen/px25"
+                        android:layout_width="@dimen/px25"
+                        android:layout_height="@dimen/px20"/>
+                    <TextView
+                        android:id="@+id/tv_nurse_leven"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|left"
+                        android:layout_marginLeft="@dimen/px21"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/px24"
+                        android:text="也是好事四十"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/ll_5"
+                    android:layout_width="match_parent"
+                    android:background="@mipmap/icon_bed_card_1_bg"
+                    android:layout_below="@id/ll_4"
+                    android:layout_marginTop="@dimen/y8"
+                    android:gravity="center_vertical"
+                    android:layout_height="@dimen/y48">
+
+                    <ImageView
+                        android:background="@mipmap/icon_bed_card_in_time"
+                        android:layout_marginLeft="@dimen/px25"
+                        android:layout_width="@dimen/px25"
+                        android:layout_height="@dimen/px20"/>
+                    <TextView
+                        android:id="@+id/tv_dietCategory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|left"
+                        android:layout_marginLeft="@dimen/px21"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/px24"
+                        android:text="也是好事四十"
+                        />
+                </LinearLayout>
+            </RelativeLayout>
 
             <LinearLayout
                 android:id="@+id/ll_no_patient"
@@ -274,4 +419,6 @@
 
     </LinearLayout>
 
-</com.muju.note.launcher.view.EBDrawerLayout>
+    </SlidingDrawer>
+
+</RelativeLayout>

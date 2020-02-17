@@ -25,7 +25,7 @@ public class MyMarginDecoration extends RecyclerView.ItemDecoration {
         int height =  parent.getMeasuredHeight();
         int itemHeight = view.getLayoutParams().height;
         int magin = (height - itemHeight * 2 )/2 - 0;
-        LogUtil.d("height:" + height + "  itemHeight:" + itemHeight + " magin:" + magin);
+//        LogUtil.d("height:" + height + "  itemHeight:" + itemHeight + " magin:" + magin);
         margin = magin;
         int rowNum = (allSize % 2 == 0) ? ( allSize/2 ): (allSize/2 + 1);
         int curPosition = parent.getChildLayoutPosition(view);
