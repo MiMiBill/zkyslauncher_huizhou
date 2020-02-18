@@ -129,7 +129,7 @@
             <RelativeLayout
                 android:id="@+id/ll_have_paitent"
                 android:layout_centerHorizontal="true"
-                android:layout_width="@dimen/x310"
+                android:layout_width="@dimen/x340"
                 android:background="@color/transparent_bg"
                 android:layout_height="match_parent">
 

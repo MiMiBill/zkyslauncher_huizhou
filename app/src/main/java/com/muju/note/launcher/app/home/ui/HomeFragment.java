@@ -519,7 +519,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         }
     }
 
-    @OnClick({R.id.btn_setting})
+    @OnClick({R.id.btn_setting,
+            R.id.rl_hospital_mien_container
+            })
     public void onModelClick(View view)
     {
         switch (view.getId())
@@ -527,6 +529,11 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             case R.id.btn_setting:
             {
                 start(VoiceFragment.newInstance(1));
+                break;
+            }
+            case R.id.rl_hospital_mien_container:
+            {
+                start(HospitalMienFragment.newInstance());
                 break;
             }
 
@@ -853,10 +860,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                     homeMenuDao.getTab().equalsIgnoreCase("百科") ||
                     homeMenuDao.getTab().equalsIgnoreCase("健康") ||
                     homeMenuDao.getTab().equalsIgnoreCase("医疗") ||
-                    homeMenuDao.getTab().equalsIgnoreCase("柜子") ||
-                    homeMenuDao.getTab().equalsIgnoreCase("新手") ||
-                    homeMenuDao.getTab().equalsIgnoreCase("用户") ||
-                    homeMenuDao.getTab().equalsIgnoreCase("通知") ||
                     homeMenuDao.getTab().equalsIgnoreCase("金融") ||
                     homeMenuDao.getTab().equalsIgnoreCase("保险") ||
                     homeMenuDao.getTab().equalsIgnoreCase("护工")
@@ -864,7 +867,12 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 rvHospitalMenuDaos.add(homeMenuDao);
             }
 
-            if (    homeMenuDao.getTab().equalsIgnoreCase("购物") ||
+            if (
+                    homeMenuDao.getTab().equalsIgnoreCase("购物") ||
+                    homeMenuDao.getTab().equalsIgnoreCase("柜子") ||
+                    homeMenuDao.getTab().equalsIgnoreCase("新手") ||
+                    homeMenuDao.getTab().equalsIgnoreCase("用户") ||
+                    homeMenuDao.getTab().equalsIgnoreCase("通知") ||
                     homeMenuDao.getTab().equalsIgnoreCase("点餐")
             ){
                 rvShoppingMenuDaos.add(homeMenuDao);
