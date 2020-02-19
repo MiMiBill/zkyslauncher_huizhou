@@ -102,7 +102,8 @@ public class HomeMenuAdapter extends BaseQuickAdapter<HomeMenuDao, BaseViewHolde
 
             case "游戏":
                 if (TextUtils.isEmpty(dao.getIcon())) {
-                    img.setImageResource(R.mipmap.icon_home_game);
+//                    img.setImageResource(R.mipmap.icon_home_game);
+                    img.setImageResource(R.drawable.drawable_menu_item_game_icon);
                 } else {
                     GlideUtil.loadImg(dao.getIcon(), img, R.mipmap.ic_video_load_default);
                 }
@@ -128,7 +129,8 @@ public class HomeMenuAdapter extends BaseQuickAdapter<HomeMenuDao, BaseViewHolde
 
             case "购物":
                 if (TextUtils.isEmpty(dao.getIcon())) {
-                    img.setImageResource(R.mipmap.ic_home_item_shop);
+//                    img.setImageResource(R.mipmap.ic_home_item_shop);
+                    img.setImageResource(R.drawable.drawable_menu_item_shop_icon);
                 } else {
                     GlideUtil.loadImg(dao.getIcon(), img, R.mipmap.ic_video_load_default);
                 }
@@ -141,7 +143,8 @@ public class HomeMenuAdapter extends BaseQuickAdapter<HomeMenuDao, BaseViewHolde
 
             case "金融":
                 if (TextUtils.isEmpty(dao.getIcon())) {
-                    img.setImageResource(R.mipmap.ic_home_item_finance);
+//                    img.setImageResource(R.mipmap.ic_home_item_finance);
+                    img.setImageResource(R.drawable.drawable_menu_item_finaace_icon);
                 } else {
                     GlideUtil.loadImg(dao.getIcon(), img, R.mipmap.ic_video_load_default);
                 }
@@ -167,7 +170,8 @@ public class HomeMenuAdapter extends BaseQuickAdapter<HomeMenuDao, BaseViewHolde
 
             case "点餐":
                 if (TextUtils.isEmpty(dao.getIcon())) {
-                    img.setImageResource(R.mipmap.ic_home_item_order);
+//                    img.setImageResource(R.mipmap.ic_home_item_order);
+                    img.setImageResource(R.drawable.drawable_menu_item_order_icon);
                 } else {
                     GlideUtil.loadImg(dao.getIcon(), img, R.mipmap.ic_video_load_default);
                 }
@@ -257,7 +261,8 @@ public class HomeMenuAdapter extends BaseQuickAdapter<HomeMenuDao, BaseViewHolde
                 break;
             case "护工":
                 if (TextUtils.isEmpty(dao.getIcon())) {
-                    img.setImageResource(R.mipmap.care_worker);
+//                    img.setImageResource(R.mipmap.care_worker);
+                    img.setImageResource(R.drawable.drawable_menu_item_care_worker_icon);
                 } else {
                     GlideUtil.loadImg(dao.getIcon(), img, R.mipmap.ic_video_load_default);
                 }
