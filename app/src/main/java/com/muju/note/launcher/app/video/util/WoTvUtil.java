@@ -203,8 +203,8 @@ public class WoTvUtil {
 
     private void setPlayerUi(ExpandVideoView videoView, int status) {
         // Exo的升级版，使用硬解，兼容性好， 较稳定
-//        videoView.setPlayerType(BasicVideoView.PlayerType.EXO2);
-        videoView.setPlayerType(BasicVideoView.PlayerType.IJK);
+        videoView.setPlayerType(BasicVideoView.PlayerType.EXO2);
+//        videoView.setPlayerType(BasicVideoView.PlayerType.IJK);//会报错
         //是否设置为WIFI下自动播放视频
         videoView.setAutoLink(true);
 
@@ -264,7 +264,9 @@ public class WoTvUtil {
         maxUIStyle.setChangeLiveVisiable(false);
         maxUIStyle.setProgramVisiable(false);
 
-
+        //TODO 是否具备片段的icon，默认是显示的
+        minUIStyle.setEpisodeButtonVisiable(false);
+        maxUIStyle.setEpisodeButtonVisiable(false);
         //TODO 是否具备锁定键的icon，默认是显示的
         minUIStyle.setLockButtonVisiable(true);
         maxUIStyle.setLockButtonVisiable(true);
