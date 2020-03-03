@@ -16,7 +16,7 @@
 
     <SlidingDrawer
         android:id="@+id/sd_slidingdrawer"
-        android:layout_width="@dimen/x410"
+        android:layout_width="@dimen/x405"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
@@ -30,7 +30,7 @@
             android:id="@+id/ll_slidingdrawer_bar"
             android:layout_marginTop="@dimen/y100"
             android:layout_marginBottom="@dimen/y100"
-            android:layout_width="@dimen/px30"
+            android:layout_width="@dimen/px25"
             android:layout_height="match_parent"
             android:visibility="gone"
             android:gravity="center"
