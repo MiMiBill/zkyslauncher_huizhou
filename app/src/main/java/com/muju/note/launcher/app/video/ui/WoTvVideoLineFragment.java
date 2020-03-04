@@ -120,7 +120,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
             @Override
             public void onPrepared(boolean b) {
                 try {
-                    videoView.setBasicControlDialogsVisible(true, true,true);
+                    videoView.setBasicControlDialogsVisible(true, true);
                     llLoading.setVisibility(View.GONE);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -345,10 +345,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
 
             }
 
-            @Override
-            public void playHalfHour() {
 
-            }
 
         });
     }
