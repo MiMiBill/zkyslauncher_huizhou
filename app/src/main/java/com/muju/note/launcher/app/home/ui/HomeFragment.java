@@ -376,8 +376,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 menuClick(homeMenuDaos.get(i));
             }
         });
-
-
         menuAdapter.notifyDataSetChanged();
 
     }
