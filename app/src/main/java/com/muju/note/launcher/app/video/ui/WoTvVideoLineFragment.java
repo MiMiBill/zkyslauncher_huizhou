@@ -345,6 +345,7 @@ public class WoTvVideoLineFragment extends BaseFragment<VideoLinePresenter> impl
 
             }
 
+
         });
     }
 

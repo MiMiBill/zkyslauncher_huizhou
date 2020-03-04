@@ -322,12 +322,11 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         });
 
 
-
         FileObserverService.start();
-
         //默认选择影视tab
         defaultSelect();
         initMovieModel();
+        mPresenter.getMenu();
 
     }
 

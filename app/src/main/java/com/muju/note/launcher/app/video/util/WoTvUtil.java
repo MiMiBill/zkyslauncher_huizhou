@@ -103,6 +103,8 @@ public class WoTvUtil {
     public void loginOut() {
         VideoSdkConfig.getInstance().getUser().logout();
         VideoSDKOpenAPI.getInstance().logoutSDK();
+
+
     }
 
     /**
