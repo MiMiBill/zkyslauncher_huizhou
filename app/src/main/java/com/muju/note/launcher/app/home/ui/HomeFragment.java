@@ -844,6 +844,10 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         btnSetting.setVisibility(View.GONE);
         isHasHospitalMien = false;
 
+        rvMovieMenuDaos.clear();
+        rvHospitalMenuDaos.clear();
+        rvShoppingMenuDaos.clear();
+
         for (HomeMenuDao homeMenuDao : list)
         {
             if (
