@@ -88,6 +88,8 @@ public class MainService extends Service {
             // 查询更新
             UpdateVersionService.getInstance().start();
 
+            // 获取定位信息
+            LocationService.getInstance().start();
             //新增影视详情
             VideoService.getInstance().getUpdateVideo();
             // 非自启动状态，10分钟内初始化操作,现在修改为30秒
@@ -99,8 +101,8 @@ public class MainService extends Service {
                             LogUtil.d("手动启动10分钟后更新:" + Thread.currentThread());
                             // 获取平板配置信息
 //                            ConfigService.getInstance().start();
-                            // 获取定位信息
-                            LocationService.getInstance().start();
+//                            // 获取定位信息
+//                            LocationService.getInstance().start();
                             //检查医院风采数据
                             MienService.getInstance().getMienInfoTryTimes();
                             // 检查影视数据
