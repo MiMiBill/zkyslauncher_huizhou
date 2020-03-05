@@ -135,13 +135,15 @@ dependencies {
     //没有使用特殊Header，可以不加这行
 
     //wotv
-//    implementation 'com.unicom.common:common:1.3.34-SNAPSHOT'
-    implementation 'com.unicom.video:exo2:1.3.37-SNAPSHOT'
-    implementation 'javax.inject:javax.inject:1'
-//    implementation 'com.unicom.video:ijk:1.3.34-SNAPSHOT'
-    //新加的
-    implementation 'com.unicom.wotvvertical:wotvvertical:1.3.37-SNAPSHOT'
 
+    //    implementation 'com.unicom.common:common:1.3.34-SNAPSHOT' //以前为1.3.34 //最新为1.3.37
+    implementation 'com.unicom.video:exo2:1.3.34-SNAPSHOT'
+    implementation 'javax.inject:javax.inject:1'
+
+    //    implementation 'com.unicom.video:ijk:1.3.34-SNAPSHOT'
+
+    //新加的
+    implementation 'com.unicom.wotvvertical:wotvvertical:1.3.34-SNAPSHOT'
 
     //gif
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.10'
