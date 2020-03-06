@@ -83,6 +83,13 @@ public class LocationService {
 
         HeConfig.init("HE2003051739101419","33230a6c317b4a06a7317dfd09ddccdc");
         HeConfig.switchToFreeServerNode();//切换到免费版本
+
+
+    }
+
+    private void getWeather(String location)
+    {
+
         /**
          * 实况天气
          * 实况天气即为当前时间点的天气状况以及温湿风压等气象指数，具体包含的数据：体感温度、
@@ -94,7 +101,8 @@ public class LocationService {
          * @param unit     单位选择，公制（m）或英制（i），默认为公制单位
          * @param listener 网络访问回调接口
          */
-        HeWeather.getWeatherNow(LauncherApplication.getContext(), "31.305847,121.520267", Lang.CHINESE_SIMPLIFIED , Unit.METRIC , new HeWeather.OnResultWeatherNowBeanListener() {
+        //location格式： "31.305847,121.520267"
+        HeWeather.getWeatherNow(LauncherApplication.getContext(), location, Lang.CHINESE_SIMPLIFIED , Unit.METRIC , new HeWeather.OnResultWeatherNowBeanListener() {
             @Override
             public void onError(Throwable e) {
                 LogUtil.e(TAG, "Weather Now onError: ", e);
@@ -107,6 +115,7 @@ public class LocationService {
                 if ( Code.OK.getCode().equalsIgnoreCase(dataObject.getStatus()) ){
                     //此时返回数据
                     NowBase now = dataObject.getNow();
+                    LogUtil.d("当下气温：" +  now.getTmp() );
                 } else {
                     //在此查看返回数据失败的原因
                     String status = dataObject.getStatus();
@@ -127,7 +136,7 @@ public class LocationService {
          * @param unit     单位选择，公制（m）或英制（i），默认为公制单位
          * @param listener 网络访问回调接口
          */
-        HeWeather.getWeatherForecast(LauncherApplication.getContext(), "31.305847,121.520267", Lang.CHINESE_SIMPLIFIED , Unit.METRIC , new HeWeather.OnResultWeatherForecastBeanListener() {
+        HeWeather.getWeatherForecast(LauncherApplication.getContext(), location, Lang.CHINESE_SIMPLIFIED , Unit.METRIC , new HeWeather.OnResultWeatherForecastBeanListener() {
 
             @Override
             public void onError(Throwable throwable) {
@@ -143,10 +152,11 @@ public class LocationService {
                     List<ForecastBase> forecastBaseList = forecast.getDaily_forecast();
                     if (forecastBaseList != null && forecastBaseList.size() > 0)
                     {
-                           ForecastBase forecastBase = forecastBaseList.get(0);
-                           String tmpMax = forecastBase.getTmp_max();//最高温度
-                           String tmpMin = forecastBase.getTmp_min();//最低温度
-                           String condTxtd = forecastBase.getCond_code_d();//整天气温的概括
+                        ForecastBase forecastBase = forecastBaseList.get(0);
+                        String tmpMax = forecastBase.getTmp_max();//最高温度
+                        String tmpMin = forecastBase.getTmp_min();//最低温度
+                        String condTxtd = forecastBase.getCond_txt_d();//整天气温的概括
+                        LogUtil.d(TAG,"最高温度：" + tmpMax,"最低温度" + tmpMin, "描述：" + condTxtd);
                     }
 
                 } else {
@@ -159,26 +169,6 @@ public class LocationService {
 
         });
 
-//            @Override
-//            public void onError(Throwable e) {
-//                LogUtil.e(TAG, "Weather Now onError: ", e);
-//            }
-//
-//            @Override
-//            public void onSuccess(Now dataObject) {
-//                LogUtil.d(TAG, " Weather Now onSuccess: " + new Gson().toJson(dataObject));
-//                //先判断返回的status是否正确，当status正确时获取数据，若status不正确，可查看status对应的Code值找到原因
-//                if ( Code.OK.getCode().equalsIgnoreCase(dataObject.getStatus()) ){
-//                    //此时返回数据
-//                    NowBase now = dataObject.getNow();
-//                } else {
-//                    //在此查看返回数据失败的原因
-//                    String status = dataObject.getStatus();
-//                    Code code = Code.toEnum(status);
-//                    LogUtil.i(TAG, "failed code: " + code);
-//                }
-//            }
-//        });
 
     }
 
@@ -196,8 +186,12 @@ public class LocationService {
             longitude = location.getLongitude()+"";
             //获取定位精度，默认值为0.0f
             address = location.getAddrStr();
-            LogUtil.d(TAG,"location: 位置信息：%s   %s   %s", latitude, longitude, address);
+//            LogUtil.d(TAG,"location: 位置信息：%s   %s   %s", latitude, longitude, address);
+//            LogUtil.d(TAG,"location: 位置信息：%s   %s   %s",  location.getAddress().city,  location.getAddress().street, location.getAddress().address);
+            LogUtil.d(TAG,"location: 位置信息：%s   %s   %s", location.getAddress().province, location.getAddress().district);
             locationClient.stop();
+            //获取天气
+            getWeather(latitude + "," + longitude);
 
         }
     }
