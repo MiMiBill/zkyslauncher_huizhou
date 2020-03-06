@@ -1,6 +1,7 @@
 package com.muju.note.launcher.app.home.ui;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
@@ -631,7 +632,14 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 start(HospitalMienFragment.newInstance());
                 break;
             case "宣教":
-                start(new HosPitalMissionFragment());
+                HosPitalMissionFragment hosPitalMissionFragment  = new HosPitalMissionFragment();
+                if (!TextUtils.isEmpty(dao.getName())) //不为空，说明需要
+                {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title",dao.getName());
+                    hosPitalMissionFragment.setArguments(bundle);
+                }
+                start(hosPitalMissionFragment);
                 break;
             case "百科":
                 start(new HospitalEncyFragment());
