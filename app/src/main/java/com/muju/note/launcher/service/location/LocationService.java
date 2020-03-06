@@ -116,37 +116,48 @@ public class LocationService {
             }
         });
 
-//        /**
-//         * 实况天气
-//         * 实况天气即为当前时间点的天气状况以及温湿风压等气象指数，具体包含的数据：体感温度、
-//         * 实测温度、天气状况、风力、风速、风向、相对湿度、大气压强、降水量、能见度等。
-//         *
-//         * @param context  上下文
-//         * @param location 地址详解
-//         * @param lang     多语言，默认为简体中文，海外城市默认为英文
-//         * @param unit     单位选择，公制（m）或英制（i），默认为公制单位
-//         * @param listener 网络访问回调接口
-//         */
-//        HeWeather.getWeatherForecast(LauncherApplication.getContext(), "31.305847,121.520267", Lang.CHINESE_SIMPLIFIED , Unit.METRIC , new HeWeather.OnResultWeatherForecastBeanListener() {
-//                    @Override
-//                    public void onError(Throwable throwable) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onSuccess(Forecast forecast) {
-//                        LogUtil.d(TAG, " Weather Now onSuccess: " + new Gson().toJson(forecast));
-//                        //先判断返回的status是否正确，当status正确时获取数据，若status不正确，可查看status对应的Code值找到原因
-//                        if ( Code.OK.getCode().equalsIgnoreCase(forecast.getStatus()) ){
-//                            //此时返回数据
-//                            List<ForecastBase> now = forecast.getDaily_forecast();
-//                        } else {
-//                            //在此查看返回数据失败的原因
-//                            String status = forecast.getStatus();
-//                            Code code = Code.toEnum(status);
-//                            LogUtil.i(TAG, "failed code: " + code);
-//                        }
-//        });
+        /**
+         * 实况天气
+         * 实况天气即为当前时间点的天气状况以及温湿风压等气象指数，具体包含的数据：体感温度、
+         * 实测温度、天气状况、风力、风速、风向、相对湿度、大气压强、降水量、能见度等。
+         *
+         * @param context  上下文
+         * @param location 地址详解
+         * @param lang     多语言，默认为简体中文，海外城市默认为英文
+         * @param unit     单位选择，公制（m）或英制（i），默认为公制单位
+         * @param listener 网络访问回调接口
+         */
+        HeWeather.getWeatherForecast(LauncherApplication.getContext(), "31.305847,121.520267", Lang.CHINESE_SIMPLIFIED , Unit.METRIC , new HeWeather.OnResultWeatherForecastBeanListener() {
+
+            @Override
+            public void onError(Throwable throwable) {
+                LogUtil.e(TAG, "Weather ForecastBase onError: ", throwable);
+            }
+
+            @Override
+            public void onSuccess(Forecast forecast) {
+                LogUtil.d(TAG, " Weather ForecastBase onSuccess: " + new Gson().toJson(forecast));
+                //先判断返回的status是否正确，当status正确时获取数据，若status不正确，可查看status对应的Code值找到原因
+                if ( Code.OK.getCode().equalsIgnoreCase(forecast.getStatus()) ){
+                    //此时返回数据
+                    List<ForecastBase> forecastBaseList = forecast.getDaily_forecast();
+                    if (forecastBaseList != null && forecastBaseList.size() > 0)
+                    {
+                           ForecastBase forecastBase = forecastBaseList.get(0);
+                           String tmpMax = forecastBase.getTmp_max();//最高温度
+                           String tmpMin = forecastBase.getTmp_min();//最低温度
+                           String condTxtd = forecastBase.getCond_code_d();//整天气温的概括
+                    }
+
+                } else {
+                    //在此查看返回数据失败的原因
+                    String status = forecast.getStatus();
+                    Code code = Code.toEnum(status);
+                    LogUtil.i(TAG, "failed code: " + code);
+                }
+            }
+
+        });
 
 //            @Override
 //            public void onError(Throwable e) {
@@ -171,6 +182,8 @@ public class LocationService {
 
     }
 
+
+
     /**
      * 实现定位回调
      */
@@ -185,7 +198,11 @@ public class LocationService {
             address = location.getAddrStr();
             LogUtil.d(TAG,"location: 位置信息：%s   %s   %s", latitude, longitude, address);
             locationClient.stop();
+
         }
     }
+
+
+
 
 }
