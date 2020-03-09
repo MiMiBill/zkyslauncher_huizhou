@@ -33,10 +33,6 @@ public class BluetoothLeService {
     public static BluetoothLeService getInstance() {
         return service;
     }
-    private  BluetoothLeService()
-    {
-
-    }
 
     public static void setService(BluetoothLeService service) {
         BluetoothLeService.service = service;

@@ -84,8 +84,6 @@ public class CabinetFragment extends BaseFragment<CabinetPresenter> implements C
     private PromptDialog promptDialog;
     private boolean isBLELockOpened;
 
-
-
     //以上蓝牙相关
     private static final String TAG = "CabinetFragment";
     @BindView(R.id.ll_back)
