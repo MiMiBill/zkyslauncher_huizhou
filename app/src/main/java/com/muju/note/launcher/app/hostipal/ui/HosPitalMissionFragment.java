@@ -191,7 +191,7 @@ public class HosPitalMissionFragment extends BaseFragment<HospitalMissionPresent
                     missionInfoDaos.clear();
                     missionInfoDaos.addAll(missionPdfInfoDaos);
                 }
-                hospitalMienTabAdapter.notifyDataSetChanged();
+                missionAdapter.notifyDataSetChanged();
                 hospitalMienTabAdapter.notifyDataSetChanged();
 
 //                if (sVideoMienTitle.equalsIgnoreCase(list.get(position).getTitle())){
