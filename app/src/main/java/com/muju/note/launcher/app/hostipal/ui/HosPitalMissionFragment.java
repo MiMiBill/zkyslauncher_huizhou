@@ -138,7 +138,8 @@ public class HosPitalMissionFragment extends BaseFragment<HospitalMissionPresent
                 }
 
 
-                if (TextUtils.isEmpty(bean.getVideo())) {
+
+                if (bean.getVideo() == null || TextUtils.isEmpty(bean.getVideo().trim())) {
                     File file = new File(SdcardConfig.RESOURCE_FOLDER, bean.getFrontCover()
                             .hashCode() + ".pdf");
                     if (!file.exists()) {
@@ -190,6 +191,7 @@ public class HosPitalMissionFragment extends BaseFragment<HospitalMissionPresent
                     missionInfoDaos.clear();
                     missionInfoDaos.addAll(missionPdfInfoDaos);
                 }
+                hospitalMienTabAdapter.notifyDataSetChanged();
                 hospitalMienTabAdapter.notifyDataSetChanged();
 
 //                if (sVideoMienTitle.equalsIgnoreCase(list.get(position).getTitle())){
@@ -291,13 +293,21 @@ public class HosPitalMissionFragment extends BaseFragment<HospitalMissionPresent
         {
 //            missionInfoDaos.add(missionInfoDao);
             //有cid或者有video的说明是视频
-            if (!TextUtils.isEmpty(missionInfoDao.getVideo()))
+
+            String videoUrl = missionInfoDao.getVideo();
+            if (videoUrl != null && !TextUtils.isEmpty(videoUrl.trim()))
             {
                 missionVideoInfoDaos.add(missionInfoDao);
             }else {
                 missionPdfInfoDaos.add(missionInfoDao);
             }
         }
+
+        if (missionVideoInfoDaos.size() != 0 && missionPdfInfoDaos.size() != 0)
+        {
+            llTabContainer.setVisibility(View.VISIBLE);
+        }
+
 //        missionAdapter.notifyDataSetChanged();
         mPresenter.getMissionVideo( "" + ActiveUtils.getPadActiveInfo().getHospitalId() + "/" + ActiveUtils.getPadActiveInfo().getDeptId() + "/科室宣教",pageNum);
     }
@@ -378,7 +388,11 @@ public class HosPitalMissionFragment extends BaseFragment<HospitalMissionPresent
             }
             missionAdapter.notifyDataSetChanged();
         }
-        llTabContainer.setVisibility(View.GONE);
+
+        if (missionVideoInfoDaos.size() != 0 && missionPdfInfoDaos.size() != 0)
+        {
+            llTabContainer.setVisibility(View.VISIBLE);
+        }
         promptDialog.dismiss();
         missionAdapter.loadMoreComplete();
     }
