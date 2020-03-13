@@ -45,8 +45,9 @@ public class HospitalMissionPresenter extends BasePresenter<HospitalMissionContr
 //                " and status = 1 order by number desc,onwayTime desc,editTime desc,updateTime desc";
 //        LogUtil.d("医院风采视频SQL："  + sql);
 
-        String sql = "customTag = '" + name +
-                "' and status = 1 order by number desc,onwayTime desc,editTime desc,updateTime desc";
+        //可能存在一个视频多个科室都使用的情况，所以用like去适配
+        String sql = "customTag like '%" + name +
+                "%' and status = 1 order by number desc,onwayTime desc,editTime desc,updateTime desc";
         LogUtil.d("医院宣教视频SQL："  + sql);
         LitePal.where(sql).findAsync(VideoInfoDao.class).listen(new FindMultiCallback<VideoInfoDao>() {
             @Override
