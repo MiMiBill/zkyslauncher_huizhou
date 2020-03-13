@@ -180,7 +180,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainPre
     @BindView(R.id.ll_slidingdrawer_bar)
     LinearLayout llSlidingdrawerBar;
 
-
     private ActivePadInfo.DataBean activeInfo;
     private String netType = "";
     private Disposable disposableProtection;

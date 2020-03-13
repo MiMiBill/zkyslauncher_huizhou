@@ -167,7 +167,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/transparent_bg"
                         android:padding="20px"
-                        android:text="点餐购物"
+                        android:text="健康管理"
                         android:textColor="#ffffff"
                         android:textSize="30sp" />
 

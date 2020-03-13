@@ -214,6 +214,10 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     TextView tvHospitalMienName;
     @BindView(R.id.tv_middle_time)
     TextView tvMiddleTime;//中间的时间显示
+    @BindView(R.id.tv_hoipital_name)
+    TextView tvHoipitalName;
+
+
     private boolean isHasHospitalMien =  false;//是否有医院风采模块
 
 
@@ -266,6 +270,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         saveRegisterId();
         if (activeInfo != null) {
             mPresenter.getPatientData(String.valueOf(activeInfo.getBedId()), getActivity());
+            tvHoipitalName.setText(activeInfo.getHospitalName());
         }
         relCard.setOnClickListener(this);
 //        ivBedCard.setOnClickListener(this);
@@ -861,14 +866,14 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                     homeMenuDao.getTab().equalsIgnoreCase("百科") ||
                     homeMenuDao.getTab().equalsIgnoreCase("健康") ||
                     homeMenuDao.getTab().equalsIgnoreCase("医疗") ||
-                    homeMenuDao.getTab().equalsIgnoreCase("金融") ||
-                    homeMenuDao.getTab().equalsIgnoreCase("保险") ||
                     homeMenuDao.getTab().equalsIgnoreCase("护工")
             ){
                 rvHospitalMenuDaos.add(homeMenuDao);
             }
 
             if (
+                    homeMenuDao.getTab().equalsIgnoreCase("金融") ||
+                    homeMenuDao.getTab().equalsIgnoreCase("保险") ||
                     homeMenuDao.getTab().equalsIgnoreCase("购物") ||
                     homeMenuDao.getTab().equalsIgnoreCase("柜子") ||
                     homeMenuDao.getTab().equalsIgnoreCase("新手") ||
