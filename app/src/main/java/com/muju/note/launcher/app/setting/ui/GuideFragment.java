@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import com.muju.note.launcher.R;
 import com.muju.note.launcher.app.video.ui.VideoContentFragment;
 import com.muju.note.launcher.base.BaseFragment;
+import com.muju.note.launcher.util.ActiveUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,12 +55,22 @@ public class GuideFragment extends BaseFragment {
 
     private void setData() {
         mFragments = new ArrayList<>();
-        FragmentInner fragmentInner1 = FragmentInner.newInstance("fragment1", R.mipmap
-                .img_novice_01);
-        FragmentInner fragmentInner2 = FragmentInner.newInstance("fragment2", R.mipmap
-                .img_novice_02);
-        FragmentInner fragmentInner3 = FragmentInner.newInstance("fragment3", R.mipmap
-                .img_novice_03);
+
+        if (ActiveUtils.getPadActiveInfo().getHaveBed() != 0) //0表示没有柜子 非0表示有柜子
+        {
+            //柜子的使用说明
+            FragmentInner fragmentInner1 = FragmentInner.newInstance("fragment1", R.mipmap
+                    .img_novice_01);
+            FragmentInner fragmentInner2 = FragmentInner.newInstance("fragment2", R.mipmap
+                    .img_novice_02);
+            FragmentInner fragmentInner3 = FragmentInner.newInstance("fragment3", R.mipmap
+                    .img_novice_03);
+            mFragments.add(fragmentInner1);
+            mFragments.add(fragmentInner2);
+            mFragments.add(fragmentInner3);
+        }
+
+        //安屏的使用说明
         FragmentInner fragmentInner4 = FragmentInner.newInstance("fragment4", R.mipmap
                 .img_novice_04);
         FragmentInner fragmentInner5 = FragmentInner.newInstance("fragment5", R.mipmap
@@ -68,9 +79,6 @@ public class GuideFragment extends BaseFragment {
                 .img_novice_06);
         FragmentInner fragmentInner7 = FragmentInner.newInstance("fragment7", R.mipmap
                 .img_novice_07);
-        mFragments.add(fragmentInner1);
-        mFragments.add(fragmentInner2);
-        mFragments.add(fragmentInner3);
         mFragments.add(fragmentInner4);
         mFragments.add(fragmentInner5);
         mFragments.add(fragmentInner6);

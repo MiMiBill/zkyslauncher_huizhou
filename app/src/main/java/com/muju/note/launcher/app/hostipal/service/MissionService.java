@@ -105,7 +105,8 @@ public class MissionService {
             @Override
             public void onFinish(List<MissionInfoDao> list) {
                 for (MissionInfoDao dao : list) {
-                    if (TextUtils.isEmpty(dao.getVideo())) {
+
+                    if (dao.getVideo() == null || TextUtils.isEmpty(dao.getVideo().trim())) {
                         downLoad(dao.getFrontCover(), 1);
                     } else {
                         downLoad(dao.getVideo(), 2);

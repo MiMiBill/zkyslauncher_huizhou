@@ -94,10 +94,10 @@ public class MienService {
     }
 
 
-    private final  static int MAX_TRY_TIMES = 5;
+    private final  static int MAX_TRY_TIMES = 10;
     private int tryTimes = 0;
     /**
-     * 更新失败后继续重试，共重试5次
+     * 更新失败后继续重试，共重试10次
      */
     public void getMienInfoTryTimes()
     {

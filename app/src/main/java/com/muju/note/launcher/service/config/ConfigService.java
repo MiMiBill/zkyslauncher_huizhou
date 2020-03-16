@@ -311,6 +311,7 @@ public class ConfigService {
                 return;
             }
             VIDEO_PAY_TIME=Integer.parseInt(subDao.getContent());
+            LogUtil.d("免费时长：" + VIDEO_PAY_TIME);
         }catch (Exception e){
             e.printStackTrace();
         }

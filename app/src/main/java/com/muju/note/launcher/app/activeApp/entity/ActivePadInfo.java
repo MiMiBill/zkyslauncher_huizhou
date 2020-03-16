@@ -70,6 +70,10 @@ public class ActivePadInfo {
          * simCode : 862433552968257
          */
 
+        /**
+         * 该平板是否绑定了柜子
+         */
+        private int haveBed; //0：没有 1:有
 
         private int id;
 
@@ -172,6 +176,14 @@ public class ActivePadInfo {
 
         public String getActive() {
             return active == null ? "" : active;
+        }
+
+        public int getHaveBed() {
+            return haveBed;
+        }
+
+        public void setHaveBed(int haveBed) {
+            this.haveBed = haveBed;
         }
 
         public void setActive(String active) {

@@ -11,10 +11,10 @@ android {
         applicationId "com.muju.note.launcher"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 1196   //fata包前面加11 惠州版本  该版本添加了广告，添加后台控制息屏是普通版本，添加了护工，默认是所有医院
+        versionCode 1198   //fata包前面加11 惠州版本  该版本添加了广告，添加后台控制息屏是普通版本，添加了护工，默认是所有医院
 //        versionName "111.9.5.1_beta"  //fata包 前面再加11
-        versionName "111.9.6.8_Golden"  //fata包 前面再加11
-//        versionName "111.9.5"  //fata包 前面再加11
+//        versionName "111.9.6.9_Golden"  //fata包 前面再加11
+        versionName "111.9.8"  //fata包 前面再加11
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -92,98 +92,78 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-
     // appcompat-v7包是必须的
     implementation 'me.yokeyword:fragmentation:1.3.6'
-
     // Your EventBus's version
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-
     // okgo
     implementation 'com.lzy.net:okgo:3.0.4'
     implementation 'com.lzy.net:okserver:2.0.5'
-
     // 日志
     implementation 'com.orhanobut:logger:2.2.0'
-
     // litepal
     implementation 'org.litepal.android:java:3.0.0'
-
     // gson
     implementation 'com.google.code.gson:gson:2.8.5'
-
     // rxjava
     implementation 'io.reactivex.rxjava2:rxjava:2.2.3'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
-
     // baseAdapter
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
-
-    //implementation files('libs/core-3.2.1.jar')
+    implementation files('libs/core-3.2.1.jar')
     implementation files('libs/BaiduLBS_Android.jar')
-
     // gilde
     implementation 'com.github.bumptech.glide:glide:4.7.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
-
     // SmartRefreshLayout
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-22'
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-22'
-
     //没有使用特殊Header，可以不加这行
-
     //wotv
-
-    //    implementation 'com.unicom.common:common:1.3.34-SNAPSHOT' //以前为1.3.34 //最新为1.3.37
+    implementation 'com.unicom.common:common:1.3.34-SNAPSHOT'
     implementation 'com.unicom.video:exo2:1.3.34-SNAPSHOT'
     implementation 'javax.inject:javax.inject:1'
+    implementation 'com.unicom.video:ijk:1.3.34-SNAPSHOT' //联通SDK软解码
 
-    //    implementation 'com.unicom.video:ijk:1.3.34-SNAPSHOT'
-
-    //新加的
-    implementation 'com.unicom.wotvvertical:wotvvertical:1.3.34-SNAPSHOT'
-
+    ////wotv 新版本SDK
+//    implementation 'com.unicom.video:exo2:1.3.37-SNAPSHOT'
+//    implementation "com.unicom.wotvvertical:wotvvertical:1.3.37-SNAPSHOT"
     //gif
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.10'
-
     //大图
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.5.0'
 
     // 七牛云
     implementation 'com.qiniu:qiniu-android-sdk:7.3.15'
-
     //视频缓存
     implementation 'com.danikula:videocache:2.7.0'
+
 
     // pdf
     implementation 'com.github.barteksc:android-pdf-viewer:3.1.0-beta.1'
 
     // 极光push
-    implementation 'cn.jiguang.sdk:jpush:3.1.3'
+    implementation 'cn.jiguang.sdk:jpush:3.1.3'  // 此处以JPush 3.3.1 版本为例。
+    implementation 'cn.jiguang.sdk:jcore:1.2.5'  // 此处以JCore 2.0.1 版本为例。
+    implementation 'cn.jiguang.sdk:janalytics:2.0.0'  // 此处以JCore 2.0.1 版本为例。
 
-    // 此处以JPush 3.3.1 版本为例。
-    implementation 'cn.jiguang.sdk:jcore:1.2.5'
-
-    // 此处以JCore 2.0.1 版本为例。
-    implementation 'cn.jiguang.sdk:janalytics:2.0.0'
-
-    // 此处以JCore 2.0.1 版本为例。
     implementation 'com.github.open-android:ViewPager:0.1.0'
+
     implementation 'com.dyhdyh.loadingbar:loadingbar:1.4.4'
+
     implementation('com.zhy:autolayout:1.4.5') {
 //        exclude group: 'com.android.support', module: 'appcompat'
     }
 
     // 文字转拼音
     implementation 'com.belerweb:pinyin4j:2.5.1'
-    implementation 'com.tencent.bugly:crashreport:latest.release'
 
-    //腾讯bugly
-    implementation 'q.rorbin:VerticalTabLayout:1.2.5'
+    implementation 'com.tencent.bugly:crashreport:latest.release'  //腾讯bugly
 
-    //医疗服务tab
+    implementation 'q.rorbin:VerticalTabLayout:1.2.5' //医疗服务tab
+
     implementation 'com.github.limxing:Android-PromptDialog:1.1.3'
 
     //7zip
