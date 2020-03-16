@@ -11,10 +11,10 @@ android {
         applicationId "com.muju.note.launcher"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 1197   //fata包前面加11 惠州版本  该版本添加了广告，添加后台控制息屏是普通版本，添加了护工，默认是所有医院
+        versionCode 1198   //fata包前面加11 惠州版本  该版本添加了广告，添加后台控制息屏是普通版本，添加了护工，默认是所有医院
 //        versionName "111.9.5.1_beta"  //fata包 前面再加11
 //        versionName "111.9.6.9_Golden"  //fata包 前面再加11
-        versionName "111.9.7"  //fata包 前面再加11
+        versionName "111.9.8"  //fata包 前面再加11
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -126,6 +126,10 @@ dependencies {
     implementation 'com.unicom.video:exo2:1.3.34-SNAPSHOT'
     implementation 'javax.inject:javax.inject:1'
     implementation 'com.unicom.video:ijk:1.3.34-SNAPSHOT' //联通SDK软解码
+
+    ////wotv 新版本SDK
+//    implementation 'com.unicom.video:exo2:1.3.37-SNAPSHOT'
+//    implementation "com.unicom.wotvvertical:wotvvertical:1.3.37-SNAPSHOT"
     //gif
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.10'
     //大图
