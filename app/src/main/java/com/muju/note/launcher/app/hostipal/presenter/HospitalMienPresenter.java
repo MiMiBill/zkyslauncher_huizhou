@@ -44,8 +44,8 @@ public class HospitalMienPresenter extends BasePresenter<HospitalMienContract.Vi
 //                " and status = 1 order by number desc,onwayTime desc,editTime desc,updateTime desc";
 //        LogUtil.d("医院风采视频SQL："  + sql);
 
-        String sql = "customTag = '" + name +
-                "' and status = 1 order by number desc,onwayTime desc,editTime desc,updateTime desc";
+        String sql = "customTag like '%" + name +
+                "%' and status = 1 order by number desc,onwayTime desc,editTime desc,updateTime desc";
         LogUtil.d("医院风采视频SQL："  + sql);
         LitePal.where(sql).findAsync(VideoInfoDao.class).listen(new FindMultiCallback<VideoInfoDao>() {
             @Override
