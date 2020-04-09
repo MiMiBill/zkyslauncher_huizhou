@@ -15,6 +15,7 @@ import com.muju.note.launcher.app.startUp.event.StartCheckDataEvent;
 import com.muju.note.launcher.app.video.service.VideoService;
 import com.muju.note.launcher.base.BaseFragment;
 import com.muju.note.launcher.base.LauncherApplication;
+import com.muju.note.launcher.service.Department.DepartmentInfoService;
 import com.muju.note.launcher.service.encyclope.EncyclopeService;
 import com.muju.note.launcher.service.homemenu.HomeMenuService;
 import com.muju.note.launcher.service.orderfood.OrderFoodService;
@@ -348,8 +349,7 @@ public class StartCheckDataFragment extends BaseFragment {
                 break;
             case FOOD_MENU_REBOOT_SUCCESS:
                 list.add("点餐数据更新成功，请稍候...");
-                getActivity().startActivity(new Intent(getActivity(), MainActivity.class));
-                getActivity().finish();
+                DepartmentInfoService.getInstance().startDepartment();//
                 break;
             case FOOD_MENU_REBOOT_HTTP_START:
                 list.add("正在获取后台点餐数据，请稍候...");
@@ -367,6 +367,26 @@ public class StartCheckDataFragment extends BaseFragment {
                 break;
             case FOOD_MENU_REBOOT_HTTP_DATA_NULL:
                 list.add("点餐数据获取为空！请稍后重试或联系管理人员检查");
+                break;
+
+                //新加的
+            case DEPARTMENT_START:
+                list.add("正在初始化科室数据，请稍候...");
+                break;
+            case DEPARTMENT_HTTP_START:
+                list.add("正在获取科室数据，请稍候...");
+                break;
+            case DEPARTMENT_DB_START:
+                list.add("正在加载科室数据，请稍候...");
+                break;
+            case DEPARTMENT_SUCCESS:
+                list.add("据初始化科室数成功！");
+                getActivity().startActivity(new Intent(getActivity(), MainActivity.class));
+                getActivity().finish();
+                break;
+            case DEPARTMENT_HTTP_FAIL:
+                list.add("科室数据获取失败！1分钟后重新初始化");
+                reDepartmentInfo(1);
                 break;
 
         }
@@ -521,6 +541,18 @@ public class StartCheckDataFragment extends BaseFragment {
                     public void accept(Long aLong) throws Exception {
                         LogUtil.d("=======reRebootHomeMenu=====");
                         HomeMenuService.getInstance().startRebootMenu();
+                    }
+                });
+    }
+
+    private void reDepartmentInfo(int min) {
+        RxUtil.closeDisposable(disposable);
+        disposable = Observable.timer(min, TimeUnit.MINUTES)
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        LogUtil.d("=======reDepartmentInfo=====");
+                        DepartmentInfoService.getInstance().startDepartment();
                     }
                 });
     }

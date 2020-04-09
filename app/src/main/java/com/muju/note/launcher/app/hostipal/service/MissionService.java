@@ -62,7 +62,11 @@ public class MissionService {
         EventBus.getDefault().post(new StartCheckDataEvent(StartCheckDataEvent.Status.HOSPITAL_MISS_HTTP_START));
         Map<String, String> params = new HashMap();
         params.put("hospitalId", "" + ActiveUtils.getPadActiveInfo().getHospitalId());
-        params.put("deptId", "" + ActiveUtils.getPadActiveInfo().getDeptId());
+
+        if (ActiveUtils.getPadActiveInfo().getHospitalId() != 4) //不是惠州3院的时候才添加这个参数
+        {   //不添加这个参数将会获取所有的宣教，目前只有惠州有这种奇怪的需求
+            params.put("deptId", "" + ActiveUtils.getPadActiveInfo().getDeptId());
+        }
         OkGo.<BaseBean<List<MissionInfoDao>>>post(UrlUtil.getHospitalMission())
                 .params(params)
                 .execute(new JsonCallback<BaseBean<List<MissionInfoDao>>>() {

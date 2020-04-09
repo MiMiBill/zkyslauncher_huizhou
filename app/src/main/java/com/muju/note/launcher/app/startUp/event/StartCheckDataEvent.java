@@ -6,6 +6,17 @@ public class StartCheckDataEvent {
         // TODO: 2019/6/14  以下为所有下载类型的回调 ，用于界面改变状态使用
 
         /**
+         * 获取所有科室信息相关
+         */
+        DEPARTMENT_START,
+        DEPARTMENT_SUCCESS,
+        DEPARTMENT_HTTP_START,
+        DEPARTMENT_HTTP_FAIL,
+        DEPARTMENT_HTTP_DATA_NULL,
+        DEPARTMENT_DB_START,
+
+
+        /**
          * 影视分类相关
          */
         VIDEO_COLUMN_START,

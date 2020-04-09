@@ -320,6 +320,8 @@ public class UrlUtil {
         return getHost() + "/hospitalPublicize/list";
     }
 
+
+
     //抽奖
     public static String startLuck() {
         return getHost() + "/lottery/start/%s";
@@ -459,4 +461,18 @@ public class UrlUtil {
     public static String recordLog(){
         return  getHost()+"/padOperationLog/recordLog";
     }
+
+    /**
+     *  获取所有医院科室的名字列表
+     * @return
+     */
+    public static String getHospitalDepartmentList(int hospitalId){
+        return  getHost()+"/dp/publicize/" + hospitalId;
+    }
+
+
+
+
+
+
 }

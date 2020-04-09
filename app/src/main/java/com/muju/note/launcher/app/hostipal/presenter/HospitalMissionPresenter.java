@@ -1,7 +1,10 @@
 package com.muju.note.launcher.app.hostipal.presenter;
 
 
+import android.app.slice.Slice;
+
 import com.muju.note.launcher.app.hostipal.contract.HospitalMissionContract;
+import com.muju.note.launcher.app.hostipal.db.DepartmentInfoDao;
 import com.muju.note.launcher.app.hostipal.db.MissionInfoDao;
 import com.muju.note.launcher.app.video.db.VideoInfoDao;
 import com.muju.note.launcher.base.BasePresenter;
@@ -15,14 +18,15 @@ import java.util.List;
 
 public class HospitalMissionPresenter extends BasePresenter<HospitalMissionContract.View> implements HospitalMissionContract.Presenter {
 
-
     /**
      * 查询医院宣教数据
      */
     @Override
-    public void queryMiss() {
+    public void queryMiss(int hospitalId,int deptId) {
         LitePalDb.setZkysDb();
-        LitePal.findAllAsync(MissionInfoDao.class).listen(new FindMultiCallback<MissionInfoDao>() {
+        String sql = "hospitalId = " + hospitalId + " and deptId=" + deptId;
+        LogUtil.d("获取普通宣教sql:" + sql);
+        LitePal.where(sql).findAsync(MissionInfoDao.class).listen(new FindMultiCallback<MissionInfoDao>() {
             @Override
             public void onFinish(List<MissionInfoDao> list) {
                 if (mView == null) {
@@ -64,4 +68,29 @@ public class HospitalMissionPresenter extends BasePresenter<HospitalMissionContr
             }
         });
     }
+
+    @Override
+    public void queryDepartmentInfos(int hospitalId) {
+
+        LitePalDb.setZkysDb();
+
+        String sql = "hospitalId = " + hospitalId;
+        LogUtil.d("医院宣教科室列表SQL："  + sql);
+        LitePal.where(sql).findAsync(DepartmentInfoDao.class).listen(new FindMultiCallback<DepartmentInfoDao>() {
+            @Override
+            public void onFinish(List<DepartmentInfoDao> list) {
+                if (mView == null) {
+                    LogUtil.e("mView为空");
+                    return;
+                }
+                if (list == null || list.size() <= 0) {
+                    mView.getDepartmentInfosNull();
+                    return;
+                }
+                mView.getDepartmentInfosSuccess(list);
+            }
+        });
+
+    }
+
 }

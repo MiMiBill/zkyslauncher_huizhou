@@ -7,6 +7,7 @@ import android.os.IBinder;
 import com.muju.note.launcher.app.hostipal.service.MienService;
 import com.muju.note.launcher.app.hostipal.service.MissionService;
 import com.muju.note.launcher.app.video.service.VideoService;
+import com.muju.note.launcher.service.Department.DepartmentInfoService;
 import com.muju.note.launcher.service.config.ConfigService;
 import com.muju.note.launcher.service.encyclope.EncyclopeService;
 import com.muju.note.launcher.service.heartbeat.HeartBeatService;
@@ -111,6 +112,9 @@ public class MainService extends Service {
                             EncyclopeService.getInstance().getLately();
                             // 检查医院宣教数据
                             MissionService.getInstance().updateMission(1);
+
+                            //更新医院科室目录
+                            DepartmentInfoService.getInstance().updateDepartment();
                         }
                     });
         }

@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/main_bg"
+    android:id="@+id/rl_container"
     >
 
     <LinearLayout
@@ -23,14 +24,15 @@
 
     <LinearLayout
         android:id="@+id/ll_tab_container"
-        android:visibility="gone"
-        android:layout_width="@dimen/px112"
-        android:layout_height="@dimen/px500"
+        android:visibility="visible"
+        android:layout_width="@dimen/px300"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginTop="@dimen/px180">
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="@dimen/px100">
         <LinearLayout
             android:id="@+id/ll_type_title"
-            android:layout_width="@dimen/px112"
+            android:layout_width="@dimen/px150"
             android:layout_height="@dimen/px37"
             android:orientation="horizontal"
             android:gravity="center"
@@ -49,11 +51,59 @@
                 android:layout_marginLeft="@dimen/px20"
                 android:textSize="@dimen/px18"/>
         </LinearLayout>
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView"
+
+        <LinearLayout
+            android:id="@+id/ll_item_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </android.support.v7.widget.RecyclerView>
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            >
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/left_recyclerView"
+                android:layout_width="@dimen/px150"
+                android:background="#ddd"
+                android:visibility="visible"
+                android:layout_height="match_parent"/>
+
+            <LinearLayout
+                android:id="@+id/ll_right_container"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:background="@mipmap/ic_hospital_type_selete"
+                android:layout_width="@dimen/px150"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/btn_video"
+                    android:text="视频"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:background="@mipmap/ic_hospital_type_selete"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/px48"/>
+
+                <View
+                    android:id="@+id/divider3"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="?android:attr/listDivider" />
+
+                <Button
+                    android:id="@+id/btn_doc"
+                    android:text="文档"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:background="@mipmap/ic_hospital_type_selete"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/px48"/>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
     </LinearLayout>
 
     <LinearLayout
