@@ -114,7 +114,7 @@ public class MainService extends Service {
                             MissionService.getInstance().updateMission(1);
 
                             //更新医院科室目录
-                            DepartmentInfoService.getInstance().updateDepartment();
+                            DepartmentInfoService.getInstance().updateDepartmentTryTimes();
                         }
                     });
         }

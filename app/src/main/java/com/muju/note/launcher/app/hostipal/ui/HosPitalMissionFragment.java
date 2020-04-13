@@ -149,6 +149,14 @@ public class HosPitalMissionFragment extends BaseFragment<HospitalMissionPresent
         rvHisMission.setLayoutManager(gridLayoutManager);
         rvHisMission.setAdapter(missionAdapter);
 
+        rvHisMission.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                setRightContainerVisibility(View.GONE);
+                return false;
+            }
+        });
+
         promptDialog = new PromptDialog(getActivity());
         promptDialog.showLoading("正在加载...");
         mPresenter.queryDepartmentInfos(ActiveUtils.getPadActiveInfo().getHospitalId());
@@ -239,7 +247,8 @@ public class HosPitalMissionFragment extends BaseFragment<HospitalMissionPresent
                 curDepartmentInfoDao = menuList.get(position);
                 if (preLeftSelectItem == position) //说明之前点击过，选择的还是它
                 {
-
+                    //之前选择过，不做任何处理
+                    return;
                 }else {
                     promptDialog.showLoading("正在加载...");
                     mPresenter.queryMiss(curDepartmentInfoDao.getHospitalId(),curDepartmentInfoDao.getDeptId());
@@ -389,6 +398,13 @@ public class HosPitalMissionFragment extends BaseFragment<HospitalMissionPresent
         }
         missionAdapter.notifyDataSetChanged();
 
+        if (missionInfoDaos.size() <= 0)
+        {
+            llNull.setVisibility(View.VISIBLE);
+        }else {
+            llNull.setVisibility(View.GONE);
+        }
+
 
     }
 
@@ -445,13 +461,20 @@ public class HosPitalMissionFragment extends BaseFragment<HospitalMissionPresent
         }
 
 //        missionAdapter.notifyDataSetChanged();
-        mPresenter.getMissionVideo( "" + curDepartmentInfoDao.getHospitalId() + "/" + curDepartmentInfoDao.getDeptId() + "/科室宣教",pageNum);
+//        mPresenter.getMissionVideo( "" + curDepartmentInfoDao.getHospitalId() + "/" + curDepartmentInfoDao.getDeptId() + "/科室宣教",pageNum);
+        getUnicomMissionVideo();
     }
 
     @Override
     public void getMissNull() {
         missionVideoInfoDaos.clear();
         missionPdfInfoDaos.clear();
+        getUnicomMissionVideo();
+    }
+
+    //视频宣教-来源于联通
+    private void getUnicomMissionVideo()
+    {
         mPresenter.getMissionVideo( "" + curDepartmentInfoDao.getHospitalId() + "/" + curDepartmentInfoDao.getDeptId() + "/科室宣教",pageNum);
     }
 
@@ -552,19 +575,27 @@ public class HosPitalMissionFragment extends BaseFragment<HospitalMissionPresent
                 }
             }
 
-
             if (ActiveUtils.getPadActiveInfo().getHospitalId() == 4)//表示是惠州3医院，添加共享宣教目录
             {
                 DepartmentInfoDao dao = new DepartmentInfoDao();
-                dao.setDeptId(999);
-                dao.setHospitalId(999);
+                dao.setDeptId(99999);//表示共享宣教
+                dao.setHospitalId(ActiveUtils.getPadActiveInfo().getHospitalId());
                 dao.setDeptName(COMMOM_MISS_NAME);
                 list.add(0,dao);//添加到第一位
             }
             menuList.clear();
             menuList.addAll(list);
-            curDepartmentInfoDao = menuList.get(0);//取到当下科室
+            curDepartmentInfoDao = menuList.get(0);//
             hospitalMienTabAdapter.notifyDataSetChanged();
+
+            //如果不是惠州医院  那么只请求自己科室的
+            if (ActiveUtils.getPadActiveInfo().getHospitalId() != 4)
+            {
+                DepartmentInfoDao departmentInfoDao = new DepartmentInfoDao();
+                departmentInfoDao.setHospitalId(ActiveUtils.getPadActiveInfo().getHospitalId());
+                departmentInfoDao.setDeptId(ActiveUtils.getPadActiveInfo().getDeptId());
+                curDepartmentInfoDao = departmentInfoDao;
+            }
             mPresenter.queryMiss(curDepartmentInfoDao.getHospitalId(),curDepartmentInfoDao.getDeptId());
 
     }
@@ -574,6 +605,9 @@ public class HosPitalMissionFragment extends BaseFragment<HospitalMissionPresent
         menuList.clear();
         hospitalMienTabAdapter.notifyDataSetChanged();
         promptDialog.dismiss();
-
+        llNull.setVisibility(View.VISIBLE);//说明没有科室有宣教视频
     }
+
+
+
 }
