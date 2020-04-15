@@ -222,9 +222,10 @@ public class HosPitalMissionFragment extends BaseFragment<HospitalMissionPresent
         if (ActiveUtils.getPadActiveInfo().getHospitalId() == 4) //如果是惠州3院，那么显示所有的科室，不是则隐藏
         {
             leftRecyclerView.setVisibility(View.VISIBLE);
-            btnDoc.setVisibility(View.GONE); //如果是共享宣教，那么只有视频
+//            btnDoc.setVisibility(View.GONE); //如果是共享宣教，那么只有视频
         }else {
             leftRecyclerView.setVisibility(View.GONE);
+            setRightContainerVisibility(View.VISIBLE);
         }
 
         menuList = new ArrayList<DepartmentInfoDao>();
@@ -236,17 +237,18 @@ public class HosPitalMissionFragment extends BaseFragment<HospitalMissionPresent
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
 
-                if (TextUtils.equals(menuList.get(position).getDeptName(),COMMOM_MISS_NAME))
-                {
-                    btnDoc.setVisibility(View.GONE); //如果是共享宣教，那么只有视频
-                }else {
-                    btnDoc.setVisibility(View.VISIBLE);
-                }
-
+//                if (TextUtils.equals(menuList.get(position).getDeptName(),COMMOM_MISS_NAME))
+//                {
+//                    btnDoc.setVisibility(View.GONE); //如果是共享宣教，那么只有视频
+//                }else {
+//                    btnDoc.setVisibility(View.VISIBLE);
+//                }
+                btnDoc.setVisibility(View.VISIBLE);
                 setRightContainerVisibility(View.VISIBLE);
                 curDepartmentInfoDao = menuList.get(position);
                 if (preLeftSelectItem == position) //说明之前点击过，选择的还是它
                 {
+                    showToast("已经选择了");
                     //之前选择过，不做任何处理
                     return;
                 }else {
@@ -566,23 +568,45 @@ public class HosPitalMissionFragment extends BaseFragment<HospitalMissionPresent
     @Override
     public void getDepartmentInfosSuccess(List<DepartmentInfoDao> list) {
 
+        int size = list.size();
 
-            for (int i = 0 ; i < list.size() ; i++)
+        boolean isHasShareMiss = false;
+
+        for (int i = 0 ; i < size ; i++)
+        {
+            //如果有共享宣教 那么放到第一个
+            if (TextUtils.equals(list.get(i).getDeptName(),COMMOM_MISS_NAME) )
             {
-                if (list.get(i).getDeptId() == ActiveUtils.getPadActiveInfo().getDeptId())
+                isHasShareMiss = true;
+                Collections.swap(list,0,i);
+            }
+        }
+
+        for (int i = 0 ; i < size ; i++)
+        {
+            if (list.get(i).getDeptId() == ActiveUtils.getPadActiveInfo().getDeptId())
+            {
+
+                if (isHasShareMiss) //如果之前已经把共享宣教放到第一个了，那么这里就把本科室放到第二个
                 {
+                    //能到这里说明至少有两个科室：共享宣教和本科室
+                    Collections.swap(list,1,i);
+
+                }else{
                     Collections.swap(list,0,i);
                 }
+                break;
             }
+        }
 
-            if (ActiveUtils.getPadActiveInfo().getHospitalId() == 4)//表示是惠州3医院，添加共享宣教目录
-            {
-                DepartmentInfoDao dao = new DepartmentInfoDao();
-                dao.setDeptId(99999);//表示共享宣教
-                dao.setHospitalId(ActiveUtils.getPadActiveInfo().getHospitalId());
-                dao.setDeptName(COMMOM_MISS_NAME);
-                list.add(0,dao);//添加到第一位
-            }
+//            if (ActiveUtils.getPadActiveInfo().getHospitalId() == 4)//表示是惠州3医院，添加共享宣教目录
+//            {
+//                DepartmentInfoDao dao = new DepartmentInfoDao();
+//                dao.setDeptId(99999);//表示共享宣教
+//                dao.setHospitalId(ActiveUtils.getPadActiveInfo().getHospitalId());
+//                dao.setDeptName(COMMOM_MISS_NAME);
+//                list.add(0,dao);//添加到第一位
+//            }
             menuList.clear();
             menuList.addAll(list);
             curDepartmentInfoDao = menuList.get(0);//
